@@ -1,0 +1,185 @@
+{%  extends "PROBASE.html" %}
+
+{% block title %}PROFILE{% endblock %}
+
+{% block head %}
+    {{ super() }}
+
+{% endblock %}
+
+{% block nav %}
+<div  class="sidenav-u" >
+    <div class="dropdown">
+  <button type="button"  data-toggle="dropdown" style="background: transparent;border-style: none">
+        <img id="burgermenu" src="../static/burger%20menu.png" role="button" alt="" >
+  </button>
+  <div class="dropdown-menu">
+    <a class="dropdown-item" href="#">Home</a>
+    <a class="dropdown-item" href="#">Courses</a>
+    <a class="dropdown-item" href="{{ url_for('verify',username = current_user.username) }}">Verify account <div id="circle" size="10"></div></a>
+    <a class="dropdown-item" href="#">Logout</a>
+  </div>
+</div>
+
+
+
+        <div  >
+            <div class="card" id="set">
+                <div class="card-body">
+                    <ul class="flex-column">
+                        <li id="burgermenu-text">HOME</li>
+                        <li id="burgermenu-text">COURSES</li>
+                        <li id="burgermenu-text">VERIFY ACCOUNT</li>
+                        <li id="burgermenu-text">HELP</li>
+                        <li id="burgermenu-text"><a href="/LOGOUT">LOG OUT</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+    {%  if current_user.role == 2 %}
+<div class="text-center">
+    <a href="{{ url_for('users.user_profile',username = current_user.username) }}"><img id="top-icon-u" style="margin-top: 60px" class="icon-u" src="../static/sessions.png" alt=""></a>
+            <a href="{{ url_for('dashboard', username=current_user.username ) }}" style="color: white"><img class="icon-u" src="../static/window-maximize.png" alt=""></a>
+            <a href="{{ url_for('discover', username=current_user.username ) }}" style="color: white"><img class="icon-u" src="../static/discover.png" alt=""></a>
+
+
+                <a href="{{ url_for('settings', username=current_user.username ) }}" style="color: white;padding: 0px"><img class="icon-u" src="../static/badge.png" alt=""></a>
+
+                <div id="botrnav" style="padding: 0px">
+                    <a href="{{ url_for('settings', username=current_user.username ) }}" style="color: white"><img class="icon-u" src="../static/SETTINGS.png" alt="" style="color: white"></a>
+                    <br>
+                    <a href="{{ url_for('logout') }}" style="color: white"><img class="icon-u" src="../static/logout.png" alt=""></a>
+                </div>
+</div>
+    {% else %}
+<div class="text-center">
+
+            <a href="{{ url_for('user_profile',username = current_user.username) }}" style="color: white"><img id="top-icon-u" class="icon-u" src="../static/sessions.png" alt=""></a>
+            <a href="{{ url_for('dashboard', username=current_user.username ) }}" style="color: white"><img class="icon-u" src="../static/window-maximize.png" alt=""></a>
+            <a href="{{ url_for('discover', username=current_user.username ) }}" style="color: white"><img class="icon-u" src="../static/discover.png" alt=""></a>
+            <a href="{{ url_for('upload', username=current_user.username ) }}" style="color: white"><img class="icon-u" src="../static/uploads.png" alt=""></a>
+
+
+
+                <div id="botrnav" style="padding: 0px">
+                    <a href="{{ url_for('settings', username=current_user.username ) }}" style="color: white"><img class="icon-u" src="../static/SETTINGS.png" alt="" style="color: white"></a>
+                    <br>
+                    <a href="{{ url_for('logout') }}" style="color: white"><img class="icon-u" src="../static/logout.png" alt=""></a>
+                </div>
+    {% endif %}
+    </div>
+</div>
+
+{% endblock %}
+
+{% block body %}
+<div class="main-u">
+
+<div class="row">
+    <div class="col-8">
+             <form class="text-center signup-form" method="post" action="" style="margin-top: 10px"><input class="search" type="search">
+
+        </form>
+
+        <div style="margin-left: 40px">
+        <video style="margin-top: 20px" class="video-page "type="video/mp4" controls  src="../static/videos/discover videos/{{ video.upload_ref }}">
+
+        </video>
+        <h3 class="video-text">{{ video.title }}</h3>
+
+
+            <div class="row">
+                <div class="col-4">
+            <img src="../static/profile_pics/{{ video.uploader.image_file}}" class="rounded-circle  profilepic shadow-lg" width="50" height="50" alt="" style="margin-top: 15px;margin-bottom: 15px;margin-right: 10px">{{ video.uploader.username}}
+
+                </div>
+                <div class="col-8">
+                    {% if current_user not in video.liked %}
+                                            <p style="font-size: 12px;color:gray;margin-left: 7px" class="text-justify text-left "><a href="{{ url_for('like' ,id=video.id) }}"><img  style="margin-left: 510px;margin-right: 7px" src="../static/grey_heart@2x.png" alt="" width="20"></a>{{ video.liked.count() }} </p>
+
+                    {% else %}
+                                            <p style="font-size: 12px;color:gray;margin-left: 7px" class="text-justify text-left "><a href="{{ url_for('unlike' ,id=video.id) }}"><img  style="margin-left: 510px;margin-right: 7px" src="../static/heart.png" alt="" width="20"></a>{{ video.liked.count() }} </p>
+
+
+                    {% endif %}
+                    <button style="margin-left: 510px" id="card-btn" value="FOLLOW" >FOLLOW</button>
+                </div>
+                </div>
+
+        <div class="">
+<div class="tab">
+  <button class="tablinks" onclick="openCity(event, 'session-tab')">Description</button>
+  <button class="tablinks" onclick="openCity(event, 'Paris')">Comments</button>
+  <button class="tablinks" onclick="openCity(event, 'Tokyo')">Uploader</button>
+</div>
+
+</div>
+
+
+<!-- Tab content -->
+<div id="session-tab" class="tabcontent">
+
+</div>
+
+
+
+<div id="Paris" class="tabcontent">
+<ul>
+{% for comment in video.comments %}
+    <li><div style="color: black"><img style="margin-right: 10px" src="../static/profile_pics/{{ comment.author.image_file }} " alt="" width="40" class="rounded-circle  profilepic shadow-lg">{{ comment.author.username }}</div></li>
+    <li><p style="color: black">{{ comment.content }}</p></li>
+{% endfor %}
+</ul>
+
+</div>
+
+<div id="Tokyo" class="tabcontent">
+  <h3>Tokyo</h3>
+  <p>Tokyo is the capital of Japan.</p>
+</div>
+</div>
+</div>
+        <div class="col-4">
+
+        <ul><div class="video-list">
+
+            <li style="padding: 0px;margin: 0px">
+                {% for upload in uploads %}
+                <card class="card video-card" >
+                <card class="card-body video-text-list">
+                    <div class="row">
+                        <div class="col-6">
+                    <a href="{{ url_for('video',upload_ref=upload.upload_ref) }}"><video width="160" height="100" src="../static/videos/discover videos/{{ upload.upload_ref }}" alt=""></video></a>
+                        </div>
+                        <div class="col">
+                    <div >{{ upload.title }}</div><br>
+                    <div>{{ upload.price }}</div>
+                    <div>{{ user.uploader }}</div>
+                        </div>
+                    </div>
+                </card>
+            </card>
+                {% endfor %}
+            </li>
+              </div>
+
+        </ul>
+    </div>
+
+    </div>
+    </div>
+
+
+    </div>
+
+</div>
+
+
+</div>
+
+{% endblock %}
+
+{% block script %}
+    {{ super() }}
+{% endblock %}

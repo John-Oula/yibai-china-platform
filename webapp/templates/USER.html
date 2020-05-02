@@ -1,0 +1,246 @@
+{%  extends "PROBASE.html" %}
+
+{% block title %}PROFILE{% endblock %}
+
+{% block head %}
+    {{ super() }}
+
+{% endblock %}
+
+{% block nav %}
+    {{ super() }}
+{% endblock %}
+
+{% block body %}
+<div class="main">
+
+
+<div class="session-container">
+{% if current_user.role == 2 %}
+    <p style="margin-left: 70px">CURRENT ADMINS</p>
+   {% for user in all_users %}
+        {% if user.role == 1  %}
+
+       <card class="card shadow-sm" style="width:fit-content;margin-top: 10px;margin-left: 60px">
+       <card class="card-body">
+           <div class="row ">
+               <div class="col-5">
+                       <img src="../static/profile_pics/{{ user.image_file}}" class="rounded-circle  profilepic shadow-lg" width="50" height="50" alt="" style="margin-top: 15px;margin-bottom: 15px;margin-right: 10px">
+                </div>
+
+               <div class="col-5 align-middle">
+               <!-- Split dropright button -->
+               <div class="btn-group dropright" style="width: fit-content;height: fit-content;margin-left: 0px;background-color: #E74525;border-radius: 4px" >
+                   <button type="button" class="btn " style="color: white">
+                       Assign role
+                   </button>
+                   <button style="background-color: #E74525;color: white" type="button" class="btn  dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                       <span class="sr-only">Toggle Dropright</span>
+                   </button>
+
+                   <div class="dropdown-menu">
+                       <!-- Dropdown menu links -->
+                       <ul>
+                       <li><a  href="{{ url_for('update_to_admin', id = user.id) }}" id="myBtn" style="color: black">Admin</a></li>
+                       <li><a  href="{{ url_for('assign_session', id = user.id) }}" id="myBtn" style="color: black">Session</a></li>
+                       <li><a  href="{{ url_for('assign_video', id = user.id) }}" id="myBtn" style="color: black">Video</a></li>
+                       <li><a  href="{{ url_for('assign_info', id = user.id) }}" id="myBtn" style="color: black">Information</a></li>
+                       <li><a  href="{{ url_for('assign_payment', id = user.id) }}" id="myBtn" style="color: black">Payment</a></li>
+                       </ul>
+                   </div>
+               </div>
+           </div>
+               </div>
+           {{ user.fullname }}
+           <div style="font-size: 13px;font-family:'Segoe UI';color: darkgray">{{ user.username }}</div>
+           <div style="font-size: 13px;font-family:'Segoe UI';color: darkgray">{{ user.nationality }}</div>
+           <br>
+
+           <div id="myModal" class="modal" style="display: none">
+
+                <!-- Modal content -->
+                <div class="modal-content">
+                  <span class="close">&times;</span>
+                      <p><img  src="{{ user.image_file }}" alt="">{{ user.fullname }}</p>
+                               <p style="font-size: 13px;font-family:'Segoe UI';color: darkgray">{{ user.username }}</p>
+                </div>
+              </div>
+       </card>
+       </card>
+        {% endif %}
+   {% endfor %}
+
+
+
+ {% else %}
+ <div>
+    {% with messages = get_flashed_messages() %}
+            {% if messages %}
+                {% for message in messages %}
+                <div style="width: 500px" class="alert alert-light alert-dismissible fade show " role="alert" >
+                {{ message }}
+                <button type="button" class="close" data-dismiss="alert">&times;</button>
+                </div>
+                {% endfor %}
+    {% endif %}
+    {% endwith %}
+         <form class="text-center signup-form" action="" style="margin-top: 19px"><input class="search" type="search">
+
+        </form>
+    </div>
+
+<card class="card text-center shadow-lg " id="create_card_trainer">
+    <card class="card-body">
+        <p style="font-size: 20px">NEW COURSE </p>
+        <button id="create_btn" value="CREATE"><a href="{{ url_for('create', username = current_user.username) }}" style="color: white">CREATE</a></button>
+    </card>
+</card>
+    <br>
+    <br>
+
+
+
+
+
+    <p class="session" >CREATED SESSIONS</p>
+
+   {% for posts in current_user.posts %}
+        <card class="card  shadow-lg  " id="my-session-card">
+
+            <card class="card-body">
+                <p><img src="../static/calendar-check.png" alt="" class="session-card-left">{{ posts.date }}
+                    <button value="JOIN" id="card-btn" style="color: white;margin-left: 175px">EDIT</button>
+                    <img src="../static/clock.png" alt="" class="session-card-right">{{posts.start_time}} - {{ posts.end_time }}</p>
+                <div class=" description">
+                    <h6><b style="text-transform: uppercase;color:#707070">{{ posts.title }}</b></h6>
+                    <h6 style="text-transform: lowercase;color:#707070;font-size: 13px">{{ posts.category }}</h6>
+                    <h6 style="text-transform: lowercase;color:#707070;font-size: 13px">{{ posts.bookers.count() }} Booked</h6>
+                {% for lesson in all_lessons %}
+                    {% if posts.id == posts.id %}
+                    <h6 style="text-transform: lowercase;color:#707070;font-size: 13px">{{ lesson.title }}</h6>
+                    {% endif %}
+                {% endfor %}
+
+                    <div class="row">
+                        <div class="col-5"></div>
+                        <div class="col-5">
+                            {% if posts.verified == 1 %}
+                              <p style="font-size: 13px">Waiting for verification</p>
+
+                            {% else %}
+
+                            <p style="font-size: 13px">once you start the session users will be notified 30 seconds earlier</p>
+                                <button value="VERIFY" id="card-btn" style="color: white"><a href="{{ url_for('session_verify',id= session_post.id) }}">VERIFY</a></button>
+
+                            {% endif %}
+                        </div>
+                    </div>
+
+
+                </div>
+                </card>
+                </card>
+   {% endfor %}
+
+
+<p class="session">AVAILABLE SESSIONS</p>
+<div class="row">
+
+    {% for posts in all_posts  %}
+    {% if posts not in current_user.book %}
+        {% if posts.verified == 1 %}
+    <div class="row">
+        <div  class="">
+        <card style="margin-left: 40px" class="card  shadow-lg  " id="session-card">
+            <card class="card-body">
+            <div class="row">
+            <div class="col">
+                <p><img src="../static/calendar-check.png" alt="" class="session-card-left">{{ posts.date }}<img src="../static/clock.png" alt="" class="session-card-right">{{posts.start_time}}-{{ posts.end_time }}</p>
+                <div class=" description"></div>
+                    <h6><b style="text-transform: uppercase">{{ posts.title }}</b></h6>
+                    <a style="font-size: 12px;color:gray;text-transform: uppercase" class="text-justify text-left "  href={{ url_for('user',username=posts.author.username)}}  ><img style="padding: 5px" src="../static/profile_pics/{{ posts.author.image_file }}" alt="" class="rounded-circle  profilepic shadow-lg" width="30" height="30">{{ posts.author.username }}</a>
+                    <p style="font-size: 12px;color:gray" class="text-justify text-left ">{{ posts.lesson | length }} Scheduled sessions</p>
+            <div class="row">
+                    <p style="font-size: 12px;color:gray" class="text-justify text-left ">{{ posts.description }}</p>
+            </div>
+                    {% if current_user.id  not in current_user.book.user_id %}
+                         <div class="text-center">
+                             <button value="BOOK" id="card-btn" style="color: white"><a  href="{{ url_for('book' ,id=posts.id) }}">BOOK</a></button></div>
+                    {% else %}
+                        <div class="text-center"><button value="UNBOOK" id="card-btn" style="color: white">UNBOOK</button>
+                        </div>
+                    {% endif %}
+                    </div>
+                    </div>
+                </card>
+                </card>
+            </div>
+    </div>
+
+        {% else %}
+
+
+        <div></div>
+    {% endif %}
+    {% else %}
+
+
+
+
+    {% endif %}
+    {% endfor %}
+{% for page in all_posts.items %}
+        <a href="{{ url_for('user_profile',username=current_user.username,page_num=page) }}">{{ page }}</a>
+
+{% endfor %}
+</div>
+
+<p class="session">BOOKED SESSIONS</p>
+<div class="row">
+{% for posts in current_user.book %}
+{% if posts.verified == 1 %}
+
+    <div class="row">
+        <card style="margin-left: 40px" class="card  shadow-lg  " id="session-card">
+        <card class="card-body">
+            <p><img src="../static/calendar-check.png" alt="" class="session-card-left">{{ posts.date }}<img src="../static/clock.png" alt="" class="session-card-right">{{posts.start_time}}-{{ posts.end_time }}</p>
+            <div class="description"></div>
+            <h6><b style="text-transform: uppercase">{{ posts.title }}</b></h6>
+            <a style="font-size: 12px;color:gray;text-transform: uppercase" class="text-justify text-left "  href={{ url_for('user',username=posts.author.username)}}  ><img style="padding: 5px" src="../static/profile_pics/{{ posts.author.image_file }}" alt="" class="rounded-circle  profilepic shadow-lg" width="30" height="30">{{ posts.author.username }}</a>
+            <p style="font-size: 12px;color:gray" class="text-justify text-left ">{{ posts.description }}</p>
+            <p style="font-size: 12px;color:gray" class="text-justify text-left ">{{ posts.lesson | length }} Scheduled sessions</p>
+            <div class="text-center">
+                <button value="UNBOOK" id="card-btn" style="color: white"><a  href="{{ url_for('unbook' ,id=posts.id) }}">UNBOOK</a></button>
+            </div>
+        </card>
+    </card>
+    </div>
+
+{% else %}
+        <div></div>
+
+
+
+{% endif %}
+{% endfor %}
+
+
+{% endif %}
+</div>
+</div>
+
+
+
+
+
+</div>
+
+
+
+{% endblock %}
+
+
+{% block script %}
+    {{ super() }}
+
+{% endblock %}

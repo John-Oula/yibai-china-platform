@@ -1,0 +1,61 @@
+{%  extends "PROBASE.html" %}
+
+{% block title %}PROFILE{% endblock %}
+
+{% block head %}
+    {{ super() }}
+
+{% endblock %}
+
+{% block nav %}
+    {{ super() }}
+{% endblock %}
+
+{% block body %}
+<div class="main">
+<card class="card shadow-lg" id="create_card">
+    <card class="card-body">
+        <p class="session">PAYMENT METHOD</p>
+
+        <br>
+        <form action="" method="POST">
+            <div class="row" style="margin-left: 40px">
+                <div class="col-3">
+                            {{ form.id_type.label }}
+                            {{ form.id_type(class="input-box-border border border-top-0 border-left-0 border-right-0") }}
+
+                            {{ form.id_number.label }}
+                            {{ form.id_number(class="input-box-border border border-top-0 border-left-0 border-right-0") }}
+
+                            {{ form.id_type.label }}
+                            {{ form.id_type(class="input-box-border border border-top-0 border-left-0 border-right-0") }}
+
+                            {{ form.email.label }}
+                            {{ form.email(class="input-box-border border border-top-0 border-left-0 border-right-0") }}
+
+                            {{ form.nationality.label }}
+                            {{ form.nationality(class="input-box-border border border-top-0 border-left-0 border-right-0") }}
+
+                </div>
+                <div class="col-3" style="margin-left: 70px">
+                            {{ form.residency.label }}
+                            {{ form.residency(class="input-box-border border border-top-0 border-left-0 border-right-0") }}
+
+                            {{ form.occupation.label }}
+                            {{ form.occupation(class="input-box-border border border-top-0 border-left-0 border-right-0") }}
+
+                            {{ form.phone.label }}
+                            {{ form.phone(class="input-box-border border border-top-0 border-left-0 border-right-0") }}
+
+                </div>
+            </div>
+
+
+
+        </form>
+        <button id="create_btn" style="margin-top: 20px" size="14px" ><a href="{{ url_for('trainer_profile') }}">SUBMIT FOR REVIEW</a></button>
+    </card>
+</card>
+</div>
+
+{% endblock %}

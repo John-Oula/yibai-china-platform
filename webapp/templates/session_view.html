@@ -1,0 +1,67 @@
+{%  extends "PROBASE.html" %}
+
+{% block title %}PROFILE{% endblock %}
+
+{% block head %}
+    {{ super() }}
+
+{% endblock %}
+
+{% block nav %}
+    {{ super() }}
+{% endblock %}
+
+{% block body %}
+        {% with messages = get_flashed_messages() %}
+            {% if messages %}
+                {% for message in messages %}
+                <div class="alert alert-light alert-dismissible fade show " role="alert" >
+                {{ message }}
+                <button type="button" class="close" data-dismiss="alert">&times;</button>
+                </div>
+                {% endfor %}
+    {% endif %}
+    {% endwith %}
+
+
+
+
+    <div class="main">
+        <div class="session-container">
+            <card class="card shadow-lg" id="create_card">
+                <card class="card-body">
+                    <div class="row">
+                        <div class="col-5 text-center">
+            <img style="margin-left: 0px" id="profilepic-u" src="../static/profile_pics/{{ user.image_file }}" alt="" class="rounded-circle  profilepic shadow-lg" width="200" height="200">
+                            <div style="margin-top: 20px">{{ session_post.author.fullname }}</div><br>
+                            <div class="row">
+
+
+                            </div>
+                        </div>
+                        <div class="col-7">
+                            <div style="margin-left: 150px">
+                            <div style="margin-top: 40px" class="orange">Title</div>
+                            <div>{{ session_post.title }}</div>
+                                <br>
+                            <div class="orange">Username:</div>
+                            <div>{{ session_post.author.username }}</div><br>
+                            <div class="orange">Creation date</div>
+                            <div>{{ session_post.date }}</div><br>
+                            <div class="orange">Series</div>
+                            <div>0 series</div><br>
+                            <div class="orange">Description</div>
+                            <div>{{ session_post.description }} </div><br>
+                                <button value="VERIFY" id="card-btn" style="color: white"><a href="{{ url_for('session_verify',id= session_post.id) }}">VERIFY</a></button>
+
+                                </div>
+                        </div>
+
+
+                    </div>
+                </card>
+            </card>
+        </div>
+    </div>
+
+{% endblock %}

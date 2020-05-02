@@ -1,0 +1,77 @@
+{%  extends "PROBASE.html" %}
+
+{% block title %}PROFILE{% endblock %}
+
+{% block head %}
+    {{ super() }}
+
+{% endblock %}
+
+{% block nav %}
+    {{ super() }}
+{% endblock %}
+
+{% block body %}
+    <div class="main">
+        <div class=" row dashboard-card">
+<div class="card shadow-sm" id="dashboard-card">
+    <div class="card-body" >
+        <p>TOTAL USERS</p>
+        <p class="dashboard-content text-center">{{ total_users }}</p>
+
+    </div>
+
+</div>
+
+
+
+
+<div class="card shadow-sm" id="dashboard-card">
+    <div class="card-body" >
+        <p>TOTAL VIDEOS</p>
+        <p class="dashboard-content text-center">{{ total_videos }}</p>
+
+    </div>
+
+
+
+</div>
+
+
+</div>
+    <div class="row">
+            <div class="card shadow" id="dashboard-long-card">
+    <div class="card-body" >
+        <p>EARNINGS</p>
+        <p class="dashboard-content text-center">0</p>
+
+    </div>
+    </div>
+    </div>
+</div>
+
+
+
+
+
+{% endblock %}
+
+
+{% block script %}
+
+
+
+    <script src='../static/packages/core/main.js'></script>
+    <script src='../static/packages/daygrid/main.js'></script>
+    <script src='../static/packages/timegrid/main.js'></script>
+    <script src='../static/packages/interaction/main.js'></script>
+
+<script
+  src="https://code.jquery.com/jquery-3.4.1.js"
+  integrity="sha256-WpOohJOqMqqyKL9FccASB9O0KwACQJpFTUBLTYOVvVU="
+  crossorigin="anonymous"></script>
+<script src="../static/bootstrap/js/bootstrap.js"></script>
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script><script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+
+{% endblock %}

@@ -1,0 +1,92 @@
+{%  extends "PROBASE.html" %}
+
+{% block title %}PROFILE{% endblock %}
+
+{% block head %}
+    {{ super() }}
+
+{% endblock %}
+
+{% block nav %}
+    {{ super() }}
+{% endblock %}
+
+{% block body %}
+        {% with messages = get_flashed_messages() %}
+            {% if messages %}
+                {% for message in messages %}
+                <div class="alert alert-light alert-dismissible fade show " role="alert" >
+                {{ message }}
+                <button type="button" class="close" data-dismiss="alert">&times;</button>
+                </div>
+                {% endfor %}
+    {% endif %}
+    {% endwith %}
+
+
+
+
+
+
+
+    <div class="main">
+    <div class="session-container">
+<card class="card shadow-lg" id="create_card">
+    <card class="card-body">
+        <h6>CARD VIEW</h6>
+        <div class="row">
+        <div class="col-5 text-center">
+        <img id="profilepic-u" src="../static/profile_pics/{{ user.image_file }}" alt="" class="rounded-circle  profilepic shadow-lg" width="200" height="200">
+
+            <br>
+            <br>
+            <br>
+            <br>
+
+                    <p>Username</p>
+                    <p>{{ user.username }}</p>
+                    <p>Fullname</p>
+                    <p>{{ user.fullname }}</p>
+                    <p>Email</p>
+                    <p>{{ user.email }}</p>
+                    <p>Password</p>
+                    <p>{{ user.password }}</p>
+                    <p>Id Type</p>
+                    <p>{{ user.id_type }}</p>
+                    <p>ID number</p>
+                    <p>{{ user.id_number }}</p>
+                    <p>Nationality</p>
+                    <p>{{ user.nationality }}</p>
+                    <p>Occupation</p>
+                    <p>{{ user.occupation }}</p>
+                    <p>Province</p>
+                    <p>{{ user.province }}</p>
+                    <p>City</p>
+                    <p>{{ user.city }}</p>
+                    <p>Phone</p>
+                    <p>{{ user.phone }}</p>
+        </div>
+            <div class="col-7">
+                <div class="userview">
+                    <p>User id.</p>
+                    <p>{{ user.id }}</p>
+                    <p>Username</p>
+                    <p>{{ user.username }}</p>
+                    <p>Subscribers</p>
+                    <p>{{ user.followers.count() }}</p>
+                    <p>Sessions</p>
+                    <p>{{ user.posts| count }}</p>
+                </div>
+        </div>
+        </div>
+
+
+
+
+
+    </card>
+</card>
+</div>
+</div>
+
+{% endblock %}

@@ -1,0 +1,153 @@
+{%  extends "PROBASE.html" %}
+
+{% block title %}PROFILE{% endblock %}
+
+{% block head %}
+    {{ super() }}
+
+{% endblock %}
+
+{% block nav %}
+<div  class="sidenav-u" >
+    <div class="dropdown">
+  <button type="button"  data-toggle="dropdown" style="background: transparent;border-style: none">
+        <img id="burgermenu" src="../static/burger%20menu.png" role="button" alt="" >
+  </button>
+  <div class="dropdown-menu">
+    <a class="dropdown-item" href="#">Home</a>
+    <a class="dropdown-item" href="#">Courses</a>
+    <a class="dropdown-item" href="{{ url_for('verify',username = current_user.username) }}">Verify account <div id="circle" size="10"></div></a>
+    <a class="dropdown-item" href="#">Logout</a>
+  </div>
+</div>
+
+
+
+        <div  >
+            <div class="card" id="set">
+                <div class="card-body">
+                    <ul class="flex-column">
+                        <li id="burgermenu-text">HOME</li>
+                        <li id="burgermenu-text">COURSES</li>
+                        <li id="burgermenu-text">VERIFY ACCOUNT</li>
+                        <li id="burgermenu-text">HELP</li>
+                        <li id="burgermenu-text"><a href="/LOGOUT">LOG OUT</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+    {%  if current_user.role == 2 %}
+<div class="text-center">
+    <a href="{{ url_for('user_profile',username = current_user.username) }}"><img id="top-icon-u" style="margin-top: 60px" class="icon-u" src="../static/sessions.png" alt=""></a>
+            <a href="{{ url_for('user_profile',username = current_user.username) }}" style="color: white"><img class="icon-u" src="../static/window-maximize.png" alt=""></a>
+            <a href="{{ url_for('user_profile',username = current_user.username) }}" style="color: white"><img class="icon-u" src="../static/discover.png" alt=""></a>
+
+
+                <a href="/SETTINGS" style="color: white;padding: 0px"><img class="icon-u" src="../static/badge.png" alt=""></a>
+
+                <div id="botrnav" style="padding: 0px">
+                    <a href="/SETTINGS" style="color: white"><img class="icon-u" src="../static/SETTINGS.png" alt="" style="color: white"></a>
+                    <br>
+                    <a href="{{ url_for('logout',username = current_user.username) }}" style="color: white"><img class="icon-u" src="../static/logout.png" alt=""></a>
+                </div>
+</div>
+    {% else %}
+<div class="text-center">
+
+            <a href="{{ url_for('user_profile',username = current_user.username) }}" style="color: white"><img id="top-icon-u" class="icon-u" src="../static/sessions.png" alt=""></a>
+            <a href="/DASHBOARD" style="color: white"><img class="icon-u" src="../static/window-maximize.png" alt=""></a>
+            <a href="/DISCOVER" style="color: white"><img class="icon-u" src="../static/discover.png" alt=""></a>
+            <a href="/UPLOADS" style="color: white"><img class="icon-u" src="../static/uploads.png" alt=""></a>
+
+
+
+                <div id="botrnav" style="padding: 0px">
+                    <a href="/SETTINGS" style="color: white"><img class="icon-u" src="../static/SETTINGS.png" alt="" style="color: white"></a>
+                    <br>
+                    <a href="{{ url_for('logout') }}" style="color: white"><img class="icon-u" src="../static/logout.png" alt=""></a>
+                </div>
+    {% endif %}
+    </div>
+</div>
+
+{% endblock %}
+
+{% block body %}
+<div class="main-u">
+<div class="row">
+        <img id="profilepic-u" src="{{ image_file }}" alt="" class="rounded-circle  profilepic shadow-lg" width="200" height="200">
+<div class="text-center" style="margin-left: 70px">
+  <p id="profilename-u">{{ user.username }}</p>
+<div>
+  <p style="margin-top: 30px;font-size: 13px">{{ user.followers.count() }}
+      {% if user.followers.count() == 1 %}
+      subscriber
+      {% else %}
+      subscribers
+      {% endif %}</p>
+        {% if user == current_user %}
+        {% elif not current_user.is_following(user) %}
+        <button style="color: white" id="card-btn"><a href="{{ url_for('follow', username=user.username) }}" style="color: white">Subscribe</a></button></p>
+        {% else %}
+        <button style="width: fit-content;color: white" id="card-btn"><a style="color: white" href="{{ url_for('unfollow', username=user.username) }}">Unsubscribe</a></button>
+        {% endif %}
+</div>
+</div>
+
+
+</div>
+</div>
+
+<div class="row">
+<div class="tab">
+  <button class="tablinks" onclick="openCity(event, 'session-tab')">Sessions</button>
+  <button class="tablinks" onclick="openCity(event, 'Paris')">Posts</button>
+  <button class="tablinks" onclick="openCity(event, 'Tokyo')">Reviews</button>
+</div>
+
+</div>
+
+<div class="row">
+<!-- Tab content -->
+<div id="session-tab" class="tabcontent">
+   {% for posts in  user.posts %}
+        {% if posts.verified == 0  %}
+     <div class="row">
+
+        <div class="card  shadow-lg  " id="session-card">
+
+            <div class="card-body">
+                <p><img src="../static/calendar-check.png" alt="" class="session-card-left">{{ posts.date }}<img src="../static/clock.png" alt="" class="session-card-right">{{ posts.start_time }} - {{ posts.end_time }}</p>
+                <div class="text-center description">
+                    <h6><b style="text-transform: uppercase">{{ posts.title }}</b></h6>
+                    <p style="font-size: 12px;color:gray" class="text-justify text-left ">{{ posts.description }}</p>
+                    <button value="JOIN" id="card-btn" style="color: white">BOOK</button>
+                </div>
+                {% endif %}
+
+            </div>
+{% endfor %}
+</div>
+
+</div>
+
+<div id="Paris" class="tabcontent">
+<ul>
+
+    <li></li>
+</ul>
+
+</div>
+
+<div id="Tokyo" class="tabcontent">
+  <h3>Tokyo</h3>
+  <p>Tokyo is the capital of Japan.</p>
+</div>
+</div>
+</div>
+{% endblock %}
+
+{% block script %}
+    {{ super() }}
+{% endblock %}

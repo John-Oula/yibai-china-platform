@@ -1,0 +1,186 @@
+{%  extends "PROBASE.html" %}
+
+{% block title %}PROFILE{% endblock %}
+
+{% block head %}
+    {{ super() }}
+
+{% endblock %}
+
+{% block nav %}
+    {{ super() }}
+{% endblock %}
+
+{% block body %}
+        {% with messages = get_flashed_messages() %}
+            {% if messages %}
+                {% for message in messages %}
+                <div class="alert alert-light alert-dismissible fade show " role="alert" >
+                {{ message }}
+                <button type="button" class="close" data-dismiss="alert">&times;</button>
+                </div>
+                {% endfor %}
+    {% endif %}
+    {% endwith %}
+
+
+
+
+
+
+
+    <div class="main">
+    <div class="session-container">
+<card class="card shadow-lg" id="create_card" style="overflow-x: scroll;overflow-y: scroll">
+    <card class="card-body" style="white-space: nowrap">
+        <div class="row">
+            {% if user_role == 2 %}
+        <table class="table table-striped table-condensed" style="display: table">
+    <div class="container">
+    <div class="bd-example">
+
+<div class="scrollspy-container">
+  <thead>
+    <tr>
+      <th scope="col">ID</th>
+      <th scope="col">role</th>
+      <th scope="col">Fullname</th>
+      <th scope="col">Username</th>
+      <th scope="col">Email</th>
+      <th scope="col">Nationality</th>
+      <th scope="col">Occupation</th>
+      <th scope="col">ID No.</th>
+      <th scope="col">Residency</th>
+      <th scope="col">Phone</th>
+      <th scope="col">Status</th>
+    </tr>
+  </thead>
+  <tbody>
+
+      <th scope="row">
+
+	<div data-spy="scroll" data-target="#navbar-example2" data-offset="0" class="scrollspy-example">
+
+          {% for user in all_users %}
+              <tr>
+              <td>{{ user.id }}</td>
+              <td>
+                  {% if user.role == 2 %}
+
+                  <p>SuperAdmin</p>
+                  {% elif user.role == 1 %}
+                  <p>Admin</p>
+                  {% else %}
+                  <p>User</p>
+                  {% endif %}
+              </td>
+              <td><a href="{{ url_for('userview', username=user.username) }}">{{ user.fullname }}</a></td>
+              <td><a href="{{ url_for('userview', username=user.username) }}">{{ user.username }}</a></td>
+              <td>{{ user.email }}</td>
+              <td>{{ user.nationality }}</td>
+              <td>{{ user.occupation }}</td>
+              <td>{{ user.id_number }}</td>
+              <td>{{ user.residency }}</td>
+              <td>{{ user.phone }}</td>
+              <td>    {% if session['known'] == current_user.id %}
+                  <p>Online</p>
+                  {% else %}
+                  <p>Offline</p>
+                  {% endif %}</td>
+              </tr>
+          {% endfor %}
+
+
+  </div>
+</div>
+    	</div>
+
+</div>
+      </th>
+    </tr>
+  </tbody>
+</table>
+            {% else %}
+                    <div class="col-4">
+                          <ul class="nav flex-column" role="tablist" style="background-color: white">
+    <li class="nav-item">
+            <li class="nav-item">
+      <a class="nav-link" data-toggle="pill" href="#edit-pill">EDIT PROFILE</a>
+    </li>
+    <li>
+      <a class="nav-link " data-toggle="pill" href="#payment-pill">PAYMENT METHODS</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" data-toggle="pill" href="#faq-pill">FAQ'S</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" data-toggle="pill" href="#help-pill">HELP</a>
+    </li>
+  </ul>
+
+                    </div>
+
+            <div class="col-7 text-center">
+              <div class="tab-content">
+    <div id="edit-pill" class="container tab-pane active"><br>
+        <h6>Edit Profile Info</h6><br>
+        <form action="" class="text-center" method="POST" enctype="multipart/form-data">
+            {{ form.username.label }}<br>
+        {{ form.username(class = "input-box-border border border-top-0 border-left-0 border-right-0") }}<br><br>
+            {{ form.email.label }}<br>
+        {{ form.email(class = "input-box-border border border-top-0 border-left-0 border-right-0") }}<br><br>
+            {{ form.password.label }}<br>
+        {{ form.password(class = "input-box-border border border-top-0 border-left-0 border-right-0") }}<br><br>
+            <br>
+            <br>
+
+        {{ form.pic.label }}<br>
+        {{ form.pic(class = "form-control-file text-center border") }}
+
+<input id="card-btn" type="submit" class="btn-text text-center" style="margin-top: 20px;" value="SUBMIT">
+
+        </form>
+
+    </div>
+
+
+    <div id="payment-pill" class="container tab-pane fade">
+
+    </div>
+    <div id="faq-pill" class="container tab-pane fade"><br>
+
+        <form action="" method="POST">
+            {{ form.date }}
+        </form>
+
+    </div>
+    <div id="help-pill" class="container tab-pane fade"><br>
+         <div  id="demo3">
+
+
+
+       <div class="row">
+                  <div class="col-4">
+
+
+        </div>
+       </div>
+
+
+       </div>
+
+    </div>
+  </div>
+
+        </div>
+            {% endif %}
+
+        </div>
+
+
+    </card>
+</card>
+</div>
+</div>
+
+{% endblock %}

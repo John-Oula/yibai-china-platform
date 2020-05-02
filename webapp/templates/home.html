@@ -1,0 +1,126 @@
+{%  extends "base.html" %}
+
+{% block title %}HOME{% endblock %}
+
+{% block head %}
+    {{ super() }}
+
+{% endblock %}
+
+
+{% block background %}
+<body class="home">
+{% endblock %}
+
+
+{% block nav %}
+    {{ super() }}
+{% endblock %}
+
+{% block body %}
+ <p class="text-center" style="margin-top: 1200px;font-size: 37px;color: #444444" >Why 100ChinaGuide?</p>
+<div class="row text-center" id="home-image-one">
+<div class="col-4 text-center">
+    <div class="card shadow-lg">
+    <div class="card-body">
+            <img src="../static/Group%20277%20-%20Copy.png" alt="" class="d-block mx-auto"><br>
+        <p class="home-text-upper">LIVE MANDARIN SESSION STREAMING</p>
+        <p class="home-text-lower">Stream live mandarin classes at no cost <br> from anywhere in the world. </p>
+
+    </div>
+    </div>
+    </div>
+
+<div class="col-4 text-center">
+    <div class="card shadow-lg">
+        <div class="card-body">
+
+            <img src="../static/Group%20278%20-%20Copy.png" alt="" class="d-block mx-auto"><br>
+    <p class="home-text-upper">LIVE PROFESSIONAL CONSULTANCY</p>
+    <p class="home-text-lower">Get access to live consultancy services from certified sources <br> on our platform according to your field of specialization. </p>
+    </div>
+        </div>
+    </div>
+
+<div class="col-4 text-center">
+    <div class="card shadow-lg">
+        <div class="card-body">
+
+        <img src="../static/Union%2066%20-%20Copy.png" alt="" class="d-block mx-auto" height="149" width="107"><br>
+        <p class="home-text-upper">KNOWLEDGE HUB</p>
+        <p class="home-text-lower">Get detailed and accurate information from accredited sources <br>if you plan to come to China or in China.</p>
+
+    </div>
+
+        </div>
+    </div>
+
+
+    </div>
+
+    <div class="row" style="margin-top: 450px"  id="home-image-two">
+    <div class="col-6" >
+        <img src="../static/sign%20up%20img.png" alt="" width="850">
+    </div>
+    <div class="col-4" style="margin-left: 250px">
+        <p class="upper-text">CONTRIBUTE YOUR  OWN</p>
+        <p class="lower-text">Explore unlimited guide videos that will help you according to your needs.</p>
+    </div>
+
+    </div>
+
+    <div class="row" style="margin-top: 750px"  id="home-image-three">
+    <div class="col-4" style="margin-left: 100px">
+        <p class="upper-text-dark">GET UNLIMITED ACCESS TO GUIDES</p>
+        <p class="lower-text-dark">Get to upload your own guide videos for others to benefit from.</p>
+    </div>
+    <div class="col-6" >
+        <img style="margin-left: 202.5px" src="../static/LAPTOP.png" alt="" width="700">
+    </div>
+
+
+    </div>
+<div class="text-center" style="margin-top: 1300px">
+<h3 style="color: #E74525"><b>SIGN UP TODAY <br> AND GET STARTED</b></h3>
+
+<button id="card-btn"><a href="/SIGNUP" style="color: white">SIGN UP</a></button>
+
+</div>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+
+<card class="card " style="background-color: #1B1C1D" id="card-size">
+        <card class="card-body" style="margin-top: 10px">
+            <div class="row">
+            <div class="col-3">
+                <h6 style="color: #E74525">CONTACT US</h6><br>
+                <p class="about-text">+86 645353241</p>
+                <p class="about-text">info@100cg.com</p>
+            </div>
+            <div class="col-3">
+                <h6 style="color: #E74525">CUSTOMER SERVICE</h6><br>
+                <p class="about-text">Contact us</p>
+                <p class="about-text">FAQ</p>
+            </div>
+            <div class="col-3">
+                <h6 style="color: #E74525">INFORMATION</h6><br>
+                <p class="about-text"><a href="">About us</a></p>
+                <p class="about-text"><a href="">Privacy Policy</a></p>
+                <p class="about-text"><a href="">Terms and Conditions</a></p>
+            </div>
+            <div class="col-3">
+                <p class="about-text" style="color: #E74525">Subscribe to us via Email</p>
+                <form action="">
+                    <input type="email" placeholder="Email Address">
+                    <button>SUBSCRIBE</button>
+                </form>
+            </div>
+            </div>
+
+        </card>
+    </card>
+
+{% endblock %}

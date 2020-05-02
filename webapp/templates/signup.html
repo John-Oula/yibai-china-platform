@@ -1,0 +1,104 @@
+{%  extends "base.html" %}
+
+{% block title %}SIGN UP{% endblock %}
+
+{% block head %}
+    {{ super() }}
+
+{% endblock %}
+
+
+{% block background %}
+    <body class="signup">
+{% endblock %}
+
+
+{% block nav %}
+    {{ super() }}
+{% endblock %}
+
+{% block body %}
+    <div class="row">
+    <div class="col-7">
+         <h1 class="sign-up-text" style="font-family: Josefin Sans, sans-serif"><b>Get access to a variety of guides <br>on the Discover page</b></h1>
+     <div class="signup-img">
+        <img src="../static/sign%20up%20img.png" alt="" width="900">
+    </div>
+
+    </div>
+   <div class="col-4">
+           <card class="card shadow-lg" id="signup-card">
+    <card class="card-body text-center">
+        <img src="../static/sign%20up%20avatar.png" alt="" width="130">
+    <form id="signup-form" action="{{ url_for('signup') }}" method="POST">
+    {{ form.hidden_tag() }}
+        <fieldset>
+        {{ form.email.label }}<br>
+         {% if form.email.errors %}
+        {{ form.email(class = "signup-input is-invalid") }}
+            {% for error in form.email.errors %}
+                <br>
+                <span class="errors">{{ error }}</span>
+                <br>
+                {% endfor %}
+        {% else %}
+                {{ form.email(class = "signup-input") }}
+            {% endif %}
+
+        {{ form.username.label }}
+         {% if form.username.errors %}
+        {{ form.username(class = "signup-input is-invalid") }}
+            {% for error in form.username.errors %}
+                <br>
+                <span class="errors">{{ error }}</span>
+                <br>
+                {% endfor %}
+        {% else %}
+                {{ form.username(class = "signup-input") }}
+
+            {% endif %}
+
+
+
+        {{ form.password.label }}
+         {% if form.password.errors %}
+        {{ form.password(class = "signup-input is-invalid") }}
+            {% for error in form.password.errors %}
+                <br>
+                <span class="errors">{{ error }}</span>
+                <br>
+                {% endfor %}
+        {% else %}
+                {{ form.password(class = "signup-input") }}
+
+            {% endif %}
+
+        {{ form.confirm_password.label }}
+         {% if form.confirm_password.errors %}
+        {{ form.confirm_password(class = "signup-input is-invalid") }}
+            {% for error in form.confirm_password.errors %}
+                <br>
+                <span class="errors">{{ error }}</span>
+                <br>
+                {% endfor %}
+        {% else %}
+                {{ form.confirm_password(class = "signup-input") }}
+
+            {% endif %}
+
+
+
+       <p style="font-size: 14px"> <input type="radio" style="margin-top: 25px">By signing up, I accept 100ChinaGuide's Terms of use and Policy</p>
+
+        {{ form.submit(id = "signup-btn") }}
+        </fieldset>
+    </form>
+    </card>
+    </card>
+
+   </div>
+
+    </div>
+
+
+{% endblock %}

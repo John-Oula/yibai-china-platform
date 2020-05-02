@@ -1,0 +1,58 @@
+
+
+{%  extends "PROBASE.html" %}
+
+{% block title %}PROFILE{% endblock %}
+
+{% block head %}
+    {{ super() }}
+
+{% endblock %}
+
+{% block nav %}
+    {{ super() }}
+{% endblock %}
+
+{% block body %}
+<div class="main">
+<card class="card shadow-lg" id="create_card">
+    <card class="card-body">
+
+   <div  class="container ">
+        <div id="demo" >
+        <ul class="text-left">
+            <li><button id="addclass" onclick="" style="background-color:white;border-color: #E55336;border-style: solid;width: 100px;border-radius: 3px">ADD</button></li>
+            <div class="class-title"></div>
+            <br>
+            <br>
+
+            <p style="color: darkgray;font-size: 13px">Upload materials e.g. PDF , Presentation(ppt)</p>
+            <button style="background-color:white;border-color: #E55336;border-style: solid;width: 100px;border-radius: 3px">UPLOAD</button>
+            <p style="color: darkgray;font-size: 13px">You must upload your materials 12 hours prior to your scheduled session after confirmation.</p>
+
+        </ul>
+  </div>
+
+    </div>
+
+        <button class="btn-text text-center" id="card-btn" style="margin-top: 20px;" type="submit" value="SUBMIT"></button>
+
+    </card>
+</card>
+
+
+
+</div>
+
+</div>
+</div>
+
+
+
+{% endblock %}
+
+
+{% block script %}
+    {{ super() }}
+
+{% endblock %}

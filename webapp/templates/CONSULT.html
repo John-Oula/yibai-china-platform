@@ -1,0 +1,126 @@
+{%  extends "base.html" %}
+
+{% block title %}TRAINING{% endblock %}
+
+{% block head %}
+    {{ super() }}
+
+{% endblock %}
+
+
+{% block background %}
+
+    <body style="background-color: #E2E2E2">
+{% endblock %}
+
+
+{% block nav %}
+<div class=" training-jumbotron">
+    <nav class="navbar navbar-expand-lg navbar-light">
+  <a class="navbar-brand" href="#">100CG</a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+  <div >
+    <ul class="navbar-nav nav-text" >
+      <li class="nav-item nav-tag ">
+        <a class="nav-link " href="/" style="color: white">HOME </a>
+      </li>
+      <li class="nav-item nav-tag">
+        <a class="nav-link " href="/DISCOVER_HOME"  style="color: white;font-family: josefin-sans,sans-serif;">DISCOVER</a>
+      </li>
+      <li class="nav-item nav-tag">
+        <a class="nav-link " href="/TRAINING"  style="color: white;font-family: josefin-sans,sans-serif;">TRAINING</a>
+      </li>
+      <li class="nav-item nav-tag">
+        <a class="nav-link " href="/EVENT"  style="color: white;font-family: josefin-sans,sans-serif;">EVENT</a>
+      </li>
+      <li class="nav-item nav-tag">
+        <a class="nav-link" href="/UNITALK"  style="color: white;font-family: josefin-sans,sans-serif;">UNITALK</a>
+      </li>
+      <li class="nav-item nav-tag">
+        <a class="nav-link" href="/ABOUT"  style="color: white;font-family: josefin-sans,sans-serif;">ABOUT</a>
+      </li>
+    <li class="nav-item nav-tag">
+        <form action="">
+            <input type="search" id="nav-search">
+        </form>
+      </li>
+    <li class="nav-item nav-tag">
+        <a class="nav-link" href="/SIGNUP"  style="color: white;font-family: josefin-sans,sans-serif;">SIGN UP</a>
+      </li>
+    <li class="nav-item nav-tag">
+        <a class="nav-link" href="/LOGIN"><img src="../static/LOG%20IN.png" alt=""></a>
+      </li>
+    </ul>
+  </div>
+</nav>
+    </div>
+ <div >
+  <div class="hero-text">
+    <p>CONSULTANCY.</p>
+
+  </div>
+</div>
+{% block body %}
+    <div class="row ">
+        <div class="col-3">
+            <ul class="discover-list vertical-line" >
+            <li><a href=""style="color: #6C6C6C">CAREER</a></li>
+            <li><a href=""style="color: #6C6C6C">VISA</a></li>
+            <li><a href=""style="color: #6C6C6C">BUSINESS</a></li>
+            <li><a href=""style="color: #6C6C6C">LEGAL</a></li>
+            <li><a href=""style="color: #6C6C6C"></a></li>
+            </ul>
+            <div class="vertical-line"></div>
+
+
+        </div>
+        <p class="session">AVAILABLE SESSIONS</p>
+        <br>
+        <div >
+    {% for posts in all_posts %}
+
+        {% if posts.verified == 1 %}
+    <!-- The Modal -->
+    <div id="myModal" class="modal">
+
+      <!-- Modal content -->
+      <div class="modal-content">
+
+    </div>
+        <div class="card  shadow-lg  " id="session-card">
+            <div class="card-body">
+                <p><img src="../static/calendar-check.png" alt="" class="session-card-left">{{ posts.date }}<img src="../static/clock.png" alt="" class="session-card-right">{{ posts.start_time}} - {{ posts.end_time}}</p>
+                <div class="text-center description">
+                    <h6><b style="text-transform: uppercase">{{ posts.title }}</b></h6>
+                    <p style="font-size: 12px;color:gray" class="text-justify text-left ">{{ posts.description }}</p>
+                    <button value="JOIN" class="card-btn" id="myBtn" style="color: white">BOOK</button>
+                </div>
+                {% else %}
+
+            <div >
+
+                </div>
+                {% endif %}
+
+            </div>
+            </div>
+            </div>
+        </div>
+
+    {% endfor %}
+</div>
+
+    </div>
+</div>
+{% endblock %}
+
+
+{% endblock %}
+
+{% block script %}
+{{ super()}}
+
+
+{% endblock %}

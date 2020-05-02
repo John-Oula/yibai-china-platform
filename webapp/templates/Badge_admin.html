@@ -1,0 +1,56 @@
+{%  extends "PROBASE.html" %}
+
+{% block title %}PROFILE{% endblock %}
+
+{% block head %}
+    {{ super() }}
+
+{% endblock %}
+
+{% block nav %}
+    {{ super() }}
+{% endblock %}
+
+{% block body %}
+
+<div class="main">
+<div>
+ {% if current_user.role == 1 and current_user.sub_role == 4 %}
+<div class="btn-group btn-group-sm text-center ">
+  <button type="button" class="btn btn-light">Business</button>
+  <button type="button" class="btn btn-light">Career</button>
+  <button type="button" class="btn btn-light">Visa</button>
+  <button type="button" class="btn btn-light">Living</button>
+  <button type="button" class="btn btn-light">Tourism</button>
+  <button type="button" class="btn btn-light">Housing</button>
+
+
+          {% for post in all_posts %}
+             {%  if post.verified  == 0 %}
+                <card class="card shadow-sm" style="width: 200px;margin-top: 10px;margin-left: 60px">
+                <card class="card-body">
+                    <p>{{ post.title }}</p>
+                    <p style="font-size: 13px;font-family:'Segoe UI';color: darkgray">{{ post.category }}</p>
+                    <button id="card-btn" style="color: white">VIEW</button>
+                </card>
+                </card>
+
+              {% endif %}
+          {% endfor %}
+
+
+
+ {%  else %}
+
+
+</div>
+{% endif %}
+
+
+</div>
+
+</div>
+{% block script %}
+    {{ super() }}
+
+{% endblock %}

@@ -1,0 +1,75 @@
+{%  extends "PROBASE.html" %}
+
+{% block title %}PROFILE{% endblock %}
+
+{% block head %}
+    {{ super() }}
+
+{% endblock %}
+
+{% block nav %}
+    {{ super() }}
+{% endblock %}
+
+{% block body %}
+
+<div class="main">
+<div>
+<div class="btn-group btn-group-sm text-center ">
+  <button type="button" class="btn btn-light">Business</button>
+  <button type="button" class="btn btn-light">Career</button>
+  <button type="button" class="btn btn-light">Visa</button>
+  <button type="button" class="btn btn-light">Living</button>
+  <button type="button" class="btn btn-light">Tourism</button>
+  <button type="button" class="btn btn-light">Housing</button>
+
+</div>
+<div class="row">
+          {% for post in all_posts %}
+    <div class="row">
+                <card  class="card shadow-sm" style="width: 500px;margin-top: 10px;margin-left: 60px">
+                <card class="card-body">
+                    <div class="row">
+                        <div class="col-5">
+                        <a href="{{ url_for('session_view',id=post.id) }}"><img src="../static/profile_pics/{{ user.image_file }}" width="50" height="50" class="rounded-circle"></a>
+
+                            </div>
+                        <div class="col-7">
+                        <p>{{ post.title }}<br>
+                            <span style="font-size: 13px;font-family:'Segoe UI';color: darkgray">{{ post.category }}</span><br>
+                            <span style="font-size: 13px;font-family:'Segoe UI';color: darkgray">Uploaded by {{ post.author.username }}</span>
+
+                        </p>
+                            </div>
+
+
+                    </div>
+
+
+                </card>
+                </card>
+    </div>
+
+          {% endfor %}
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+</div>
+
+</div>
+{% endblock %}
+
+{% block script %}
+    {{ super() }}
+
+{% endblock %}

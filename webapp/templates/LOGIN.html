@@ -1,0 +1,80 @@
+{%  extends "base.html" %}
+
+{% block title %}LOGIN{% endblock %}
+
+{% block head %}
+    {{ super() }}
+
+{% endblock %}
+
+
+{% block background %}
+    <body class="signup">
+{% endblock %}
+
+
+{% block nav %}
+    {{ super() }}
+{% endblock %}
+
+{% block body %}
+    <div class="row">
+    <div class="col-7">
+         <h1 class="sign-up-text"><b>Get access to a variety of guides <br>on the Discover page</b></h1>
+     <div class="signup-img">
+        <img src="../static/sign%20up%20img.png" alt="" width="900">
+    </div>
+
+    </div>
+   <div class="col-4">
+       <card class="card shadow-lg" id="login-card">
+    <card class="card-body text-center">
+        <img src="../static/sign%20up%20avatar.png" alt="" width="130">
+    <form id="signup-form" action="{{ url_for('login') }}" method="POST">
+
+        <fieldset>
+         {{ form.hidden_tag() }}
+        {{ form.username.label }}
+         {% if form.username.errors %}
+        {{ form.username(class = "signup-input is-invalid") }}
+            {% for error in form.username.errors %}
+                <br>
+                <span class="errors">{{ error }}</span>
+                <br>
+                {% endfor %}
+        {% else %}
+                {{ form.username(class = "signup-input") }}
+            {% endif %}
+
+
+        {{ form.password.label }}
+         {% if form.password.errors %}
+        {{ form.username(class = "signup-input is-invalid") }}
+            {% for error in form.password.errors %}
+                <br>
+                <span class="errors">{{ error }}</span>
+                <br>
+                {% endfor %}
+        {% else %}
+                {{ form.password(class = "signup-input") }}
+            {% endif %}
+
+
+            <div>
+
+            </div>
+       <p style="font-size: 14px"> <input type="radio" style="margin-top: 25px">Remember me</p>
+        {{ form.submit(id = "signup-btn") }}
+        </fieldset>
+    </form>
+        <br>
+        <br>
+
+    <span><a href="#" style="">Forgot password?</a></span>
+    </card>
+    </card>
+   </div>
+
+    </div>
+
+{% endblock %}

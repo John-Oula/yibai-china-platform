@@ -1,0 +1,172 @@
+{%  extends "PROBASE.html" %}
+
+{% block title %}PROFILE{% endblock %}
+
+{% block head %}
+    {{ super() }}
+
+{% endblock %}
+
+{% block nav %}
+    {{ super() }}
+{% endblock %}
+
+{% block body %}
+    <div class="main">
+    {%  if current_user.role == 2 %}
+        <div class=" row dashboard-card">
+<div class="card shadow-sm" id="dashboard-card">
+    <div class="card-body" >
+        <p>TOTAL VIDEOS</p>
+        <p class="dashboard-content text-center">{{ total_videos }}</p>
+
+    </div>
+
+</div>
+
+
+
+
+<div class="card shadow-sm" id="dashboard-card">
+    <div class="card-body" >
+        <p>TOTAL </p>
+        <p class="dashboard-content text-center">{{ len(current_user.upload.liked) }}</p>
+
+    </div>
+
+
+
+</div>
+
+
+</div>
+    <div class="row">
+            <div class="card shadow
+" id="dashboard-long-card">
+    <div class="card-body" >
+        <p>EARNINGS</p>
+        <p class="dashboard-content text-center">0</p>
+
+    </div>
+    </div>
+    </div>
+</div>
+    {% else %}
+
+
+<div class=" row dashboard-card">
+<div class="card shadow-sm" id="dashboard-card">
+    <div class="card-body" >
+        <p>TOTAL LIKES</p>
+        <p class="dashboard-content text-center">{{ current_user.liked | length }}</p>
+
+    </div>
+
+</div>
+
+
+
+
+<div class="card shadow-sm" id="dashboard-card">
+    <div class="card-body" >
+        <p>CREATED SESSIONS</p>
+        <p class="dashboard-content text-center">{{ my_posts }}</p>
+
+    </div>
+
+
+
+</div>
+
+
+</div>
+    <div class="row">
+            <div class="card shadow" id="dashboard-long-card">
+    <div class="card-body" >
+        <p>EARNINGS</p>
+        <p class="dashboard-content text-center">0</p>
+
+    </div>
+    </div>
+    </div>
+
+
+{% endif %}
+
+{% endblock %}
+</div>
+
+
+{% block script %}
+
+ <script>
+
+    document.addEventListener('DOMContentLoaded', function() {
+  var calendarEl = document.getElementById('calendar');
+
+
+        var calendar = new FullCalendar.Calendar(calendarEl, {
+    plugins: [ 'interaction', 'dayGrid', 'timeGrid','bootstrap' ],
+
+     events:'/package.json',
+
+
+
+    themeSystem: 'bootstrap',
+    defaultView: 'dayGridMonth',
+    defaultDate: Date.now(),
+    navLinks: true,
+    selectable: true,
+    selectMirror: true,
+    unselectAuto: false,
+    nowIndicator: true,
+    editable: true,
+    eventBackgroundColor: '#E74525',
+    eventBorderColor: '#E74525',
+    eventTextColor: 'white',
+    eventTimeFormat:{
+      hour: 'numeric',
+      minute:'2-digit',
+      meridiem: false,
+
+    },
+
+    header: {
+      left: 'prev,next today',
+      center: 'title',
+
+      right: 'dayGridMonth,timeGridWeek,timeGridDay'
+    },
+    height: 650,
+
+    slotDuration: '00:05' ,
+    allDayDefault: true,
+
+    displayEventEnd: true,
+  });
+
+
+  calendar.render();
+  calendar.addEvent( event [ 'package.json' ] )
+
+
+});
+
+
+</script>
+
+
+    <script src='../static/packages/core/main.js'></script>
+    <script src='../static/packages/daygrid/main.js'></script>
+    <script src='../static/packages/timegrid/main.js'></script>
+    <script src='../static/packages/interaction/main.js'></script>
+
+<script
+  src="https://code.jquery.com/jquery-3.4.1.js"
+  integrity="sha256-WpOohJOqMqqyKL9FccASB9O0KwACQJpFTUBLTYOVvVU="
+  crossorigin="anonymous"></script>
+<script src="../static/bootstrap/js/bootstrap.js"></script>
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script><script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+
+{% endblock %}

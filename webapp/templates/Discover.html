@@ -1,0 +1,88 @@
+{%  extends "PROBASE.html" %}
+
+{% block title %}PROFILE{% endblock %}
+
+{% block head %}
+    {{ super() }}
+
+{% endblock %}
+
+{% block nav %}
+    {{ super() }}
+{% endblock %}
+
+{% block body %}
+
+<div class="main">
+<div >
+ {% if current_user.role == 2 %}
+
+<!-- Trigger/Open The Modal -->
+<button id="myBtn" >Open Modal</button>
+
+<!-- The Modal -->
+
+
+
+
+
+
+          {% for post in all_posts %}
+             {%  if post.verified  == 0 %}
+                <card class="card shadow-sm" style="width: 200px;margin-top: 10px;margin-left: 60px">
+                <card class="card-body">
+                    <p>{{ post.title }}</p>
+                    <p style="font-size: 13px;font-family:'Segoe UI';color: darkgray">{{ post.category }}</p>
+                    <button id="card-btn" style="color: white">VIEW</button>
+                </card>
+                </card>
+
+              {% endif %}
+          {% endfor %}
+
+
+
+ {%  else %}
+<div class="btn-group btn-group-sm text-center ">
+  <button type="button" class="btn btn-light">Business</button>
+  <button type="button" class="btn btn-light">Career</button>
+  <button type="button" class="btn btn-light">Visa</button>
+  <button type="button" class="btn btn-light">Living</button>
+  <button type="button" class="btn btn-light">Tourism</button>
+  <button type="button" class="btn btn-light">Housing</button>
+
+</div>
+{% endif %}
+
+
+</div>
+
+<div class="uploads">
+<ul>
+{% for  upload in uploads%}
+    <card class="card" style="height: fit-content;width: fit-content;margin-top: 30px">
+    <card class="card-body">
+        <li><a href="{{ url_for('video',upload_ref=upload.upload_ref) }}"><video width="250" height="200" type="video/mp4" src="../static/videos/discover videos/{{ upload.upload_ref }}" alt=""></video></a></li></li>
+        <p>{{ upload.title}}</p>
+        <p style="font-size: 10px">Uploaded by {{ upload.uploader.username}}</p>
+        <p style="font-size: 10px">{{ upload.category }}</p>
+        {% if upload.price == None %}
+        <p>Free</p>
+        {% else %}
+        <p>{{ upload.price }}</p>
+        {% endif %}
+
+
+
+    </card>
+    </card>
+
+    {% endfor %}
+{% endblock %}
+</ul>
+</div>
+</div>
+{% block script %}
+    {{ super() }}
+
+{% endblock %}

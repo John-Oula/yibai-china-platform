@@ -1,0 +1,73 @@
+{%  extends "PROBASE.html" %}
+
+{% block title %}PROFILE{% endblock %}
+
+{% block head %}
+    {{ super() }}
+
+{% endblock %}
+
+{% block nav %}
+    {{ super() }}
+{% endblock %}
+
+{% block body %}
+
+<div class="main">
+<div>
+ {% if current_user.role == 1 and current_user.sub_role == 1 %}
+<div class="btn-group btn-group-sm text-center ">
+  <button type="button" class="btn btn-light">Business</button>
+  <button type="button" class="btn btn-light">Career</button>
+  <button type="button" class="btn btn-light">Visa</button>
+  <button type="button" class="btn btn-light">Living</button>
+  <button type="button" class="btn btn-light">Tourism</button>
+  <button type="button" class="btn btn-light">Housing</button>
+</div>
+
+          {% for upload in uploads %}
+
+                <card class="card shadow-sm" style="width: 300px;margin-top: 10px;margin-left: 60px">
+                <card class="card-body">
+                    <div class="row">
+                        <div class="col-5">
+                        <a href="{{ url_for('video_view',upload_ref = upload.upload_ref) }}"><video src="../static/videos/discover videos/{{ upload.upload_ref }}" width="100" height="50"></video></a>
+                                                <img width="20" src="../static/heart.png" alt="">  {{ upload.liked.count() }}
+
+                            </div>
+                        <div class="col-7">
+                        <p>{{ upload.title }}<br>
+                            <span style="font-size: 13px;font-family:'Segoe UI';color: darkgray">{{ upload.category }}</span><br>
+                            <span style="font-size: 13px;font-family:'Segoe UI';color: darkgray">Uploaded by {{ upload.uploader.username }}</span>
+
+                        </p>
+                            </div>
+
+
+                    </div>
+
+
+                </card>
+                </card>
+
+
+          {% endfor %}
+
+
+
+ {%  else %}
+
+
+
+{% endif %}
+
+
+</div>
+
+</div>
+{% endblock %}
+
+{% block script %}
+    {{ super() }}
+
+{% endblock %}

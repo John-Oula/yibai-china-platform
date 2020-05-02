@@ -1,0 +1,66 @@
+{%  extends "PROBASE.html" %}
+
+{% block title %}PROFILE{% endblock %}
+
+{% block head %}
+    {{ super() }}
+
+{% endblock %}
+
+{% block nav %}
+    {{ super() }}
+{% endblock %}
+
+{% block body %}
+        {% with messages = get_flashed_messages() %}
+            {% if messages %}
+                {% for message in messages %}
+                <div class="alert alert-light alert-dismissible fade show " role="alert" >
+                {{ message }}
+                <button type="button" class="close" data-dismiss="alert">&times;</button>
+                </div>
+                {% endfor %}
+    {% endif %}
+    {% endwith %}
+
+
+
+
+    <div class="main">
+        <div class="session-container">
+            <card class="card shadow-lg" id="create_card">
+                <card class="card-body">
+                    <div class="row">
+                        <div class="col-5">
+                            <video style="margin-top: 20px"  width="400" height="300" type="video/mp4" controls  src="../static/videos/{{ video.upload_ref }}"></video>
+                            <div class="row">
+
+
+                            </div>
+                        </div>
+                        <div class="col-7">
+                            <div style="margin-left: 150px">
+                            <div style="margin-top: 40px" class="orange">Title</div>
+                            <div>{{ video.title }}</div>
+                                <br>
+                            <div class="orange">Uploader</div>
+                            <div>{{ video.uploader.username }}</div><br>
+                            <div class="orange">Upload date</div>
+                            <div>{{ video.timestamp }}</div><br>
+                            <div class="orange">Likes</div>
+                            <div>{{ video.liked.count() }} likes</div><br>
+                            <div class="orange">Comments</div>
+                            <div>{{ video.comments.count() }} comments</div><br>
+                            <div class="orange">Description</div>
+                            <div>{{ video.description }} </div><br>
+                                </div>
+                        </div>
+
+
+                    </div>
+                </card>
+            </card>
+        </div>
+    </div>
+
+{% endblock %}

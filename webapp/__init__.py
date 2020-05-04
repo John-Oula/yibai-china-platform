@@ -761,7 +761,7 @@ def discover(req_path,username):
     # Permission
     user_role = current_user.role
 
-    BASE_DIR = '/Users/ASUS/Desktop/100CHINAGUIDE/webapp/static'
+    BASE_DIR = '/var/www/App/webapp/static'
 
     # Joining the base and the requested path
     abs_path = os.path.join(BASE_DIR, req_path)

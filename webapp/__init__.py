@@ -877,7 +877,7 @@ def create(username):
 
         
         db.session.commit()
-        return redirect(url_for('lesson',username=current_user.username,id=post.id ))
+        return redirect(url_for('user',username=current_user.username))
     return render_template('CREATE1.html',user=user,user_role = user_role,form=form,verify_form=verify_form,lesson_form=lesson_form,image_file=image_file)
 
 

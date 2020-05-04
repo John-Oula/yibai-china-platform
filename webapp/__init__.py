@@ -27,6 +27,7 @@ app = Flask(__name__)
 
 UPLOAD_FOLDER = "/videos"
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+app.config['SECRET_KEY'] = 'Adawug;irwugw79536870635785ty0875y03davvavavdey'
 
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://power_user:@poweruserpass@172.16.214.87:5432/100CG'
@@ -895,7 +896,7 @@ def upload(username):
         _, f_ext = os.path.splitext(file.filename)
         file_hex = random_hex
         file_fn = random_hex + f_ext
-        file.save(os.path.join(current_app.root_path, 'static/videos/discover videos', file_fn))
+        file.save(os.path.join(app.root_path, 'static/videos/discover videos', file_fn))
         path = os.path.join(file_fn)
         upload = Upload(title=form.title.data,description=form.description.data,category=form.category.data,price= form.price.data,upload_ref=path,uploader=current_user)
         db.session.add(upload)
@@ -1068,7 +1069,7 @@ def reset_token(token):
     form = Reset_password()
     if form.validate_on_submit() and request.method == "POST":
 
-        hashed_password = bcrypt.generate_password_hash(form.password.data).decode('utf-8')
+        hashed_password =form.password.data
         user.password = hashed_password
         db.session.commit()
         flash('Updated')

@@ -124,13 +124,13 @@
                     <div class="row">
                         <div class="col-5"></div>
                         <div class="col-5">
-                            {% if posts.verified == 1 %}
+                            {% if posts.verified == 0 %}
                               <p style="font-size: 13px">Waiting for verification</p>
 
                             {% else %}
 
                             <p style="font-size: 13px">once you start the session users will be notified 30 seconds earlier</p>
-                                <button value="VERIFY" id="card-btn" style="color: white"><a href="{{ url_for('session_verify',id= session_post.id) }}">VERIFY</a></button>
+                                <button value="VERIFY" id="card-btn" style="color: white"><a href="{{ url_for('session_verify',id= posts.id) }}">START</a></button>
 
                             {% endif %}
                         </div>

@@ -18,7 +18,7 @@
 {% endblock %}
 
 {% block body %}
- <p class="text-center" style="margin-top: 1200px;font-size: 37px;color: #444444" >Why 100ChinaGuide?</p>
+ <p class="text-center title"  >Why 100ChinaGuide?</p>
 <div class="row text-center" id="home-image-one">
 <div class="col-4 text-center">
     <div class="card shadow-lg">
@@ -58,32 +58,32 @@
 
     </div>
 
-    <div class="row" style="margin-top: 450px"  id="home-image-two">
+    <div class="row"  id="home-image-two">
     <div class="col-6" >
         <img src="../static/sign%20up%20img.png" alt="" width="850">
     </div>
-    <div class="col-4" style="margin-left: 250px">
+    <div class="col-4 left-home-text" >
         <p class="upper-text">CONTRIBUTE YOUR  OWN</p>
         <p class="lower-text">Explore unlimited guide videos that will help you according to your needs.</p>
     </div>
 
     </div>
 
-    <div class="row" style="margin-top: 750px"  id="home-image-three">
-    <div class="col-4" style="margin-left: 100px">
+    <div class="row"   id="home-image-three">
+    <div class="col-4 right-home-text">
         <p class="upper-text-dark">GET UNLIMITED ACCESS TO GUIDES</p>
         <p class="lower-text-dark">Get to upload your own guide videos for others to benefit from.</p>
     </div>
     <div class="col-6" >
-        <img style="margin-left: 202.5px" src="../static/LAPTOP.png" alt="" width="700">
+        <img class="laptop" src="../static/LAPTOP.png" alt="" width="700">
     </div>
 
 
     </div>
-<div class="text-center" style="margin-top: 1300px">
-<h3 style="color: #E74525"><b>SIGN UP TODAY <br> AND GET STARTED</b></h3>
+<div class="text-center" >
+<h3 class="bottom-header" ><b>SIGN UP TODAY <br> AND GET STARTED</b></h3>
 
-<button id="card-btn"><a href="/SIGNUP" style="color: white">SIGN UP</a></button>
+<button type="button" id="card-btn" href="{{url_for('signup')}}" >SIGN UP</button>
 
 </div>
     <br>
@@ -92,32 +92,26 @@
     <br>
     <br>
 
-<card class="card " style="background-color: #1B1C1D" id="card-size">
-        <card class="card-body" style="margin-top: 10px">
+<card class="card "  id="footer">
+        <card class="card-body" id="footer-body">
             <div class="row">
             <div class="col-3">
-                <h6 style="color: #E74525">CONTACT US</h6><br>
-                <p class="about-text">+86 645353241</p>
-                <p class="about-text">info@100cg.com</p>
+                <h6>CONTACT US</h6><br>
+                <p class="about-text">+8618994050515</p>
+                <p class="about-text">service@100chinaguide.com</p>
             </div>
             <div class="col-3">
-                <h6 style="color: #E74525">CUSTOMER SERVICE</h6><br>
+                <h6 >CUSTOMER SERVICE</h6><br>
                 <p class="about-text">Contact us</p>
                 <p class="about-text">FAQ</p>
             </div>
             <div class="col-3">
-                <h6 style="color: #E74525">INFORMATION</h6><br>
+                <h6>INFORMATION</h6><br>
                 <p class="about-text"><a href="">About us</a></p>
                 <p class="about-text"><a href="">Privacy Policy</a></p>
                 <p class="about-text"><a href="">Terms and Conditions</a></p>
             </div>
-            <div class="col-3">
-                <p class="about-text" style="color: #E74525">Subscribe to us via Email</p>
-                <form action="">
-                    <input type="email" placeholder="Email Address">
-                    <button>SUBSCRIBE</button>
-                </form>
-            </div>
+
             </div>
 
         </card>

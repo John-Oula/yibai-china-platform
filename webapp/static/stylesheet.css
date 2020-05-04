@@ -15,12 +15,24 @@ ul{}
     width: 100%;
 }
 
+.bottom-header{
+    color: #E74525;
+    margin-top: 1300px;
+}
+
+.title{
+    margin-top: 1200px;
+    font-size: 37px;
+    color: #444444;
+}
 li.nav-item{
     float: left;
 
 }
 
-
+.laptop{
+    margin-left: 202.5px;
+}
 
 #home-image-one{
     margin-top: 50px;
@@ -31,12 +43,24 @@ li.nav-item{
 
 #home-image-two img{
     margin-left: 100px;
+    margin-top: 450px;
 }
 
+#home-image-three{
+    margin-top: 750px;
+}
+.right-home-text{
+    margin-left: 100px;
+}
+
+.left-home-text{
+    margin-left: 250px;
+}
 .upper-text{
     color: white;
     font-size: 35px;
     font-weight: bold;
+    margin-top: 450px;
 }
 
 .lower-text{
@@ -99,12 +123,16 @@ input#nav-search{
     color: white;
     font-size: 14px;
 }
-#card-size{
+#footer{
     height: 300px;
     border-style: none;
     background-color: #1B1C1D;
     border-radius: 0px;
+    color: #E74525;
 
+}
+#footer-body{
+    padding: 30px;
 }
 /*SIGNUP*/
 .sign-up-text{
@@ -232,6 +260,9 @@ a{
   overflow: hidden;
 }
 
+button{
+    color: white;
+}
 /* Style the buttons that are used to open the tab content */
 .tab button {
   background-color: inherit;
@@ -768,7 +799,7 @@ font-style: normal;
     font-family: josefin-sans,sans-serif;
     font-weight: 400;
     font-style: normal;
-  display: block;
+    display: block;
 }
 
 /* The navigation menu links */

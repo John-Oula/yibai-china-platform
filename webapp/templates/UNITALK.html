@@ -15,45 +15,7 @@
 
 {% block nav %}
 <div class=" unitalk-jumbotron">
-    <nav class="navbar navbar-expand-lg navbar-light">
-  <a class="navbar-brand" href="#">100CG</a>
-  <button class="navbar-toggler" type="button" data-toggle="collapse" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
-    <span class="navbar-toggler-icon"></span>
-  </button>
-  <div >
-    <ul class="navbar-nav nav-text" >
-      <li class="nav-item nav-tag ">
-        <a class="nav-link " href="/" style="color: white">HOME </a>
-      </li>
-      <li class="nav-item nav-tag">
-        <a class="nav-link " href="/DISCOVER_HOME"  style="color: white">DISCOVER</a>
-      </li>
-      <li class="nav-item nav-tag">
-        <a class="nav-link " href="/TRAINING"  style="color: white">TRAINING</a>
-      </li>
-      <li class="nav-item nav-tag">
-        <a class="nav-link " href="/EVENT"  style="color: white">EVENT</a>
-      </li>
-      <li class="nav-item nav-tag">
-        <a class="nav-link" href="/UNITALK"  style="color: white">UNITALK</a>
-      </li>
-      <li class="nav-item nav-tag">
-        <a class="nav-link" href="/ABOUT"  style="color: white">ABOUT</a>
-      </li>
-    <li class="nav-item nav-tag">
-        <form action="">
-            <input type="search" id="nav-search">
-        </form>
-      </li>
-    <li class="nav-item nav-tag">
-        <a class="nav-link" href="/SIGNUP"  style="color: white">SIGN UP</a>
-      </li>
-    <li class="nav-item nav-tag">
-        <a class="nav-link" href="/LOGIN"><img src="../static/LOG%20IN.png" alt=""></a>
-      </li>
-    </ul>
-  </div>
-</nav>
+{{ super() }}
     </div>
  <div >
   <div class="hero-text">
@@ -61,6 +23,7 @@
 
   </div>
 </div>
+{% endblock %}
 {% block body %}
 {% endblock %}
 

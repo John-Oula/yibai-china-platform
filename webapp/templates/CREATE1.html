@@ -1,6 +1,6 @@
 {%  extends "PROBASE.html" %}
 
-{% block title %}PROFILE{% endblock %}
+{% block title %}100CHINAGUIDE{% endblock %}
 
 {% block head %}
     {{ super() }}
@@ -14,7 +14,7 @@
 {% block body %}
     <div class="main">
     <div class="session-container">
-<card class="card shadow-lg" id="create_card" style="height: fit-content;">
+<card class="card shadow-lg" id="create_card" >
     <card class="card-body">
     <form action=""  method="POST">
         <div class="row">
@@ -27,17 +27,17 @@
             {{ form.title.label }}<br>
         {{ form.title(class = "input-box-border border border-top-0 border-left-0 border-right-0") }}
         <br>
-            {{ form.category.label (style="margin-top:40px")}}
+            {{ form.category.label (class = "category-dropdown")}}
             <br>
-            {{ form.category( class="category shadow-sm", style="" ) }}
+            {{ form.category( class="category shadow-sm" ) }}
             <br>
             <br>
             {{ form.description.label }}
             <br>
             {{ form.description( class = "description-field") }}
               <br>
-            <input id="start-time" type="text" name="date-time" value="" style="display: none">
-            <input id="end-time" type="text" name="end-time" value="" style="display: none">
+            <input id="start-time" type="text" name="date-time" value="" class="time-input">
+            <input id="end-time" type="text" name="end-time" value="" class="time-input">
 
                             </div>
 
@@ -61,20 +61,14 @@
                                 <div  id="demo3">
                               <div class="row">
                   <div class="">
-                  {% if  current_user.id_type and current_user.id_number and current_user.id_document and current_user.nationality and current_user.occupation and
-                  current_user.email and current_user.residency and current_user.phone == None  %}
+                  {% if  current_user.id_type and current_user.id_number and current_user.id_document and current_user.nationality and current_user.occupation
+                   and current_user.residency and current_user.phone == None  %}
 
                             {{ verify_form.id_type.label }}
                             {{ verify_form.id_type(class="input-box-border border border-top-0 border-left-0 border-right-0") }}
 
                             {{ verify_form.id_number.label }}
                             {{ verify_form.id_number(class="input-box-border border border-top-0 border-left-0 border-right-0") }}
-
-
-                            {{ verify_form.email.label }}
-                            {{ verify_form.email(class="input-box-border border border-top-0 border-left-0 border-right-0") }}
-
-
 
                             {{ verify_form.nationality.label }}
                             {{ verify_form.nationality(class="input-box-border border border-top-0 border-left-0 border-right-0") }}
@@ -91,7 +85,7 @@
                       {% else %}
                       <br>
                       <div>
-                                  <p style="color: darkgray;font-size: 13px;margin-top: 20px">Your information is already verified.</p>
+                                  <p class="verification-text">Your information is already verified.</p>
 
 
                       </div>
@@ -108,8 +102,10 @@
                             </div>
 
                         </div>
+        <br>
+        <br>
 
-            <input id="card-btn vvv" type="submit" class="btn-text text-center" style="margin-top: 20px;" value="SUBMIT">
+            <input id="card-btn vvv" type="submit" class="btn-text text-center"  value="SUBMIT">
             </form>
 
     </card>

@@ -411,6 +411,7 @@ card#create_card{
     width: 1004px;
     margin-top: 40px;
 
+
 }
 
 card#create_card_trainer{
@@ -438,6 +439,19 @@ ul.category{
     height: 100px;
     border-style: solid;
 
+}
+.category-dropdown{
+    margin-top:40px;
+}
+
+.time-input{
+    display: none;
+}
+
+.verification-text{
+    color: darkgray;
+    font-size: 13px;
+    margin-top: 20px
 }
 /*DISCOVER*/
 
@@ -575,6 +589,14 @@ body, html {
 
 }
 
+.discover-list-link{
+    color: #6C6C6C;
+}
+
+#discover-body{
+    background-color: #E2E2E2;
+}
+
 ul li.discover-list a:link{
     color: #6C6C6C;
 }
@@ -584,6 +606,9 @@ ul li.discover-list a:link{
     color: #444444;
 }
 
+.category-title{
+    font-size: 30px;
+}
 
 .video-thumbnail{
 
@@ -592,6 +617,11 @@ ul li.discover-list a:link{
 .video-thumb-card{
     margin-top: 30px;
     width: fit-content;
+    margin-left: 50px;
+}
+
+.user-thumb{
+    font-size: 10px;
 }
 
 .training-jumbotron{
@@ -1038,3 +1068,5 @@ font-family: Josefin Sans,sans-serif;
 .upload-username{
     font-size: 10px;
 }
+
+.ca

@@ -1,6 +1,6 @@
 {%  extends "base.html" %}
 
-{% block title %}DISCOVER{% endblock %}
+{% block title %}100CHINAGUIDE{% endblock %}
 
 {% block head %}
     {{ super() }}
@@ -9,7 +9,7 @@
 
 
 {% block background %}
-    <body id="discover-bod" style="background-color: #E2E2E2">
+    <body id="discover-body" >
 {% endblock %}
 
 
@@ -32,13 +32,13 @@
         <div class="col-2">
 
             <ul class="discover-list vertical-line" >
-                <li><a href=""style="color: #6C6C6C">BUSINESS</a></li>
-                <li><a href=""style="color: #6C6C6C">VISA</a></li>
-                <li><a href=""style="color: #6C6C6C">TRAVEL</a></li>
-                <li><a href=""style="color: #6C6C6C">LIVING</a></li>
-                <li><a href=""style="color: #6C6C6C">CAREER</a></li>
-                <li><a href=""style="color: #6C6C6C">TECH</a></li>
-                <li><a href=""style="color: #6C6C6C"></a></li>
+                <li><a href="" class="discover-list-link">BUSINESS</a></li>
+                <li><a href="" class="discover-list-link">VISA</a></li>
+                <li><a href="" class="discover-list-link">TRAVEL</a></li>
+                <li><a href="" class="discover-list-link">LIVING</a></li>
+                <li><a href="" class="discover-list-link">CAREER</a></li>
+                <li><a href="" class="discover-list-link">TECH</a></li>
+                <li><a href="" class="discover-list-link"></a></li>
 
             </ul>
 
@@ -49,7 +49,7 @@
         <div class="col-9" id="discover-content">
             <div>
 
-                <p style="font-size: 30px">BUSINESS</p>
+                <p class="category-title">BUSINESS</p>
 
                 <br>
 
@@ -65,13 +65,13 @@
                                 <div class="">
 
 
-                                <card class=" card video-thumb-card" style="margin-left: 50px">
+                                <card class=" card video-thumb-card" >
                                     <card class="card-body">
 
                                         <li><a href="{{ url_for('video',upload_ref=upload.upload_ref) }}"><video width="300" height="200" type="video/mp4" src="../static/videos/discover videos/{{ upload.upload_ref }}" alt=""></video></a></li></li>
                                         <div class="row">
                                         <div class="col-3">
-                                            <span style="font-size: 10px"><img src="../static/profile_pics/{{ upload.uploader.image_file }}" alt="" width="40" class="rounded-circle"></span>
+                                            <span><img src="../static/profile_pics/{{ upload.uploader.image_file }}" alt="" width="40" class="rounded-circle user-thumb"></span>
 
                                         </div>
                                         <div class="col-8">

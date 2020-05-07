@@ -11,7 +11,7 @@ from flask_wtf import FlaskForm
 from wtforms import *
 from wtforms.validators import Required
 from flask_wtf.file import FileField
-
+from flask_bcrypt import Bcrypt
 
 #### FORMS IMPORTS ####
 
@@ -24,7 +24,7 @@ import psycopg2
 import base64
 app = Flask(__name__)
 
-
+bcrypt = Bcrypt(app)
 
 UPLOAD_FOLDER = "/videos"
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
@@ -426,7 +426,7 @@ def signup():
     form = Signup_form(request.form)
     if form.validate_on_submit() and request.method == "POST":
         flash('True')
-        hashed_password = form.password.data
+        hashed_password = bcrypt.generate_password_hash(form.password.data).decode('utf-8')
         user = User(email=form.email.data,
                     username= form.username.data,
                     password=hashed_password)

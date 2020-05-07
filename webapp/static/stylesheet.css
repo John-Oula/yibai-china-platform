@@ -470,6 +470,7 @@ button#create_btn{
     width: fit-content;
     height: 46px;
     border-style: none;
+    color: white;
 }
 
 input#signup-btn{
@@ -1014,4 +1015,26 @@ font-family: Josefin Sans,sans-serif;
 .errors{
     font-size: 10px;
     color: red;
+}
+
+.post-card{
+    width: 200px;
+    margin-top: 10px;
+    margin-left: 60px;
+}
+
+.post-category{
+    font-size: 13px;
+    font-family:'Segoe UI';
+    color: darkgray;
+}
+
+.upload-card{
+    height: fit-content;
+    width: fit-content;
+    margin-top: 30px;
+}
+
+.upload-username{
+    font-size: 10px;
 }

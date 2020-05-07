@@ -21,6 +21,7 @@ import datetime
 from flask_sqlalchemy import SQLAlchemy
 from itsdangerous import TimedJSONWebSignatureSerializer as Serializer
 import psycopg2
+import base64
 app = Flask(__name__)
 
 
@@ -732,7 +733,8 @@ def unfollow(username):
 
 
 def save_pic(form_pic):
-    random_hex = urandom(8)
+
+    random_hex = urandom(8).hex()
     _,f_ext = os.path.splitext(form_pic.filename)
     pic_fn = random_hex + f_ext
     pic_path = os.path.join(app.root_path,'static/profile_pics',pic_fn)
@@ -890,12 +892,14 @@ def upload(username):
     user = User.query.filter_by(username=username).first_or_404()
     form = Upload_form()
     if request.method == 'POST':
-        random_hex = urandom(8).hex()
+#        random_hex = urandom(8).hex()
         file  = request.files['file']
-        file_data  = request.files['file']
+        with open(file,"r") as file:
+            content = file.read()
+            encoded=base64.b64decode(bytes.fromhex(content))
         _, f_ext = os.path.splitext(file.filename)
-        file_hex = random_hex
-        file_fn = random_hex + f_ext
+        file_hex = encoded
+        file_fn = encoded + f_ext
         file.save(os.path.join(app.root_path, 'static/videos/discover videos', file_fn))
         path = os.path.join(file_fn)
         upload = Upload(title=form.title.data,description=form.description.data,category=form.category.data,price= form.price.data,upload_ref=path,uploader=current_user)

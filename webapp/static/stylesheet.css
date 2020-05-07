@@ -187,7 +187,7 @@ form#signup-form{
 
 /*LOGIN*/
 #login-card{
-    height: 500px;
+    height: fit-content;
     width: 354px;
     margin-left: 170px;
     background: linear-gradient(0deg, rgba(211, 211, 211, 0.69), rgba(255, 255, 255, 0.69));

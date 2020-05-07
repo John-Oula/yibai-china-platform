@@ -1,6 +1,6 @@
 {%  extends "base.html" %}
 
-{% block title %}LOGIN{% endblock %}
+{% block title %}{{ super() }}{% endblock %}
 
 {% block head %}
     {{ super() }}
@@ -19,14 +19,14 @@
 
 {% block body %}
     <div class="row">
-    <div class="col-7">
+    <div class="col-lg-7 col-md-7 col-sm-7">
          <h1 class="sign-up-text"><b>Get access to a variety of guides <br>on the Discover page</b></h1>
      <div class="signup-img">
         <img src="../static/sign%20up%20img.png" alt="" width="900">
     </div>
 
     </div>
-   <div class="col-4">
+   <div class="col-lg-4 col-md-4 col-sm-4">
        <card class="card shadow-lg" id="login-card">
     <card class="card-body text-center">
         <img src="../static/sign%20up%20avatar.png" alt="" width="130">
@@ -63,14 +63,16 @@
             <div>
 
             </div>
-       <p style="font-size: 14px"> <input type="radio" style="margin-top: 25px">Remember me</p>
+        <div class="login-text">
+                   <p > <input type="radio">Remember me</p>
+
+        </div>
         {{ form.submit(id = "signup-btn") }}
         </fieldset>
     </form>
         <br>
-        <br>
 
-    <span><a href="#" style="">Forgot password?</a></span>
+    <span><a href="#" >Forgot password?</a></span>
     </card>
     </card>
    </div>

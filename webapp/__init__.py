@@ -43,7 +43,6 @@ app.config['SECRET_KEY'] = 'Adawug;irwugw79536870635785ty0875y03davvavavdey'
 appID=200000164
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://power_user:@poweruserpass@172.16.214.87:5432/100CG'
-cred = credential.Credential("JIRMZ6O3Qm5KDwCHsgYnlxatGeXq7dfFcjEk", "wZn5NeGCqxg4r8XaDum2EMzRhIvWHtcU")
 
 mail = Mail(app)
 #### MODELS ####

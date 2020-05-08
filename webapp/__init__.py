@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 #### ROUTES IMPORTS ####
 import os
 import re
@@ -12,6 +13,16 @@ from wtforms import *
 from wtforms.validators import Required
 from flask_wtf.file import FileField
 
+
+### Tencent live video imports ###
+
+import requests
+import datetime
+import hashlib
+from hashlib import sha1
+import hmac
+import base64
+from tencentcloud.common import credential
 
 #### FORMS IMPORTS ####
 
@@ -29,10 +40,10 @@ app = Flask(__name__)
 UPLOAD_FOLDER = "/videos"
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 app.config['SECRET_KEY'] = 'Adawug;irwugw79536870635785ty0875y03davvavavdey'
-
+appID=200000164
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://power_user:@poweruserpass@172.16.214.87:5432/100CG'
-
+cred = credential.Credential("JIRMZ6O3Qm5KDwCHsgYnlxatGeXq7dfFcjEk", "wZn5NeGCqxg4r8XaDum2EMzRhIvWHtcU")
 
 mail = Mail(app)
 #### MODELS ####
@@ -857,7 +868,6 @@ def unlike(id):
 @login_required
 def create(username):
     user = User.query.filter_by(username=username).first_or_404()
-
     image_file = url_for('static', filename ='profile_pics/' + current_user.image_file)
     user_role = current_user.role
     lesson_form = Lesson_form()
@@ -1080,6 +1090,59 @@ def reset_token(token):
 
         return redirect(url_for('login'))
     return render_template('reset_password.html', form=form)
+
+@app.route('/createMeeting/<username>' , methods=['POST','GET'])
+def createMeeting(username):
+    dateTime = datetime.datetime.utcnow().strftime(GMT_FORMAT)
+    headerString = {"X-TC-Key" : SecretKey , "&X-TC-Nonce" : 1234567 , "&X-TC-Timestamp" : dateTime}
+
+    user = User.query.filter_by(username=username).first_or_404()
+    username = current_user.username
+    userId = str(current_user.id)
+    subject = 'TRIAL'
+    type= 0
+
+    host = current_user.id
+
+    url = 'https://api.meeting.qq.com/v1/meetings'
+    r = requests.get(url,header=headerString)
+    return r.json()
+
+
+### Tencent signature gen ###
+GMT_FORMAT = '%a, %d %b %Y %H:%M:%S GMT'
+
+def getSimpleSign(source, SecretId, SecretKey) :
+    dateTime = datetime.datetime.utcnow().strftime(GMT_FORMAT)
+    auth = "hmac id=\"" + SecretId + "\", algorithm=\"hmac-sha1\", headers=\"date source\", signature=\""
+    signStr = "date: " + dateTime + "\n" + "source: " + source
+    sign = hmac.new(SecretKey, signStr, hashlib.sha1).digest()
+    sign = base64.b64encode(sign)
+    sign = auth + sign + "\""
+    return sign, dateTime
+
+SecretId = 'JIRMZ6O3Qm5KDwCHsgYnlxatGeXq7dfFcjEk' # `SecretId` in key pair
+SecretKey = 'wZn5NeGCqxg4r8XaDum2EMzRhIvWHtcU' # `SecretKey` in key pair
+url = 'https://api.meeting.qq.com/v1/' # API access path
+
+#header = {}
+header = { 'Host':'api.meeting.qq.com/v1', # Service domain name of API
+            'Accept': 'application/json, */*; q=0.01',
+            'X-Requested-With': 'XMLHttpRequest',
+            'Accept-Encoding': 'gzip, deflate, sdch',
+            'Accept-Language': 'zh-CN,zh;q=0.8,ja;q=0.6'
+}
+
+Source = 'xxxxxx' # Arbitrary signature watermark value
+sign, dateTime = getSimpleSign(Source, SecretId, SecretKey)
+header['Authorization'] = sign
+header['Date'] = dateTime
+header['Source'] = Source
+
+# If it is a microservice API, you need to add two fields in the header: 'X-NameSpace-Code' and 'X-MicroService-Name'. They are not needed for general APIs.
+#header['X-NameSpace-Code'] = 'testmic'
+#header['X-MicroService-Name'] = 'provider-demo'
+
 
 
 if __name__ == '__main__':

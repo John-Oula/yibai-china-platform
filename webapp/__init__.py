@@ -1093,7 +1093,7 @@ def reset_token(token):
 @app.route('/createMeeting/<username>' , methods=['POST','GET'])
 def createMeeting(username):
     dateTime = datetime.datetime.utcnow().strftime(GMT_FORMAT)
-    headerString = {"X-TC-Key" : SecretKey , "&X-TC-Nonce" : 1234567 , "&X-TC-Timestamp" : dateTime}
+    headerString = {"X-TC-Key" : str(SecretKey) , "&X-TC-Nonce" : str(1234567) , "&X-TC-Timestamp" : str(dateTime),"content-type":"application/json","AppId":str(appID)}
 
     user = User.query.filter_by(username=username).first_or_404()
     username = current_user.username

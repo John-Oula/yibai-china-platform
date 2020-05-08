@@ -1104,7 +1104,7 @@ def createMeeting(username):
     host = current_user.id
 
     url = 'https://api.meeting.qq.com/v1/meetings'
-    r = requests.get(url,header=headerString)
+    r = requests.get(url,params=headerString)
     return r.json()
 
 

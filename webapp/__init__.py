@@ -22,7 +22,7 @@ import hashlib
 from hashlib import sha1
 import hmac
 import base64
-from tencentcloud.common import credential
+
 
 #### FORMS IMPORTS ####
 

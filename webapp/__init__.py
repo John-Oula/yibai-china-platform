@@ -1138,11 +1138,11 @@ def createMeeting(username):
               }
 
     Source = '34232453'  # Arbitrary signature watermark value
-    sign, dateTime = getSimpleSign(Source, SecretId, SecretKey)
+    sign, dateTime = getSimpleSign(Source, 'JIRMZ6O3Qm5KDwCHsgYnlxatGeXq7dfFcjEk', 'wZn5NeGCqxg4r8XaDum2EMzRhIvWHtcU')
     header['Authorization'] = sign
     header['Date'] = dateTime
     header['Source'] = Source
-    return sign
+    return sign,dateTime
 
 
 SecretId = 'JIRMZ6O3Qm5KDwCHsgYnlxatGeXq7dfFcjEk'  # `SecretId` in key pair

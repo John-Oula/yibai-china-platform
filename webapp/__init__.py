@@ -1153,7 +1153,7 @@ SecretKey = 'wZn5NeGCqxg4r8XaDum2EMzRhIvWHtcU'  # `SecretKey` in key pair
 #header['X-MicroService-Name'] = 'provider-demo'
 
 
-#service = "cvm"
+service = "cvm"
 host = "api.meeting.qq.com/v1/meetings"
 endpoint = "https://" + host
 #region = "ap-guangzhou"
@@ -1183,7 +1183,7 @@ canonical_request = (http_request_method + "\n" +
 print(canonical_request)
 
 # ************* Step 2: Concatenate the string to sign *************
-credential_scope = date + "/"  + "/" + "tc3_request"
+credential_scope = date + "/" + service + "/" + "tc3_request"
 hashed_canonical_request = hashlib.sha256(canonical_request.encode("utf-8")).hexdigest()
 string_to_sign = (algorithm + "\n" +
                   str(timestamp) + "\n" +
@@ -1193,11 +1193,11 @@ print(string_to_sign)
 
 # ************* Step 3: Calculate the Signature *************
 # Function for computing signature digest
-def sign(key):
-    return hmac.new(key, hashlib.sha256).digest()
+def sign(key, msg):
+    return hmac.new(key, msg.encode("utf-8"), hashlib.sha256).digest()
 secret_date = sign(("TC3" + SecretKey).encode("utf-8"), date)
-secret_service = sign(secret_date)
-secret_signing = sign(secret_service)
+secret_service = sign(secret_date, service)
+secret_signing = sign(secret_service, "tc3_request")
 signature = hmac.new(secret_signing, string_to_sign.encode("utf-8"), hashlib.sha256).hexdigest()
 print(signature)
 

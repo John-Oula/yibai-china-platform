@@ -1104,7 +1104,7 @@ timeStamp = int(time.time())
     ### Tencent signature gen ###
 GMT_FORMAT = '%a, %d %b %Y %H:%M:%S GMT'
 def getSimpleSign(source, SecretId, SecretKey):
-        dateTime = datetime.datetime.utcnow().strftime(GMT_FORMAT)
+        dateTime = 3311314
         auth = "hmac id=\"" + SecretId + "\", algorithm=\"hmac-sha1\", headers=\"date source\", signature=\""
         signStr = "date: " + dateTime + "\n" + "source: " + source
         sign = hmac.new(SecretKey, signStr, hashlib.sha1).digest()

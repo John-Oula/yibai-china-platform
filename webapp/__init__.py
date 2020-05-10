@@ -1112,12 +1112,82 @@ def getSimpleSign(source, SecretId, SecretKey):
         sign = auth + sign + "\""
         return sign, dateTime
 
+
+SecretId = 'JIRMZ6O3Qm5KDwCHsgYnlxatGeXq7dfFcjEk'  # `SecretId` in key pair
+SecretKey = 'wZn5NeGCqxg4r8XaDum2EMzRhIvWHtcU'  # `SecretKey` in key pair
+
+
+service = "cvm"
+host = "api.meeting.qq.com/v1/meetings"
+endpoint = "https://" + host
+#region = "ap-guangzhou"
+action = "DescribeInstances"
+#version = "2017-03-12"
+algorithm = "TC3-HMAC-SHA256"
+#timestamp = int(time.time())
+
+
+params = {"Limit": 1, "Filters": [{"Name": "instance-name", "Values": [u"unnamed"]}]}
+
+# ************* Step 1: Concatenate the CanonicalRequest string *************
+http_request_method = "POST"
+canonical_uri = "/"
+canonical_querystring = ""
+ct = "application/json; charset=utf-8"
+payload = json.dumps(params)
+canonical_headers = "content-type:%s\nhost:%s\n" % (ct, host)
+signed_headers = "content-type;host"
+hashed_request_payload = hashlib.sha256(payload.encode("utf-8")).hexdigest()
+canonical_request = (http_request_method + "\n" +
+                     canonical_uri + "\n" +
+                     canonical_querystring + "\n" +
+                     canonical_headers + "\n" +
+                     signed_headers + "\n" +
+                     hashed_request_payload)
+print(canonical_request)
+
+# ************* Step 2: Concatenate the string to sign *************
+credential_scope = str(timeStamp) + "/" + service + "/" + "tc3_request"
+hashed_canonical_request = hashlib.sha256(canonical_request.encode("utf-8")).hexdigest()
+string_to_sign = (algorithm + "\n" +
+                  str(timeStamp) + "\n" +
+                  credential_scope + "\n" +
+                  hashed_canonical_request)
+print(string_to_sign)
+
+# ************* Step 3: Calculate the Signature *************
+# Function for computing signature digest
+def sign(key, msg):
+    return hmac.new(key, msg.encode("utf-8"), hashlib.sha256).digest()
+secret_date = sign(("TC3" + SecretKey).encode("utf-8"), str(timeStamp))
+secret_service = sign(secret_date, service)
+secret_signing = sign(secret_service, "tc3_request")
+signature = hmac.new(secret_signing, string_to_sign.encode("utf-8"), hashlib.sha256).hexdigest()
+print('signature = ',signature)
+
+# ************* Step 4: Concatenate the Authorization *************
+authorization = (algorithm + " " +
+                 "Credential=" + SecretId + "/" + credential_scope + ", " +
+                 "SignedHeaders=" + signed_headers + ", " +
+                 "Signature=" + signature)
+print(authorization)
+
+print('curl -X POST ' + endpoint
+      + ' -H "Authorization: ' + authorization + '"'
+      + ' -H "Content-Type: application/json; charset=utf-8"'
+      + ' -H "Host: ' + host + '"'
+      + ' -H "X-TC-Action: ' + action + '"'
+      + ' -H "X-TC-Timestamp: ' + str(timeStamp) + '"'
+#      + ' -H "X-TC-Version: ' + version + '"'
+#      + ' -H "X-TC-Region: ' + region + '"'
+      + " -d '" + payload + "'")
+
+
 @app.route('/createMeeting/<username>' , methods=['POST','GET'])
 def createMeeting(username):
-    SecretId = 'JIRMZ6O3Qm5KDwCHsgYnlxatGeXq7dfFcjEk'  # `SecretId` in key pair
-    SecretKey = 'wZn5NeGCqxg4r8XaDum2EMzRhIvWHtcU'  # `SecretKey` in key pair
+
 #    dateTime = datetime.datetime.utcnow().strftime(GMT_FORMAT)
-    headerString = {"X-TC-Key" : SecretId , "X-TC-Nonce" : str(1234567) , "X-TC-Timestamp" : str(timeStamp),"content-type":"application/json","AppId":str(appID)}
+    headerString = {"X-TC-Key" : SecretId , "X-TC-Nonce" : str(1234567) , "X-TC-Timestamp" : str(timeStamp),"content-type":"application/json","AppId":str(appID),"X-TC-Signature":signature}
 
     user = User.query.filter_by(username=username).first_or_404()
     username = current_user.username
@@ -1147,8 +1217,7 @@ def createMeeting(username):
     return r.json()
 
 
-SecretId = 'JIRMZ6O3Qm5KDwCHsgYnlxatGeXq7dfFcjEk'  # `SecretId` in key pair
-SecretKey = 'wZn5NeGCqxg4r8XaDum2EMzRhIvWHtcU'  # `SecretKey` in key pair
+
 
 # If it is a microservice API, you need to add two fields in the header: 'X-NameSpace-Code' and 'X-MicroService-Name'. They are not needed for general APIs.
 #header['X-NameSpace-Code'] = 'testmic'
@@ -1161,4 +1230,4 @@ if __name__ == '__main__':
 
     app.run()
 
-#curl -X POST https://api.meeting.qq.com/v1/meetings -H "Authorization: TC3-HMAC-SHA256 Credential=JIRMZ6O3Qm5KDwCHsgYnlxatGeXq7dfFcjEk/Sun, 10 May 2020 15:09:33 GMT/cvm/tc3_requestSignedHeaders=content-type;host, Signature=f84b7bd3395e0f6acf3d76f0f8c1f995a140f12c6ab809a4d7175d12691a03af" -H "Content-Type: application/json; charset=utf-8" -H "Host: api.meeting.qq.com/v1/meetings" -H "X-TC-Action: DescribeInstances"-H "X-TC-Timestamp: Sun, 10 May 2020 15:09:33 GMT" -d '{"Limit": 1, "Filters": [{"Values": ["unnamed"], "Name": "instance-name"}]}'
+#curl -X POST https://api.meeting.qq.com/v1/meetings -H "Authorization: TC3-HMAC-SHA256 Credential=JIRMZ6O3Qm5KDwCHsgYnlxatGeXq7dfFcjEk/Sun, 10 May 2020 15:09:33 GMT/cvm/tc3_requestSignedHeaders=content-type;host, " -H "Content-Type: application/json; charset=utf-8" -H "Host: api.meeting.qq.com/v1/meetings" -H "X-TC-Action: DescribeInstances"-H "X-TC-Timestamp: Sun, 10 May 2020 15:09:33 GMT" -d '{"Limit": 1, "Filters": [{"Values": ["unnamed"], "Name": "instance-name"}]}'

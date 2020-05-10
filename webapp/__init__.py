@@ -1162,7 +1162,7 @@ action = "DescribeInstances"
 algorithm = "TC3-HMAC-SHA256"
 #timestamp = int(time.time())
 timestamp = 1551113065
-date = datetime.utcfromtimestamp(timestamp).strftime("%Y-%m-%d")
+date = datetime.datetime.utcnow().strftime(GMT_FORMAT)
 params = {"Limit": 1, "Filters": [{"Name": "instance-name", "Values": [u"unnamed"]}]}
 
 # ************* Step 1: Concatenate the CanonicalRequest string *************

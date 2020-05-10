@@ -1160,8 +1160,8 @@ endpoint = "https://" + host
 action = "DescribeInstances"
 #version = "2017-03-12"
 algorithm = "TC3-HMAC-SHA256"
-timestamp = int(time.time())
-#timestamp = 1551113065
+#timestamp = int(time.time())
+timestamp = 1551113065
 date = datetime.utcfromtimestamp(timestamp).strftime("%Y-%m-%d")
 params = {"Limit": 1, "Filters": [{"Name": "instance-name", "Values": [u"unnamed"]}]}
 

@@ -1135,7 +1135,7 @@ def createMeeting(username):
 #    header['Authorization'] = sign
 #    header['Date'] = dateTime
 #    header['Source'] = Source
-    return r
+    return r.json()
 
 
 SecretId = 'JIRMZ6O3Qm5KDwCHsgYnlxatGeXq7dfFcjEk'  # `SecretId` in key pair

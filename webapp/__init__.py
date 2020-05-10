@@ -1091,6 +1091,13 @@ def reset_token(token):
         return redirect(url_for('login'))
     return render_template('reset_password.html', form=form)
 
+from datetime import datetime
+
+# current date and time
+now = datetime.now()
+
+timeStamp = datetime.timestamp(now)
+#    print("timestamp =", timestamp)
 
     ### Tencent signature gen ###
 GMT_FORMAT = '%a, %d %b %Y %H:%M:%S GMT'
@@ -1108,7 +1115,7 @@ def createMeeting(username):
     SecretId = 'JIRMZ6O3Qm5KDwCHsgYnlxatGeXq7dfFcjEk'  # `SecretId` in key pair
     SecretKey = 'wZn5NeGCqxg4r8XaDum2EMzRhIvWHtcU'  # `SecretKey` in key pair
     dateTime = datetime.datetime.utcnow().strftime(GMT_FORMAT)
-    headerString = {"X-TC-Key" : str(SecretKey) , "X-TC-Nonce" : str(1234567) , "X-TC-Timestamp" : str(dateTime),"content-type":"application/json","AppId":str(appID)}
+    headerString = {"X-TC-Key" : str(SecretKey) , "X-TC-Nonce" : str(1234567) , "X-TC-Timestamp" : str(timeStamp),"content-type":"application/json","AppId":str(appID)}
 
     user = User.query.filter_by(username=username).first_or_404()
     username = current_user.username

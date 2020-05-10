@@ -1105,44 +1105,37 @@ def getSimpleSign(source, SecretId, SecretKey):
 
 @app.route('/createMeeting/<username>' , methods=['POST','GET'])
 def createMeeting(username):
-#   dateTime = datetime.datetime.utcnow().strftime(GMT_FORMAT)
-#   headerString = {"X-TC-Key" : str(SecretKey) , "&X-TC-Nonce" : str(1234567) , "&X-TC-Timestamp" : str(dateTime),"content-type":"application/json","AppId":str(appID)}
-
-#   user = User.query.filter_by(username=username).first_or_404()
-#   username = current_user.username
-#   userId = str(current_user.id)
-#   subject = 'TRIAL'
-#   type= 0
-
-#   host = current_user.id
-
-#   url = 'https://api.meeting.qq.com/v1/meetings'
-#
-#
-#   r = requests.get(url,params=headerString)
-
-
-
-
-
     SecretId = 'JIRMZ6O3Qm5KDwCHsgYnlxatGeXq7dfFcjEk'  # `SecretId` in key pair
     SecretKey = 'wZn5NeGCqxg4r8XaDum2EMzRhIvWHtcU'  # `SecretKey` in key pair
-    url = 'https://api.meeting.qq.com/v1/'  # API access path
+    dateTime = datetime.datetime.utcnow().strftime(GMT_FORMAT)
+    headerString = {"X-TC-Key" : str(SecretKey) , "X-TC-Nonce" : str(1234567) , "X-TC-Timestamp" : str(dateTime),"content-type":"application/json","AppId":str(appID)}
+
+    user = User.query.filter_by(username=username).first_or_404()
+    username = current_user.username
+    userId = str(current_user.id)
+    subject = 'TRIAL'
+    type= 0
+
+    host = current_user.id
+
+    url = 'https://api.meeting.qq.com/v1/meetings'
+
+
+    r = requests.post(url,headers=headerString)
+
 
     # header = {}
-    header = {'Host': 'api.meeting.qq.com/v1',  # Service domain name of API
-              'Accept': 'application/json, */*; q=0.01',
-              'X-Requested-With': 'XMLHttpRequest',
-              'Accept-Encoding': 'gzip, deflate, sdch',
-              'Accept-Language': 'zh-CN,zh;q=0.8,ja;q=0.6'
-              }
-
-    Source = '34232453'  # Arbitrary signature watermark value
-    sign, dateTime = getSimpleSign(Source, 'JIRMZ6O3Qm5KDwCHsgYnlxatGeXq7dfFcjEk', 'wZn5NeGCqxg4r8XaDum2EMzRhIvWHtcU')
-    header['Authorization'] = sign
-    header['Date'] = dateTime
-    header['Source'] = Source
-    return sign
+#    header = {'Host': 'api.meeting.qq.com/v1',  # Service domain name of API
+#              'Accept': 'application/json',
+#              ''
+#              }
+#
+#    Source = '34232453'  # Arbitrary signature watermark value
+#    sign, dateTime = getSimpleSign(Source, 'JIRMZ6O3Qm5KDwCHsgYnlxatGeXq7dfFcjEk', 'wZn5NeGCqxg4r8XaDum2EMzRhIvWHtcU')
+#    header['Authorization'] = sign
+#    header['Date'] = dateTime
+#    header['Source'] = Source
+    return r
 
 
 SecretId = 'JIRMZ6O3Qm5KDwCHsgYnlxatGeXq7dfFcjEk'  # `SecretId` in key pair
@@ -1222,3 +1215,5 @@ print('curl -X POST ' + endpoint
 if __name__ == '__main__':
 
     app.run()
+
+#curl -X POST https://api.meeting.qq.com/v1/meetings -H "Authorization: TC3-HMAC-SHA256 Credential=JIRMZ6O3Qm5KDwCHsgYnlxatGeXq7dfFcjEk/Sun, 10 May 2020 15:09:33 GMT/cvm/tc3_requestSignedHeaders=content-type;host, Signature=f84b7bd3395e0f6acf3d76f0f8c1f995a140f12c6ab809a4d7175d12691a03af" -H "Content-Type: application/json; charset=utf-8" -H "Host: api.meeting.qq.com/v1/meetings" -H "X-TC-Action: DescribeInstances"-H "X-TC-Timestamp: Sun, 10 May 2020 15:09:33 GMT" -d '{"Limit": 1, "Filters": [{"Values": ["unnamed"], "Name": "instance-name"}]}'

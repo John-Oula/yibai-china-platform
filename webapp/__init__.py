@@ -1092,11 +1092,12 @@ def reset_token(token):
     return render_template('reset_password.html', form=form)
 
 from datetime import datetime
+import time
 
 # current date and time
-now = datetime.utcnow()
-
-timeStamp = now.timestamp()
+#now = datetime.utcnow()
+timeStamp = int(time.time())
+#timeStamp = now.timestamp()
 #    print("timestamp =", timestamp)
 
 

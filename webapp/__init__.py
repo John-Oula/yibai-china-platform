@@ -1091,7 +1091,7 @@ def reset_token(token):
         return redirect(url_for('login'))
     return render_template('reset_password.html', form=form)
 
-import datetime
+from datetime import datetime
 
 # current date and time
 now = datetime.now()

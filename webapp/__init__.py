@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 #### ROUTES IMPORTS ####
 import json
+import random
 import os
 import re
 from os import urandom
@@ -1101,16 +1102,7 @@ timeStamp = int(time.time())
 #    print("timestamp =", timestamp)
 
 
-    ### Tencent signature gen ###
-GMT_FORMAT = '%a, %d %b %Y %H:%M:%S GMT'
-def getSimpleSign(source, SecretId, SecretKey):
-        dateTime = '3311314'
-        auth = "hmac id=\"" + SecretId + "\", algorithm=\"hmac-sha1\", headers=\"date source\", signature=\""
-        signStr = "date: " + dateTime + "\n" + "source: " + source
-        sign = hmac.new(SecretKey, signStr, hashlib.sha1).digest()
-        sign = base64.b64encode(sign)
-        sign = auth + sign + "\""
-        return sign, dateTime
+
 
 
 SecretId = 'JIRMZ6O3Qm5KDwCHsgYnlxatGeXq7dfFcjEk'  # `SecretId` in key pair
@@ -1182,18 +1174,22 @@ print('curl -X POST ' + endpoint
 #      + ' -H "X-TC-Region: ' + region + '"'
       + " -d '" + payload + "'")
 
+#def generateHeaders(method,params,uri):
+#    nonce = random.randint(1000, 9001)
+#    headerString = "X-TC-Key=" + SecretId + "&X-TC-Nonce=" + str(nonce) + "&X-TC-Timestamp=" + str(timeStamp)
+#    stringSign = "GET" + "\n" + headerString + "\n" + "/v1/meetings" + "\n" + ""
 
 
 @app.route('/createMeeting/<username>' , methods=['POST','GET'])
 def createMeeting(username):
-
+    nonce= random.randint(1000,9001)
 #    dateTime = datetime.datetime.utcnow().strftime(GMT_FORMAT)
-    headerString = "X-TC-Key="+ SecretId + "&X-TC-Nonce=" +str(1234567) + "&X-TC-Timestamp=" + str(timeStamp)+"&AppId="+str(appID)
+    headerString = "X-TC-Key="+ SecretId + "&X-TC-Nonce=" +str(nonce) + "&X-TC-Timestamp=" + str(timeStamp)
     stringSign= "GET" + "\n" +headerString + "\n" +"/v1/meetings" +"\n" + ""
 
     skey = SecretKey.encode('utf-8')
     sts = stringSign.encode('utf-8')
-    sg = hmac.new(skey, sts, hashlib.sha256).hexdigest()
+    sg = hmac.new(sts, skey, hashlib.sha256).hexdigest()
 #    h = hashlib.sha256(bytes(sg,'utf-8'))
 #   str_hex = h.hexdigest()
 
@@ -1211,13 +1207,28 @@ def createMeeting(username):
 
 
 
-    header = {"AppId": str(appID),"X-TC-Key": SecretId,"X-TC-Signature": str(b64), "X-TC-Nonce": str(1234567), "X-TC-Timestamp": str(timeStamp)}
+    header = {"X-TC-Key": SecretId, "X-TC-Timestamp": str(timeStamp), "X-TC-Nonce": str(nonce),"AppId": str(appID),"X-TC-Signature": str(b64),"content-type":"application/json"}
 
     url = 'https://api.meeting.qq.com/v1/meetings'
     print(header)
 
 
     r = requests.get(url,headers=header)
+
+
+
+    return r.json()
+
+    ### Tencent signature gen ###
+GMT_FORMAT = '%a, %d %b %Y %H:%M:%S GMT'
+def getSimpleSign(source, SecretId, SecretKey):
+        dateTime = str(timeStamp)
+        auth = "hmac id=\"" + SecretId + "\", algorithm=\"hmac-sha1\", headers=\"date source\", signature=\""
+        signStr = "date: " + dateTime + "\n" + "source: " + source
+        sign = hmac.new(SecretKey, signStr, hashlib.sha1).digest()
+        sign = base64.b64encode(sign)
+        sign = auth + sign + "\""
+        return sign, dateTime
 
 
     # header = {}
@@ -1231,9 +1242,6 @@ def createMeeting(username):
 #    header['Authorization'] = sign
 #    header['Date'] = dateTime
 #    header['Source'] = Source
-    return r.json()
-
-
 
 
 # If it is a microservice API, you need to add two fields in the header: 'X-NameSpace-Code' and 'X-MicroService-Name'. They are not needed for general APIs.

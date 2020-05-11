@@ -1191,8 +1191,8 @@ def createMeeting(username):
     headerString = "X-TC-Key="+ SecretId + "&X-TC-Nonce=" +str(1234567) + "&X-TC-Timestamp=" + str(timeStamp)+"&AppId="+str(appID)
     stringSign= "GET" + "\n" +headerString + "\n" +"/v1/meetings" +"\n" + ""
 
-    skey = bytes(SecretKey,'utf-8')
-    sts = bytes(stringSign,'utf-8')
+    skey = SecretKey.encode('utf-8')
+    sts = stringSign.encode('utf-8')
     sg = hmac.new(skey, sts, hashlib.sha256).hexdigest()
 #    h = hashlib.sha256(bytes(sg,'utf-8'))
 #   str_hex = h.hexdigest()

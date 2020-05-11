@@ -1188,16 +1188,22 @@ print('curl -X POST ' + endpoint
 def createMeeting(username):
 
 #    dateTime = datetime.datetime.utcnow().strftime(GMT_FORMAT)
-    headerString = "X-TC-Key="+SecretId + "&X-TC-Nonce=" +str(1234567) + "&X-TC-Timestamp=" + str(timeStamp)+"&AppId="+str(appID)
+    headerString = "X-TC-Key="+ SecretId + "&X-TC-Nonce=" +str(1234567) + "&X-TC-Timestamp=" + str(timeStamp)+"&AppId="+str(appID)
     stringSign= "GET" + "\n" +headerString + "\n" +"/v1/meetings" +"\n" + ""
 
-
-    sg = hmac.new(bytes(SecretKey,'utf-8'), stringSign.encode("utf-8"), hashlib.sha256).hexdigest()
+    skey = bytes(SecretKey,'utf-8')
+    sts = bytes(stringSign,'utf-8')
+    sg = hmac.new(skey, sts, hashlib.sha256).hexdigest()
 #    h = hashlib.sha256(bytes(sg,'utf-8'))
 #   str_hex = h.hexdigest()
 
-    b64=base64.b64encode(bytes(sg,'utf-8'))
+    b64=base64.b64encode(sg.encode('utf-8'))
+#    print(headerString)
+#    print(stringSign)
+    print(skey)
+    print(sg)
     print(b64)
+    decodeb64 = b64.decode('utf-8')
 
     user = User.query.filter_by(username=username).first_or_404()
     username = current_user.username
@@ -1209,9 +1215,10 @@ def createMeeting(username):
 
 
     header = {"X-TC-Key": SecretId, "X-TC-Nonce": str(1234567), "X-TC-Timestamp": str(timeStamp),
-              "content-type": "application/json", "AppId": str(appID), "X-TC-Signature": b64}
+              "content-type": "application/json", "AppId": str(appID), "X-TC-Signature": decodeb64}
 
     url = 'https://api.meeting.qq.com/v1/meetings'
+    print(header)
 
 
     r = requests.post(url,headers=header)

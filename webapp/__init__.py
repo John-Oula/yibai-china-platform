@@ -1203,7 +1203,7 @@ def createMeeting(username):
     print(skey)
     print(sg)
     print(b64)
-    decodeb64 = b64.decode('utf-8')
+#    decodeb64 = b64.decode('utf-8')
 
     user = User.query.filter_by(username=username).first_or_404()
     username = current_user.username
@@ -1215,13 +1215,13 @@ def createMeeting(username):
 
 
     header = {"X-TC-Key": SecretId, "X-TC-Nonce": str(1234567), "X-TC-Timestamp": str(timeStamp),
-              "content-type": "application/json", "AppId": str(appID), "X-TC-Signature": decodeb64}
+              "content-type": "application/json", "AppId": str(appID), "X-TC-Signature": b64}
 
     url = 'https://api.meeting.qq.com/v1/meetings'
     print(header)
 
 
-    r = requests.post(url,headers=header)
+    r = requests.get(url,headers=header)
 
 
     # header = {}

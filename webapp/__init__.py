@@ -1173,11 +1173,12 @@ print('curl -X POST ' + endpoint
 #      + ' -H "X-TC-Version: ' + version + '"'
 #      + ' -H "X-TC-Region: ' + region + '"'
       + " -d '" + payload + "'")
-
+#
 #def generateHeaders(method,params,uri):
 #    nonce = random.randint(1000, 9001)
 #    headerString = "X-TC-Key=" + SecretId + "&X-TC-Nonce=" + str(nonce) + "&X-TC-Timestamp=" + str(timeStamp)
-#    stringSign = "GET" + "\n" + headerString + "\n" + "/v1/meetings" + "\n" + ""
+#    stringSign = method + "\n" + headerString + "\n" + uri + "\n" + params
+#    return
 
 
 @app.route('/createMeeting/<username>' , methods=['POST','GET'])
@@ -1189,15 +1190,15 @@ def createMeeting(username):
 
     skey = SecretKey.encode('utf-8')
     sts = stringSign.encode('utf-8')
-    sg = hmac.new(skey, sts, hashlib.sha256).hexdigest()
+
 #    h = hashlib.sha256(bytes(sg,'utf-8'))
 #   str_hex = h.hexdigest()
 
-    b64=base64.b64encode(sg.encode('utf-8'))
+    b64=base64.b64encode(hmac.new(skey, sts, digestmod=hashlib.sha256).digest())
 #    print(headerString)
 #    print(stringSign)
     print(skey)
-    print(sg)
+
     print(b64)
 #    decodeb64 = b64.decode('utf-8')
 

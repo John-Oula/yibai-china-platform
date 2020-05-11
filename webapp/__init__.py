@@ -1207,13 +1207,13 @@ def createMeeting(username):
 
 
 
-    header = {"X-TC-Key": SecretId, "X-TC-Timestamp": str(timeStamp), "X-TC-Nonce": str(nonce),"AppId": str(appID),"X-TC-Signature": str(b64),"content-type":"application/json"}
-
+    header = {"X-TC-Key": SecretId, "X-TC-Timestamp": str(timeStamp), "X-TC-Nonce": str(nonce),"X-TC-Signature": str(b64),"content-type":"application/json"}
+    params={"AppId": str(appID)}
     url = 'https://api.meeting.qq.com/v1/meetings'
     print(header)
 
 
-    r = requests.get(url,params=header)
+    r = requests.get(url,headers=header,params=params)
 
 
 

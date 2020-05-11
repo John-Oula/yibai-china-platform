@@ -1189,7 +1189,7 @@ def createMeeting(username):
 
     skey = SecretKey.encode('utf-8')
     sts = stringSign.encode('utf-8')
-    sg = hmac.new(sts, skey, hashlib.sha256).hexdigest()
+    sg = hmac.new(skey, sts, hashlib.sha256).hexdigest()
 #    h = hashlib.sha256(bytes(sg,'utf-8'))
 #   str_hex = h.hexdigest()
 

@@ -14,6 +14,7 @@ from flask_wtf import FlaskForm
 from wtforms import *
 from wtforms.validators import Required
 from flask_wtf.file import FileField
+import binascii
 
 
 ### Tencent live video imports ###
@@ -24,6 +25,8 @@ import hashlib
 from hashlib import sha1
 import hmac
 import base64
+import  urllib
+import urllib3
 
 
 #### FORMS IMPORTS ####
@@ -1174,41 +1177,46 @@ print('curl -X POST ' + endpoint
 #      + ' -H "X-TC-Region: ' + region + '"'
       + " -d '" + payload + "'")
 #
-#def generateHeaders(method,params,uri):
-#    nonce = random.randint(1000, 9001)
-#    headerString = "X-TC-Key=" + SecretId + "&X-TC-Nonce=" + str(nonce) + "&X-TC-Timestamp=" + str(timeStamp)
-#    stringSign = method + "\n" + headerString + "\n" + uri + "\n" + params
-#    return
+def generateHeaders(method,params,uri):
+    nonce = random.randint(1000, 9001)
+    headerString = "X-TC-Key=" + SecretId + "&X-TC-Nonce=" + nonce + "&X-TC-Timestamp=" + timeStamp
+    stringSign = method + "\n" + headerString + "\n" + uri + "\n" + params
+    h = hmac.new(SecretKey.encode(), stringSign.encode(), digestmod=hashlib.sha256)
+    str_hex = h.hexdigest()
+
+    b64=base64.encodebytes(bytes(str_hex,'utf-8'))
+    return {'X-TC-Key': SecretId,
+            'X-TC-Timestamp': str(timeStamp),
+            'X-TC-Nonce': nonce,
+            'AppId': str(appID),
+            'X-TC-Signature': str(b64),
+            'content-type':'application/json'}
 
 
-@app.route('/createMeeting/<username>' , methods=['POST','GET'])
-def createMeeting(username):
+@app.route('/createMeeting' , methods=['POST','GET'])
+def createMeeting():
     nonce= random.randint(1000,9001)
 #    dateTime = datetime.datetime.utcnow().strftime(GMT_FORMAT)
-    headerString = "X-TC-Key="+ SecretId + "&X-TC-Nonce=" +str(nonce) + "&X-TC-Timestamp=" + str(timeStamp)
+    headerString = f"X-TC-Key={SecretId}&X-TC-Nonce={nonce}&X-TC-Timestamp={timeStamp}"
     stringSign= "GET" + "\n" +headerString + "\n" +"/v1/meetings" +"\n" + ""
 
-    skey = SecretKey.encode('utf-8')
-    sts = stringSign.encode('utf-8')
+    print(headerString)
+    print(stringSign)
 
-#    h = hashlib.sha256(bytes(sg,'utf-8'))
-#   str_hex = h.hexdigest()
+    h = hmac.new(SecretKey.encode(), stringSign.encode(), digestmod=hashlib.sha256)
+    str_hex = h.hexdigest()
 
-    b64=base64.b64encode(hmac.new(skey, sts, digestmod=hashlib.sha256).hexdigest())
+    b64=base64.b64encode(bytes(str_hex.encode()))
 #    print(headerString)
 #    print(stringSign)
-    print(skey)
+
 
     print(b64)
 #    decodeb64 = b64.decode('utf-8')
 
-    user = User.query.filter_by(username=username).first_or_404()
-    username = current_user.username
-    userId = str(current_user.id)
 
 
-
-    header = {"X-TC-Key": SecretId, "X-TC-Timestamp": str(timeStamp), "X-TC-Nonce": str(nonce),"AppId": str(appID),"X-TC-Signature": str(b64),"content-type":"application/json"}
+    header = {"X-TC-Key": SecretId, "X-TC-Timestamp": timeStamp, "X-TC-Nonce": nonce,"AppId": appID,"X-TC-Signature": b64,"content-type":"application/json"}
 
     url = 'https://api.meeting.qq.com/v1/meetings'
     print(header)

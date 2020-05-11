@@ -1194,7 +1194,7 @@ def createMeeting(username):
 #    h = hashlib.sha256(bytes(sg,'utf-8'))
 #   str_hex = h.hexdigest()
 
-    b64=base64.b64encode(hmac.new(skey, sts, digestmod=hashlib.sha256).digest())
+    b64=base64.b64encode(hmac.new(skey, sts, digestmod=hashlib.sha256).hexidigest())
 #    print(headerString)
 #    print(stringSign)
     print(skey)

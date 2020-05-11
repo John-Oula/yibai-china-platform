@@ -1104,7 +1104,7 @@ timeStamp = int(time.time())
     ### Tencent signature gen ###
 GMT_FORMAT = '%a, %d %b %Y %H:%M:%S GMT'
 def getSimpleSign(source, SecretId, SecretKey):
-        dateTime = 3311314
+        dateTime = '3311314'
         auth = "hmac id=\"" + SecretId + "\", algorithm=\"hmac-sha1\", headers=\"date source\", signature=\""
         signStr = "date: " + dateTime + "\n" + "source: " + source
         sign = hmac.new(SecretKey, signStr, hashlib.sha1).digest()
@@ -1183,11 +1183,21 @@ print('curl -X POST ' + endpoint
       + " -d '" + payload + "'")
 
 
+
 @app.route('/createMeeting/<username>' , methods=['POST','GET'])
 def createMeeting(username):
 
 #    dateTime = datetime.datetime.utcnow().strftime(GMT_FORMAT)
-    headerString = {"X-TC-Key" : SecretId , "X-TC-Nonce" : str(1234567) , "X-TC-Timestamp" : str(timeStamp),"content-type":"application/json","AppId":str(appID),"X-TC-Signature":signature}
+    headerString = "X-TC-Key="+SecretId + "&X-TC-Nonce=" +str(1234567) + "&X-TC-Timestamp=" + str(timeStamp)+"&AppId="+str(appID)+"&X-TC-Signature="+signature
+    stringSign= "GET" + "\n" +headerString + "\n" +"/v1/meetings" "\n" + ""
+
+
+    sg = hmac.new(bytes(SecretKey,'utf-8'), stringSign.encode("utf-8"), hashlib.sha256).hexdigest()
+#    h = hashlib.sha256(bytes(sg,'utf-8'))
+#   str_hex = h.hexdigest()
+
+    b64=base64.b64encode(bytes(sg,'utf-8'))
+    print(b64)
 
     user = User.query.filter_by(username=username).first_or_404()
     username = current_user.username
@@ -1197,10 +1207,14 @@ def createMeeting(username):
 
     host = current_user.id
 
+
+    header = {"X-TC-Key": SecretId, "X-TC-Nonce": str(1234567), "X-TC-Timestamp": str(timeStamp),
+              "content-type": "application/json", "AppId": str(appID), "X-TC-Signature": str(b64)}
+
     url = 'https://api.meeting.qq.com/v1/meetings'
 
 
-    r = requests.post(url,headers=headerString)
+    r = requests.post(url,headers=header)
 
 
     # header = {}

@@ -1188,8 +1188,8 @@ print('curl -X POST ' + endpoint
 def createMeeting(username):
 
 #    dateTime = datetime.datetime.utcnow().strftime(GMT_FORMAT)
-    headerString = "X-TC-Key="+SecretId + "&X-TC-Nonce=" +str(1234567) + "&X-TC-Timestamp=" + str(timeStamp)+"&AppId="+str(appID)+"&X-TC-Signature="+signature
-    stringSign= "GET" + "\n" +headerString + "\n" +"/v1/meetings" "\n" + ""
+    headerString = "X-TC-Key="+SecretId + "&X-TC-Nonce=" +str(1234567) + "&X-TC-Timestamp=" + str(timeStamp)+"&AppId="+str(appID)
+    stringSign= "GET" + "\n" +headerString + "\n" +"/v1/meetings" +"\n" + ""
 
 
     sg = hmac.new(bytes(SecretKey,'utf-8'), stringSign.encode("utf-8"), hashlib.sha256).hexdigest()

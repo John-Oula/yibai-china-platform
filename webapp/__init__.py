@@ -1202,13 +1202,16 @@ def createMeeting():
 
     print(headerString)
     print(stringSign)
+    skey = SecretKey.encode('utf-8')
+    sts = stringSign.encode('utf-8')
 
-    h = hmac.new(SecretKey.encode(), stringSign.encode(), digestmod=hashlib.sha256)
-    str_hex = h.hexdigest()
+    #    h = hashlib.sha256(bytes(sg,'utf-8'))
+    #   str_hex = h.hexdigest()
 
-    b64=base64.b64encode(bytes(str_hex.encode()))
+    b64 = base64.urlsafe_b64encode(bytes(hmac.new(skey, sts, digestmod=hashlib.sha256).hexdigest(),'utf-8'))
 #    print(headerString)
 #    print(stringSign)
+
 
 
     print(b64)
@@ -1216,7 +1219,7 @@ def createMeeting():
 
 
 
-    header = {"X-TC-Key": SecretId, "X-TC-Timestamp": timeStamp, "X-TC-Nonce": nonce,"AppId": appID,"X-TC-Signature": b64,"content-type":"application/json"}
+    header = {"X-TC-Key": SecretId, "X-TC-Timestamp": timeStamp, "X-TC-Nonce": nonce,"AppId": appID,"X-TC-Signature": str(b64,'utf-8'),"content-type":"application/json"}
 
     url = 'https://api.meeting.qq.com/v1/meetings'
     print(header)

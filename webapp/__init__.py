@@ -1213,7 +1213,7 @@ def createMeeting(username):
     print(header)
 
 
-    r = requests.get(url,headers=header)
+    r = requests.get(url,params=header)
 
 
 

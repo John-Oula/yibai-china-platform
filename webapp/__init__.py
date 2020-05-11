@@ -1197,7 +1197,7 @@ def generateHeaders(method,params,uri):
 def createMeeting():
     nonce= random.randint(1000,9001)
 #    dateTime = datetime.datetime.utcnow().strftime(GMT_FORMAT)
-    headerString = f"X-TC-Key={SecretId}&X-TC-Nonce={nonce}&X-TC-Timestamp={timeStamp}"
+    headerString = "X-TC-Key=" + SecretId + "&X-TC-Nonce=" + str(nonce) + "&X-TC-Timestamp=" + str(timeStamp)
     stringSign= "GET" + "\n" +headerString + "\n" +"/v1/meetings" +"\n" + ""
 
     print(headerString)

@@ -1208,14 +1208,10 @@ def createMeeting(username):
     user = User.query.filter_by(username=username).first_or_404()
     username = current_user.username
     userId = str(current_user.id)
-    subject = 'TRIAL'
-    type= 0
-
-    host = current_user.id
 
 
-    header = {"X-TC-Key": SecretId, "X-TC-Nonce": str(1234567), "X-TC-Timestamp": str(timeStamp),
-              "content-type": "application/json", "AppId": str(appID), "X-TC-Signature": str(b64)}
+
+    header = {"AppId": str(appID),"X-TC-Key": SecretId,"X-TC-Signature": str(b64), "X-TC-Nonce": str(1234567), "X-TC-Timestamp": str(timeStamp)}
 
     url = 'https://api.meeting.qq.com/v1/meetings'
     print(header)

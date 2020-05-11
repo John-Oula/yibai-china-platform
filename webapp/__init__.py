@@ -1209,7 +1209,7 @@ def createMeeting(username):
 
 
     header = {"X-TC-Key": SecretId, "X-TC-Nonce": str(1234567), "X-TC-Timestamp": str(timeStamp),
-              "content-type": "application/json", "AppId": str(appID), "X-TC-Signature": str(b64)}
+              "content-type": "application/json", "AppId": str(appID), "X-TC-Signature": b64}
 
     url = 'https://api.meeting.qq.com/v1/meetings'
 

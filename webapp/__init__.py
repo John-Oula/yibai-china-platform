@@ -1175,7 +1175,7 @@ def generateHeaders(method,params,uri):
     nonce = random.randint(1000, 9001)
 
     headerString = "X-TC-Key=" + SecretId + "&X-TC-Nonce=" + str(nonce) + "&X-TC-Timestamp=" + str(timeStamp)
-    stringSign= method+"\n"+headerString+"\n"+uri+"\n"+params
+    stringSign= method+"\n"+str(headerString)+"\n"+uri+"\n"+params
     b64 = create_sign(SecretKey,stringSign)
 
     print(headerString)

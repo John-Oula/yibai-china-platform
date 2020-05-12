@@ -1161,10 +1161,10 @@ def create_sign(key,toSign):
     print(type(h))
     print(h)
 
-    h = bytes(h)
+    hb = bytes(h)
     print(type(h))
     print(h)
-    hex_string = h.hex()
+    hex_string = hb.hex()
     print(type(hex_string))
     print(hex_string)
 

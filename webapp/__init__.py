@@ -1160,6 +1160,10 @@ def create_sign(key,toSign):
     h = hmac.new(key,msg=toSign.encode('utf-8'),digestmod=hashlib.sha256).digest()
     print(type(h))
     print(h)
+
+    bytes(h)
+    print(type(h))
+    print(h)
     hex_string = h.hex()
     print(type(hex_string))
     print(hex_string)

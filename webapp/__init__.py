@@ -1192,41 +1192,60 @@ def generateHeaders(method,params,uri):
             'X-TC-Signature': str(b64),
             'content-type':'application/json'}
 
+def create_sign(key,toSign):
+    key = key.encode('utf-8')
+    toSign = toSign.encode('utf-8')
+    h = hmac.new(bytes(key),msg=bytes(toSign),digestmod=hashlib.sha256).digest()
+    print(type(h))
+    print(h)
+    hex_string = h.hex()
+    print(type(hex_string))
+    print(hex_string)
+
+
+    return base64.urlsafe_b64encode(h).decode()
+
+def generate_nonce(length=8):
+    """Generate pseudorandom number."""
+    return ''.join([str(random.randint(0, 9)) for i in range(length)])
 
 @app.route('/createMeeting' , methods=['POST','GET'])
 def createMeeting():
-    nonce= random.randint(1000,9001)
+    nonce= generate_nonce()
 #    dateTime = datetime.datetime.utcnow().strftime(GMT_FORMAT)
     headerString = "X-TC-Key=" + SecretId + "&X-TC-Nonce=" + str(nonce) + "&X-TC-Timestamp=" + str(timeStamp)
     stringSign= "GET" + "\n" +headerString + "\n" +"/v1/meetings" +"\n" + ""
 
     print(headerString)
     print(stringSign)
-    skey = SecretKey.encode('utf-8')
-    sts = stringSign.encode('utf-8')
-
+#    skey = SecretKey.encode('utf-8')
+#    sts = stringSign.encode('utf-8')
+#    s = create_sign(SecretKey, stringSign)
     #    h = hashlib.sha256(bytes(sg,'utf-8'))
     #   str_hex = h.hexdigest()
 
-    b64 = base64.urlsafe_b64encode(bytes(hmac.new(skey, sts, digestmod=hashlib.sha256).hexdigest(),'utf-8'))
-#    print(headerString)
+    b64 = create_sign(SecretKey,stringSign)
+
+
+    print(headerString)
 #    print(stringSign)
 
 
-
+#    print(s)
     print(b64)
+
 #    decodeb64 = b64.decode('utf-8')
 
 
 
-    header = {"X-TC-Key": SecretId, "X-TC-Timestamp": timeStamp, "X-TC-Nonce": nonce,"AppId": appID,"X-TC-Signature": str(b64,'utf-8'),"content-type":"application/json"}
+    header = {"X-TC-Key": SecretId, "X-TC-Timestamp": timeStamp, "X-TC-Nonce": nonce,"Appd": appID,"X-TC-Signature": b64,"content-type":"application/json"}
 
     url = 'https://api.meeting.qq.com/v1/meetings'
     print(header)
 
 
     r = requests.get(url,headers=header)
-
+    print(r.ok)
 
 
     return r.json()

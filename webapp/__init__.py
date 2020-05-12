@@ -1109,7 +1109,7 @@ timeStamp = int(time.time())
 
 
 SecretId = 'JIRMZ6O3Qm5KDwCHsgYnlxatGeXq7dfFcjEk'  # `SecretId` in key pair
-SecretKey = 'wZn5NeGCqxg4r8XaDum2EMzRhIvWHtcU'  # `SecretKey` in key pair
+SecretKey =b'wZn5NeGCqxg4r8XaDum2EMzRhIvWHtcU'  # `SecretKey` in key pair
 
 
 service = "cvm"
@@ -1152,50 +1152,12 @@ print(string_to_sign)
 
 # ************* Step 3: Calculate the Signature *************
 # Function for computing signature digest
-def sign(key, msg):
-    return hmac.new(key, msg.encode("utf-8"), hashlib.sha256).digest()
-secret_date = sign(("TC3" + SecretKey).encode("utf-8"), str(timeStamp))
-secret_service = sign(secret_date, service)
-secret_signing = sign(secret_service, "tc3_request")
-signature = hmac.new(secret_signing, string_to_sign.encode("utf-8"), hashlib.sha256).hexdigest()
-print('signature = ',signature)
 
-# ************* Step 4: Concatenate the Authorization *************
-authorization = (algorithm + " " +
-                 "Credential=" + SecretId + "/" + credential_scope + ", " +
-                 "SignedHeaders=" + signed_headers + ", " +
-                 "Signature=" + signature)
-print(authorization)
-
-print('curl -X POST ' + endpoint
-      + ' -H "Authorization: ' + authorization + '"'
-      + ' -H "Content-Type: application/json; charset=utf-8"'
-      + ' -H "Host: ' + host + '"'
-      + ' -H "X-TC-Action: ' + action + '"'
-      + ' -H "X-TC-Timestamp: ' + str(timeStamp) + '"'
-#      + ' -H "X-TC-Version: ' + version + '"'
-#      + ' -H "X-TC-Region: ' + region + '"'
-      + " -d '" + payload + "'")
-#
-def generateHeaders(method,params,uri):
-    nonce = random.randint(1000, 9001)
-    headerString = "X-TC-Key=" + SecretId + "&X-TC-Nonce=" + nonce + "&X-TC-Timestamp=" + timeStamp
-    stringSign = method + "\n" + headerString + "\n" + uri + "\n" + params
-    h = hmac.new(SecretKey.encode(), stringSign.encode(), digestmod=hashlib.sha256)
-    str_hex = h.hexdigest()
-
-    b64=base64.encodebytes(bytes(str_hex,'utf-8'))
-    return {'X-TC-Key': SecretId,
-            'X-TC-Timestamp': str(timeStamp),
-            'X-TC-Nonce': nonce,
-            'AppId': str(appID),
-            'X-TC-Signature': str(b64),
-            'content-type':'application/json'}
-
+url = 'https://api.meeting.qq.com/v1/meetings'
 def create_sign(key,toSign):
-    key = key.encode('utf-8')
-    toSign = toSign.encode('utf-8')
-    h = hmac.new(bytes(key),msg=bytes(toSign),digestmod=hashlib.sha256).digest()
+
+
+    h = hmac.new(key,msg=toSign.encode('utf-8'),digestmod=hashlib.sha256).digest()
     print(type(h))
     print(h)
     hex_string = h.hex()
@@ -1203,52 +1165,59 @@ def create_sign(key,toSign):
     print(hex_string)
 
 
-    return base64.urlsafe_b64encode(h).decode()
+    return base64.b64encode(h).decode()
 
 def generate_nonce(length=8):
     """Generate pseudorandom number."""
     return ''.join([str(random.randint(0, 9)) for i in range(length)])
 
-@app.route('/createMeeting' , methods=['POST','GET'])
-def createMeeting():
-    nonce= generate_nonce()
-#    dateTime = datetime.datetime.utcnow().strftime(GMT_FORMAT)
+def generateHeaders(method,params,uri):
+    nonce = random.randint(1000, 9001)
+
     headerString = "X-TC-Key=" + SecretId + "&X-TC-Nonce=" + str(nonce) + "&X-TC-Timestamp=" + str(timeStamp)
-    stringSign= "GET" + "\n" +headerString + "\n" +"/v1/meetings" +"\n" + ""
+    stringSign= method+"\n"+headerString+"\n"+uri+"\n"+params
+    b64 = create_sign(SecretKey,stringSign)
 
     print(headerString)
     print(stringSign)
-#    skey = SecretKey.encode('utf-8')
-#    sts = stringSign.encode('utf-8')
-#    s = create_sign(SecretKey, stringSign)
-    #    h = hashlib.sha256(bytes(sg,'utf-8'))
-    #   str_hex = h.hexdigest()
-
-    b64 = create_sign(SecretKey,stringSign)
-
-
-    print(headerString)
-#    print(stringSign)
-
-
-#    print(s)
     print(b64)
 
-#    decodeb64 = b64.decode('utf-8')
+    return {'X-TC-Key': SecretId,
+            'X-TC-Timestamp': str(timeStamp),
+            'X-TC-Nonce': nonce,
+            'AppId': str(appID),
+            'X-TC-Signature': str(b64),
+            'content-type':'application/json'}
 
 
+def add(timeStamp):
+    uri = '/v1/meetings'
+    userid = current_user.id
+    settings = {
+            "mute_enable_join" : True,
+            "allow_unmute_self" : True,
+            "mute_all" : False,
+            "host_video" : False,
+            "participant_video" : False,
+            "enable_record" : False,
+            "play_ivr_on_leave" : False,
+            "play_ivr_on_join" : False,
+            "live_url" : False
+    }
+    params = {'userid':userid,'instanceid': 5,
+              'subject':'consultation','type':0,
+              'start_time':timeStamp,
+              'end_time':timeStamp+1000000,
+              'settings':settings}
+    headers = generateHeaders('POST',params,uri)
+    response = requests(url,headers=headers,params=params)
 
-    header = {"X-TC-Key": SecretId, "X-TC-Timestamp": timeStamp, "X-TC-Nonce": nonce,"AppId": appID,"X-TC-Signature": b64,"content-type":"application/json"}
+    return response.json()
 
-    url = 'https://api.meeting.qq.com/v1/meetings'
-    print(header)
-
-
-    r = requests.get(url,headers=header)
-    print(r.ok)
-
-
-    return r.json()
+@app.route('/createMeeting/<username>' , methods=['POST','GET'])
+def createMeeting(username):
+    user = User.query.filter_by(username=username).first_or_404()
+    return add(timeStamp)
 
     ### Tencent signature gen ###
 GMT_FORMAT = '%a, %d %b %Y %H:%M:%S GMT'

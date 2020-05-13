@@ -1137,13 +1137,13 @@ def generateHeaders(method,params,uri):
     stringSign= method+"\n"+str(headerString)+"\n"+uri+"\n"+str(params)
     b64 = create_sign(SecretKey,stringSign)
 
-    print('final=',type(b64))
+    print('final=',type(str(b64)))
     print('final=',b64)
     head={'X-TC-Key': SecretId,
             'X-TC-Timestamp': int(timeStamp),
             'X-TC-Nonce': nonce,
             'AppId': str(appID),
-            'X-TC-Signature': b64,
+            'X-TC-Signature': str(b64),
             'content-type':'application/json'}
     return head
 

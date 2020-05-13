@@ -1206,8 +1206,10 @@ def add(timeStamp):
               'end_time':timeStamp+10000,
               'settings':str(settings)}
     headers = generateHeaders('POST',params,uri)
-    response = requests.post(url,headers=headers,params=params)
 
+    response = requests.post(url,headers=headers,params=params)
+    print(headers)
+    print(response.url)
     return response.json()
 
 @app.route('/createMeeting/<username>' , methods=['POST','GET'])

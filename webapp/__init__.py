@@ -1117,11 +1117,12 @@ url = 'https://api.meeting.qq.com/v1/meetings'
 def create_sign(key,toSign):
 
 
-    h = hmac.new(bytes(key),msg=toSign.encode('utf-8'),digestmod=hashlib.sha256).digest()
+    h = hmac.new(bytes(key,'utf-8'),msg=toSign.encode('utf-8'),digestmod=hashlib.sha256).hexdigest()
     print(type(h))
     print(h)
-    b64=base64.b64encode(h).decode()
-    return b64
+    base = base64.b64encode(h.encode('utf-8'))
+    hash = base.decode('utf-8')
+    return hash
 
 def generate_nonce(length=8):
     """Generate pseudorandom number."""

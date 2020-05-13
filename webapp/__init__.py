@@ -1160,7 +1160,7 @@ def create_sign(key,toSign):
     h = hmac.new(bytes(key),msg=toSign.encode('utf-8'),digestmod=hashlib.sha256).digest()
     print(type(h))
     print(h)
-    b64=base64.b64encode(bytes(h.hex(),'utf-8')).decode()
+    b64=base64.b64encode(h).decode()
     return b64
 
 def generate_nonce(length=8):

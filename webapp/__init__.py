@@ -1184,7 +1184,7 @@ def test(username):
     uri = '/v1/meetings'
 
     print(generateHeaders('GET','',uri))
-    response = requests.get(url,headers=generateHeaders('GET','',uri),params="")
+    response = requests.get(url,headers=generateHeaders('GET','',uri),params={"":""})
 
     print(response.url)
     return response.json()

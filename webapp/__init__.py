@@ -1182,9 +1182,9 @@ def createMeeting(username):
 @app.route('/Meeting/<username>', methods=['POST', 'GET'])
 def test(username):
     uri = '/v1/meetings'
-    head = generateHeaders('GET','',uri)
-    print(head)
-    response = requests.get(url,headers=head,params="")
+
+    print(generateHeaders('GET','',uri))
+    response = requests.get(url,headers=generateHeaders('GET','',uri),params="")
 
     print(response.url)
     return response.json()

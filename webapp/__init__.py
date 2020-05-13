@@ -1183,7 +1183,8 @@ def createMeeting(username):
 def test(username):
     uri = '/v1/meetings'
     head = generateHeaders('GET','',uri)
-    response = requests.get(url,headers=head)
+    print(head)
+    response = requests.get(url,headers=head,params="")
 
     print(response.url)
     return response.json()

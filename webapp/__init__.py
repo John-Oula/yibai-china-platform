@@ -1157,7 +1157,7 @@ url = 'https://api.meeting.qq.com/v1/meetings'
 def create_sign(key,toSign):
 
 
-    h = hmac.new(key,msg=toSign.encode('utf-8'),digestmod=hashlib.sha256).digest()
+    h = hmac.new(key,msg=toSign.encode('utf-8'),digestmod=hashlib.sha256).hexdigest()
     print(type(h))
     print(h)
 

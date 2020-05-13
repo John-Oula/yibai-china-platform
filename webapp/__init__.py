@@ -1161,12 +1161,12 @@ def create_sign(key,toSign):
     print(type(h))
     print(h)
 
-    return base64.b64encode(bytes(h.hex(),'utf-8')).decode()
+    return base64.b64encode(bytes(h,'utf-8')).decode()
 
 def generate_nonce(length=8):
     """Generate pseudorandom number."""
     return ''.join([str(random.randint(0, 9)) for i in range(length)])
-
+global stringSign
 def generateHeaders(method,params,uri):
     nonce = random.randint(1000, 9001)
 

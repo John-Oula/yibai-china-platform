@@ -1218,6 +1218,10 @@ def createMeeting(username):
     user = User.query.filter_by(username=username).first_or_404()
     return add(timeStamp)
 
+@app.route('/Meeting/<username>', methods=['POST', 'GET'])
+def test(username):
+    uri = '/v1/meetings'
+    return generateHeaders('GET','',uri)
     ### Tencent signature gen ###
 GMT_FORMAT = '%a, %d %b %Y %H:%M:%S GMT'
 def getSimpleSign(source, SecretId, SecretKey):

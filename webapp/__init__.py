@@ -1,4 +1,4 @@
-# -*- coding: utf-8 -*-
+
 #### ROUTES IMPORTS ####
 import json
 import random
@@ -1157,7 +1157,7 @@ url = 'https://api.meeting.qq.com/v1/meetings'
 def create_sign(key,toSign):
 
 
-    h = hmac.new(bytes(key,'utf-8'),msg=toSign.encode('utf-8'),digestmod=hashlib.sha256).digest()
+    h = hmac.new(bytes(key),msg=toSign.encode('utf-8'),digestmod=hashlib.sha256).digest()
     print(type(h))
     print(h)
     b64=base64.b64encode(bytes(h.hex(),'utf-8')).decode()

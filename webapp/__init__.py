@@ -1150,7 +1150,7 @@ def generateHeaders(method,params,uri):
 
 def add(timeStamp):
     uri = '/v1/meetings'
-    userid = current_user.id
+    userid = User.id
     settings = {
             "mute_enable_join" : True,
             "allow_unmute_self" : True,

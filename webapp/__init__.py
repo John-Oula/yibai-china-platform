@@ -1161,12 +1161,14 @@ def create_sign(key,toSign):
     print(type(h))
     print(h)
 
-    return base64.b64encode(bytes(h)).decode()
+    return base64.b64encode(bytes(h,'utf-8')).decode()
 
 def generate_nonce(length=8):
     """Generate pseudorandom number."""
     return ''.join([str(random.randint(0, 9)) for i in range(length)])
-global stringSign
+
+
+
 def generateHeaders(method,params,uri):
     nonce = random.randint(1000, 9001)
 
@@ -1177,13 +1179,13 @@ def generateHeaders(method,params,uri):
     print(headerString)
     print(stringSign)
     print(b64)
-
-    return {'X-TC-Key': SecretId,
+    head={'X-TC-Key': SecretId,
             'X-TC-Timestamp': int(timeStamp),
             'X-TC-Nonce': int(nonce),
             'AppId': str(appID),
             'X-TC-Signature': str(b64),
             'content-type':'application/json'}
+    return head
 
 
 def add(timeStamp):

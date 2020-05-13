@@ -1109,7 +1109,7 @@ timeStamp = int(time.time())
 
 
 SecretId = 'JIRMZ6O3Qm5KDwCHsgYnlxatGeXq7dfFcjEk'  # `SecretId` in key pair
-SecretKey =b'wZn5NeGCqxg4r8XaDum2EMzRhIvWHtcU'  # `SecretKey` in key pair
+SecretKey ='wZn5NeGCqxg4r8XaDum2EMzRhIvWHtcU'  # `SecretKey` in key pair
 
 
 service = "cvm"
@@ -1157,11 +1157,11 @@ url = 'https://api.meeting.qq.com/v1/meetings'
 def create_sign(key,toSign):
 
 
-    h = hmac.new(key,msg=toSign.encode('utf-8'),digestmod=hashlib.sha256).hexdigest()
+    h = hmac.new(bytes(key,'utf-8'),msg=toSign.encode('utf-8'),digestmod=hashlib.sha256).digest()
     print(type(h))
     print(h)
-
-    return base64.b64encode(bytes(h,'utf-8')).decode()
+    b64=base64.b64encode(bytes(h.hex(),'utf-8')).decode()
+    return b64
 
 def generate_nonce(length=8):
     """Generate pseudorandom number."""
@@ -1173,17 +1173,16 @@ def generateHeaders(method,params,uri):
     nonce = random.randint(1000, 9001)
 
     headerString = "X-TC-Key=" + SecretId + "&X-TC-Nonce=" + str(nonce) + "&X-TC-Timestamp=" + str(timeStamp)
-    stringSign= method+"\n"+str(headerString)+"\n"+str(uri)+"\n"+str(params)
+    stringSign= method+"\n"+headerString+"\n"+uri+"\n"+str(params)
     b64 = create_sign(SecretKey,str(stringSign))
 
-    print(headerString)
-    print(stringSign)
-    print(b64)
+    print('final=',type(b64))
+    print('final=',b64)
     head={'X-TC-Key': SecretId,
             'X-TC-Timestamp': int(timeStamp),
-            'X-TC-Nonce': int(nonce),
+            'X-TC-Nonce': nonce,
             'AppId': str(appID),
-            'X-TC-Signature': str(b64),
+            'X-TC-Signature': b64,
             'content-type':'application/json'}
     return head
 

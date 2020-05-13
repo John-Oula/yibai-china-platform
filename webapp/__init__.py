@@ -1108,50 +1108,10 @@ timeStamp = int(time.time())
 
 
 
-SecretId = 'JIRMZ6O3Qm5KDwCHsgYnlxatGeXq7dfFcjEk'  # `SecretId` in key pair
-SecretKey ='wZn5NeGCqxg4r8XaDum2EMzRhIvWHtcU'  # `SecretKey` in key pair
+SecretId = 'JIRMZ6O3Qm5KDwCHsgYnlxatGeXq7dfFcjEk'
+SecretKey ='wZn5NeGCqxg4r8XaDum2EMzRhIvWHtcU'
 
 
-service = "cvm"
-host = "api.meeting.qq.com/v1/meetings"
-endpoint = "https://" + host
-#region = "ap-guangzhou"
-action = "DescribeInstances"
-#version = "2017-03-12"
-algorithm = "TC3-HMAC-SHA256"
-#timestamp = int(time.time())
-
-
-params = {"Limit": 1, "Filters": [{"Name": "instance-name", "Values": [u"unnamed"]}]}
-
-# ************* Step 1: Concatenate the CanonicalRequest string *************
-http_request_method = "POST"
-canonical_uri = "/"
-canonical_querystring = ""
-ct = "application/json; charset=utf-8"
-payload = json.dumps(params)
-canonical_headers = "content-type:%s\nhost:%s\n" % (ct, host)
-signed_headers = "content-type;host"
-hashed_request_payload = hashlib.sha256(payload.encode("utf-8")).hexdigest()
-canonical_request = (http_request_method + "\n" +
-                     canonical_uri + "\n" +
-                     canonical_querystring + "\n" +
-                     canonical_headers + "\n" +
-                     signed_headers + "\n" +
-                     hashed_request_payload)
-print(canonical_request)
-
-# ************* Step 2: Concatenate the string to sign *************
-credential_scope = str(timeStamp) + "/" + service + "/" + "tc3_request"
-hashed_canonical_request = hashlib.sha256(canonical_request.encode("utf-8")).hexdigest()
-string_to_sign = (algorithm + "\n" +
-                  str(timeStamp) + "\n" +
-                  credential_scope + "\n" +
-                  hashed_canonical_request)
-print(string_to_sign)
-
-# ************* Step 3: Calculate the Signature *************
-# Function for computing signature digest
 
 url = 'https://api.meeting.qq.com/v1/meetings'
 def create_sign(key,toSign):
@@ -1170,11 +1130,11 @@ def generate_nonce(length=8):
 
 
 def generateHeaders(method,params,uri):
-    nonce = random.randint(1000, 9001)
+    nonce = random.randint(100000, 999999)
 
     headerString = "X-TC-Key=" + SecretId + "&X-TC-Nonce=" + str(nonce) + "&X-TC-Timestamp=" + str(timeStamp)
-    stringSign= method+"\n"+headerString+"\n"+uri+"\n"+str(params)
-    b64 = create_sign(SecretKey,str(stringSign))
+    stringSign= method+"\n"+str(headerString)+"\n"+uri+"\n"+str(params)
+    b64 = create_sign(SecretKey,stringSign)
 
     print('final=',type(b64))
     print('final=',b64)

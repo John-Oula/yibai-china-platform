@@ -1139,13 +1139,13 @@ def generateHeaders(method,params,uri):
 
     print('final=',type(str(b64)))
     print('final=',b64)
-    head={'X-TC-Key': SecretId,
+
+    return {'X-TC-Key': SecretId,
             'X-TC-Timestamp': int(timeStamp),
             'X-TC-Nonce': nonce,
             'AppId': str(appID),
             'X-TC-Signature': str(b64),
             'content-type':'application/json'}
-    return head
 
 
 def add(timeStamp):

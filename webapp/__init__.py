@@ -1182,7 +1182,11 @@ def createMeeting(username):
 @app.route('/Meeting/<username>', methods=['POST', 'GET'])
 def test(username):
     uri = '/v1/meetings'
-    return generateHeaders('GET','',uri)
+    head = generateHeaders('GET','',uri)
+    response = requests.post(url,headers=head)
+
+    print(response.url)
+    return response.json()
     ### Tencent signature gen ###
 GMT_FORMAT = '%a, %d %b %Y %H:%M:%S GMT'
 def getSimpleSign(source, SecretId, SecretKey):

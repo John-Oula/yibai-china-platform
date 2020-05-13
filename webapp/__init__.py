@@ -1161,15 +1161,7 @@ def create_sign(key,toSign):
     print(type(h))
     print(h)
 
-    hb = bytes(h)
-    print(type(h))
-    print(h)
-    hex_string = hb.hex()
-    print(type(hex_string))
-    print(hex_string)
-
-
-    return base64.b64encode(h).decode()
+    return base64.b64encode(bytes(h.hex(),'utf-8')).decode()
 
 def generate_nonce(length=8):
     """Generate pseudorandom number."""
@@ -1187,8 +1179,8 @@ def generateHeaders(method,params,uri):
     print(b64)
 
     return {'X-TC-Key': SecretId,
-            'X-TC-Timestamp': str(timeStamp),
-            'X-TC-Nonce': nonce,
+            'X-TC-Timestamp': int(timeStamp),
+            'X-TC-Nonce': int(nonce),
             'AppId': str(appID),
             'X-TC-Signature': str(b64),
             'content-type':'application/json'}
@@ -1211,8 +1203,8 @@ def add(timeStamp):
     params = {'userid':userid,'instanceid': 5,
               'subject':'consultation','type':0,
               'start_time':timeStamp,
-              'end_time':timeStamp+1000000,
-              'settings':settings}
+              'end_time':timeStamp+10000,
+              'settings':str(settings)}
     headers = generateHeaders('POST',params,uri)
     response = requests.post(url,headers=headers,params=params)
 

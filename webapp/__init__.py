@@ -1184,7 +1184,9 @@ def test(username):
     uri = '/v1/meetings'
 
     print(generateHeaders('GET','',uri))
-    response = requests.get(url,headers=generateHeaders('GET','',uri),params={"":""})
+    auth = generateHeaders('GET','',uri)
+
+    response = requests.get(url,headers=generateHeaders('GET','',uri),auth={auth['X-TC-KEY'],auth['X-TC-SIGNATURE']})
 
     print(response.url)
     return response.json()

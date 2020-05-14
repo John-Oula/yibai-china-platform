@@ -1179,6 +1179,8 @@ def createMeeting(username):
     user = User.query.filter_by(username=username).first_or_404()
     return add(timeStamp)
 
+from requests.auth import HTTPBasicAuth
+
 @app.route('/Meeting/<username>', methods=['POST', 'GET'])
 def test(username):
     uri = '/v1/meetings'
@@ -1186,7 +1188,7 @@ def test(username):
     print(generateHeaders('GET','',uri))
     auth = generateHeaders('GET','',uri)
 
-    response = requests.get(url,headers=generateHeaders('GET','',uri),auth={auth['X-TC-KEY'],auth['X-TC-SIGNATURE']})
+    response = requests.get(url,headers=generateHeaders('GET','',uri),auth=HTTPBasicAuth(auth['X-TC-KEY'],auth['X-TC-SIGNATURE']))
 
     print(response.url)
     return response.json()

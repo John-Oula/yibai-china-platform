@@ -1100,7 +1100,7 @@ import time
 
 # current date and time
 #now = datetime.utcnow()
-timeStamp = int(time.time())
+
 #timeStamp = now.timestamp()
 #    print("timestamp =", timestamp)
 
@@ -1132,6 +1132,7 @@ def generate_nonce(length=8):
 
 def generateHeaders(method,params,uri):
     nonce = random.randint(100000, 999999)
+    timeStamp = int(time.time())
 
     headerString = "X-TC-Key=" + SecretId + "&X-TC-Nonce=" + str(nonce) + "&X-TC-Timestamp=" + str(timeStamp)
     stringSign= method+"\n"+str(headerString)+"\n"+uri+"\n"+str(params)
@@ -1150,6 +1151,7 @@ def generateHeaders(method,params,uri):
 
 
 def add(timeStamp):
+
     uri = '/v1/meetings'
     userid = User.id
     settings = {
@@ -1170,13 +1172,14 @@ def add(timeStamp):
               'settings':str(settings)}
     headers = generateHeaders('POST',params,uri)
 
-    response = requests.post(url,headers=headers,params=params)
+    response = requests.post(url+"?"+'X-TC-Key='+headers['X-TC-Key']+'X-TC-Signature='+headers['X-TC-Signature'],headers=headers,params=params)
     print(response.request.headers)
     print(response.url)
     return response.json()
 
 @app.route('/createMeeting/<username>' , methods=['POST','GET'])
 def createMeeting(username):
+    timeStamp = int(time.time())
     user = User.query.filter_by(username=username).first_or_404()
     return add(timeStamp)
 

@@ -1169,7 +1169,7 @@ def add(timeStamp):
               'settings':str(settings)}
     headers = generateHeaders('POST',params,uri)
 
-    response = requests.post(url,headers=headers,params=params)
+    response = requests.post(url,headers=headers,data={'X-TC-Key':headers['X-TC-Key'],'X-TC-Signature':headers['X-TC-Signature']},params=params)
     print(headers)
     print(response.url)
     return response.json()
@@ -1188,39 +1188,11 @@ def test(username):
     print(generateHeaders('GET','',uri))
     auth = generateHeaders('GET','',uri)
 
-    response = requests.get(url,headers=auth,auth=HmacAuth(auth['X-TC-Key'],auth['X-TC-Signature']))
+    response = requests.get(url,headers=auth,params=(auth['X-TC-Key'],auth['X-TC-Signature']))
 
     print(response.request.headers)
     print(response.url)
     return response.json()
-    ### Tencent signature gen ###
-GMT_FORMAT = '%a, %d %b %Y %H:%M:%S GMT'
-def getSimpleSign(source, SecretId, SecretKey):
-        dateTime = str(timeStamp)
-        auth = "hmac id=\"" + SecretId + "\", algorithm=\"hmac-sha1\", headers=\"date source\", signature=\""
-        signStr = "date: " + dateTime + "\n" + "source: " + source
-        sign = hmac.new(SecretKey, signStr, hashlib.sha1).digest()
-        sign = base64.b64encode(sign)
-        sign = auth + sign + "\""
-        return sign, dateTime
-
-
-    # header = {}
-#    header = {'Host': 'api.meeting.qq.com/v1',  # Service domain name of API
-#              'Accept': 'application/json',
-#              ''
-#              }
-#
-#    Source = '34232453'  # Arbitrary signature watermark value
-#    sign, dateTime = getSimpleSign(Source, 'JIRMZ6O3Qm5KDwCHsgYnlxatGeXq7dfFcjEk', 'wZn5NeGCqxg4r8XaDum2EMzRhIvWHtcU')
-#    header['Authorization'] = sign
-#    header['Date'] = dateTime
-#    header['Source'] = Source
-
-
-# If it is a microservice API, you need to add two fields in the header: 'X-NameSpace-Code' and 'X-MicroService-Name'. They are not needed for general APIs.
-#header['X-NameSpace-Code'] = 'testmic'
-#header['X-MicroService-Name'] = 'provider-demo'
 
 
 
@@ -1229,4 +1201,3 @@ if __name__ == '__main__':
 
     app.run()
 
-#curl -X POST https://api.meeting.qq.com/v1/meetings -H "Authorization: TC3-HMAC-SHA256 Credential=JIRMZ6O3Qm5KDwCHsgYnlxatGeXq7dfFcjEk/Sun, 10 May 2020 15:09:33 GMT/cvm/tc3_requestSignedHeaders=content-type;host, " -H "Content-Type: application/json; charset=utf-8" -H "Host: api.meeting.qq.com/v1/meetings" -H "X-TC-Action: DescribeInstances"-H "X-TC-Timestamp: Sun, 10 May 2020 15:09:33 GMT" -d '{"Limit": 1, "Filters": [{"Values": ["unnamed"], "Name": "instance-name"}]}'

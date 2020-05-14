@@ -1110,7 +1110,7 @@ timeStamp = int(time.time())
 
 SecretId = 'JIRMZ6O3Qm5KDwCHsgYnlxatGeXq7dfFcjEk'
 SecretKey =b'wZn5NeGCqxg4r8XaDum2EMzRhIvWHtcU'
-
+from python_hmac_auth import HmacAuth
 
 
 url = 'https://api.meeting.qq.com/v1/meetings'
@@ -1188,7 +1188,7 @@ def test(username):
     print(generateHeaders('GET','',uri))
     auth = generateHeaders('GET','',uri)
 
-    response = requests.get(url,headers=auth,auth=HTTPDigestAuth(auth['X-TC-Key'],auth['X-TC-Signature']))
+    response = requests.get(url,headers=auth,auth=HmacAuth(auth['X-TC-Key'],auth['X-TC-Signature']))
 
     print(response.request.headers)
     print(response.url)

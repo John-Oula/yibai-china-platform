@@ -1170,8 +1170,8 @@ def add(timeStamp):
     headers = generateHeaders('POST',params,uri)
 
     response = requests.post(url,headers=headers,data={'X-TC-Key':headers['X-TC-Key'],'X-TC-Signature':headers['X-TC-Signature']},params=params)
-    print(headers)
-    print(response.requests.url)
+    print(response.request.headers)
+    print(response.url)
     return response.json()
 
 @app.route('/createMeeting/<username>' , methods=['POST','GET'])

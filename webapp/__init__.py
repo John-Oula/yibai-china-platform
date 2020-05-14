@@ -1188,7 +1188,7 @@ def test(username):
     print(generateHeaders('GET','',uri))
     auth = generateHeaders('GET','',uri)
 
-    response = requests.get(url,headers=generateHeaders('GET','',uri),auth=HTTPBasicAuth(auth['X-TC-KEY'],auth['X-TC-SIGNATURE']))
+    response = requests.get(url,headers=generateHeaders('GET','',uri),auth=HTTPBasicAuth(auth['X-TC-Key'],auth['X-TC-Signature']))
 
     print(response.url)
     return response.json()

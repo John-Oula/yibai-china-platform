@@ -1098,19 +1098,13 @@ def reset_token(token):
 from datetime import datetime
 import time
 
-# current date and time
-#now = datetime.utcnow()
-
-#timeStamp = now.timestamp()
-#    print("timestamp =", timestamp)
-
+# current date
 
 
 
 
 SecretId = 'JIRMZ6O3Qm5KDwCHsgYnlxatGeXq7dfFcjEk'
 SecretKey =b'wZn5NeGCqxg4r8XaDum2EMzRhIvWHtcU'
-from python_hmac_auth import HmacAuth
 
 
 url = 'https://api.meeting.qq.com/v1/meetings'

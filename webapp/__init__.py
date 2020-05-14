@@ -1179,7 +1179,7 @@ def createMeeting(username):
     user = User.query.filter_by(username=username).first_or_404()
     return add(timeStamp)
 
-from requests.auth import HTTPBasicAuth
+from requests.auth import HTTPBasicAuth,HTTPDigestAuth
 
 @app.route('/Meeting/<username>', methods=['POST', 'GET'])
 def test(username):
@@ -1188,8 +1188,9 @@ def test(username):
     print(generateHeaders('GET','',uri))
     auth = generateHeaders('GET','',uri)
 
-    response = requests.get(url,headers=auth,auth=HTTPBasicAuth(auth['X-TC-Key'],auth['X-TC-Signature']))
+    response = requests.get(url,headers=auth,auth=HTTPDigestAuth(auth['X-TC-Key'],auth['X-TC-Signature']))
 
+    print(response.request.headers)
     print(response.url)
     return response.json()
     ### Tencent signature gen ###

@@ -1171,7 +1171,7 @@ def add(timeStamp):
 
     response = requests.post(url,headers=headers,data={'X-TC-Key':headers['X-TC-Key'],'X-TC-Signature':headers['X-TC-Signature']},params=params)
     print(headers)
-    print(response.url)
+    print(response.requests.url)
     return response.json()
 
 @app.route('/createMeeting/<username>' , methods=['POST','GET'])
@@ -1188,7 +1188,7 @@ def test(username):
     print(generateHeaders('GET','',uri))
     auth = generateHeaders('GET','',uri)
 
-    response = requests.get(url,headers=auth,params=(auth['X-TC-Key'],auth['X-TC-Signature']))
+    response = requests.get(url,headers=auth,params={'X-TC-Key':auth['X-TC-Key'],'X-TC-Signature':auth['X-TC-Signature']})
 
     print(response.request.headers)
     print(response.url)

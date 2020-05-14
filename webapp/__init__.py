@@ -1170,7 +1170,7 @@ def add(timeStamp):
               'settings':str(settings)}
     headers = generateHeaders('POST',params,uri)
 
-    response = requests.post(url,headers=headers,data={'X-TC-Key':headers['X-TC-Key'],'X-TC-Signature':headers['X-TC-Signature']},params=params)
+    response = requests.post(url,headers=headers,params=params)
     print(response.request.headers)
     print(response.url)
     return response.json()
@@ -1189,7 +1189,7 @@ def test(username):
     print(generateHeaders('GET','',uri))
     auth = generateHeaders('GET','',uri)
 
-    response = requests.get(url,headers=auth,params={'X-TC-Key':auth['X-TC-Key'],'X-TC-Signature':auth['X-TC-Signature']})
+    response = requests.get(url,headers=auth)
 
     print(response.request.headers)
     print(response.url)

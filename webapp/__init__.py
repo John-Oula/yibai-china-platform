@@ -1146,7 +1146,7 @@ def generateHeaders(method,params,uri):
             'AppId': str(appID),
             'X-TC-Signature': str(b64),
             'content-type':'application/json',
-            'Accept-Encoding': 'application/json'}
+            'Accept': 'application/json'}
 
 
 def add(timeStamp):

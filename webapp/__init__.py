@@ -1167,7 +1167,7 @@ def add(timeStamp):
               'end_time':timeStamp+10000,
               'settings':str(settings)}
     headers = generateHeaders('POST',params,uri)
-    encoded_args = urlencode(params)
+    encoded_args = urllib3.util.parse_url(params)
     url_encode = 'https://api.meeting.qq.com/v1/meetings?'+encoded_args
     req = http.request('POST',url,headers=headers)
     print(req.status)

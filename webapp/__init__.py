@@ -1191,7 +1191,7 @@ def test(username):
     req = http.request('GET',url,headers=auth)
 
     print(req.status)
-    print(json.loads(req.data.decode('utf-8'))['headers'])
+    print(json.loads(req.data.decode('utf-8')))
     return req.data
 
 

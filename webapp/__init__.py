@@ -1106,7 +1106,7 @@ import time
 SecretId = 'JIRMZ6O3Qm5KDwCHsgYnlxatGeXq7dfFcjEk'
 SecretKey =b'wZn5NeGCqxg4r8XaDum2EMzRhIvWHtcU'
 
-import urllib3.response
+from urllib.parse import urlencode
 import urllib3.request
 http= urllib3.PoolManager()
 url = 'https://api.meeting.qq.com/v1/meetings'
@@ -1167,11 +1167,13 @@ def add(timeStamp):
               'end_time':timeStamp+10000,
               'settings':str(settings)}
     headers = generateHeaders('POST',params,uri)
-
-    response = requests.post(url,headers=headers,params=params)
-    print(response.request.headers)
-    print(response.url)
-    return response.json()
+    encoded_args = urlencode(params)
+    url_encode = 'https://api.meeting.qq.com/v1/meetings?'+encoded_args
+    req = http.request('POST',url,headers=headers)
+    print(req.status)
+    print(req.headers)
+    print(json.loads(req.data.decode('utf-8')))
+    return req.data
 
 @app.route('/createMeeting/<username>' , methods=['POST','GET'])
 def createMeeting(username):
@@ -1191,6 +1193,7 @@ def test(username):
     req = http.request('GET',url,headers=auth)
 
     print(req.status)
+    print(req.headers)
     print(json.loads(req.data.decode('utf-8')))
     return req.data
 

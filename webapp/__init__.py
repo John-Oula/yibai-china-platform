@@ -1105,7 +1105,8 @@ import time
 
 SecretId = 'JIRMZ6O3Qm5KDwCHsgYnlxatGeXq7dfFcjEk'
 SecretKey =b'wZn5NeGCqxg4r8XaDum2EMzRhIvWHtcU'
-
+import urllib.request
+import urllib.parse
 
 url = 'https://api.meeting.qq.com/v1/meetings'
 def create_sign(key,toSign):
@@ -1186,11 +1187,11 @@ def test(username):
     print(generateHeaders('GET','',uri))
     auth = generateHeaders('GET','',uri)
 
-    response = requests.get(url+"?"+'X-TC-Key='+auth['X-TC-Key']+'&X-TC-Signature='+auth['X-TC-Signature'],headers=auth)
+    req = urllib.request.Request(url,headers=auth)
+    resp = urllib.request.urlopen(req)
 
-    print(response.request.headers)
-    print(response.url)
-    return response.json()
+    print(resp)
+    return resp.json()
 
 
 

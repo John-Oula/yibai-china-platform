@@ -1105,10 +1105,10 @@ import time
 
 SecretId = 'JIRMZ6O3Qm5KDwCHsgYnlxatGeXq7dfFcjEk'
 SecretKey =b'wZn5NeGCqxg4r8XaDum2EMzRhIvWHtcU'
-import urllib.request
-import urllib.parse
 
-
+import urllib3.response
+import urllib3.request
+http= urllib3.PoolManager()
 url = 'https://api.meeting.qq.com/v1/meetings'
 def create_sign(key,toSign):
 
@@ -1188,11 +1188,11 @@ def test(username):
     print(generateHeaders('GET','',uri))
     auth = generateHeaders('GET','',uri)
 
-    req = urllib.request.Request(url,headers=auth)
-    resp = urllib.request.urlopen(req)
+    req = http.request('GET',url,headers=auth)
 
-    print(resp)
-    return resp.json()
+    print(req.status)
+    print(json.loads(req.data.decode('utf-8'))['headers'])
+    return req.data
 
 
 

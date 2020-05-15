@@ -1164,9 +1164,9 @@ def add(timeStamp):
               'start_time':timeStamp,
               'end_time':timeStamp+10000,
               'settings':str(settings)}
-    headers = generateHeaders('POST',json.dumps(params.decode('utf-8')),uri)
+    headers = generateHeaders('POST',params,uri)
 
-    response = requests.post(url,headers=headers,params=params)
+    response = requests.post(url+"?"+'X-TC-Key='+headers['X-TC-Key']+'&X-TC-Signature='+headers['X-TC-Signature'],headers=headers,params=params)
     print(response.request.headers)
     print(response.url)
     return response.json()

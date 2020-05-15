@@ -1106,8 +1106,8 @@ import time
 SecretId = 'JIRMZ6O3Qm5KDwCHsgYnlxatGeXq7dfFcjEk'
 SecretKey =b'wZn5NeGCqxg4r8XaDum2EMzRhIvWHtcU'
 
-from urllib.parse import urlencode
 import urllib3.request
+import urllib3.util
 http= urllib3.PoolManager()
 url = 'https://api.meeting.qq.com/v1/meetings'
 def create_sign(key,toSign):

@@ -1166,7 +1166,7 @@ def add(timeStamp):
               'settings':str(settings)}
     headers = generateHeaders('POST',params,uri)
 
-    response = requests.post("http://api.meeting.qq.com/v1/meetings",headers=headers,params=params)
+    response = requests.post("https://api.meeting.qq.com/v1/meetings",headers=headers,params=params)
     print(response.request.headers)
     print(response.url)
     return response.json()

@@ -1184,9 +1184,9 @@ def test(username):
     uri = '/v1/meetings'
 
     print(generateHeaders('GET','',uri))
-    auth = generateHeaders('GET','',uri)
 
-    response = requests.get("http://api.meeting.qq.com/v1/meetings",headers=headers)
+
+    response = requests.get("http://api.meeting.qq.com/v1/meetings",headers=generateHeaders('GET','',uri))
 
     print(response.request.headers)
     print(response.url)

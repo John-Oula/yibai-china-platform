@@ -1111,7 +1111,7 @@ url = 'https://api.meeting.qq.com/v1/meetings'
 def create_sign(key,toSign):
 
 
-    h = hmac.new(key.decode('utf-8'),msg=toSign.encode('utf-8'),digestmod=hashlib.sha256).hexdigest()
+    h = hmac.new(key,msg=toSign.encode('utf-8'),digestmod=hashlib.sha256).hexdigest()
     print(type(h))
     print(h)
     base = base64.b64encode(h.encode('utf-8'))
@@ -1186,7 +1186,7 @@ def test(username):
     print(generateHeaders('GET','',uri))
 
 
-    response = requests.get("http://api.meeting.qq.com/v1/meetings",headers=generateHeaders("GET","",uri))
+    response = requests.get("https://api.meeting.qq.com/v1",headers=generateHeaders("GET","",uri))
 
     print(response.request.headers)
     print(response.url)

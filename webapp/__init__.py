@@ -1161,8 +1161,8 @@ def add(timeStamp):
     }
     params = {'userid':userid,'instanceid': 5,
               'subject':'consultation','type':0,
-              'start_time':timeStamp,
-              'end_time':timeStamp+10000,
+              'start_time':str(timeStamp),
+              'end_time':str(timeStamp+10000),
               'settings':str(settings)}
     headers = generateHeaders('POST',params,uri)
 

@@ -1106,9 +1106,7 @@ import time
 SecretId = 'JIRMZ6O3Qm5KDwCHsgYnlxatGeXq7dfFcjEk'
 SecretKey =b'wZn5NeGCqxg4r8XaDum2EMzRhIvWHtcU'
 
-import urllib3.request
-import urllib3.util
-http= urllib3.PoolManager()
+
 url = 'https://api.meeting.qq.com/v1/meetings'
 def create_sign(key,toSign):
 
@@ -1167,13 +1165,11 @@ def add(timeStamp):
               'end_time':timeStamp+10000,
               'settings':str(settings)}
     headers = generateHeaders('POST',params,uri)
-    encoded_args = urllib3.util.parse_url(params)
-    url_encode = 'https://api.meeting.qq.com/v1/meetings?'+encoded_args
-    req = http.request('POST',url,headers=headers)
-    print(req.status)
-    print(req.headers)
-    print(json.loads(req.data.decode('utf-8')))
-    return req.data
+
+    response = requests.post("http://api.meeting.qq.com/v1/meetings"+"?"+'X-TC-Key='+headers['X-TC-Key']+'&X-TC-Signature='+headers['X-TC-Signature'],headers=headers,params=params)
+    print(response.request.headers)
+    print(response.url)
+    return response.json()
 
 @app.route('/createMeeting/<username>' , methods=['POST','GET'])
 def createMeeting(username):
@@ -1190,12 +1186,11 @@ def test(username):
     print(generateHeaders('GET','',uri))
     auth = generateHeaders('GET','',uri)
 
-    req = http.request('GET',url,headers=auth)
+    response = requests.get(url+"?"+'X-TC-Key='+auth['X-TC-Key']+'&X-TC-Signature='+auth['X-TC-Signature'],headers=auth)
 
-    print(req.status)
-    print(req.headers)
-    print(json.loads(req.data.decode('utf-8')))
-    return req.data
+    print(response.request.headers)
+    print(response.url)
+    return response.json()
 
 
 

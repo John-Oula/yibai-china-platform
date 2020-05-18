@@ -1136,7 +1136,7 @@ def generateHeaders(method,params,uri):
     print('final=',b64)
 
     return {'X-TC-Key': SecretId,
-            'X-TC-Timestamp': timeStamp,
+            'X-TC-Timestamp': str(timeStamp),
             'X-TC-Nonce': nonce,
             'AppId': str(appID),
             'X-TC-Signature': str(b64),

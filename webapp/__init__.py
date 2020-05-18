@@ -1137,7 +1137,7 @@ def generateHeaders(method,params,uri):
 
     return {'X-TC-Key': SecretId,
             'X-TC-Timestamp': str(timeStamp),
-            'X-TC-Nonce': nonce,
+            'X-TC-Nonce': str(nonce),
             'AppId': str(appID),
             'X-TC-Signature': str(b64),
             'content-type':'application/json',

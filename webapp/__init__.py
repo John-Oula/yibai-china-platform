@@ -40,6 +40,7 @@ import urllib3
 
 #### MODELS IMPORTS ####
 import datetime
+import time
 from flask_sqlalchemy import SQLAlchemy
 from itsdangerous import TimedJSONWebSignatureSerializer as Serializer
 import psycopg2

@@ -48,7 +48,7 @@ document.addEventListener('DOMContentLoaded', function() {
     displayEventEnd: true,
   });
 
-  calendar.getMilliseconds();
+
   calendar.render();
 
 });

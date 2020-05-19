@@ -57,5 +57,5 @@ signature =base64.b64encode(signature.encode("utf-8"))
 headers = {'Content-Type': 'application/json','X-TC-Key':your_secretid,'X-TC-Timestamp':str(stamp),'X-TC-Nonce':str(num),'AppId':'200000164','X-TC-Signature':signature,'X-TC-Registered':'0'}
 datas = req_body
 r = requests.post("https://api.meeting.qq.com/v1/meetings", data=datas, headers=headers)
-print('创建会议成功：\n',r.text)
-print('创建会议成功：\n',r.json())
+print(r.text)
+print(r.json())

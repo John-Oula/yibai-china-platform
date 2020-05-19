@@ -1163,7 +1163,7 @@ def add():
         "subject": "tester's meeting",
         "type": 0,
         "hosts": [{"userid": "61"}],
-        "start_time": str(stamp + 3000),
+        "start_time": str(stamp + 500),
         "end_time": str(stamp + 1000),
         "settings": {
             "mute_enable_join": True,

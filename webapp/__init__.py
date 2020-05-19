@@ -873,7 +873,7 @@ def unlike(id):
     return redirect(url_for('video',upload_ref=video.upload_ref))
 
 
-def createMeeting(id):
+def createMeeting():
     num = random.randint(0, 999999999)
     stamp = int(time.time())
 
@@ -954,7 +954,7 @@ def create(username):
 
 #        db.session.commit()
 
-        return createMeeting(current_user.id)
+        return createMeeting()
     return render_template('CREATE1.html',user=user,user_role = user_role,form=form,verify_form=verify_form,lesson_form=lesson_form,image_file=image_file)
 
 

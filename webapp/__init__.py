@@ -54,6 +54,8 @@ app.config['SECRET_KEY'] = 'Adawug;irwugw79536870635785ty0875y03davvavavdey'
 appID=200000164
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://power_user:@poweruserpass@172.16.214.87:5432/100CG'
+SecretId = 'JIRMZ6O3Qm5KDwCHsgYnlxatGeXq7dfFcjEk'
+SecretKey =b'wZn5NeGCqxg4r8XaDum2EMzRhIvWHtcU'
 
 mail = Mail(app)
 #### MODELS ####
@@ -871,7 +873,55 @@ def unlike(id):
     return redirect(url_for('video',upload_ref=video.upload_ref))
 
 
+def createMeeting(id,title,start,end):
+    num = random.randint(0, 999999999)
+    stamp = int(time.time())
 
+    uri = "/v1/meetings"
+
+    headerString = "X-TC-Key=%s&X-TC-Nonce=%s&X-TC-Timestamp=%s" % (SecretId, num, str(stamp))
+
+    req_body = {
+        "userid": str(id),
+        "instanceid": 1,
+        "subject": str(title),
+        "type": 0,
+        "hosts": [{"userid": str(id)}],
+        "start_time": str(start),
+        "end_time": str(end),
+        "settings": {
+            "mute_enable_join": True,
+            "allow_unmute_self": False,
+            "mute_all": False,
+            "host_video": True,
+            "participant_video": False,
+            "enable_record": False,
+            "play_ivr_on_leave": False,
+            "play_ivr_on_join": False,
+            "live_url": False
+        }
+    }
+    req_body = json.dumps(req_body)
+    stringToSign = "%s\n%s\n%s\n%s" % ('POST', headerString, uri, req_body)
+    print(stringToSign)
+
+    keyEnc = SecretKey.encode('utf-8')
+    stringToSign = stringToSign.encode('utf-8')
+
+    signature = hmac.new(keyEnc, stringToSign, digestmod=hashlib.sha256).hexdigest()
+    print("signature", signature)
+
+
+    signature = base64.b64encode(signature.encode("utf-8"))
+
+    headers = {'Content-Type': 'application/json', 'X-TC-Key': SecretId, 'X-TC-Timestamp': str(stamp),
+               'X-TC-Nonce': str(num), 'AppId': '200000164', 'X-TC-Signature': signature, 'X-TC-Registered': '0'}
+    datas = req_body
+    r = requests.post("https://api.meeting.qq.com/v1/meetings", data=datas, headers=headers)
+
+    print( r.status_code)
+
+    return r.json()
 
 
 @app.route('/create/<username>',methods=['GET','POST'])
@@ -886,9 +936,9 @@ def create(username):
     if request.method =='POST':
         time = float(request.form['date-time'])
         fullDate = datetime.fromtimestamp(time/1000.0).strftime('%Y-%m-%d')
-        startTime = datetime.fromtimestamp(time/1000.0).strftime('%H:%M:')
+        startTime = datetime.fromtimestamp(time/1000.0).strftime('%H:%M')
         end_time =float(request.form['end-time'])
-        endTime=datetime.fromtimestamp(end_time/1000.0).strftime('%H:%M:')
+        endTime=datetime.fromtimestamp(end_time/1000.0).strftime('%H:%M')
         print(time)
         print(end_time)
         print(fullDate)
@@ -900,11 +950,9 @@ def create(username):
                      nationality = verify_form.nationality.data,occupation = verify_form.occupation.data,email = verify_form.email.data,phone = verify_form.phone.data)
 
         db.session.add(post,verify)
-
-
-
-
+        createMeeting(current_user.id,form.title.data,startTime,endTime)
         db.session.commit()
+
         return redirect(url_for('user_profile',username=current_user.username))
     return render_template('CREATE1.html',user=user,user_role = user_role,form=form,verify_form=verify_form,lesson_form=lesson_form,image_file=image_file)
 
@@ -1115,8 +1163,6 @@ import time
 
 
 
-SecretId = 'JIRMZ6O3Qm5KDwCHsgYnlxatGeXq7dfFcjEk'
-SecretKey =b'wZn5NeGCqxg4r8XaDum2EMzRhIvWHtcU'
 
 
 url = 'https://api.meeting.qq.com/v1/meetings'
@@ -1155,63 +1201,10 @@ def generateHeaders(method,params,uri):
             'Accept': 'application/json'}
 
 
-def add():
-    num = random.randint(0, 999999999)
-    stamp = int(time.time())
-
-    uri = "/v1/meetings"
-
-    headerString = "X-TC-Key=%s&X-TC-Nonce=%s&X-TC-Timestamp=%s" % (SecretId, num, str(stamp))
-
-    req_body = {
-        "userid": "61",
-        "instanceid": 3,
-        "subject": "tester's meeting",
-        "type": 0,
-        "hosts": [{"userid": "61"}],
-        "start_time": str(stamp + 500),
-        "end_time": str(stamp + 1000),
-        "settings": {
-            "mute_enable_join": True,
-            "allow_unmute_self": False,
-            "mute_all": False,
-            "host_video": True,
-            "participant_video": False,
-            "enable_record": False,
-            "play_ivr_on_leave": False,
-            "play_ivr_on_join": False,
-            "live_url": False
-        }
-    }
-    req_body = json.dumps(req_body)
-    stringToSign = "%s\n%s\n%s\n%s" % ('POST', headerString, uri, req_body)
-    print(stringToSign)
-
-    keyEnc = SecretKey.encode('utf-8')
-    stringToSign = stringToSign.encode('utf-8')
-
-    signature = hmac.new(keyEnc, stringToSign, digestmod=hashlib.sha256).hexdigest()
-    print("signature", signature)
 
 
-    signature = base64.b64encode(signature.encode("utf-8"))
 
-    headers = {'Content-Type': 'application/json', 'X-TC-Key': SecretId, 'X-TC-Timestamp': str(stamp),
-               'X-TC-Nonce': str(num), 'AppId': '200000164', 'X-TC-Signature': signature, 'X-TC-Registered': '0'}
-    datas = req_body
-    r = requests.post("https://api.meeting.qq.com/v1/meetings", data=datas, headers=headers)
 
-    print( r.status_code)
-
-    return r.json()
-
-@app.route('/createMeeting/<username>' , methods=['POST','GET'])
-def createMeeting(username):
-    timeStamp = int(time.time())
-    user = User.query.filter_by(username=username).first_or_404()
-    return add()
-
-from requests.auth import HTTPBasicAuth,HTTPDigestAuth
 
 @app.route('/Meeting/<username>', methods=['POST', 'GET'])
 def test(username):

@@ -6,10 +6,10 @@ document.addEventListener('DOMContentLoaded', function() {
     plugins: [ 'interaction', 'dayGrid', 'timeGrid','bootstrap' ,'interactionPlugin'],
 
     select: function( selectionInfo ){
-      let start_time = selectionInfo.start.getUTCMilliseconds();
-      document.getElementById('start-time').value = start_time;
-      let end_time = selectionInfo.end.getUTCMilliseconds();
-      document.getElementById('end-time').value = end_time;
+      let start_time = selectionInfo.startStr;
+      document.getElementById('start-time').value = Date.parse(start_time);
+      let end_time = selectionInfo.endStr;
+      document.getElementById('end-time').value = Date.parse(end_time);
 
     },
     dateClick: function(info){},

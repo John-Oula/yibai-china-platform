@@ -980,7 +980,12 @@ def create(username):
         print(fullDate)
 #        start = re.split(r'([T+])', time)
 #        end = re.split(r'([T+])', end_time)
-        post = Post(title=form.title.data,category=form.category.data,description=form.description.data,date= fullDate,start_time= startTime ,end_time = endTime, author=current_user)
+
+        meeting = createMeeting(form.title.data,fulltime,end_time)
+
+        meeting_id = meeting["meeting_id"]
+        print(meeting_id)
+        post = Post(title=form.title.data,category=form.category.data,description=form.description.data,date= fullDate,start_time= startTime ,end_time = endTime, author=current_user,meetingId=meeting_id)
         lesson = Lesson(title=request.form['title'],description=request.form['description'])
         verify = User(id_type = verify_form.id_type.data,id_number = verify_form.id_number.data,id_document = verify_form.id_document.data,
                      nationality = verify_form.nationality.data,occupation = verify_form.occupation.data,email = verify_form.email.data,phone = verify_form.phone.data)
@@ -988,10 +993,7 @@ def create(username):
         db.session.add(post,verify)
 
         db.session.commit()
-        meeting = createMeeting(form.title.data,fulltime,end_time)
 
-        meeting_id = meeting["meeting_id"]
-        print(meeting_id)
         return
     return render_template('CREATE1.html',user=user,user_role = user_role,form=form,verify_form=verify_form,lesson_form=lesson_form,image_file=image_file)
 

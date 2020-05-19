@@ -934,10 +934,10 @@ def create(username):
     form = Session_form()
     verify_form = Verify_form()
     if request.method =='POST':
-        time = request.form['date-time']%60
+        time = request.form['date-time']
         fullDate = datetime.fromtimestamp(time/1000).strftime('%Y-%m-%d')
         startTime = datetime.fromtimestamp(time/1000).strftime('%H:%M')
-        end_time =request.form['end-time']%60
+        end_time =request.form['end-time']
         endTime=datetime.fromtimestamp(end_time/1000).strftime('%H:%M')
         print(time)
         print(end_time)
@@ -951,7 +951,7 @@ def create(username):
 
         db.session.add(post,verify)
         createMeeting(current_user.id,form.title.data,time,end_time)
-        db.session.commit()
+#        db.session.commit()
 
         return redirect(url_for('user_profile',username=current_user.username))
     return render_template('CREATE1.html',user=user,user_role = user_role,form=form,verify_form=verify_form,lesson_form=lesson_form,image_file=image_file)

@@ -1135,7 +1135,7 @@ def generateHeaders(method,params,uri):
     print('final=',type(str(b64)))
     print('final=',b64)
 
-    return {'X-TC-Key': SecretId,
+    return {'X-TC-Action':'DescribeInstances','X-TC-Key': SecretId,
             'X-TC-Timestamp': str(timeStamp),
             'X-TC-Nonce': str(nonce),
             'AppId': str(appID),
@@ -1164,7 +1164,7 @@ def add(timeStamp):
               'subject':'consultation','type':0,
               'start_time':str(timeStamp),
               'end_time':str(timeStamp+10000),
-              'settings':[]}
+              'settings':settings}
     headers = generateHeaders('POST',params,uri)
 
     response = requests.post("https://api.meeting.qq.com/v1/meetings",headers=headers,params=params)

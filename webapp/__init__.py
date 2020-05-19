@@ -874,7 +874,7 @@ def unlike(id):
     return redirect(url_for('video',upload_ref=video.upload_ref))
 
 
-def createMeeting(id,fulltime,end_time):
+def createMeeting(fulltime,end_time):
     num = random.randint(0, 999999999)
     stamp = int(time.time())
 
@@ -883,11 +883,11 @@ def createMeeting(id,fulltime,end_time):
     headerString = "X-TC-Key=%s&X-TC-Nonce=%s&X-TC-Timestamp=%s" % (SecretId, num, str(stamp))
 
     req_body = {
-        "userid": id,
+        "userid": str(current_user.id),
         "instanceid": 1,
         "subject": "tester's meeting",
         "type": 0,
-        "hosts": [{"userid": id}],
+        "hosts": [{"userid": str(current_user.id)}],
         "start_time": str(int(fulltime) / 1000),
         "end_time": str(int(end_time) / 1000),
         "settings": {
@@ -953,7 +953,7 @@ def create(username):
 
 #        db.session.commit()
 
-        return createMeeting(str(current_user.id),fulltime,end_time)
+        return createMeeting(fulltime,end_time)
     return render_template('CREATE1.html',user=user,user_role = user_role,form=form,verify_form=verify_form,lesson_form=lesson_form,image_file=image_file)
 
 

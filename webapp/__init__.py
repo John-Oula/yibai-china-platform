@@ -987,9 +987,12 @@ def create(username):
 
         db.session.add(post,verify)
 
-#        db.session.commit()
+        db.session.commit()
+        meeting = createMeeting(form.title.data,fulltime,end_time)
 
-        return createMeeting(form.title.data,fulltime,end_time)
+        meeting_id = meeting["meeting_id"]
+        print(meeting_id)
+        return
     return render_template('CREATE1.html',user=user,user_role = user_role,form=form,verify_form=verify_form,lesson_form=lesson_form,image_file=image_file)
 
 

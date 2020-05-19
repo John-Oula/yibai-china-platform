@@ -1159,7 +1159,7 @@ def add(timeStamp):
             "play_ivr_on_join" : False,
             "live_url" : False
     }
-    json.dumps(settings)
+#    json.dumps(settings)
     params = {'userid':userid,'instanceid': 5,
               'subject':'consultation','type':0,
               'start_time':str(timeStamp),

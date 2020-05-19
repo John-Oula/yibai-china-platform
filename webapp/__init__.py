@@ -1185,7 +1185,7 @@ def add():
     stringToSign = stringToSign.encode('utf-8')
 
     signature = hmac.new(keyEnc, stringToSign, digestmod=hashlib.sha256).digest()
-    print("我是签名：\n", signature)
+    print("signature", signature)
 
     signature = signature.hex()
     signature = base64.b64encode(signature.encode("utf-8"))
@@ -1195,7 +1195,7 @@ def add():
     datas = req_body
     r = requests.post("https://api.meeting.qq.com/v1/meetings", data=datas, headers=headers)
 
-    print('创建会议成功：\n', r.status_code)
+    print('status：\n', r.status_code)
 
     return r.json()
 

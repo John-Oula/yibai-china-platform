@@ -883,11 +883,11 @@ def createMeeting(id,fulltime,end_time):
     headerString = "X-TC-Key=%s&X-TC-Nonce=%s&X-TC-Timestamp=%s" % (SecretId, num, str(stamp))
 
     req_body = {
-        "userid": "66",
+        "userid": id,
         "instanceid": 1,
         "subject": "tester's meeting",
         "type": 0,
-        "hosts": [{"userid": "66"}],
+        "hosts": [{"userid": id}],
         "start_time": str(int(fulltime) / 1000),
         "end_time": str(int(end_time) / 1000),
         "settings": {

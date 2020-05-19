@@ -884,7 +884,7 @@ def create(username):
     form = Session_form()
     verify_form = Verify_form()
     if request.method =='POST':
-        time = request.form['date-time']
+        time = float(request.form['date-time'])
         fullDate = datetime.fromtimestamp(time/1000.0).strftime('%Y-%m-%d')
         end_time = request.form['end-time']
         print(time)

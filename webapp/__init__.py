@@ -873,7 +873,7 @@ def unlike(id):
     return redirect(url_for('video',upload_ref=video.upload_ref))
 
 
-def createMeeting(id,title,start,end):
+def createMeeting(id,start,end):
     num = random.randint(0, 999999999)
     stamp = int(time.time())
 
@@ -884,7 +884,7 @@ def createMeeting(id,title,start,end):
     req_body = {
         "userid": str(id),
         "instanceid": 1,
-        "subject": str(title),
+        "subject": "test",
         "type": 0,
         "hosts": [{"userid": str(id)}],
         "start_time": str(start),
@@ -954,7 +954,7 @@ def create(username):
 
 #        db.session.commit()
 
-        return createMeeting(current_user.id,form.title.data,str(int(time)/1000),str(int(end_time)/1000))
+        return createMeeting(current_user.id,str(int(time)/1000),str(int(end_time)/1000))
     return render_template('CREATE1.html',user=user,user_role = user_role,form=form,verify_form=verify_form,lesson_form=lesson_form,image_file=image_file)
 
 

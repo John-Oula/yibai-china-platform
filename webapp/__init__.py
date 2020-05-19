@@ -1,5 +1,11 @@
 
 #### ROUTES IMPORTS ####
+# -*- coding: utf-8 -*-
+
+
+
+
+from hashlib import sha256
 import json
 import random
 import os
@@ -1111,7 +1117,7 @@ url = 'https://api.meeting.qq.com/v1/meetings'
 def create_sign(key,toSign):
 
 
-    h = hmac.new(key,msg=b'JIRMZ6O3Qm5KDwCHsgYnlxatGeXq7dfFcjEk',digestmod=hashlib.sha256).hexdigest()
+    h = hmac.new(key,msg=toSign.encode('utf-8'),digestmod=hashlib.sha256).hexdigest()
     print(type(h))
     print(h)
     base = base64.b64encode(h.encode('utf-8'))
@@ -1132,8 +1138,7 @@ def generateHeaders(method,params,uri):
     stringSign= method+"\n"+str(headerString)+"\n"+uri+"\n"+str(params)
     b64 = create_sign(SecretKey,stringSign)
 
-    print('final=',type(str(b64)))
-    print('final=',b64)
+
 
     return {'X-TC-Action':'DescribeInstances','X-TC-Key': SecretId,
             'X-TC-Timestamp': str(timeStamp),
@@ -1144,39 +1149,61 @@ def generateHeaders(method,params,uri):
             'Accept': 'application/json'}
 
 
-def add(timeStamp):
+def add():
+    num = random.randint(0, 999999999)
+    stamp = int(time.time())
 
-    uri = '/v1/meetings'
-    userid = User.id
-    settings = {
-            "mute_enable_join" : True,
-            "allow_unmute_self" : True,
-            "mute_all" : False,
-            "host_video" : False,
-            "participant_video" : False,
-            "enable_record" : False,
-            "play_ivr_on_leave" : False,
-            "play_ivr_on_join" : False,
-            "live_url" : False
+    uri = "/v1/meetings"
+
+    headerString = "X-TC-Key=%s&X-TC-Nonce=%s&X-TC-Timestamp=%s" % (SecretId, num, str(stamp))
+
+    req_body = {
+        "userid": "61",
+        "instanceid": 3,
+        "subject": "tester's meeting",
+        "type": 0,
+        "hosts": [{"userid": "61"}],
+        "start_time": str(stamp + 3000),
+        "end_time": str(stamp + 1000),
+        "settings": {
+            "mute_enable_join": True,
+            "allow_unmute_self": False,
+            "mute_all": False,
+            "host_video": True,
+            "participant_video": False,
+            "enable_record": False,
+            "play_ivr_on_leave": False,
+            "play_ivr_on_join": False,
+            "live_url": False
+        }
     }
+    req_body = json.dumps(req_body)
+    stringToSign = "%s\n%s\n%s\n%s" % ('POST', headerString, uri, req_body)
+    print(stringToSign)
 
-    params = {'userid':userid,'instanceid': 5,
-              'subject':'consultation','type':0,
-              'start_time':str(timeStamp),
-              'end_time':str(timeStamp+10000),
-              'settings':settings}
-    headers = generateHeaders('POST',params,uri)
+    keyEnc = SecretKey.encode('utf-8')
+    stringToSign = stringToSign.encode('utf-8')
 
-    response = requests.post("https://api.meeting.qq.com/v1/meetings",headers=headers,params=params)
-    print(response.request.headers)
-    print(response.url)
-    return response.json()
+    signature = hmac.new(keyEnc, stringToSign, digestmod=hashlib.sha256).digest()
+    print("我是签名：\n", signature)
+
+    signature = signature.hex()
+    signature = base64.b64encode(signature.encode("utf-8"))
+
+    headers = {'Content-Type': 'application/json', 'X-TC-Key': SecretId, 'X-TC-Timestamp': str(stamp),
+               'X-TC-Nonce': str(num), 'AppId': '200000164', 'X-TC-Signature': signature, 'X-TC-Registered': '0'}
+    datas = req_body
+    r = requests.post("https://api.meeting.qq.com/v1/meetings", data=datas, headers=headers)
+
+    print('创建会议成功：\n', r.status_code)
+
+    return r.json()
 
 @app.route('/createMeeting/<username>' , methods=['POST','GET'])
 def createMeeting(username):
     timeStamp = int(time.time())
     user = User.query.filter_by(username=username).first_or_404()
-    return add(timeStamp)
+    return add()
 
 from requests.auth import HTTPBasicAuth,HTTPDigestAuth
 

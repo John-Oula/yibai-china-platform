@@ -951,10 +951,10 @@ def create(username):
                      nationality = verify_form.nationality.data,occupation = verify_form.occupation.data,email = verify_form.email.data,phone = verify_form.phone.data)
 
         db.session.add(post,verify)
-        createMeeting(current_user.id,form.title.data,int(time)/1000,int(end_time)/1000)
+
 #        db.session.commit()
 
-        return redirect(url_for('user_profile',username=current_user.username))
+        return createMeeting(current_user.id,form.title.data,str(int(time)/1000),str(int(end_time)/1000))
     return render_template('CREATE1.html',user=user,user_role = user_role,form=form,verify_form=verify_form,lesson_form=lesson_form,image_file=image_file)
 
 

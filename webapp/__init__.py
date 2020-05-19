@@ -936,12 +936,12 @@ def create(username):
     form = Session_form()
     verify_form = Verify_form()
     if request.method =='POST':
-        time = request.form['date-time']
-        fullDate = datetime.fromtimestamp(int(time)/1000).strftime('%Y-%m-%d')
-        startTime = datetime.fromtimestamp(int(time)/1000).strftime('%H:%M')
+        fulltime = request.form['date-time']
+        fullDate = datetime.fromtimestamp(int(fulltime)/1000).strftime('%Y-%m-%d')
+        startTime = datetime.fromtimestamp(int(fulltime)/1000).strftime('%H:%M')
         end_time =request.form['end-time']
         endTime=datetime.fromtimestamp(int(end_time)/1000).strftime('%H:%M')
-        print(time)
+        print(fulltime)
         print(end_time)
         print(fullDate)
 #        start = re.split(r'([T+])', time)

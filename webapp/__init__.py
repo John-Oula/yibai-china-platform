@@ -1184,7 +1184,7 @@ def add():
     keyEnc = SecretKey.encode('utf-8')
     stringToSign = stringToSign.encode('utf-8')
 
-    signature = hmac.new(keyEnc, stringToSign, digestmod=hashlib.sha256).hexidigest()
+    signature = hmac.new(keyEnc, stringToSign, digestmod=hashlib.sha256).hexdigest()
     print("signature", signature)
 
 

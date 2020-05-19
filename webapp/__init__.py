@@ -1164,7 +1164,7 @@ def add(timeStamp):
               'subject':'consultation','type':0,
               'start_time':str(timeStamp),
               'end_time':str(timeStamp+10000),
-              'settings':json.loads(settings)}
+              'settings':json.dumps(settings)}
     headers = generateHeaders('POST',params,uri)
 
     response = requests.post("https://api.meeting.qq.com/v1/meetings",headers=headers,params=params)

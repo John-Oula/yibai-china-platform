@@ -886,9 +886,11 @@ def create(username):
     if request.method =='POST':
         time = request.form['date-time']
         end_time = request.form['end-time']
-        start = re.split(r'([T+])', time)
-        end = re.split(r'([T+])', end_time)
-        post = Post(title=form.title.data,category=form.category.data,description=form.description.data,date= start[0],start_time= start[2] ,end_time = end[2], author=current_user)
+        print(time)
+        print(end_time)
+#        start = re.split(r'([T+])', time)
+#        end = re.split(r'([T+])', end_time)
+        post = Post(title=form.title.data,category=form.category.data,description=form.description.data,date= time,start_time= time ,end_time = end_time, author=current_user)
         lesson = Lesson(title=request.form['title'],description=request.form['description'])
         verify = User(id_type = verify_form.id_type.data,id_number = verify_form.id_number.data,id_document = verify_form.id_document.data,
                      nationality = verify_form.nationality.data,occupation = verify_form.occupation.data,email = verify_form.email.data,phone = verify_form.phone.data)

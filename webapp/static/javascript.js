@@ -3,16 +3,16 @@ document.addEventListener('DOMContentLoaded', function() {
   var calendarEl = document.getElementById('calendar');
 
   var calendar = new FullCalendar.Calendar(calendarEl, {
-    plugins: [ 'interaction', 'dayGrid', 'timeGrid','bootstrap' ],
+    plugins: [ 'interaction', 'dayGrid', 'timeGrid','bootstrap' ,'interactionPlugin'],
 
     select: function( selectionInfo ){
-      let start_time = selectionInfo.startStr;
+      let start_time = selectionInfo.start.getMilliseconds();
       document.getElementById('start-time').value = start_time;
-      let end_time = selectionInfo.endStr;
+      let end_time = selectionInfo.end.getMilliseconds();
       document.getElementById('end-time').value = end_time;
 
     },
-
+    dateClick: function(info){},
     defaultTimedEventDuration: '01:45:00',
     forceEventDuration: true,
     themeSystem: 'bootstrap',
@@ -48,7 +48,7 @@ document.addEventListener('DOMContentLoaded', function() {
     displayEventEnd: true,
   });
 
-
+  calendar.getMilliseconds();
   calendar.render();
 
 });

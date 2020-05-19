@@ -1184,10 +1184,10 @@ def add():
     keyEnc = SecretKey.encode('utf-8')
     stringToSign = stringToSign.encode('utf-8')
 
-    signature = hmac.new(keyEnc, stringToSign, digestmod=hashlib.sha256).digest()
+    signature = hmac.new(keyEnc, stringToSign, digestmod=hashlib.sha256).hexidigest()
     print("signature", signature)
 
-    signature = signature.hex()
+
     signature = base64.b64encode(signature.encode("utf-8"))
 
     headers = {'Content-Type': 'application/json', 'X-TC-Key': SecretId, 'X-TC-Timestamp': str(stamp),

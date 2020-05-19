@@ -181,7 +181,7 @@ class User(db.Model, UserMixin):
 class Post(db.Model):
     __tablename__ = 'post'
     id = db.Column('id', db.Integer, primary_key=True)
-    meetingId = db.Column('MeetingId', db.Integer,nullable=False)
+    meetingId = db.Column('MeetingId', db.Integer,nullable=True)
     verified = db.Column('verified', db.Integer, default=0, nullable=True)
     title = db.Column('title', db.String(70), nullable=True)
     category = db.Column('category', db.String(10), nullable=True)

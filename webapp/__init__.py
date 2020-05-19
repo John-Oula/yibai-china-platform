@@ -1195,7 +1195,7 @@ def add():
     datas = req_body
     r = requests.post("https://api.meeting.qq.com/v1/meetings", data=datas, headers=headers)
 
-    print('status：\n', r.status_code)
+    print( r.status_code)
 
     return r.json()
 

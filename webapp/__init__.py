@@ -1125,7 +1125,7 @@ def generate_nonce(length=8):
 
 
 def generateHeaders(method,params,uri):
-    nonce = random.randint(100000, 999999)
+    nonce = generate_nonce()
     timeStamp = int(time.time())
 
     headerString = "X-TC-Key=" + SecretId + "&X-TC-Nonce=" + str(nonce) + "&X-TC-Timestamp=" + str(timeStamp)
@@ -1159,11 +1159,12 @@ def add(timeStamp):
             "play_ivr_on_join" : False,
             "live_url" : False
     }
+    json.dumps(settings)
     params = {'userid':userid,'instanceid': 5,
               'subject':'consultation','type':0,
               'start_time':str(timeStamp),
               'end_time':str(timeStamp+10000),
-              'settings':str(settings)}
+              'settings':json.loads(settings)}
     headers = generateHeaders('POST',params,uri)
 
     response = requests.post("https://api.meeting.qq.com/v1/meetings",headers=headers,params=params)

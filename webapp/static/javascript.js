@@ -7,9 +7,9 @@ document.addEventListener('DOMContentLoaded', function() {
 
     select: function( selectionInfo ){
       let start_time = selectionInfo.startStr;
-      document.getElementById('start-time').value = Date.UTC(start_time);
+      document.getElementById('start-time').value = start_time.valueOf();
       let end_time = selectionInfo.endStr;
-      document.getElementById('end-time').value = Date.UTC(end_time);
+      document.getElementById('end-time').value = end_time.valueOf();
 
     },
     dateClick: function(info){},

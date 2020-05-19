@@ -920,6 +920,7 @@ def createMeeting(id,title,start,end):
     r = requests.post("https://api.meeting.qq.com/v1/meetings", data=datas, headers=headers)
 
     print( r.status_code)
+    print(r.json())
 
     return r.json()
 

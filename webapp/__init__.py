@@ -983,8 +983,10 @@ def create(username):
 
         meeting = createMeeting(form.title.data,fulltime,end_time)
 
-        meeting_id = meeting.meeting_info_list["meeting_id"]
-        print(meeting_id)
+        meeting_info = meeting["meeting_info_list"]
+        for item in meeting_info:
+            meeting_id = item['meeting_id']
+
         post = Post(title=form.title.data,category=form.category.data,description=form.description.data,date= fullDate,start_time= startTime ,end_time = endTime, author=current_user,meetingId=meeting_id)
         lesson = Lesson(title=request.form['title'],description=request.form['description'])
         verify = User(id_type = verify_form.id_type.data,id_number = verify_form.id_number.data,id_document = verify_form.id_document.data,

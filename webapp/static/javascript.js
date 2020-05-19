@@ -6,9 +6,9 @@ document.addEventListener('DOMContentLoaded', function() {
     plugins: [ 'interaction', 'dayGrid', 'timeGrid','bootstrap' ,'interactionPlugin'],
 
     select: function( selectionInfo ){
-      let start_time = selectionInfo.start.getMilliseconds();
+      let start_time = selectionInfo.start.getUTCMilliseconds();
       document.getElementById('start-time').value = start_time;
-      let end_time = selectionInfo.end.getMilliseconds();
+      let end_time = selectionInfo.end.getUTCMilliseconds();
       document.getElementById('end-time').value = end_time;
 
     },

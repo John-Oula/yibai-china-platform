@@ -55,7 +55,7 @@ appID=200000164
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://power_user:@poweruserpass@172.16.214.87:5432/100CG'
 SecretId = 'JIRMZ6O3Qm5KDwCHsgYnlxatGeXq7dfFcjEk'
-SecretKey =b'wZn5NeGCqxg4r8XaDum2EMzRhIvWHtcU'
+SecretKey ='wZn5NeGCqxg4r8XaDum2EMzRhIvWHtcU'
 
 mail = Mail(app)
 #### MODELS ####

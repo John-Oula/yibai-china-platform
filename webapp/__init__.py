@@ -967,8 +967,8 @@ def create(username):
             "subject": "tester's meeting",
             "type": 0,
             "hosts": [{"userid": "66"}],
-            "start_time": str(fulltime/1000),
-            "end_time": str(end_time/1000),
+            "start_time": str(int(fulltime)/1000),
+            "end_time": str(int(end_time)/1000),
             "settings": {
                 "mute_enable_join": True,
                 "allow_unmute_self": False,

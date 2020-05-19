@@ -934,10 +934,10 @@ def create(username):
     form = Session_form()
     verify_form = Verify_form()
     if request.method =='POST':
-        time = float(request.form['date-time'])
+        time = float(request.form['date-time'])%60
         fullDate = datetime.fromtimestamp(time/1000.0).strftime('%Y-%m-%d')
         startTime = datetime.fromtimestamp(time/1000.0).strftime('%H:%M')
-        end_time =float(request.form['end-time'])
+        end_time =float(request.form['end-time'])%60
         endTime=datetime.fromtimestamp(end_time/1000.0).strftime('%H:%M')
         print(time)
         print(end_time)

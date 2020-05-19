@@ -950,7 +950,7 @@ def create(username):
                      nationality = verify_form.nationality.data,occupation = verify_form.occupation.data,email = verify_form.email.data,phone = verify_form.phone.data)
 
         db.session.add(post,verify)
-        createMeeting(current_user.id,form.title.data,time,end_time)
+        createMeeting(current_user.id,form.title.data,time%60,end_time%60)
 #        db.session.commit()
 
         return redirect(url_for('user_profile',username=current_user.username))

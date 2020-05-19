@@ -1159,12 +1159,12 @@ def add(timeStamp):
             "play_ivr_on_join" : False,
             "live_url" : False
     }
-#    json.dumps(settings)
+
     params = {'userid':userid,'instanceid': 5,
               'subject':'consultation','type':0,
               'start_time':str(timeStamp),
               'end_time':str(timeStamp+10000),
-              'settings':settings}
+              'settings':[]}
     headers = generateHeaders('POST',params,uri)
 
     response = requests.post("https://api.meeting.qq.com/v1/meetings",headers=headers,params=params)

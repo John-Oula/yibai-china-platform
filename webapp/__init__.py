@@ -929,7 +929,7 @@ def inquire(meetingcode,username,instanceid):
     num = random.randint(0, 999999999)
     stamp = int(time.time())
 
-    uri = "/v1/meetings?meeting_code="+str(meetingcode)+"&userid="+username+"&instanceid="+str(instanceid)
+    uri = "/v1/meetings?meetingCode="+str(meetingcode)+"&userid="+username+"&instanceid="+str(instanceid)
 
     headerString = "X-TC-Key=%s&X-TC-Nonce=%s&X-TC-Timestamp=%s" % (SecretId, num, str(stamp))
     req_body = ""

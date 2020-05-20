@@ -1018,7 +1018,7 @@ def meetingInfo(username,meetingcode):
 @login_required
 def cancel_meeting(meetingId,meetingcode):
 
-    cancelMeeting(meetingId)
+    cancelMeeting(meetingId,current_user.username,1)
     Post.query.filter_by(meetingCode=meetingcode).delete()
     db.session.commit()
 

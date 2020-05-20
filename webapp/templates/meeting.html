@@ -17,10 +17,11 @@
 <card class="card shadow-lg" id="create_card" >
     <card class="card-body">
    <h3>{{ meetingcode }}</h3>
+       <a href="{{ meetingUrl }}"><button value="START" id="card-btn" style="color: white;margin-left: 175px">START</button></a>
        <a href="{{ url_for('cancel_meeting',meetingId=meeting_id,meetingcode=meetingcode) }}"><button value="CANCEL" id="card-btn" style="color: white;margin-left: 175px">CANCEL</button></a>
-        {% for posts in current_user.posts %}
-       <a href="{{ url_for('modify_meeting',meetingId=meeting_id,username=current_user.username,id=posts.id) }}"><button value="CANCEL" id="card-btn" style="color: white;margin-left: 175px">MODIFY</button></a>
-        {% endfor %}
+
+       <a href="{{ url_for('modify_meeting',meetingId=meeting_id,username=current_user.username,id=current_user.posts.id) }}"><button value="CANCEL" id="card-btn" style="color: white;margin-left: 175px">MODIFY</button></a>
+
 
     </card>
 </card>

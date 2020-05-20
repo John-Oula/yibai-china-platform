@@ -1,0 +1,123 @@
+{%  extends "PROBASE.html" %}
+
+{% block title %}{{ super() }}{% endblock %}
+
+{% block head %}
+    {{ super() }}
+
+{% endblock %}
+
+{% block nav %}
+    {{ super() }}
+{% endblock %}
+
+{% block body %}
+    <div class="main">
+    <div class="session-container">
+<card class="card shadow-lg" id="create_card" >
+    <card class="card-body">
+    <form action=""  method="POST">
+        <div class="row">
+                        <div class="row">
+                            <div class="col-5">
+                                <a class="nav-link create-header" ></a>
+                            </div>
+                            <div class="col-7">
+                                <br>
+            {{ form.title.label }}<br>
+        {{ form.title(class = "input-box-border border border-top-0 border-left-0 border-right-0") }}
+        <br>
+            {{ form.category.label (class = "category-dropdown")}}
+            <br>
+            {{ form.category( class="category shadow-sm" ) }}
+            <br>
+            <br>
+            {{ form.description.label }}
+            <br>
+            {{ form.description( class = "description-field") }}
+              <br>
+            <input id="start-time" type="text" name="date-time" value="" class="time-input">
+            <input id="end-time" type="text" name="end-time" value="" class="time-input">
+
+                            </div>
+
+                        </div>
+
+
+            <br>
+        </div>
+        <br>
+        <br>
+        <br>
+
+<div id="calendar"></div>
+        <br>
+        <br>
+<div class="row">
+                            <div class="col-5">
+                                <a class="nav-link create-header" >VERIFICATION</a>
+                            </div>
+                            <div class="col-7 ">
+                                <div  id="demo3">
+                              <div class="row">
+                  <div class="">
+                  {% if  current_user.id_type and current_user.id_number and current_user.id_document and current_user.nationality and current_user.occupation
+                   and current_user.residency and current_user.phone == None  %}
+
+                            {{ verify_form.id_type.label }}
+                            {{ verify_form.id_type(class="input-box-border border border-top-0 border-left-0 border-right-0") }}
+
+                            {{ verify_form.id_number.label }}
+                            {{ verify_form.id_number(class="input-box-border border border-top-0 border-left-0 border-right-0") }}
+
+                            {{ verify_form.nationality.label }}
+                            {{ verify_form.nationality(class="input-box-border border border-top-0 border-left-0 border-right-0") }}
+
+                            {{ verify_form.residency.label }}
+                            {{ verify_form.residency(class="input-box-border border border-top-0 border-left-0 border-right-0") }}
+
+                            {{ verify_form.occupation.label }}
+                            {{ verify_form.occupation(class="input-box-border border border-top-0 border-left-0 border-right-0") }}
+
+                            {{ verify_form.phone.label }}
+                            {{ verify_form.phone(class="input-box-border border border-top-0 border-left-0 border-right-0") }}
+
+                      {% else %}
+                      <br>
+                      <div>
+                                  <p class="verification-text">Your information is already verified.</p>
+
+
+                      </div>
+
+                      {% endif %}
+
+
+        </div>
+       </div>
+
+
+       </div>
+
+                            </div>
+
+                        </div>
+        <br>
+        <br>
+
+            <input id="card-btn vvv" type="submit" class="btn-text text-center"  value="SUBMIT">
+            </form>
+
+    </card>
+</card>
+
+</div>
+</div>
+
+{% endblock %}
+
+
+{% block script %}
+    {{ super() }}
+
+{% endblock %}

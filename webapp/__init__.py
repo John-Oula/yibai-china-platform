@@ -993,6 +993,53 @@ def cancelMeeting(meetingId,username,instanceId):
 
     return r.json()
 
+def modifyMeeting(title,fulltime,end_time,meetingId,username,instanceId):
+    num = random.randint(0, 999999999)
+    stamp = int(time.time())
+
+    uri = "/v1/meetings/%s" % (meetingId)
+    headerString = "X-TC-Key=%s&X-TC-Nonce=%s&X-TC-Timestamp=%s" % (SecretId, num, str(stamp))
+    req_body = {
+        "userid": username,
+        "instanceid": instanceId,
+        "subject": "%s" % (title),
+        "type": 0,
+        "hosts": [{"userid": str(current_user.username)}],
+        "start_time": str(int(fulltime) / 1000),
+        "end_time": str(int(end_time) / 1000),
+        "settings": {
+            "mute_enable_join": True,
+            "allow_unmute_self": False,
+            "mute_all": False,
+            "host_video": True,
+            "participant_video": False,
+            "enable_record": False,
+            "play_ivr_on_leave": False,
+            "play_ivr_on_join": False,
+            "live_url": False
+        }
+    }
+    req_body = json.dumps(req_body)
+    stringToSign = "%s\n%s\n%s\n%s" % ('PUT', headerString, uri, req_body)
+    print(stringToSign)
+
+    your_secretkey = SecretKey.encode('utf-8')
+    stringToSign = stringToSign.encode('utf-8')
+
+    signature = hmac.new(your_secretkey, stringToSign, digestmod=hashlib.sha256).hexdigest()
+    print(signature)
+
+    signature = base64.b64encode(signature.encode("utf-8"))
+
+    headers = {'Content-Type': 'application/json', 'X-TC-Key': SecretId, 'X-TC-Timestamp': str(stamp),
+               'X-TC-Nonce': str(num), 'AppId': '200000164', 'X-TC-Signature': signature, 'X-TC-Registered': '0'}
+    datas = req_body
+    r = requests.put("https://api.meeting.qq.com/v1/meetings/%s" % (meetingId), data=datas, headers=headers)
+    print(r.text)
+    print(r.json())
+
+    return r.json()
+
 @app.route('/session/<username>meetingId<int:meetingcode>',methods=['GET','POST'])
 @login_required
 def meetingInfo(username,meetingcode):
@@ -1026,7 +1073,47 @@ def cancel_meeting(meetingId,meetingcode):
 
     return redirect(url_for('user_profile',username=current_user.username))
 
+@app.route('/modify/<username><int:meetingId><int:id>',methods=['GET','POST','PUT'])
+@login_required
+def modify_meeting(username,meetingId,id):
+    user = User.query.filter_by(username=username).first_or_404()
+    image_file = url_for('static', filename='profile_pics/' + current_user.image_file)
+    user_role = current_user.role
+    lesson_form = Lesson_form()
+    form = Session_form()
+    verify_form = Verify_form()
+    if request.method == 'POST':
+        fulltime = request.form['date-time']
+        fullDate = datetime.fromtimestamp(int(fulltime) / 1000).strftime('%Y-%m-%d')
+        startTime = datetime.fromtimestamp(int(fulltime) / 1000).strftime('%H:%M')
+        end_time = request.form['end-time']
+        endTime = datetime.fromtimestamp(int(end_time) / 1000).strftime('%H:%M')
 
+        #        start = re.split(r'([T+])', time)
+        #        end = re.split(r'([T+])', end_time)
+
+        meeting = modifyMeeting(form.title.data, fulltime,end_time,meetingId,current_user.username,1 )
+
+        meeting_info = meeting["meeting_info_list"]
+        for item in meeting_info:
+            meetingCode = item['meeting_code']
+
+        post = Post.query.filter_by(id=id).first_or_404()
+        lesson = Lesson(title=request.form['title'], description=request.form['description'])
+        verify = User(id_type=verify_form.id_type.data, id_number=verify_form.id_number.data,
+                      id_document=verify_form.id_document.data,
+                      nationality=verify_form.nationality.data, occupation=verify_form.occupation.data,
+                      email=verify_form.email.data, phone=verify_form.phone.data)
+
+        post.title= form.title.data
+        post.start_time=startTime
+        post.end_time=endTime
+        post.date=fullDate
+
+        db.session.commit()
+
+        return redirect(url_for('meetingInfo', meetingcode=meetingCode, username=current_user.username))
+    return render_template('modify.html',user=user,user_role = user_role,form=form,verify_form=verify_form,lesson_form=lesson_form,image_file=image_file)
 @app.route('/create/<username>',methods=['GET','POST'])
 @login_required
 def create(username):

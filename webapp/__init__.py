@@ -958,7 +958,7 @@ def cancelMeeting(meetingId):
 
     return r.json()
 
-@app.route('/session/<username>/<int:meetingcode>',methods=['GET','POST'])
+@app.route('/session/<username>meetingId<int:meetingcode>',methods=['GET','POST'])
 @login_required
 def meetingInfo(username,meetingcode):
     user = User.query.filter_by(username=username).first_or_404()

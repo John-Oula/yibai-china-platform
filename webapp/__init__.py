@@ -961,7 +961,16 @@ def cancelMeeting(meetingId):
 @app.route('/session/<int:meetingcode>',methods=['GET','POST'])
 @login_required
 def meetingInfo(meetingcode):
-    return render_template('meeting.html',meetingcode=meetingcode)
+    user = User.query.all()
+    image_file = url_for('static', filename ='profile_pics/' + current_user.image_file)
+    followed_posts=Post.query.join(followers, (followers.c.followed_id == Post.user_id)).all()
+
+    all_posts = Post.query.all()
+
+    all_users = User.query.all()
+    author = db.session.query(Post.title).join(User.posts)
+    user_role = current_user.role
+    return render_template('meeting.html',meetingcode=meetingcode,followed_posts=followed_posts,user=user,user_role=user_role,all_users=all_users,all_posts = all_posts,author=author, image_file = image_file)
 
 
 @app.route('/create/<username>',methods=['GET','POST'])

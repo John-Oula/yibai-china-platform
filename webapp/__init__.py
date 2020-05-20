@@ -1019,7 +1019,7 @@ def meetingInfo(username,meetingcode):
 def cancel_meeting(meetingId,meetingcode):
 
     cancelMeeting(meetingId,current_user.username,1)
-    meeting=Post.query.filter_by(meetingCode=meetingcode)
+    meeting=Post.query.filter_by(meetingCode=meetingcode).first_or_404()
     db.session.delete(meeting)
 
     db.session.commit()

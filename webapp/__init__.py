@@ -993,7 +993,7 @@ def cancelMeeting(meetingId,username,instanceId):
 
     return r.json()
 
-@app.route('/session/<username>meetingId<int:meetingcode>',methods=['GET','POST'])
+@app.route('/session/<username><int:meetingcode>',methods=['GET','POST'])
 @login_required
 def meetingInfo(username,meetingcode):
     meeting = inquire(meetingcode,current_user.username,1)

@@ -985,9 +985,9 @@ def create(username):
 
         meeting_info = meeting["meeting_info_list"]
         for item in meeting_info:
-            meeting_id = item['meeting_code']
+            meetingCode = item['meeting_code']
 
-        post = Post(title=form.title.data,category=form.category.data,description=form.description.data,date= fullDate,start_time= startTime ,end_time = endTime, author=current_user,meetingId=meeting_id)
+        post = Post(title=form.title.data,category=form.category.data,description=form.description.data,date= fullDate,start_time= startTime ,end_time = endTime, author=current_user,meetingCode=meetingCode)
         lesson = Lesson(title=request.form['title'],description=request.form['description'])
         verify = User(id_type = verify_form.id_type.data,id_number = verify_form.id_number.data,id_document = verify_form.id_document.data,
                      nationality = verify_form.nationality.data,occupation = verify_form.occupation.data,email = verify_form.email.data,phone = verify_form.phone.data)

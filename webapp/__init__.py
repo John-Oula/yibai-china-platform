@@ -1019,7 +1019,9 @@ def meetingInfo(username,meetingcode):
 def cancel_meeting(meetingId,meetingcode):
 
     cancelMeeting(meetingId,current_user.username,1)
-    Post.query.filter_by(meetingCode=meetingcode).delete()
+    meeting=Post.query.filter_by(meetingCode=meetingcode)
+    db.session.delete(meeting)
+
     db.session.commit()
 
     return redirect(url_for('user_profile',username=current_user.username))

@@ -1047,7 +1047,7 @@ def meetingInfo(username,meetingcode):
     meeting_info = meeting["meeting_info_list"]
     for item in meeting_info:
         meeting_id = item['meeting_id']
-        meetingUrl= item["join_url"]
+    meetingUrl = meeting["join_url"]
     user = User.query.filter_by(username=username).first_or_404()
     image_file = url_for('static', filename ='profile_pics/' + current_user.image_file)
     followed_posts=Post.query.join(followers, (followers.c.followed_id == Post.user_id)).all()

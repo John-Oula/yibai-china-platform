@@ -924,7 +924,42 @@ def createMeeting(title,fulltime,end_time):
     print(r.json())
 
     return r.json()
-def cancelMeeting(meetingcode):
+
+def inquire(meetingcode,username,instanceid):
+    num = random.randint(0, 999999999)
+    stamp = int(time.time())
+
+    uri = "/v1/meetings"
+
+    headerString = "X-TC-Key=%s&X-TC-Nonce=%s&X-TC-Timestamp=%s" % (SecretId, num, str(stamp))
+    req_body = ""
+
+    stringToSign = "%s\n%s\n%s\n%s" % ('GET', headerString, uri, req_body)
+    print(stringToSign)
+
+    your_secretkey = SecretKey.encode('utf-8')
+    stringToSign = stringToSign.encode('utf-8')
+
+    signature = hmac.new(your_secretkey, stringToSign, digestmod=hashlib.sha256).hexdigest()
+    print(signature)
+
+    signature = base64.b64encode(signature.encode("utf-8"))
+    params={
+        "meetingcode": meetingcode,
+        "userid": username,
+        "instanceid": instanceid,
+    }
+
+
+    headers = {'Content-Type': 'application/json', 'X-TC-Key': SecretId, 'X-TC-Timestamp': str(stamp),
+               'X-TC-Nonce': str(num), 'AppId': '200000164', 'X-TC-Signature': signature, 'X-TC-Registered': '0'}
+    r = requests.get("https://api.meeting.qq.com/v1/meetings", data=params, headers=headers)
+    print(r.text)
+
+    return r.json()
+
+
+def cancelMeeting(meetingId):
     num = random.randint(0, 999999999)
     stamp = int(time.time())
 
@@ -952,7 +987,7 @@ def cancelMeeting(meetingcode):
     headers = {'Content-Type': 'application/json', 'X-TC-Key': SecretId, 'X-TC-Timestamp': str(stamp),
                'X-TC-Nonce': str(num), 'AppId': '200000164', 'X-TC-Signature': signature, 'X-TC-Registered': '0'}
     datas = req_body
-    r = requests.post("https://api.meeting.qq.com/v1/meetings/%s/cancel" % (meetingcode), data=datas, headers=headers)
+    r = requests.post("https://api.meeting.qq.com/v1/meetings/%s/cancel" % (meetingId), data=datas, headers=headers)
     print(r.text)
     print(r.json())
 
@@ -961,23 +996,28 @@ def cancelMeeting(meetingcode):
 @app.route('/session/<username>meetingId<int:meetingcode>',methods=['GET','POST'])
 @login_required
 def meetingInfo(username,meetingcode):
+    meeting_info = inquire(meetingcode,current_user.username,1)
+    for item in meeting_info:
+        meetingId = item['meeting_id']
     user = User.query.filter_by(username=username).first_or_404()
     image_file = url_for('static', filename ='profile_pics/' + current_user.image_file)
     followed_posts=Post.query.join(followers, (followers.c.followed_id == Post.user_id)).all()
 
     all_posts = Post.query.all()
 
+
     all_users = User.query.all()
     author = db.session.query(Post.title).join(User.posts)
     user_role = current_user.role
 
-    return render_template('meeting.html',meetingcode=meetingcode,followed_posts=followed_posts,user=user,user_role=user_role,all_users=all_users,all_posts = all_posts,author=author, image_file = image_file)
 
-@app.route('/cancel/<int:meetingcode>',methods=['GET','POST'])
+    return render_template('meeting.html',meetingId=meetingId,meetingcode=meetingcode,followed_posts=followed_posts,user=user,user_role=user_role,all_users=all_users,all_posts = all_posts,author=author, image_file = image_file)
+
+@app.route('/cancel/<int:meetingId><int:meetingcode>',methods=['GET','POST'])
 @login_required
-def cancel_meeting(meetingcode):
+def cancel_meeting(meetingId,meetingcode):
 
-    cancelMeeting(meetingcode)
+    cancelMeeting(meetingId)
     Post.query.filter_by(meetingcode=meetingcode).delete()
     db.session.commit()
 

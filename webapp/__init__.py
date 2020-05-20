@@ -958,10 +958,10 @@ def cancelMeeting(meetingId):
 
     return r.json()
 
-@app.route('/session/<int:meetingcode>',methods=['GET','POST'])
+@app.route('/session/<username>/<int:meetingcode>',methods=['GET','POST'])
 @login_required
-def meetingInfo(meetingcode):
-    user = User.query.all()
+def meetingInfo(username,meetingcode):
+    user = User.query.filter_by(username=username).first_or_404()
     image_file = url_for('static', filename ='profile_pics/' + current_user.image_file)
     followed_posts=Post.query.join(followers, (followers.c.followed_id == Post.user_id)).all()
 
@@ -1009,7 +1009,7 @@ def create(username):
 
         db.session.commit()
 
-        return redirect(url_for('meetingInfo',meetingcode=meetingCode))
+        return redirect(url_for('meetingInfo',meetingcode=meetingCode,username=current_user.username))
     return render_template('CREATE1.html',user=user,user_role = user_role,form=form,verify_form=verify_form,lesson_form=lesson_form,image_file=image_file)
 
 

@@ -1,0 +1,33 @@
+{%  extends "PROBASE.html" %}
+
+{% block title %}{{ super() }}{% endblock %}
+
+{% block head %}
+    {{ super() }}
+
+{% endblock %}
+
+{% block nav %}
+    {{ super() }}
+{% endblock %}
+
+{% block body %}
+    <div class="main">
+    <div class="session-container">
+<card class="card shadow-lg" id="create_card" >
+    <card class="card-body">
+   {{ meetingcode }}
+
+    </card>
+</card>
+
+</div>
+</div>
+
+{% endblock %}
+
+
+{% block script %}
+    {{ super() }}
+
+{% endblock %}

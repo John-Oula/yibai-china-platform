@@ -929,7 +929,7 @@ def inquire(meetingcode,username,instanceid):
     num = random.randint(0, 999999999)
     stamp = int(time.time())
 
-    uri = "/v1/meetings?meetingCode="+str(meetingcode)+"&userid="+username+"&instanceid="+str(instanceid)
+    uri = "/v1/meetings?meeting_code="+str(meetingcode)+"&userid="+username+"&instanceid="+str(instanceid)
 
     headerString = "X-TC-Key=%s&X-TC-Nonce=%s&X-TC-Timestamp=%s" % (SecretId, num, str(stamp))
     req_body = ""
@@ -953,7 +953,7 @@ def inquire(meetingcode,username,instanceid):
 
     headers = {'Content-Type': 'application/json', 'X-TC-Key': SecretId, 'X-TC-Timestamp': str(stamp),
                'X-TC-Nonce': str(num), 'AppId': '200000164', 'X-TC-Signature': signature, 'X-TC-Registered': '0'}
-    r = requests.get("https://api.meeting.qq.com/v1/meetings", params=params, headers=headers)
+    r = requests.get("https://api.meeting.qq.com/v1/meetings?meeting_code="+str(meetingcode)+"&userid="+username+"&instanceid="+str(instanceid), params=params, headers=headers)
     print(r.ok)
     print(r.text)
 

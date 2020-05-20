@@ -20,7 +20,7 @@
        <a href="{{ meetingUrl }}"><button value="START" id="card-btn" style="color: white;margin-left: 175px">START</button></a>
        <a href="{{ url_for('cancel_meeting',meetingId=meeting_id,meetingcode=meetingcode) }}"><button value="CANCEL" id="card-btn" style="color: white;margin-left: 175px">CANCEL</button></a>
 
-       <a href="{{ url_for('modify_meeting',meetingId=meeting_id,username=current_user.username,id=current_user.posts.id) }}"><button value="CANCEL" id="card-btn" style="color: white;margin-left: 175px">MODIFY</button></a>
+
 
 
     </card>

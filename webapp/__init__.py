@@ -993,7 +993,7 @@ def cancelMeeting(meetingId,username,instanceId):
 
     return r.json()
 
-@app.route('/session/<username><int:meetingcode>',methods=['GET','POST'])
+@app.route('/session/<username>meetingId<int:meetingcode>',methods=['GET','POST'])
 @login_required
 def meetingInfo(username,meetingcode):
     meeting = inquire(meetingcode,current_user.username,1)
@@ -1019,8 +1019,8 @@ def meetingInfo(username,meetingcode):
 def cancel_meeting(meetingId,meetingcode):
 
     cancelMeeting(meetingId)
-#    Post.query.filter_by(meetingcode=meetingCode).delete()
-#    db.session.commit()
+    Post.query.filter_by(meetingcode=meetingCode).delete()
+    db.session.commit()
 
     return redirect(url_for('user_profile',username=current_user.username))
 

@@ -996,7 +996,8 @@ def cancelMeeting(meetingId,username,instanceId):
 @app.route('/session/<username>meetingId<int:meetingcode>',methods=['GET','POST'])
 @login_required
 def meetingInfo(username,meetingcode):
-    meeting_info = inquire(meetingcode,current_user.username,1)
+    meeting = inquire(meetingcode,current_user.username,1)
+    meeting_info = meeting["meeting_info_list"]
     for item in meeting_info:
         meeting_id = item['meeting_id']
     user = User.query.filter_by(username=username).first_or_404()

@@ -945,7 +945,7 @@ def inquire(meetingcode,username,instanceid):
 
     signature = base64.b64encode(signature.encode("utf-8"))
     params={
-        "meeting_code": str(meetingcode),
+        "meetingCode": str(meetingcode),
         "userid": username,
         "instanceid": instanceid,
     }
@@ -953,7 +953,7 @@ def inquire(meetingcode,username,instanceid):
 
     headers = {'Content-Type': 'application/json', 'X-TC-Key': SecretId, 'X-TC-Timestamp': str(stamp),
                'X-TC-Nonce': str(num), 'AppId': '200000164', 'X-TC-Signature': signature, 'X-TC-Registered': '0'}
-    r = requests.get("https://api.meeting.qq.com/v1/meetings", data=params, headers=headers)
+    r = requests.get("https://api.meeting.qq.com/v1/meetings", params=params, headers=headers)
     print(r.ok)
     print(r.text)
 

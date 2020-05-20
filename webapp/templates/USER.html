@@ -107,9 +107,9 @@
    {% for posts in current_user.posts %}
         <card class="card  shadow-lg  " id="my-session-card">
 
-            <a href="{{ url_for('meetingInfo',username=current_user.username,meetingcode=posts.meetingCode) }}"><card class="card-body">
+            <card class="card-body">
                 <p><img src="../static/calendar-check.png" alt="" class="session-card-left">{{ posts.date }}
-                    <button value="JOIN" id="card-btn" style="color: white;margin-left: 175px">EDIT</button>
+                    <a href="{{ url_for('meetingInfo',username=current_user.username,meetingcode=posts.meetingCode) }}"><button value="JOIN" id="card-btn" style="color: white;margin-left: 175px">VIEW</button></a>
                     <img src="../static/clock.png" alt="" class="session-card-right">{{posts.start_time}} - {{ posts.end_time }}</p>
                 <div class=" description">
                     <h6><b style="text-transform: uppercase;color:#707070">{{ posts.title }}</b></h6>
@@ -138,7 +138,7 @@
 
 
                 </div>
-                </card></a>
+                </card>
                 </card>
    {% endfor %}
 

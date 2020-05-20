@@ -107,7 +107,7 @@
    {% for posts in current_user.posts %}
         <card class="card  shadow-lg  " id="my-session-card">
 
-            <card class="card-body">
+            <a href="{{ url_for('meetingInfo',meetingcode=posts.meetingCode) }}"><card class="card-body">
                 <p><img src="../static/calendar-check.png" alt="" class="session-card-left">{{ posts.date }}
                     <button value="JOIN" id="card-btn" style="color: white;margin-left: 175px">EDIT</button>
                     <img src="../static/clock.png" alt="" class="session-card-right">{{posts.start_time}} - {{ posts.end_time }}</p>
@@ -138,7 +138,7 @@
 
 
                 </div>
-                </card>
+                </card></a>
                 </card>
    {% endfor %}
 

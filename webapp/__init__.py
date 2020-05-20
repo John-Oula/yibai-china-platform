@@ -924,7 +924,7 @@ def createMeeting(title,fulltime,end_time):
     print(r.json())
 
     return r.json()
-def cancelMeeting(meetingId):
+def cancelMeeting(meetingcode):
     num = random.randint(0, 999999999)
     stamp = int(time.time())
 
@@ -970,6 +970,7 @@ def meetingInfo(username,meetingcode):
     all_users = User.query.all()
     author = db.session.query(Post.title).join(User.posts)
     user_role = current_user.role
+
     return render_template('meeting.html',meetingcode=meetingcode,followed_posts=followed_posts,user=user,user_role=user_role,all_users=all_users,all_posts = all_posts,author=author, image_file = image_file)
 
 

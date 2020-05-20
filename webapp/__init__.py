@@ -953,7 +953,7 @@ def inquire(meetingcode,username,instanceid):
 
     headers = {'Content-Type': 'application/json', 'X-TC-Key': SecretId, 'X-TC-Timestamp': str(stamp),
                'X-TC-Nonce': str(num), 'AppId': '200000164', 'X-TC-Signature': signature, 'X-TC-Registered': '0'}
-    r = requests.get("https://api.meeting.qq.com/v1/meetings?meeting_code="+str(meetingcode)+"&userid="+username+"&instanceid="+str(instanceid), params=params, headers=headers)
+    r = requests.get("https://api.meeting.qq.com/v1/meetings?meeting_code="+str(meetingcode)+"&userid="+username+"&instanceid="+str(instanceid)", headers=headers)
     print(r.ok)
     print(r.text)
 

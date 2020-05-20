@@ -929,7 +929,7 @@ def inquire(meetingcode,username,instanceid):
     num = random.randint(0, 999999999)
     stamp = int(time.time())
 
-    uri = "/v1/meetings"
+    uri = "/v1/meetings?meeting_code=%s&userid=%s&instanceid=%s" % (meetingcode, username, instanceid)
 
     headerString = "X-TC-Key=%s&X-TC-Nonce=%s&X-TC-Timestamp=%s" % (SecretId, num, str(stamp))
     req_body = ""
@@ -953,22 +953,23 @@ def inquire(meetingcode,username,instanceid):
 
     headers = {'Content-Type': 'application/json', 'X-TC-Key': SecretId, 'X-TC-Timestamp': str(stamp),
                'X-TC-Nonce': str(num), 'AppId': '200000164', 'X-TC-Signature': signature, 'X-TC-Registered': '0'}
-    r = requests.get("https://api.meeting.qq.com/v1/meetings", data=params, headers=headers)
+    r = requests.get("https://api.meeting.qq.com/v1/meetings", params=params, headers=headers)
+    print(r.ok)
     print(r.text)
 
     return r.json()
 
 
-def cancelMeeting(meetingId):
+def cancelMeeting(meetingId,username,instanceId):
     num = random.randint(0, 999999999)
     stamp = int(time.time())
 
-    uri = "/v1/meetings"
+    uri = "/v1/meetings/%s/cancel" % (meetingId)
 
     headerString = "X-TC-Key=%s&X-TC-Nonce=%s&X-TC-Timestamp=%s" % (SecretId, num, str(stamp))
     req_body = {
-     "userid" : str(current_user.username),
-     "instanceid" : 1,
+     "userid" : username,
+     "instanceid" : instanceId,
      "reason_code" : 1,
     }
     req_body = json.dumps(req_body)
@@ -997,7 +998,7 @@ def cancelMeeting(meetingId):
 def meetingInfo(username,meetingcode):
     meeting_info = inquire(meetingcode,current_user.username,1)
     for item in meeting_info:
-        meetingId = item['meeting_id']
+        meeting_id = item['meeting_id']
     user = User.query.filter_by(username=username).first_or_404()
     image_file = url_for('static', filename ='profile_pics/' + current_user.image_file)
     followed_posts=Post.query.join(followers, (followers.c.followed_id == Post.user_id)).all()
@@ -1010,7 +1011,7 @@ def meetingInfo(username,meetingcode):
     user_role = current_user.role
 
 
-    return render_template('meeting.html',meetingId=meetingId,meetingcode=meetingcode,followed_posts=followed_posts,user=user,user_role=user_role,all_users=all_users,all_posts = all_posts,author=author, image_file = image_file)
+    return render_template('meeting.html',meeting_id=meeting_id,meetingcode=meetingcode,followed_posts=followed_posts,user=user,user_role=user_role,all_users=all_users,all_posts = all_posts,author=author, image_file = image_file)
 
 @app.route('/cancel/<int:meetingId><int:meetingcode>',methods=['GET','POST'])
 @login_required

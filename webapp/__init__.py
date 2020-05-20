@@ -952,7 +952,7 @@ def cancelMeeting(meetingcode):
     headers = {'Content-Type': 'application/json', 'X-TC-Key': SecretId, 'X-TC-Timestamp': str(stamp),
                'X-TC-Nonce': str(num), 'AppId': '200000164', 'X-TC-Signature': signature, 'X-TC-Registered': '0'}
     datas = req_body
-    r = requests.post("https://api.meeting.qq.com/v1/meetings/%s/cancel" % (meetingId), data=datas, headers=headers)
+    r = requests.post("https://api.meeting.qq.com/v1/meetings/%s/cancel" % (meetingcode), data=datas, headers=headers)
     print(r.text)
     print(r.json())
 
@@ -972,6 +972,16 @@ def meetingInfo(username,meetingcode):
     user_role = current_user.role
 
     return render_template('meeting.html',meetingcode=meetingcode,followed_posts=followed_posts,user=user,user_role=user_role,all_users=all_users,all_posts = all_posts,author=author, image_file = image_file)
+
+@app.route('/cancel/<int:meetingcode>',methods=['GET','POST'])
+@login_required
+def cancel_meeting(meetingcode):
+
+    cancelMeeting(meetingcode)
+    Post.query.filter_by(meetingcode=meetingcode).delete()
+    db.session.commit()
+
+    return redirect(url_for('user_profile',username=current_user.username))
 
 
 @app.route('/create/<username>',methods=['GET','POST'])

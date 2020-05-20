@@ -16,7 +16,8 @@
     <div class="session-container">
 <card class="card shadow-lg" id="create_card" >
     <card class="card-body">
-   {{ meetingcode }}
+   <h3>{{ meetingcode }}</h3>
+       <a href="{{ url_for('cancel_meeting',meetingcode=meetingcode) }}"><button value="CANCEL" id="card-btn" style="color: white;margin-left: 175px">CANCEL</button></a>
 
     </card>
 </card>

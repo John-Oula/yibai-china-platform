@@ -945,7 +945,7 @@ def inquire(meetingcode,username,instanceid):
 
     signature = base64.b64encode(signature.encode("utf-8"))
     params={
-        "meetingcode": meetingcode,
+        "meeting_code": str(meetingcode),
         "userid": username,
         "instanceid": instanceid,
     }
@@ -970,7 +970,6 @@ def cancelMeeting(meetingId):
      "userid" : str(current_user.username),
      "instanceid" : 1,
      "reason_code" : 1,
-     "reason_detail" : "none"
     }
     req_body = json.dumps(req_body)
     stringToSign = "%s\n%s\n%s\n%s" % ('POST', headerString, uri, req_body)
@@ -988,7 +987,7 @@ def cancelMeeting(meetingId):
                'X-TC-Nonce': str(num), 'AppId': '200000164', 'X-TC-Signature': signature, 'X-TC-Registered': '0'}
     datas = req_body
     r = requests.post("https://api.meeting.qq.com/v1/meetings/%s/cancel" % (meetingId), data=datas, headers=headers)
-    print(r.text)
+    print(r.ok)
     print(r.json())
 
     return r.json()
@@ -1018,8 +1017,8 @@ def meetingInfo(username,meetingcode):
 def cancel_meeting(meetingId,meetingcode):
 
     cancelMeeting(meetingId)
-    Post.query.filter_by(meetingcode=meetingcode).delete()
-    db.session.commit()
+#    Post.query.filter_by(meetingcode=meetingCode).delete()
+#    db.session.commit()
 
     return redirect(url_for('user_profile',username=current_user.username))
 

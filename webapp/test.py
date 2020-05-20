@@ -14,11 +14,8 @@ SecretKey = "wZn5NeGCqxg4r8XaDum2EMzRhIvWHtcU"
 def inquire():
     num = random.randint(0, 999999999)
     stamp = int(time.time())
-    meet=985966732
-    userid='user'
-    i=1
 
-    uri = "/v1/meetings?meeting_code="+str(meet)+"&userid="+userid+"&instanceid="+str(i)
+    uri = "/v1/meetings?meeting_code=985966732&userid=user&instanceid=1"
 
     headerString = "X-TC-Key=%s&X-TC-Nonce=%s&X-TC-Timestamp=%s" % (SecretId, num, str(stamp))
 

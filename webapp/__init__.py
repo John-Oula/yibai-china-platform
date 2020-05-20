@@ -1014,7 +1014,7 @@ def meetingInfo(username,meetingcode):
 
     return render_template('meeting.html',meeting_id=meeting_id,meetingcode=meetingcode,followed_posts=followed_posts,user=user,user_role=user_role,all_users=all_users,all_posts = all_posts,author=author, image_file = image_file)
 
-@app.route('/cancel/<int:meetingId><int:meetingcode>',methods=['GET','POST'])
+@app.route('/cancel/<int:meetingId>Code<int:meetingcode>',methods=['GET','POST'])
 @login_required
 def cancel_meeting(meetingId,meetingcode):
 

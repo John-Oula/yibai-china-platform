@@ -19,7 +19,7 @@
 {% if current_user.role == 2 %}
     <p style="margin-left: 70px">CURRENT ADMINS</p>
    {% for user in all_users %}
-        {% if user.role == 1  %}
+        {% if user.role == 0  %}
 
        <card class="card shadow-sm" style="width:fit-content;margin-top: 10px;margin-left: 60px">
        <card class="card-body">

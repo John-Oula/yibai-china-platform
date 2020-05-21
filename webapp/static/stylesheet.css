@@ -1078,3 +1078,7 @@ p.login-text{
     color: darkgray;
     padding: 20px;
 }
+
+.dropdownLinks{
+    padding-left: 15px;
+}

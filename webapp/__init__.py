@@ -890,6 +890,7 @@ def createMeeting(title,fulltime,end_time):
         "subject": "%s" % (title),
         "type": 0,
         "hosts": [{"userid": str(current_user.username)}],
+
         "start_time": str(int(fulltime) / 1000),
         "end_time": str(int(end_time) / 1000),
         "settings": {
@@ -1048,6 +1049,7 @@ def meetingInfo(username,meetingcode):
     for item in meeting_info:
         meeting_id = item['meeting_id']
         meetingUrl= item["join_url"]
+        meetingTitle= item["subject"]
     user = User.query.filter_by(username=username).first_or_404()
     image_file = url_for('static', filename ='profile_pics/' + current_user.image_file)
     followed_posts=Post.query.join(followers, (followers.c.followed_id == Post.user_id)).all()
@@ -1060,7 +1062,7 @@ def meetingInfo(username,meetingcode):
     user_role = current_user.role
 
 
-    return render_template('meeting.html',meetingUrl=meetingUrl,meeting_id=meeting_id,meetingcode=meetingcode,followed_posts=followed_posts,user=user,user_role=user_role,all_users=all_users,all_posts = all_posts,author=author, image_file = image_file)
+    return render_template('meeting.html',meetingTitle=meetingTitle,meetingUrl=meetingUrl,meeting_id=meeting_id,meetingcode=meetingcode,followed_posts=followed_posts,user=user,user_role=user_role,all_users=all_users,all_posts = all_posts,author=author, image_file = image_file)
 
 @app.route('/cancel/<int:meetingId>Code<int:meetingcode>',methods=['GET','POST'])
 @login_required

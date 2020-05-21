@@ -1073,3 +1073,8 @@ p.login-text{
     font-size: 14px;
     margin-top: 25px;
 }
+
+.meetingTitle{
+    color: darkgray;
+    padding: 20px;
+}

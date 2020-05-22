@@ -276,6 +276,8 @@ class Signup_form(FlaskForm):
         user = User.query.filter_by(username=username.data).first()
         if user:
             raise ValidationError('That username is taken')
+        elif user.isspace():
+            raise ValidationError('Whitespace not allowed')
 
     def validate_email(self,email):
         user = User.query.filter_by(email=email.data).first()

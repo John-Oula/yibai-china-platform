@@ -267,7 +267,7 @@ class Comment(db.Model):
 
 class Signup_form(FlaskForm):
     email = StringField('EMAIL', [validators.Email()])
-    username = StringField('USERNAME', [validators.Length(min=4,max=15) , validators.NoneOf(values=['\s'],message="No whitespace allowed")])
+    username = StringField('USERNAME', [validators.Length(min=4,max=15) , validators.NoneOf(values=[' '],message="No whitespace allowed")])
     password = PasswordField('PASSWORD', [validators.DataRequired(),validators.Length(min=6)])
     confirm_password = PasswordField('CONFIRM PASSWORD',[validators.DataRequired(),validators.EqualTo('password',message='Password must much')])
     submit = SubmitField('Submit')

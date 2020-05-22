@@ -495,7 +495,7 @@ def login():
         form = Login_form()
         if form.validate_on_submit() and request.method == 'POST':
             user = User.query.filter_by(username = form.username.data).first()
-            if user and verify_password(user.password,form.password.data):
+            if user and verify_password(user.password,form.password.data) == True:
                 login_user(user)
                 session['known'] = True
                 session['known'] = form.username.data

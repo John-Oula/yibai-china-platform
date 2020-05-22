@@ -453,13 +453,31 @@ def about():
 def corona():
     return render_template('corona.html')
 
+def hash_password(password):
+    """Hash a password for storing."""
+    salt = hashlib.sha256(os.urandom(60)).hexdigest().encode('ascii')
+    pwdhash = hashlib.pbkdf2_hmac('sha512', password.encode('utf-8'),
+                                salt, 100000)
+    pwdhash = binascii.hexlify(pwdhash)
+    return (salt + pwdhash).decode('ascii')
+
+def verify_password(stored_password, provided_password):
+    """Verify a stored password against one provided by user"""
+    salt = stored_password[:64]
+    stored_password = stored_password[64:]
+    pwdhash = hashlib.pbkdf2_hmac('sha512',
+                                  provided_password.encode('utf-8'),
+                                  salt.encode('ascii'),
+                                  100000)
+    pwdhash = binascii.hexlify(pwdhash).decode('ascii')
+    return pwdhash == stored_password
 
 @app.route('/signup',methods=['POST','GET'])
 def signup():
     form = Signup_form(request.form)
     if form.validate_on_submit() and request.method == "POST":
         flash('True')
-        hashed_password = form.password.data
+        hashed_password = hash_password(form.password.data)
         user = User(email=form.email.data,
                     username= form.username.data,
                     password=hashed_password)
@@ -472,13 +490,12 @@ def signup():
     return render_template('signup.html', form=form)
 
 
-
 @app.route('/login',methods=['POST','GET'])
 def login():
         form = Login_form()
         if form.validate_on_submit() and request.method == 'POST':
             user = User.query.filter_by(username = form.username.data).first()
-            if user:
+            if user and verify_password(user.password,form.password.data):
                 login_user(user)
                 session['known'] = True
                 session['known'] = form.username.data

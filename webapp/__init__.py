@@ -298,6 +298,11 @@ class Login_form(FlaskForm):
         if username not in user.username:
             raise ValidationError('That username does not exist')
 
+    def check_password(self,password,username):
+        user = User.query.filter_by(username=username.data)
+        if password.data != user.password:
+            raise ValidationError('Incorrect password')
+
 class Verify_form(FlaskForm):
 
     id_type = StringField('ID type', validators=[Required()])

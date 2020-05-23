@@ -477,7 +477,7 @@ def signup():
     form = Signup_form(request.form)
     if form.validate_on_submit() and request.method == "POST":
         flash('True')
-        hashed_password = form.password.data
+        hashed_password = hash_password(form.password.data)
         user = User(email=form.email.data,
                     username= form.username.data,
                     password=hashed_password)
@@ -495,7 +495,7 @@ def login():
         form = Login_form()
         if form.validate_on_submit() and request.method == 'POST':
             user = User.query.filter_by(username = form.username.data).first()
-            if user:
+            if user and verify_password(user.password,form.password.data) == True:
                 login_user(user)
                 session['known'] = True
                 session['known'] = form.username.data

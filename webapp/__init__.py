@@ -1065,9 +1065,9 @@ def modifyMeeting(title,fulltime,end_time,meetingId,username,instanceId):
 
     return r.json()
 
-@app.route('/session/<username>meetingId<int:meetingcode>',methods=['GET','POST'])
+@app.route('/session/<username>meetingId<int:meetingcode><int:post_id>',methods=['GET','POST'])
 @login_required
-def meetingInfo(username,meetingcode):
+def meetingInfo(username,meetingcode,post_id):
     meeting = inquire(meetingcode,current_user.username,1)
     meeting_info = meeting["meeting_info_list"]
     for item in meeting_info:
@@ -1079,14 +1079,14 @@ def meetingInfo(username,meetingcode):
     followed_posts=Post.query.join(followers, (followers.c.followed_id == Post.user_id)).all()
 
     all_posts = Post.query.all()
-
+    postId=post_id
 
     all_users = User.query.all()
     author = db.session.query(Post.title).join(User.posts)
     user_role = current_user.role
 
 
-    return render_template('meeting.html',meetingTitle=meetingTitle,meetingUrl=meetingUrl,meeting_id=meeting_id,meetingcode=meetingcode,followed_posts=followed_posts,user=user,user_role=user_role,all_users=all_users,all_posts = all_posts,author=author, image_file = image_file)
+    return render_template('meeting.html',meetingTitle=meetingTitle,postId=postId,meetingUrl=meetingUrl,meeting_id=meeting_id,meetingcode=meetingcode,followed_posts=followed_posts,user=user,user_role=user_role,all_users=all_users,all_posts = all_posts,author=author, image_file = image_file)
 
 @app.route('/cancel/<int:meetingId>Code<int:meetingcode>',methods=['GET','POST'])
 @login_required
@@ -1100,9 +1100,9 @@ def cancel_meeting(meetingId,meetingcode):
 
     return redirect(url_for('user_profile',username=current_user.username))
 
-@app.route('/modify/<username><int:meetingId><int:id>',methods=['GET','POST','PUT'])
+@app.route('/modify/<username><int:meetingId><int:post_id>',methods=['GET','POST','PUT'])
 @login_required
-def modify_meeting(username,meetingId,id):
+def modify_meeting(username,meetingId,post_id):
     user = User.query.filter_by(username=username).first_or_404()
     image_file = url_for('static', filename='profile_pics/' + current_user.image_file)
     user_role = current_user.role
@@ -1126,7 +1126,7 @@ def modify_meeting(username,meetingId,id):
             meetingCode = item['meeting_code']
 
 
-        post = Post.query.filter_by(id=id).first_or_404()
+        post = Post.query.filter_by(id=post_id).first_or_404()
         lesson = Lesson(title=request.form['title'], description=request.form['description'])
         verify = User(id_type=verify_form.id_type.data, id_number=verify_form.id_number.data,
                       id_document=verify_form.id_document.data,
@@ -1141,7 +1141,7 @@ def modify_meeting(username,meetingId,id):
         db.session.commit()
 
         return redirect(url_for('meetingInfo', meetingcode=meetingCode, username=current_user.username))
-    return render_template('modify.html',user=user,user_role = user_role,form=form,verify_form=verify_form,lesson_form=lesson_form,image_file=image_file)
+    return render_template('CREATE1.html',user=user,user_role = user_role,form=form,verify_form=verify_form,lesson_form=lesson_form,image_file=image_file)
 @app.route('/create/<username>',methods=['GET','POST'])
 @login_required
 def create(username):

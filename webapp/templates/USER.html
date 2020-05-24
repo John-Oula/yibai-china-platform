@@ -109,7 +109,7 @@
 
             <card class="card-body">
                 <p><img src="../static/calendar-check.png" alt="" class="session-card-left">{{ posts.date }}
-                    <a href="{{ url_for('meetingInfo',username=current_user.username,meetingcode=posts.meetingCode,id= posts.id) }}"><button value="JOIN" id="card-btn" style="color: white;margin-left: 175px">VIEW</button></a>
+                    <a href="{{ url_for('meetingInfo',username=current_user.username,meetingcode=posts.meetingCode,post_id=posts.id) }}"><button value="JOIN" id="card-btn" style="color: white;margin-left: 175px">VIEW</button></a>
                     <img src="../static/clock.png" alt="" class="session-card-right">{{posts.start_time}} - {{ posts.end_time }}</p>
                 <div class=" description">
                     <h6><b style="text-transform: uppercase;color:#707070">{{ posts.title }}</b></h6>

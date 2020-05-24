@@ -1100,7 +1100,7 @@ def cancel_meeting(meetingId,meetingcode):
 
     return redirect(url_for('user_profile',username=current_user.username))
 
-@app.route('/<username>/<int:meetingId><int:post_id>',methods=['GET','POST'])
+@app.route('/<username>/<int:meetingId>id<int:post_id>',methods=['GET','POST'])
 @login_required
 def modify_meeting(username,meetingId,post_id):
     user = User.query.filter_by(username=username).first_or_404()

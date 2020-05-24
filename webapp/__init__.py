@@ -1100,7 +1100,7 @@ def cancel_meeting(meetingId,meetingcode):
 
     return redirect(url_for('user_profile',username=current_user.username))
 
-@app.route('/modify/<username><int:meetingId>/<int:post_id>',methods=['GET','POST'])
+@app.route('/modify<int:post_id>/<username><int:meetingId>',methods=['GET','POST'])
 @login_required
 def modify_meeting(username,meetingId,post_id):
     user = User.query.filter_by(username=username).first_or_404()
@@ -1109,6 +1109,7 @@ def modify_meeting(username,meetingId,post_id):
     lesson_form = Lesson_form()
     form = Session_form()
     verify_form = Verify_form()
+    print(url_for('modify_meeting'))
     if request.method == 'POST':
         fulltime = request.form['date-time']
         fullDate = datetime.fromtimestamp(int(fulltime) / 1000).strftime('%Y-%m-%d')
@@ -1139,6 +1140,7 @@ def modify_meeting(username,meetingId,post_id):
         post.date=fullDate
 
         db.session.commit()
+
 
         return redirect(url_for('meetingInfo', meetingcode=meetingCode, username=current_user.username))
     return render_template('modify.html',user=user,user_role = user_role,form=form,verify_form=verify_form,lesson_form=lesson_form,image_file=image_file)

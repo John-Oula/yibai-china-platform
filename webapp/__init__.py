@@ -1065,7 +1065,7 @@ def modifyMeeting(title,fulltime,end_time,meetingId,username,instanceId):
 
     return r.json()
 
-@app.route('/session/<username>meetingId<int:meetingcode><int:post_id>',methods=['GET','POST'])
+@app.route('/session/<int:post_id><username>meetingId<int:meetingcode>',methods=['GET','POST'])
 @login_required
 def meetingInfo(username,meetingcode,post_id):
     meeting = inquire(meetingcode,current_user.username,1)

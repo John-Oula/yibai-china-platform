@@ -784,7 +784,7 @@ def unfollow(username):
 
 def save_pic(form_pic):
 
-    random_hex = urandom(8).hex()
+    random_hex = urandom(8)
     _,f_ext = os.path.splitext(form_pic.filename)
     pic_fn = random_hex + f_ext
     pic_path = os.path.join(app.root_path,'static/profile_pics',pic_fn)
@@ -1135,6 +1135,7 @@ def modify_meeting(username,meetingId,post_id):
                       email=verify_form.email.data, phone=verify_form.phone.data)
 
         post.title= form.title.data
+        post.description= form.description.data
         post.start_time=startTime
         post.end_time=endTime
         post.date=fullDate

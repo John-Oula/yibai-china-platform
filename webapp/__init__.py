@@ -1109,7 +1109,7 @@ def modify_meeting(username,meetingId,post_id):
     lesson_form = Lesson_form()
     form = Session_form()
     verify_form = Verify_form()
-    print(url_for('modify_meeting'))
+
     if request.method == 'POST':
         fulltime = request.form['date-time']
         fullDate = datetime.fromtimestamp(int(fulltime) / 1000).strftime('%Y-%m-%d')

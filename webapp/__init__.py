@@ -1142,7 +1142,7 @@ def modify_meeting(username,meetingId,post_id):
         db.session.commit()
 
 
-        return redirect(url_for('meetingInfo', meetingcode=meetingCode, username=current_user.username))
+        return redirect(url_for('meetingInfo', meetingcode=meetingCode, username=current_user.username,post_id=post_id))
     return render_template('modify.html',user=user,user_role = user_role,form=form,verify_form=verify_form,lesson_form=lesson_form,image_file=image_file)
 @app.route('/create/<username>',methods=['GET','POST'])
 @login_required

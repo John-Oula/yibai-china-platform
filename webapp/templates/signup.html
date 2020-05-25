@@ -33,7 +33,7 @@
     <form id="signup-form" action="{{ url_for('signup') }}" method="POST">
     {{ form.hidden_tag() }}
         <fieldset>
-        {{ form.email.label }}<br>
+        {{ form.email.label (class = "form-label")}}<br>
          {% if form.email.errors %}
         {{ form.email(class = "signup-input is-invalid") }}
             {% for error in form.email.errors %}
@@ -45,7 +45,7 @@
                 {{ form.email(class = "signup-input") }}
             {% endif %}
 
-        {{ form.username.label }}
+        {{ form.username.label (class = "form-label")}}
          {% if form.username.errors %}
         {{ form.username(class = "signup-input is-invalid") }}
             {% for error in form.username.errors %}
@@ -60,7 +60,7 @@
 
 
 
-        {{ form.password.label }}
+        {{ form.password.label (class = "form-label")}}
          {% if form.password.errors %}
         {{ form.password(class = "signup-input is-invalid") }}
             {% for error in form.password.errors %}
@@ -73,7 +73,7 @@
 
             {% endif %}
 
-        {{ form.confirm_password.label }}
+        {{ form.confirm_password.label(class = "form-label") }}
          {% if form.confirm_password.errors %}
         {{ form.confirm_password(class = "signup-input is-invalid") }}
             {% for error in form.confirm_password.errors %}

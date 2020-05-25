@@ -34,7 +34,7 @@
 
         <fieldset>
          {{ form.hidden_tag() }}
-        {{ form.username.label }}
+        {{ form.username.label(class = "form-label") }}
          {% if form.username.errors %}
         {{ form.username(class = "signup-input is-invalid") }}
             {% for error in form.username.errors %}

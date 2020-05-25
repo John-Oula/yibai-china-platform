@@ -185,6 +185,10 @@ form#signup-form{
     margin-top: 10px;
 }
 
+.form-label{
+    color: white;
+}
+
 /*LOGIN*/
 #login-card{
     height: fit-content;

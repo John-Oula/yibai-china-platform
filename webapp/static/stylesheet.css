@@ -227,7 +227,7 @@ li#burgermenu-text{
     font-family: Josefin Sans, sans-serif;
 }
 #profilepic {
-   margin-top: 70px;
+
     display: inline;
     height: 100%;
     width: auto;
@@ -239,6 +239,7 @@ li#burgermenu-text{
     overflow: hidden;
     width:200px;
     height:200px;
+    margin-top: 70px;
 }
 
 #profilepic-u {

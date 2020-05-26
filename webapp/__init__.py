@@ -1,10 +1,7 @@
 
 #### ROUTES IMPORTS ####
 # -*- coding: utf-8 -*-
-
-
-
-
+import secrets
 from hashlib import sha256
 import json
 import random
@@ -784,7 +781,7 @@ def unfollow(username):
 
 def save_pic(form_pic):
 
-    random_hex = os.urandom(8).hex()
+    random_hex = secrets.token_hex(8)
     _,f_ext = os.path.splitext(form_pic.filename)
     pic_fn = random_hex + f_ext
     pic_path = os.path.join(app.root_path,'static/profile_pics',pic_fn)

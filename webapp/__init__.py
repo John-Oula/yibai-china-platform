@@ -1197,12 +1197,9 @@ def upload(username):
     if request.method == 'POST':
 #        random_hex = urandom(8).hex()
         file  = request.files['file']
-        with open(file,"r") as file:
-            content = file.read()
-            encoded=base64.b64decode(bytes.fromhex(content))
         _, f_ext = os.path.splitext(file.filename)
-        file_hex = encoded
-        file_fn = encoded + f_ext
+        file_hex = binascii.hexlify(os.urandom(8))
+        file_fn = file_hex + f_ext
         file.save(os.path.join(app.root_path, 'static/videos/discover videos', file_fn))
         path = os.path.join(file_fn)
         upload = Upload(title=form.title.data,description=form.description.data,category=form.category.data,price= form.price.data,upload_ref=path,uploader=current_user)

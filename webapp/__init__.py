@@ -11,7 +11,7 @@ import random
 import os
 import re
 from os import urandom
-from PIL.Image import Image
+from PIL import Image
 from flask import Flask,render_template, url_for, flash, redirect, session, request, send_from_directory
 from flask_migrate import Migrate
 from flask_login import login_user, login_required, current_user, logout_user,UserMixin, LoginManager

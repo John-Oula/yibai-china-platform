@@ -83,7 +83,7 @@
         </form>
 
         <div style="margin-left: 40px">
-        <video style="margin-top: 20px" class="video-page "type="video/mp4" controls  src="../static/videos/discover videos/{{ video.upload_ref }}">
+        <video style="margin-top: 20px" class="video-page "type="video/mp4" controls  src="../static/videos/{{ video.upload_ref }}">
 
         </video>
         <h3 class="video-text">{{ video.title }}</h3>
@@ -150,7 +150,7 @@
                 <card class="card-body video-text-list">
                     <div class="row">
                         <div class="col-6">
-                    <a href="{{ url_for('video',upload_ref=upload.upload_ref) }}"><video width="160" height="100" src="../static/videos/discover videos/{{ upload.upload_ref }}" alt=""></video></a>
+                    <a href="{{ url_for('video',upload_ref=upload.upload_ref) }}"><video width="160" height="100" src="../static/videos/{{ upload.upload_ref }}" alt=""></video></a>
                         </div>
                         <div class="col">
                     <div >{{ upload.title }}</div><br>

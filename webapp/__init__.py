@@ -1195,10 +1195,9 @@ def upload(username):
     user = User.query.filter_by(username=username).first_or_404()
     form = Upload_form()
     if request.method == 'POST':
-#        random_hex = urandom(8).hex()
-        file  = request.files['file']
-        _, f_ext = os.path.splitext(file.filename)
         file_hex = binascii.hexlify(os.urandom(8))
+        file  = request.files['file'].read()
+        _, f_ext = os.path.splitext(file.filename)
         file_fn = file_hex + f_ext
         file.save(os.path.join(app.root_path, 'static/videos/discover videos', file_fn))
         path = os.path.join(file_fn)

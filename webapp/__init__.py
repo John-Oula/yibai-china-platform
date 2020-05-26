@@ -792,6 +792,7 @@ def save_pic(form_pic):
     i = Image.open(form_pic)
     i.thumbnail(output_size)
     i.save(pic_path)
+
     return pic_fn
 
 

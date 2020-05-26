@@ -50,8 +50,9 @@
 
 
 
-
-        <img id="profilepic" src="{{ image_file }}" alt="" class="rounded-circle mx-auto d-block profilepic shadow-lg" width="200" height="200">
+    <div class="profile-pic-wrapper">
+        <img id="profilepic" src="{{ image_file }}" alt="" class=" mx-auto d-block profilepic shadow-lg" >
+    </div>
     <div class="text-center">
              <p id="profilename"  >{{ current_user.username }}</p>
         {% if current_user.role == 1 %}

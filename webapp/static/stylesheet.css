@@ -228,6 +228,17 @@ li#burgermenu-text{
 }
 #profilepic {
    margin-top: 70px;
+    display: inline;
+    height: 100%;
+    width: auto;
+
+}
+.profile-pic-wrapper{
+    border-radius: 50%;
+    position: relative;
+    overflow: hidden;
+    width:200px;
+    height:200px;
 }
 
 #profilepic-u {

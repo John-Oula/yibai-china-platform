@@ -62,7 +62,7 @@
 {% for  upload in uploads%}
     <card class="card upload-card" >
     <card class="card-body">
-        <li><a href="{{ url_for('video',upload_ref=upload.upload_ref) }}"><video width="250" height="200" type="video/mp4" src="../static/videos/discover videos/{{ upload.upload_ref }}" alt=""></video></a></li></li>
+        <li><a href="{{ url_for('video',upload_ref=upload.upload_ref) }}"><video width="250" height="200" type="video/mp4" src="../static/videos/{{ upload.upload_ref }}" alt=""></video></a></li></li>
         <p>{{ upload.title}}</p>
         <p class="upload-username">Uploaded by {{ upload.uploader.username}}</p>
         <p class="upload-username">{{ upload.category }}</p>

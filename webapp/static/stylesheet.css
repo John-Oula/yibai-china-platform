@@ -258,7 +258,8 @@ li#burgermenu-text{
 }
 .icon{
     height: 20px;
-    width: 14px;
+    width: 27px;
+    margin-bottom: 10px;
 }
 
 #profilename-u{

@@ -109,35 +109,30 @@
                 <p><img src="../static/calendar-check.png" alt="" class="session-card-left">{{ posts.date }}
                     <a href="{{ url_for('meetingInfo',username=current_user.username,meetingcode=posts.meetingCode,post_id=posts.id) }}"><button value="JOIN" id="card-btn" style="color: white;margin-left: 175px">START</button></a>
                     <img src="../static/clock.png" alt="" class="session-card-right">{{posts.start_time}} - {{ posts.end_time }}</p>
-                <div><img class="session-card-right" src="../static/edit.png" alt=""></div>
-                <div><img class="session-card-right" src="../static/window-close.png" alt=""></div>
-                <div class=" description">
+
+                <div class=" row description">
+                <div class="col-8">
                     <h6><b style="text-transform: uppercase;color:#707070">{{ posts.title }}</b></h6>
                     <h6 style="text-transform: lowercase;color:#707070;font-size: 13px">{{ posts.category }}</h6>
                     <h6 style="text-transform: lowercase;color:#707070;font-size: 13px">{{ posts.bookers.count() }} Booked</h6>
+                </div>
+                <div class=" col-sm-4 col-md-4 col-lg-4">
+                    <div><img class="icon session-card-right" src="../static/edit.png" alt=""></div>
+                <div><img class="icon session-card-right" src="../static/window-close.png" alt=""></div>
+                </div>
+                </div>
+
                 {% for lesson in all_lessons %}
                     {% if posts.id == posts.id %}
                     <h6 style="text-transform: lowercase;color:#707070;font-size: 13px">{{ lesson.title }}</h6>
                     {% endif %}
                 {% endfor %}
 
-                    <div class="row">
-                        <div class="col-5"></div>
-                        <div class="col-5">
-                            {% if posts.verified == 0 %}
-                              <p style="font-size: 13px">Waiting for verification</p>
 
-                            {% else %}
-
-                            <p style="font-size: 13px">once you start the session users will be notified 30 seconds earlier</p>
-                                <button value="VERIFY" id="card-btn" style="color: white"><a href="{{ url_for('session_verify',id= posts.id) }}">START</a></button>
-
-                            {% endif %}
-                        </div>
-                    </div>
 
 
                 </div>
+
                 </card>
                 </card>
    {% endfor %}

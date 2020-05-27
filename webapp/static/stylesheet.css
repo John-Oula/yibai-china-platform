@@ -256,6 +256,10 @@ li#burgermenu-text{
     text-transform: uppercase;
 
 }
+.icon{
+    height: 20px;
+    width: 14px;
+}
 
 #profilename-u{
    font-family: "Segoe UI";

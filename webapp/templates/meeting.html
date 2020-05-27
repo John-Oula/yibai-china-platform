@@ -19,8 +19,7 @@
    <h3 class="meetingTitle">{{ meetingTitle }}</h3>
    <h6>{{ meetingcode }}</h6>
 
-   <h6>{{ meetingStart }}</h6>
-   <h6>{{ meetingEnd }}</h6>
+  <div><h6>{{ meetingStart }} - {{ meetingEnd }}</h6></div>
        <a href="{{ meetingUrl }}"><button value="START" id="card-btn" style="color: white;margin-left: 175px">START</button></a>
        <a href="{{ url_for('cancel_meeting',meetingId=meeting_id,meetingcode=meetingcode) }}"><button value="CANCEL" id="card-btn" style="color: white;margin-left: 175px">CANCEL</button></a>
        <a href="{{ url_for('modify_meeting',meetingId=meeting_id,username= current_user.username,post_id=postId) }}"><button value="MODIFY" id="card-btn" style="color: white;margin-left: 175px">MODIFY</button></a>

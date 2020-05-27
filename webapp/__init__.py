@@ -1075,6 +1075,8 @@ def meetingInfo(username,meetingcode,post_id):
         meeting_id = item['meeting_id']
         meetingUrl= item["join_url"]
         meetingTitle= item["subject"]
+        meetingStart = datetime.fromtimestamp(int(item['start_time'])).strftime('%H:%M')
+        meetingEnd = datetime.fromtimestamp(int(item['end_time'])).strftime('%H:%M')
     user = User.query.filter_by(username=username).first_or_404()
     image_file = url_for('static', filename ='profile_pics/' + current_user.image_file)
     followed_posts=Post.query.join(followers, (followers.c.followed_id == Post.user_id)).all()
@@ -1087,7 +1089,7 @@ def meetingInfo(username,meetingcode,post_id):
     user_role = current_user.role
 
 
-    return render_template('meeting.html',meetingTitle=meetingTitle,postId=postId,meetingUrl=meetingUrl,meeting_id=meeting_id,meetingcode=meetingcode,followed_posts=followed_posts,user=user,user_role=user_role,all_users=all_users,all_posts = all_posts,author=author, image_file = image_file)
+    return render_template('meeting.html',meetingStart=meetingStart,meetingEnd=meetingEnd,meetingTitle=meetingTitle,postId=postId,meetingUrl=meetingUrl,meeting_id=meeting_id,meetingcode=meetingcode,followed_posts=followed_posts,user=user,user_role=user_role,all_users=all_users,all_posts = all_posts,author=author, image_file = image_file)
 
 @app.route('/cancel/<int:meetingId>Code<int:meetingcode>',methods=['GET','POST'])
 @login_required
@@ -1172,6 +1174,7 @@ def create(username):
         meeting_info = meeting["meeting_info_list"]
         for item in meeting_info:
             meetingCode = item['meeting_code']
+
 
         post = Post(title=form.title.data,category=form.category.data,description=form.description.data,date= fullDate,start_time= startTime ,end_time = endTime, author=current_user,meetingCode=meetingCode)
         lesson = Lesson(title=request.form['title'],description=request.form['description'])

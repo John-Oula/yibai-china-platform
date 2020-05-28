@@ -611,6 +611,16 @@ body, html {
 
 }
 
+.porfile-thumbnail{
+    border-radius: 50%;
+    position: relative;
+    overflow: hidden;
+    width:40px;
+    height:40px;
+    margin-top: 70px;
+    margin-left: 10%;
+}
+
 .discover-list-link{
     color: #6C6C6C;
 }
@@ -644,6 +654,9 @@ ul li.discover-list a:link{
 
 .user-thumb{
     font-size: 10px;
+    display: inline;
+    width: 100%;
+    height: auto;
 }
 
 .training-jumbotron{

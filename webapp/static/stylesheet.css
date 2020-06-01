@@ -1294,14 +1294,15 @@ p.login-text{
       display:none;
   }
   #home-image-two{
-      margin-top: 5%;
+      margin-top: 10%;
       background-color: #E74525;
       height: 500px;
       width: auto;
   }
   .right-home-text{
-    text-align: center;
     margin-right: 0px;
+    display: block;
+    margin-left: 5%;
 }
   .left-home-text{
     text-align: left;
@@ -1321,5 +1322,11 @@ p.login-text{
   }
   p.lower-text{
       margin-top: 10px;
+  }
+    #home-image-three{
+      margin-top: 10%;
+
+      height: 500px;
+
   }
 }

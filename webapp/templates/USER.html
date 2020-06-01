@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 {% block head %}
-    <meta charset="UTF-8">
+    <meta charset="UTF-8" name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="{{ url_for('static',filename='stylesheet.css') }}">
     <link rel="stylesheet" href="../static/bootstrap/css/bootstrap.css">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
@@ -53,12 +53,12 @@
     <div class="profile-pic-wrapper text-center">
         <img id="profilepic" src="{{ image_file }}" alt="" class=" mx-auto d-block profilepic shadow-lg" >
     </div>
-    <div class="text-center">
+    <div class="text-center info-text">
              <p id="profilename"  >{{ current_user.username }}</p>
         {% if current_user.role == 1 %}
         {% else %}
 
-      <p style="font-size: 13px">{{ user.followers.count() }} subscribers</p>
+      <p class="subscribers">{{ user.followers.count() }} subscribers</p>
     {% endif %}
 </div>
 

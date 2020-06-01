@@ -45,7 +45,26 @@ from flask_sqlalchemy import SQLAlchemy
 from itsdangerous import TimedJSONWebSignatureSerializer as Serializer
 import psycopg2
 import base64
+import socket
 app = Flask(__name__)
+
+
+# IP address
+def get_Host_name_IP(hostname):
+    try:
+        host_name = socket.gethostname()
+        host_ip = socket.gethostbyname(host_name)
+        if host_name == hostname:
+            print("Hostname :  ", host_name)
+            print("IP : ", host_ip)
+            return True
+        else:
+            return False
+    except:
+        print("Unable to get Hostname and IP")
+
+    # Driver code
+
 
 
 
@@ -54,7 +73,11 @@ app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 app.config['SECRET_KEY'] = 'Adawug;irwugw79536870635785ty0875y03davvavavdey'
 appID=200000164
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://power_user:@poweruserpass@172.16.214.87:5432/100CG'
+if get_Host_name_IP('CJAY') == True:
+    app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:@qwerty1234!@localhost/postgres'
+else:
+    app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://power_user:@poweruserpass@172.16.214.87:5432/100CG'
+
 SecretId = 'JIRMZ6O3Qm5KDwCHsgYnlxatGeXq7dfFcjEk'
 SecretKey ='wZn5NeGCqxg4r8XaDum2EMzRhIvWHtcU'
 
@@ -62,6 +85,7 @@ mail = Mail(app)
 #### MODELS ####
 db = SQLAlchemy(app)
 db.init_app(app)
+
 
 migrate = Migrate(app,db)
 
@@ -92,7 +116,7 @@ class User(db.Model, UserMixin):
     sub_role = db.Column('sub role', db.Integer, default=1)
     fullname = db.Column('fullname', db.String(20))
     username = db.Column('username', db.String(20), unique=True, nullable=True)
-    password = db.Column('password', nullable=False)
+    password = db.Column('password',db.String(500), nullable=False)
     image_file = db.Column(db.String(60), nullable=False, default='default.jpg')
     id_type = db.Column('id_type', db.String(60), nullable=True)
     id_number = db.Column('id_number', db.String(), nullable=True)
@@ -260,7 +284,7 @@ class Comment(db.Model):
    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
    upload_id = db.Column(db.Integer, db.ForeignKey('upload.id'))
 
-
+db.create_all()
 
 
 ### FORMS ###
@@ -386,6 +410,7 @@ class Reset_password(FlaskForm):
 
 @app.route('/')
 def home():
+    get_Host_name_IP('CJAY')
     return render_template('home.html')
 
 @app.route('/profile')
@@ -722,7 +747,6 @@ def user_profile(username):
 #    return redirect(url_for('login'))
 
 #TRAINER PROFILE FUNCTIONS
-
 
 
 

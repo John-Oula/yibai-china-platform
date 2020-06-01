@@ -1117,3 +1117,54 @@ p.login-text{
 .dropdownLinks{
     padding-left: 15px;
 }
+.subscribers{
+    font-size: 13px;
+}
+
+@media screen and (max-width: 600px){
+ .sidenav{
+  width: 100%; /* Set the width of the sidebar */
+  position: fixed; /* Fixed Sidebar (stay in place on scroll) */
+  z-index: 1; /* Stay on top */
+  top: 0; /* Stay at the top */
+  left: 0;
+  background-color: #DCDCDC; /* Black */
+  overflow-x: hidden; /* Disable horizontal scroll */
+  overflow-y: hidden; /* Disable horizontal scroll */
+  height: 80px;
+ display: flex}
+ .sidenav-u{
+      padding: 0px;
+ }
+ .profile-pic-wrapper{
+    margin-top: 10px;
+    margin-left: 23px;
+    width: 60px;
+    height: 60px;
+ }
+ #profilepic{
+    display: inline;
+    width: 100%;
+    height: auto; }
+ .side-nav-menu{
+     display: none;
+ }
+ #profilename{
+     font-size: 14px;
+     margin-bottom: 0px;
+     margin-top: 17px;
+ }
+ #burgermenu{
+    float: right;
+    position: fixed;
+    right: 10px;
+    width: fit-content;
+     display: none;
+}
+ .subscribers{
+     margin-top: 5px;
+ }
+ .info-text{
+     margin-left: 10px;
+ }
+}

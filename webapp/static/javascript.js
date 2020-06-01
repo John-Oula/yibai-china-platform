@@ -106,5 +106,3 @@ function Event(new_event){
 
 
 
-
-

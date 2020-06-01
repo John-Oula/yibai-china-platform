@@ -1270,4 +1270,13 @@ p.login-text{
     #nav-search{
         display: none;
     }
+  .home{
+      background-color: white;
+      background-image: url("mobile-home.png");
+        /* Center and scale the image nicely */
+  background-repeat: no-repeat;
+  background-size: cover;
+    /* Needed to position the navbar */
+    width: 100%;
+  }
 }

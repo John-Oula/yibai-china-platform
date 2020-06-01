@@ -1284,10 +1284,42 @@ p.login-text{
       overflow-x: hidden;
   }
   .title{
-      margin-top: 860px;
+      margin-top: 800px;
       font-size: 22px;
   }
   #home-image-one{
       display:none;
+  }
+  div#home-image-two.col-6{
+      display:none;
+  }
+  #home-image-two{
+      margin-top: 5%;
+      background-color: #E74525;
+      height: 500px;
+      width: auto;
+  }
+  .right-home-text{
+    text-align: center;
+    margin-right: 0px;
+}
+  .left-home-text{
+    text-align: left;
+    margin-left: 0px;
+      margin-left: 5%;
+}
+  div.col-6{
+      display:none;
+  }
+  div.col-4.left-home-text{
+      width: 100%;
+      display: block;
+
+  }
+  p.upper-text{
+      margin-top: 20px;
+  }
+  p.lower-text{
+      margin-top: 10px;
   }
 }

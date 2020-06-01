@@ -1261,6 +1261,6 @@ p.login-text{
       width: 100%;
   }
   body{
-      overflow-y: hidden;
+      overflow-x: hidden;
   }
 }

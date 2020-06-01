@@ -1279,4 +1279,8 @@ p.login-text{
     /* Needed to position the navbar */
     width: 100%;
   }
+  .home-wrapper{
+      position: relative;
+      overflow-x: hidden;
+  }
 }

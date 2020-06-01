@@ -1124,6 +1124,7 @@ p.login-text{
     display: none;
 }
 @media screen and (max-width: 600px){
+
  .sidenav{
   width: 100%; /* Set the width of the sidebar */
   position: fixed; /* Fixed Sidebar (stay in place on scroll) */
@@ -1140,7 +1141,7 @@ p.login-text{
  }
  .profile-pic-wrapper{
     margin-top: 10px;
-    margin-left: 23px;
+    margin-left: 5%;
     width: 60px;
     height: 60px;
  }
@@ -1222,6 +1223,7 @@ p.login-text{
     font-size: 10px;
      display: block;
      margin-top: 8px;
+     color: #444444;
 
  }
  .mobile-nav-link{
@@ -1257,5 +1259,8 @@ p.login-text{
   }
   #create_card form{
       width: 100%;
+  }
+  body{
+      overflow-y: hidden;
   }
 }

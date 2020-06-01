@@ -1141,7 +1141,7 @@ p.login-text{
  }
  .profile-pic-wrapper{
     margin-top: 10px;
-    margin-left: 5%;
+    margin-left: 0%;
     width: 60px;
     height: 60px;
  }
@@ -1263,4 +1263,11 @@ p.login-text{
   body{
       overflow-x: hidden;
   }
+  /*main*/
+    #navbarTogglerDemo01{
+        background-color: #1B1C1D;
+    }
+    #nav-search{
+        display: none;
+    }
 }

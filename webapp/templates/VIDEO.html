@@ -39,9 +39,9 @@
 
     {%  if current_user.role == 2 %}
 <div class="text-center">
-    <a href="{{ url_for('users.user_profile',username = current_user.username) }}"><img id="top-icon-u" style="margin-top: 60px" class="icon-u" src="../static/sessions.png" alt=""></a>
-            <a href="{{ url_for('dashboard', username=current_user.username ) }}" style="color: white"><img class="icon-u" src="../static/window-maximize.png" alt=""></a>
-            <a href="{{ url_for('discover', username=current_user.username ) }}" style="color: white"><img class="icon-u" src="../static/discover.png" alt=""></a>
+    <a href="{{ url_for('users.user_profile',username = current_user.username) }}"><img id="top-icon-u" style="margin-top: 60px" class="icon-u" src="../static/sessions-w.png" alt=""></a>
+            <a href="{{ url_for('dashboard', username=current_user.username ) }}" style="color: white"><img class="icon-u" src="../static/dashboard.png" alt=""></a>
+            <a href="{{ url_for('discover', username=current_user.username ) }}" style="color: white"><img class="icon-u" src="../static/discover-w.png" alt=""></a>
 
 
                 <a href="{{ url_for('settings', username=current_user.username ) }}" style="color: white;padding: 0px"><img class="icon-u" src="../static/badge.png" alt=""></a>
@@ -55,10 +55,10 @@
     {% else %}
 <div class="text-center">
 
-            <a href="{{ url_for('user_profile',username = current_user.username) }}" style="color: white"><img id="top-icon-u" class="icon-u" src="../static/sessions.png" alt=""></a>
-            <a href="{{ url_for('dashboard', username=current_user.username ) }}" style="color: white"><img class="icon-u" src="../static/window-maximize.png" alt=""></a>
-            <a href="{{ url_for('discover', username=current_user.username ) }}" style="color: white"><img class="icon-u" src="../static/discover.png" alt=""></a>
-            <a href="{{ url_for('upload', username=current_user.username ) }}" style="color: white"><img class="icon-u" src="../static/uploads.png" alt=""></a>
+            <a href="{{ url_for('user_profile',username = current_user.username) }}" style="color: white"><img id="top-icon-u" class="icon-u" src="../static/sessions-w.png" alt=""></a>
+            <a href="{{ url_for('dashboard', username=current_user.username ) }}" style="color: white"><img class="icon-u" src="../static/dashboard.png" alt=""></a>
+            <a href="{{ url_for('discover', username=current_user.username ) }}" style="color: white"><img class="icon-u" src="../static/discover-w.png" alt=""></a>
+            <a href="{{ url_for('upload', username=current_user.username ) }}" style="color: white"><img class="icon-u" src="../static/uploads-w.png" alt=""></a>
 
 
 

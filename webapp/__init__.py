@@ -45,7 +45,26 @@ from flask_sqlalchemy import SQLAlchemy
 from itsdangerous import TimedJSONWebSignatureSerializer as Serializer
 import psycopg2
 import base64
+import socket
 app = Flask(__name__)
+
+
+# IP address
+def get_Host_name_IP(hostname):
+    try:
+        host_name = socket.gethostname()
+        host_ip = socket.gethostbyname(host_name)
+        if host_name == hostname:
+            print("Hostname :  ", host_name)
+            print("IP : ", host_ip)
+            return True
+        else:
+            return False
+    except:
+        print("Unable to get Hostname and IP")
+
+    # Driver code
+
 
 
 
@@ -54,7 +73,11 @@ app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 app.config['SECRET_KEY'] = 'Adawug;irwugw79536870635785ty0875y03davvavavdey'
 appID=200000164
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://power_user:@poweruserpass@172.16.214.87:5432/100CG'
+if get_Host_name_IP('CJAY') == True:
+    app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:@qwerty1234!@localhost/postgres'
+else:
+    app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://power_user:@poweruserpass@172.16.214.87:5432/100CG'
+
 SecretId = 'JIRMZ6O3Qm5KDwCHsgYnlxatGeXq7dfFcjEk'
 SecretKey ='wZn5NeGCqxg4r8XaDum2EMzRhIvWHtcU'
 
@@ -62,6 +85,7 @@ mail = Mail(app)
 #### MODELS ####
 db = SQLAlchemy(app)
 db.init_app(app)
+
 
 migrate = Migrate(app,db)
 
@@ -260,7 +284,7 @@ class Comment(db.Model):
    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
    upload_id = db.Column(db.Integer, db.ForeignKey('upload.id'))
 
-
+db.create_all()
 
 
 ### FORMS ###
@@ -386,6 +410,7 @@ class Reset_password(FlaskForm):
 
 @app.route('/')
 def home():
+    get_Host_name_IP('CJAY')
     return render_template('home.html')
 
 @app.route('/profile')
@@ -722,7 +747,6 @@ def user_profile(username):
 #    return redirect(url_for('login'))
 
 #TRAINER PROFILE FUNCTIONS
-
 
 
 
@@ -1075,6 +1099,8 @@ def meetingInfo(username,meetingcode,post_id):
         meeting_id = item['meeting_id']
         meetingUrl= item["join_url"]
         meetingTitle= item["subject"]
+        meetingStart = datetime.fromtimestamp(int(item['start_time'])).strftime('%H:%M')
+        meetingEnd = datetime.fromtimestamp(int(item['end_time'])).strftime('%H:%M')
     user = User.query.filter_by(username=username).first_or_404()
     image_file = url_for('static', filename ='profile_pics/' + current_user.image_file)
     followed_posts=Post.query.join(followers, (followers.c.followed_id == Post.user_id)).all()
@@ -1087,7 +1113,7 @@ def meetingInfo(username,meetingcode,post_id):
     user_role = current_user.role
 
 
-    return render_template('meeting.html',meetingTitle=meetingTitle,postId=postId,meetingUrl=meetingUrl,meeting_id=meeting_id,meetingcode=meetingcode,followed_posts=followed_posts,user=user,user_role=user_role,all_users=all_users,all_posts = all_posts,author=author, image_file = image_file)
+    return render_template('meeting.html',meetingStart=meetingStart,meetingEnd=meetingEnd,meetingTitle=meetingTitle,postId=postId,meetingUrl=meetingUrl,meeting_id=meeting_id,meetingcode=meetingcode,followed_posts=followed_posts,user=user,user_role=user_role,all_users=all_users,all_posts = all_posts,author=author, image_file = image_file)
 
 @app.route('/cancel/<int:meetingId>Code<int:meetingcode>',methods=['GET','POST'])
 @login_required
@@ -1172,6 +1198,7 @@ def create(username):
         meeting_info = meeting["meeting_info_list"]
         for item in meeting_info:
             meetingCode = item['meeting_code']
+
 
         post = Post(title=form.title.data,category=form.category.data,description=form.description.data,date= fullDate,start_time= startTime ,end_time = endTime, author=current_user,meetingCode=meetingCode)
         lesson = Lesson(title=request.form['title'],description=request.form['description'])

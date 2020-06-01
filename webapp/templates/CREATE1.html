@@ -19,9 +19,7 @@
     <form action=""  method="POST">
         <div class="row">
                         <div class="row">
-                            <div class="col-5">
-                                <a class="nav-link create-header" ></a>
-                            </div>
+
                             <div class="col-7">
                                 <br>
             {{ form.title.label }}<br>
@@ -114,6 +112,11 @@
 </div>
 </div>
 
+
+{% endblock %}
+
+{% block mobileNav %}
+    {{ super() }}
 {% endblock %}
 
 

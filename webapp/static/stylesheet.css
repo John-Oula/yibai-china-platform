@@ -256,6 +256,11 @@ li#burgermenu-text{
     text-transform: uppercase;
 
 }
+.icon{
+    height: 20px;
+    width: 27px;
+    margin-bottom: 10px;
+}
 
 #profilename-u{
    font-family: "Segoe UI";
@@ -606,6 +611,16 @@ body, html {
 
 }
 
+.profile-thumbnail{
+    border-radius: 50%;
+    position: relative;
+    overflow: hidden;
+    width:40px;
+    height:40px;
+
+    margin-left: 10%;
+}
+
 .discover-list-link{
     color: #6C6C6C;
 }
@@ -639,6 +654,9 @@ ul li.discover-list a:link{
 
 .user-thumb{
     font-size: 10px;
+    display: inline;
+    width: 100%;
+    height: auto;
 }
 
 .training-jumbotron{
@@ -1098,4 +1116,146 @@ p.login-text{
 
 .dropdownLinks{
     padding-left: 15px;
+}
+.subscribers{
+    font-size: 13px;
+}
+.mobile-nav{
+    display: none;
+}
+@media screen and (max-width: 600px){
+ .sidenav{
+  width: 100%; /* Set the width of the sidebar */
+  position: fixed; /* Fixed Sidebar (stay in place on scroll) */
+  z-index: 1; /* Stay on top */
+  top: 0; /* Stay at the top */
+  left: 0;
+  background-color: #DCDCDC; /* Black */
+  overflow-x: hidden; /* Disable horizontal scroll */
+  overflow-y: hidden; /* Disable horizontal scroll */
+  height: 80px;
+ display: flex}
+ .sidenav-u{
+      padding: 0px;
+ }
+ .profile-pic-wrapper{
+    margin-top: 10px;
+    margin-left: 23px;
+    width: 60px;
+    height: 60px;
+ }
+ #profilepic{
+    display: inline;
+    width: 100%;
+    height: auto; }
+ .side-nav-menu{
+     display: none;
+ }
+ #profilename{
+     font-size: 14px;
+     margin-bottom: 0px;
+     margin-top: 17px;
+ }
+ #burgermenu{
+    float: right;
+    position: fixed;
+    right: 10px;
+    width: fit-content;
+}
+ .subscribers{
+     margin-top: 5%;
+     margin-left:0px;
+ }
+ .info-text{
+     margin-left: 5%;
+ }
+ .search{
+     display: none;
+ }
+ card#create_card_trainer{
+    margin-top: 100px;
+    margin-left: 5%;
+    width: 90%;
+    height: 213px;
+    margin-right: 5%;
+
+ }
+ .main{
+     margin-left: 0px;
+ }
+ .session-container{
+     margin-left: 0px;
+ }
+ .session{
+     margin-top: 10px;
+     margin-left: 5%;
+ }
+ #my-session-card{
+    margin-left: 5%;
+    width: 90%;
+    height: 213px;
+    margin-right: 5%;
+    margin-top: 15px;
+
+ }
+ .session-card-right{
+     margin-left: 0px;
+ }
+ .meeting-details{
+     font-size: 13px;
+ }
+ .mobile-nav{
+     height: 61px;
+     width: 100%;
+     display: flex;
+     background-color: white;
+     position: fixed;
+     left: 0;
+     bottom: 0;
+ }
+ .mobile-nav-list{
+     display: flex;
+     width: 100%;
+
+ }
+ .mobile-nav-link a{
+    font-size: 10px;
+     display: block;
+     margin-top: 8px;
+
+ }
+ .mobile-nav-link{
+     margin-left: 31px;
+ }
+ .mobile-icon{
+     width: 25px;
+     font-size: 10px;
+ }
+/* create meeting*/
+  card#create_card{
+    margin-left: 5%;
+    width: 90%;
+    height: fit-content;
+    margin-right: 5%;
+    margin-top: 25px;
+    padding-right: 5%;
+    padding-left: 5%;
+  }
+  #calendar{
+      width: 100%;
+  }
+  .session-container{
+      margin-top: 70px;
+
+  }
+   #create_card.card-body{
+     padding: 0px;
+
+  }
+  .description-field{
+      width: 250%;
+  }
+  #create_card form{
+      width: 100%;
+  }
 }

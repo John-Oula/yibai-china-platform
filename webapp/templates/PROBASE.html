@@ -186,7 +186,7 @@
 {% endblock %}
 
 {% block mobileNav %}
-<div class="mobile-nav ">
+<div class="mobile-nav">
     <ul class="mobile-nav-list">
         <li class="mobile-nav-link d-block text-center"><img class="mobile-icon" src="../static/session-m.png" alt=""><a href="{{ url_for('user_profile', username = current_user.username) }}">Sessions</a></li>
         <li class="mobile-nav-link d-block text-center"><img class="mobile-icon" src="../static/dashboard-m.png" alt=""><a href="{{ url_for('dashboard', username = current_user.username) }}" >Dashboard</a></li>

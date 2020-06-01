@@ -88,15 +88,15 @@
         </div>
 
 
-    {% elif  current_user.role == 1 and current_user.sub_role == 1 %}
-        <div class="side-nav-menu" style="margin-left: 55px">
-        <a href="{{ url_for('video_admin', id = current_user.id) }}" style="color: white"><img class="icon" src="../static/sessions-w.png" alt="">UPLOADED VIDEOS</a>
-        <a href="{{ url_for('video_admin_dashboard') }}" style="color: white"><img class="icon" src="../static/dashboard.png" alt="">DASHBOARD</a>
-        <div id="botrnav" style="padding: 0px">
-            <a href="{{ url_for('settings',username= current_user.username) }}" style="color: white"><img class="icon" src="../static/SETTINGS.png" alt="" style="color: white">SETTINGS</a>
-            <br>
-            <a href="{{ url_for('logout') }}" style="color: white"><img class="icon" src="../static/logout.png" alt="">LOGOUT</a>
-        </div>
+        {% elif  current_user.role == 1 and current_user.sub_role == 1 %}
+            <div class="side-nav-menu" style="margin-left: 55px">
+            <a href="{{ url_for('video_admin', id = current_user.id) }}" style="color: white"><img class="icon" src="../static/sessions-w.png" alt="">UPLOADED VIDEOS</a>
+            <a href="{{ url_for('video_admin_dashboard') }}" style="color: white"><img class="icon" src="../static/dashboard.png" alt="">DASHBOARD</a>
+            <div id="botrnav" style="padding: 0px">
+                <a href="{{ url_for('settings',username= current_user.username) }}" style="color: white"><img class="icon" src="../static/SETTINGS.png" alt="" style="color: white">SETTINGS</a>
+                <br>
+                <a href="{{ url_for('logout') }}" style="color: white"><img class="icon" src="../static/logout.png" alt="">LOGOUT</a>
+            </div>
 
 
             {% elif  current_user.role == 1 and current_user.sub_role == 2 %}
@@ -114,17 +114,17 @@
                 </div>
 
             {% elif  current_user.role == 1 and current_user.sub_role == 3 %}
-    <div class="side-nav-menu" style="margin-left: 55px">
+                <div class="side-nav-menu" style="margin-left: 55px">
 
-            <a href="{{ url_for('user_profile', username = current_user.username ) }}" style="color: white"><img class="icon" src="../static/sessions-w.png" alt="">PAYMENT</a>
-                <div id="botrnav" style="padding: 0px">
-                    <a href="{{ url_for('settings',username= current_user.username) }}" style="color: white"><img class="icon" src="../static/SETTINGS.png" alt="" style="color: white">SETTINGS</a>
-                    <br>
-                    <a href="{{ url_for('logout') }}" style="color: white"><img class="icon" src="../static/logout.png" alt="">LOGOUT</a>
-                </div>
+                <a href="{{ url_for('user_profile', username = current_user.username ) }}" style="color: white"><img class="icon" src="../static/sessions-w.png" alt="">PAYMENT</a>
+                    <div id="botrnav" style="padding: 0px">
+                        <a href="{{ url_for('settings',username= current_user.username) }}" style="color: white"><img class="icon" src="../static/SETTINGS.png" alt="" style="color: white">SETTINGS</a>
+                        <br>
+                        <a href="{{ url_for('logout') }}" style="color: white"><img class="icon" src="../static/logout.png" alt="">LOGOUT</a>
+                    </div>
 
             {% elif current_user.role == 1 and current_user.sub_role == 4 %}
-    <div class="side-nav-menu" style="margin-left: 55px">
+                <div class="side-nav-menu" style="margin-left: 55px">
 
             <a href="{{ url_for('user_profile', username = current_user.username) }}" style="color: white"><img class="icon" src="../static/sessions-w.png" alt="">PAYMENT</a>
             <a href="{{ url_for('dashboard', username = current_user.username) }}" style="color: white"><img class="icon" src="../static/dashboard.png" alt="">DASHBOARD</a>

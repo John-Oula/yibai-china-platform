@@ -1283,4 +1283,11 @@ p.login-text{
       position: relative;
       overflow-x: hidden;
   }
+  .title{
+      margin-top: 860px;
+      font-size: 22px;
+  }
+  #home-image-one{
+      display:none;
+  }
 }

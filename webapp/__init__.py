@@ -116,7 +116,7 @@ class User(db.Model, UserMixin):
     sub_role = db.Column('sub role', db.Integer, default=1)
     fullname = db.Column('fullname', db.String(20))
     username = db.Column('username', db.String(20), unique=True, nullable=True)
-    password = db.Column('password', nullable=False)
+    password = db.Column('password',db.String(500), nullable=False)
     image_file = db.Column(db.String(60), nullable=False, default='default.jpg')
     id_type = db.Column('id_type', db.String(60), nullable=True)
     id_number = db.Column('id_number', db.String(), nullable=True)

@@ -1329,4 +1329,15 @@ p.login-text{
       height: 500px;
 
   }
+    .home-signup{
+        height: 298px;
+        width: auto;
+        background-color: #1B1C1D;
+        margin-top: 15%;
+        padding: 10px;
+
+    }
+    h3.bottom-header{
+        margin-top: 15%;
+    }
 }

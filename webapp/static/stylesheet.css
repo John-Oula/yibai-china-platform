@@ -1141,7 +1141,9 @@ img.corner-design{
     overflow-x: scroll;
     overflow-y: scroll;
 }
-
+#myCarousel{
+    display: none;
+}
 @media screen and (max-width: 600px){
 
  .sidenav{

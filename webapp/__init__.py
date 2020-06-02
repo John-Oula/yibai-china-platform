@@ -375,7 +375,7 @@ class Session_form(FlaskForm):
 class Upload_form(FlaskForm):
     title = StringField('Title')
     category = SelectField('Category', choices=[('Mandarin','Mandarin'), ('Communication skills', 'Communication skills'), ('Academics', 'Academics'), ('Visa', 'Visa'), ('Living', 'Living'), ('Talent policy', 'Talent policy'), ('Finance & Law', 'Finance & Law'), ('Entrepreneur', 'Entrepreneur'), ('Others', 'Others')],widget=None)
-    description = StringField('Description')
+    description = TextAreaField('Description')
     price = StringField('Price')
     upload = FileField('Upload')
     submit = SubmitField('Submit')

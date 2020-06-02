@@ -1132,6 +1132,12 @@ img.corner-design{
 .corner-image{
     display: none;
 }
+
+.form-upload{
+    margin-left: 300px;
+}
+
+
 @media screen and (max-width: 600px){
 
  .sidenav{
@@ -1470,5 +1476,11 @@ img.corner-design{
 
     font-size: 40px;
     padding-left: 8%;
+  }
+  .form-upload{
+      margin-left: 0px;
+  }
+  .form-upload textarea{
+      width: 100%;
   }
 }

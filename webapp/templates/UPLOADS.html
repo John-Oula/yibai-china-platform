@@ -18,14 +18,14 @@
 <card class="card shadow-lg" id="create_card" style="height: 500px">
     <card class="card-body">
 
-<form style="margin-left: 300px" class="text-left" action="" method="POST" enctype="multipart/form-data">
+<form  class="form-upload text-left" action="" method="POST" enctype="multipart/form-data">
 
          {{ form.title.label }} <br>
         {{ form.title(class = "input-box-border border border-top-0 border-left-0 border-right-0") }}
 
     <br>
          {{ form.description.label }} <br>
-        {{ form.description(class = "input-box-border border border-top-0 border-left-0 border-right-0") }}
+        {{ form.description(class = "description-field input-box-border border border-top-0 border-left-0 border-right-0") }}
     <br>
 
          {{ form.price.label }} <br>

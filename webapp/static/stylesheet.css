@@ -1441,4 +1441,34 @@ img.corner-design{
   div.col-2{
       display: none;
   }
+  div.dashboard-card{
+      padding: 10% 10% 10% 5%;
+  }
+  #dashboard-card{
+    width: 45%;
+    height: 100px;
+    margin-left: 5%;
+    margin-top: 45px;
+  }
+  .dashboard-content {
+
+    font-size: 35px;
+    padding-left: 8%;
+  }
+  .dashboard-body{
+      display: flex;
+  }
+  #dashboard-long-card{
+      width: 80%;
+      height: 200px;
+      margin-top: 0px;
+      margin-left: 10%;
+      margin-right: 10%;
+      align-content: center;
+  }
+  #dashboard-long-card.dashboard-content p{
+
+    font-size: 40px;
+    padding-left: 8%;
+  }
 }

@@ -31,7 +31,7 @@
 
     <div class="main">
     <div class="session-container">
-<card class="card shadow-lg" id="create_card" style="overflow-x: scroll;overflow-y: scroll">
+<card class="card shadow-lg settings-card" id="create_card" ">
     <card class="card-body" style="white-space: nowrap">
         <div class="row">
             {% if user_role == 2 %}
@@ -120,7 +120,7 @@
 
                     </div>
 
-            <div class="col-7 text-center">
+            <div class="col-sm-12 col-lg-7  text-center">
               <div class="tab-content">
     <div id="edit-pill" class="container tab-pane active"><br>
         <h6>Edit Profile Info</h6><br>
@@ -132,7 +132,7 @@
             {{ form.password.label }}<br>
         {{ form.password(class = "input-box-border border border-top-0 border-left-0 border-right-0") }}<br><br>
             <br>
-            <br>
+
 
         {{ form.pic.label }}<br>
         {{ form.pic(class = "form-control-file text-center border") }}
@@ -140,7 +140,7 @@
 <input id="card-btn" type="submit" class="btn-text text-center" style="margin-top: 20px;" value="SUBMIT">
 
         </form>
-
+        <br>
     </div>
 
 

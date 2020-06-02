@@ -1137,6 +1137,10 @@ img.corner-design{
     margin-left: 300px;
 }
 
+.settings-card{
+    overflow-x: scroll;
+    overflow-y: scroll;
+}
 
 @media screen and (max-width: 600px){
 
@@ -1482,5 +1486,12 @@ img.corner-design{
   }
   .form-upload textarea{
       width: 100%;
+  }
+  div.col-4{
+      display: none;
+  }
+  .settings-card{
+      overflow-x: hidden;
+      overflow-y: hidden;
   }
 }

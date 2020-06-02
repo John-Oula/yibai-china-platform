@@ -14,7 +14,8 @@
 
 
 {% block nav %}
-<div class=" hero-image">
+    <div class="corner-image"></div>
+<div class="hero-image">
 {{ super() }}
 </div>
  <div >
@@ -27,6 +28,7 @@
 {% endblock %}
 {% block body %}
 <div class="home-wrapper">
+
     <div class="row ">
 
         <div class="col-2">
@@ -68,7 +70,7 @@
                                 <card class=" card video-thumb-card" >
                                     <card class="card-body">
 
-                                        <li><a href="{{ url_for('video',upload_ref=upload.upload_ref) }}"><video width="300" height="200" type="video/mp4" src="../static/videos/{{ upload.upload_ref }}" alt=""></video></a></li></li>
+                                        <li><a href="{{ url_for('video',upload_ref=upload.upload_ref) }}"><video class="video-window" type="video/mp4" src="../static/videos/{{ upload.upload_ref }}" alt=""></video></a></li></li>
                                         <div class="row">
                                         <div class="col-3">
                                             <div class="profile-thumbnail">

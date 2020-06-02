@@ -284,7 +284,7 @@ class Comment(db.Model):
    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
    upload_id = db.Column(db.Integer, db.ForeignKey('upload.id'))
 
-db.create_all()
+
 
 
 ### FORMS ###

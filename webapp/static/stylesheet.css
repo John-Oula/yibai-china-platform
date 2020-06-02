@@ -1438,4 +1438,7 @@ img.corner-design{
     width: 100%;
     margin-left: 0px;
  }
+  div.col-2{
+      display: none;
+  }
 }

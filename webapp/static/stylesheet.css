@@ -1340,4 +1340,34 @@ p.login-text{
     h3.bottom-header{
         margin-top: 15%;
     }
+
+    /*login and signup */
+    .sign-up-text{
+        display: None;
+    }
+    .signup-img{
+        display: none;
+    }
+    div.col-lg-7.col-md-7.col-sm-7{
+        display: none;
+    }
+    .signup{
+              background-color: white;
+      background-image: url("login-signup-bg.png");
+        /* Center and scale the image nicely */
+    background-size: contain;
+    width: 100%;
+    height: 80%;
+
+    }
+  card#login-card{
+    margin-left: 5%;
+    width: 90%;
+
+    margin-right: 5%;
+    margin-top: 25px;
+    padding-right: 5%;
+    padding-left: 5%;
+  }
+
 }

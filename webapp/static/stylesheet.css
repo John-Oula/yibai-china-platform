@@ -1430,7 +1430,7 @@ p.login-text{
       width: 100%;
       height: 161px;
   }
-  .video-thumb-card{
+  #card.video-thumb-card{
     margin-top: 15%;
     width: 100%;
     margin-left: 0px;

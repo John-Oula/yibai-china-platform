@@ -1129,6 +1129,9 @@ p.login-text{
 .corner-design{
     display: none;
 }
+.corner-image{
+    display: none;
+}
 @media screen and (max-width: 600px){
 
  .sidenav{

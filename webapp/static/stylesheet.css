@@ -1266,6 +1266,7 @@ p.login-text{
   /*main*/
     #navbarTogglerDemo01{
         background-color: #1B1C1D;
+        z-index: 5;
     }
     #nav-search{
         display: none;
@@ -1361,6 +1362,15 @@ p.login-text{
 
     }
   card#login-card{
+    margin-left: 5%;
+    width: 90%;
+
+    margin-right: 5%;
+    margin-top: 25px;
+    padding-right: 5%;
+    padding-left: 5%;
+  }
+    card#signup-card{
     margin-left: 5%;
     width: 90%;
 

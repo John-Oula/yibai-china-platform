@@ -83,9 +83,9 @@
         </form>
 
         <div style="margin-left: 40px">
-        <video style="margin-top: 20px" class="video-page "type="video/mp4" controls  src="../static/videos/{{ video.upload_ref }}">
-
-        </video>
+        <video-js class="video-js video-page" data-setup='{}' controls preload="none">
+          <source src="../static/videos/{{ video.upload_ref }}" type="video/mp4">
+        </video-js>
         <h3 class="video-text">{{ video.title }}</h3>
 
 

@@ -1144,6 +1144,9 @@ img.corner-design{
 #myCarousel{
     display: none;
 }
+
+/* video */
+
 @media screen and (max-width: 600px){
 
  .sidenav{

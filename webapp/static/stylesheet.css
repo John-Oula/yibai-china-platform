@@ -1123,7 +1123,7 @@ p.login-text{
 .subscribers{
     font-size: 13px;
 }
-#nav{
+.bot-nav{
     display: none;
 }
 img.corner-design{
@@ -1152,7 +1152,7 @@ body{
     margin: 0 0 55px 0;
 }
 
-nav{
+.bot-nav{
     position: fixed;
     bottom: 0;
     width: 100%;

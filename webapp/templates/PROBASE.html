@@ -187,7 +187,7 @@
 {% endblock %}
 
 {% block mobileNav %}
-<nav class="nav" id="nav">
+<nav class="bot-nav" >
     <a class="navLink" href="{{ url_for('user_profile', username = current_user.username) }}"><img class="mobile-icon" src="../static/session-m.png" alt=""><span class="nav_text">Sessions</span></a>
     <a class="navLink" href="{{ url_for('dashboard', username = current_user.username) }}"><img class="mobile-icon" src="../static/dashboard-m.png" alt=""><span class="nav_text">Dashboard</span></a>
     <a class="navlink navLink-center"  href="{{ url_for('discover', username = current_user.username) }}"><img class="mobile-icon" src="../static/discover-m.png" alt=""><span class="nav_text">Discover</span></a>

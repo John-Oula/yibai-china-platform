@@ -426,7 +426,7 @@ def sent():
     msg = Message("Testing",recipients=["johnoula@icloud.com"])
     mail.send(msg)
 
-    return print("sent!")
+    return True
 
 @app.route('/profile')
 @login_required

@@ -1148,7 +1148,58 @@ img.corner-design{
 /* video */
 
 @media screen and (max-width: 600px){
+body{
+    margin: 0 0 55px 0;
+}
 
+nav{
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    height: 55px;
+    background-color: white;
+    display: flex;
+    overflow-x: auto;
+}
+.navLink{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    flex-grow: 1;
+    min-width: 50px;
+    overflow: hidden;
+    white-space: nowrap;
+    text-decoration: none;
+    color: #444444;
+    font-size: 12px;
+    font-family: Josefin Sans, sans-serif;
+
+}
+
+.navLink:hover{
+    text-decoration: none;
+    color:#E74525 ;
+}
+.navLink-center {
+    background-color: #E74525;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    flex-grow: 1;
+    min-width: 50px;
+    overflow: hidden;
+    white-space: nowrap;
+    text-decoration: none;
+    color: white;
+    font-size: 12px;
+    font-family: Josefin Sans, sans-serif;
+}
+.navLink-center:hover{
+    text-decoration: none;
+    color:#444444 ;
+}
  .sidenav{
   width: 100%; /* Set the width of the sidebar */
   position: fixed; /* Fixed Sidebar (stay in place on scroll) */
@@ -1238,18 +1289,7 @@ img.corner-design{
      left: 0;
      bottom: 0;
  }
- .mobile-nav-list{
-     display: flex;
-     width: 100%;
 
- }
- .mobile-nav-link a{
-    font-size: 10px;
-     display: block;
-     margin-top: 8px;
-     color: #444444;
-
- }
  .mobile-nav-link{
      margin-left: 31px;
  }

@@ -93,7 +93,7 @@ login_manager = LoginManager()
 login_manager.init_app(app)
 
 app.config['MAIL_SERVER']='mail.100chinaguide.com'
-app.config['MAIL_PORT'] = 80
+app.config['MAIL_PORT'] = 587
 app.config['MAIL_USERNAME'] = 'authentication@100chinaguide.com'
 app.config['MAIL_PASSWORD'] = 'verify@2020'
 app.config['MAIL_USE_TLS'] = False

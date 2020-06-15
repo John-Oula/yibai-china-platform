@@ -187,16 +187,19 @@
 {% endblock %}
 
 {% block mobileNav %}
-<div class="mobile-nav text-center">
-    <ul class="mobile-nav-list">
-        <li class="mobile-nav-link d-block text-center"><img class="mobile-icon" src="../static/session-m.png" alt=""><a href="{{ url_for('user_profile', username = current_user.username) }}">Sessions</a></li>
-        <li class="mobile-nav-link d-block text-center"><img class="mobile-icon" src="../static/dashboard-m.png" alt=""><a href="{{ url_for('dashboard', username = current_user.username) }}" >Dashboard</a></li>
-        <li class="mobile-nav-link d-block text-center"><img class="mobile-icon" src="../static/discover-m.png" alt=""><a href="{{ url_for('discover', username = current_user.username) }}" >Discover</a></li>
-        <li class="mobile-nav-link d-block text-center"><img class="mobile-icon" src="../static/uploads-m.png" alt=""><a href="{{ url_for('upload', username = current_user.username) }}" >Uploads</a></li>
-        <li class="mobile-nav-link d-block text-center"><img class="mobile-icon" src="../static/settings-m.png" alt=""><a href="{{ url_for('settings', username = current_user.username) }}">Settings</a></li>
-    </ul>
+<nav class="nav">
+    <a class="navLink" href="{{ url_for('user_profile', username = current_user.username) }}"><img class="mobile-icon" src="../static/session-m.png" alt=""><span class="nav_text">Sessions</span></a>
+    <a class="navLink" href="{{ url_for('dashboard', username = current_user.username) }}"><img class="mobile-icon" src="../static/dashboard-m.png" alt=""><span class="nav_text">Dashboard</span></a>
+    <a class="navlink navLink-center"  href="{{ url_for('discover', username = current_user.username) }}"><img class="mobile-icon" src="../static/discover-m.png" alt=""><span class="nav_text">Discover</span></a>
+    <a class="navLink" href="{{ url_for('upload', username = current_user.username) }}"><img class="mobile-icon" src="../static/uploads-m.png" alt=""><span class="nav_text">Uploads</span></a>
+    <a class="navLink" href="{{ url_for('settings', username = current_user.username) }}"><img class="mobile-icon" src="../static/settings-m.png" alt=""><span class="nav_text">Settings</span></a>
+</nav>
+
 </div>
 </div>
+</div>
+</div>
+
 {% endblock %}
 
 

@@ -753,6 +753,7 @@ def user_profile(username):
     followed_posts=Post.query.join(followers, (followers.c.followed_id == Post.user_id)).all()
 
     all_posts = Post.query.all()
+    postNum=len(all_posts)
 
     all_users = User.query.all()
     author = db.session.query(Post.title).join(User.posts)
@@ -761,7 +762,7 @@ def user_profile(username):
 
 
 
-    return render_template('USER.html',followed_posts=followed_posts,user=user,user_role=user_role,all_users=all_users,all_posts = all_posts,author=author, image_file = image_file)
+    return render_template('USER.html',postNum=postNum,followed_posts=followed_posts,user=user,user_role=user_role,all_users=all_users,all_posts = all_posts,author=author, image_file = image_file)
 #    return redirect(url_for('login'))
 
 #TRAINER PROFILE FUNCTIONS

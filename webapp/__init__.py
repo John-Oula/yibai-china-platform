@@ -15,7 +15,7 @@ from PIL import Image
 from flask import Flask,render_template, url_for, flash, redirect, session, request, send_from_directory
 from flask_migrate import Migrate
 from flask_login import login_user, login_required, current_user, logout_user,UserMixin, LoginManager
-from flask_mail import Mail
+from flask_mail import Mail,Message
 from flask_wtf import FlaskForm
 from wtforms import *
 from wtforms.validators import Required
@@ -91,6 +91,14 @@ migrate = Migrate(app,db)
 
 login_manager = LoginManager()
 login_manager.init_app(app)
+
+app.config['MAIL_SERVER']='mail.100chinaguide.com'
+app.config['MAIL_PORT'] = 80
+app.config['MAIL_USERNAME'] = 'authentication@100chinaguide.com'
+app.config['MAIL_PASSWORD'] = 'verify@2020'
+app.config['MAIL_USE_TLS'] = False
+app.config['MAIL_USE_SSL'] = False
+
 
 @login_manager.user_loader
 def load_user(user_id):
@@ -410,8 +418,15 @@ class Reset_password(FlaskForm):
 
 @app.route('/')
 def home():
-    get_Host_name_IP('CJAY')
+
     return render_template('home.html')
+
+@app.route('/sent')
+def sent():
+    msg = Message("Testing",recipients=["johnoula@icloud.com"])
+    mail.send(msg)
+
+    return print("sent!")
 
 @app.route('/profile')
 @login_required

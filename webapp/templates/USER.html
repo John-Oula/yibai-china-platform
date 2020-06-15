@@ -101,7 +101,7 @@
 
 
 
-
+{% if current_user.posts %}
     <p class="session" >CREATED SESSIONS</p>
 
    {% for posts in current_user.posts %}
@@ -141,8 +141,11 @@
                 </card>
                 </card>
    {% endfor %}
+{% else %}
+    <span></span>
+    {% endif %}
 
-
+{% if all_posts %}
 <p class="session">AVAILABLE SESSIONS</p>
 <div class="row">
 
@@ -194,11 +197,14 @@
 
 {% endfor %}
 </div>
+    {% else %}
+    <span></span>
+    {% endif %}
 
+{% if current_user.book and posts.verified == 1%}
 <p class="session">BOOKED SESSIONS</p>
 <div class="row">
 {% for posts in current_user.book %}
-{% if posts.verified == 1 %}
 
     <div class="row">
         <card style="margin-left: 40px" class="card  shadow-lg  " id="session-card">
@@ -216,18 +222,17 @@
     </card>
     </div>
 
-{% else %}
-        <div></div>
 
 
-
-{% endif %}
 {% endfor %}
 
-
+{% else %}
+    <span></span>
 {% endif %}
-</div>
 
+
+</div>
+{% endif %}
 </div>
 
 

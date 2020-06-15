@@ -1123,7 +1123,7 @@ p.login-text{
 .subscribers{
     font-size: 13px;
 }
-.mobile-nav{
+.nav{
     display: none;
 }
 img.corner-design{
@@ -1193,7 +1193,7 @@ nav{
     white-space: nowrap;
     text-decoration: none;
     color: white;
-    font-size: 12px;
+    font-size: 10px;
     font-family: Josefin Sans, sans-serif;
 }
 .navLink-center:hover{

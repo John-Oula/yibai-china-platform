@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 25 25">
+  <defs>
+    <style>
+      .cls-1 {
+        fill: #e74525;
+      }
+    </style>
+  </defs>
+  <g id="Group_134" data-name="Group 134" transform="translate(-69 -536.412)">
+    <g id="Group_167" data-name="Group 167" transform="translate(69 536.412)">
+      <path id="window-maximize" class="cls-1" d="M22.656,32H2.344A2.529,2.529,0,0,0,0,34.679V54.321A2.529,2.529,0,0,0,2.344,57H22.656A2.529,2.529,0,0,0,25,54.321V34.679A2.529,2.529,0,0,0,22.656,32Zm0,21.987a.317.317,0,0,1-.293.335H2.637a.317.317,0,0,1-.293-.335l.293-19.308H22.363Z" transform="translate(0 -32)"/>
+      <path id="Polygon_15" data-name="Polygon 15" class="cls-1" d="M5,0l5,9H0Z" transform="translate(18.16 7.068) rotate(90)"/>
+    </g>
+  </g>
+</svg>

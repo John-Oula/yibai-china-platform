@@ -307,17 +307,16 @@ class Episode(db.Model):
     description = db.Column('description', db.String(600))
     timestamp = db.Column(db.DateTime, default=datetime.datetime.utcnow)
     upload_ref = db.Column('upload_ref', db.VARCHAR)
-    series_id = db.Column('series_id', db.Integer, db.ForeignKey('series.id'), nullable=False)
     user_id = db.Column('user_id', db.Integer, db.ForeignKey('user.id'), nullable=True)
 
 
-    def __repr__(self, id, title, category, description, upload_ref, series_id,user_id):
+    def __repr__(self, id, title, category, description, upload_ref ,user_id):
         self.id = id
         self.title = title
         self.category = category
         self.description = description
         self.upload_ref = upload_ref
-        self.series_id = series_id
+
         self.user_id = user_id
 #
 

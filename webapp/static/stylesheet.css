@@ -26,7 +26,6 @@ ul{}
     box-sizing: border-box;
 }
 .top-nav ul li {
-    float:left;
     width: 20%;}
 .top-nav ul li a {
     display: block;
@@ -124,16 +123,11 @@ li.nav-item{
 li.nav-tag{
     color: white;
     font-size: 14px;
-        font-family: "Segoe UI";
+    font-family: "Segoe UI";
 
 
 }
-.live-icon{
-    width: 3px;
-    background-color: white;
-    border-radius: 50%;
-    margin-right: 5px;
-}
+
 input#nav-search{
     border-radius: 20px;
     border-style: none;

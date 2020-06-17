@@ -35,29 +35,27 @@
 
         <fieldset>
          {{ form.hidden_tag() }}
-        {{ form.username.label(class = "form-label") }}
          {% if form.username.errors %}
-        {{ form.username(class = "signup-input is-invalid") }}
+        {{ form.username(class = "signup-input is-invalid",placeholder="Username") }}
             {% for error in form.username.errors %}
                 <br>
                 <span class="errors">{{ error }}</span>
                 <br>
                 {% endfor %}
         {% else %}
-                {{ form.username(class = "signup-input") }}
+                {{ form.username(class = "signup-input",placeholder="Username") }}
             {% endif %}
 
 
-        {{ form.password.label (class = "form-label")}}
          {% if form.password.errors %}
-        {{ form.username(class = "signup-input is-invalid") }}
+        {{ form.password(class = "signup-input is-invalid",placeholder="Password") }}
             {% for error in form.password.errors %}
                 <br>
                 <span class="errors">{{ error }}</span>
                 <br>
                 {% endfor %}
         {% else %}
-                {{ form.password(class = "signup-input") }}
+                {{ form.password(class = "signup-input",placeholder="Password") }}
             {% endif %}
 
 
@@ -67,10 +65,9 @@
         <div class="login-text">
             <br>
 
-                   <p ><input type="radio">Remember me</p>
 
         </div>
-        {{ form.submit(id = "signup-btn") }}
+        {{ form.submit(id = "signup-long-btn") }}
         </fieldset>
     </form>
         <br>

@@ -172,15 +172,20 @@ input#nav-search{
 }
 
 input.signup-input{
-    margin-top: 10px;
+    margin-top: 15px;
     width: 246px;
     height: 43px;
-    border-radius: 20px;
+    border-radius: 7px;
     border-style: none;
-    background-color: rgba(255, 255, 255, 0.63);
+    background-color: rgba(255, 255, 255, 0.44);
+    padding-left: 10px;
+    border-width: 1px;
+    border-color: white;
 
 }
-
+.form-rules{
+    font-size: 11px;
+}
 form#signup-form{
     margin-top: 10px;
 }
@@ -517,6 +522,14 @@ input#signup-btn{
     border-style: none;
 }
 
+input#signup-long-btn{
+    background-color: #E74525;
+    border-radius: 7px;
+    width: 246px;
+    height: 45px;
+    border-style: none;
+    color: white;
+}
 
 .session-card-left{
     padding-right: 8px;

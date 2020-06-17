@@ -700,7 +700,7 @@ def settings(username):
             pic_file = save_pic(form.pic.data)
             current_user.image_file = pic_file
         current_user.username = form.username.data
-        current_user.password = form.password.data
+        current_user.password = hash_password(form.password.data)
         current_user.email = form.email.data
         db.session.commit()
         flash('Updated!')

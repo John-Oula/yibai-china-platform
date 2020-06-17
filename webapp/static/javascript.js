@@ -101,7 +101,69 @@ function Event(new_event){
   return new_event
 }
 
+$("#button-join").on("click",function(){
+  roomName = document.getElementById('room-name').value;
+  if(!roomName){
+    alert("enter room name")
+    return;
+  }
+  else{
+  $.ajax({
+  type:"GET",
+  url:"/token",
+  dataType:"json",
 
+  beforeSend :function() {
+
+
+    $("#loader").show();
+  },
+  complete:function(){
+    $("#loader").hide();
+
+    $("#user-input").hide();
+    document.getElementById('room-page').style.display='flex';
+    },
+  success:function(data){
+    identity = data.identity;
+
+
+
+    document.getElementById('room-controls').style.display='block';
+
+
+
+    log("Joining room '" + roomName + "'...");
+    var connectOptions = {
+      name: roomName,
+      logLevel: 'debug',
+      dominantSpeaker: true,
+      automaticSubscription:true
+    };
+
+
+
+
+    // Join the Room with the token from the server and the
+    // LocalParticipant's Tracks.
+    Video.connect(data.token, connectOptions).then(roomJoined, function(error) {
+      log('Could not connect to Twilio: ' + error.message)
+
+
+
+
+    });
+
+
+  },
+  error:function(){
+    $("#user-input").show()
+
+  }
+
+});
+  };
+})
 
 
 

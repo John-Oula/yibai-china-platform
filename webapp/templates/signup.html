@@ -34,64 +34,62 @@
     <form id="signup-form" action="{{ url_for('signup') }}" method="POST">
     {{ form.hidden_tag() }}
         <fieldset>
-        {{ form.email.label (class = "form-label")}}<br>
          {% if form.email.errors %}
-        {{ form.email(class = "signup-input is-invalid") }}
+        {{ form.email(class = "signup-input is-invalid",placeholder="Email") }}
             {% for error in form.email.errors %}
                 <br>
                 <span class="errors">{{ error }}</span>
                 <br>
                 {% endfor %}
         {% else %}
-                {{ form.email(class = "signup-input") }}
+                {{ form.email(class = "signup-input",placeholder="Email") }}
             {% endif %}
 
-        {{ form.username.label (class = "form-label")}}
          {% if form.username.errors %}
-        {{ form.username(class = "signup-input is-invalid") }}
+        {{ form.username(class = "signup-input is-invalid",placeholder="Username") }}
             {% for error in form.username.errors %}
                 <br>
                 <span class="errors">{{ error }}</span>
                 <br>
                 {% endfor %}
         {% else %}
-                {{ form.username(class = "signup-input") }}
+                {{ form.username(class = "signup-input",placeholder="Username") }}
 
             {% endif %}
 
 
 
-        {{ form.password.label (class = "form-label")}}
          {% if form.password.errors %}
-        {{ form.password(class = "signup-input is-invalid") }}
+        {{ form.password(class = "signup-input is-invalid",placeholder="Password") }}
             {% for error in form.password.errors %}
                 <br>
                 <span class="errors">{{ error }}</span>
                 <br>
                 {% endfor %}
         {% else %}
-                {{ form.password(class = "signup-input") }}
-
+                {{ form.password(class = "signup-input",placeholder="Password") }}
             {% endif %}
 
-        {{ form.confirm_password.label(class = "form-label") }}
          {% if form.confirm_password.errors %}
-        {{ form.confirm_password(class = "signup-input is-invalid") }}
+        {{ form.confirm_password(class = "signup-input is-invalid",placeholder="Password") }}
             {% for error in form.confirm_password.errors %}
                 <br>
                 <span class="errors">{{ error }}</span>
                 <br>
                 {% endfor %}
         {% else %}
-                {{ form.confirm_password(class = "signup-input") }}
+                {{ form.confirm_password(class = "signup-input",placeholder="Confirm Password") }}
 
             {% endif %}
 
+            <br>
+            <br>
+            <br>
 
 
-       <p style="font-size: 14px"> <input type="radio" style="margin-top: 25px">By signing up, I accept 100ChinaGuide's Terms of use and Policy</p>
+       <p class="form-rules"> <input type="radio" >By clicking Agree & Join, you agree to the LinkedIn User Agreement, Privacy Policy, and Cookie Policy.</p>
 
-        {{ form.submit(id = "signup-btn") }}
+        {{ form.submit(id = "signup-long-btn") }}
         </fieldset>
     </form>
     </card>

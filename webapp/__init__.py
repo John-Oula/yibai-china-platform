@@ -1295,7 +1295,7 @@ def create(username):
 
 
 
-@app.route('/uploads/<username><int:id>',methods=['POST','GET'])
+@app.route('/uploads/<int:id><username>',methods=['POST','GET'])
 @login_required
 def upload(username,id):
     image_file = url_for('static', filename ='profile_pics/' + current_user.image_file)

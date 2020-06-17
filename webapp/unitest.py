@@ -1,7 +1,7 @@
 from datetime import datetime, timedelta
 import unittest
-from webapp import app
-from webapp.models import User, Post, Lesson, db, Comment, likes, Upload
+from webapp import app, Series, Episode
+from webapp import User, Post, Lesson, db, Comment, likes, Upload
 from flask import jsonify
 import psycopg2
 
@@ -65,9 +65,19 @@ class UserModelCase(unittest.TestCase):
         db.session.add(c4)
         db.session.commit()
 
+        s1 = Series(user_id=1, title='tech', description='this is a test ', category='MANDARIN', timestamp='2019-12-4')
+        db.session.add(s1)
+        db.session.commit()
 
-
-
+        e1 = Episode(user_id=1, subtitle='subtitle=tech', description='this is a test ',upload_ref='c66bc66048db6fb0.mp4' , timestamp='2019-12-4')
+        e2 = Episode(user_id=1, subtitle='tech', description='this is a test ',upload_ref='c66bc66048db6fb0.mp4' , timestamp='2019-12-4')
+        e3 = Episode(user_id=1, subtitle='ech', description='this is a test ',upload_ref='c66bc66048db6fb0.mp4' , timestamp='2019-12-4')
+        e4 = Episode(user_id=1, subtitle='suble=tech', description='this is a test ',upload_ref='c66bc66048db6fb0.mp4' , timestamp='2019-12-4')
+        db.session.add(e1)
+        db.session.add(e2)
+        db.session.add(e3)
+        db.session.add(e4)
+        db.session.commit()
 
         posts = Post.query.all()
         for lesson in p1.lesson:
@@ -105,7 +115,13 @@ class UserModelCase(unittest.TestCase):
         #       join=Post.query.join(user, (id == p1.user_id))
         #       print(join)
         print(author1, 'created session titled')
-        print(author2)
+        for episodes in s1.episode:
+            print(episodes.subtitle)
+
+        ep = e1.sub.title
+
+        print(ep)
+
 
 db.drop_all()
 if __name__ == '__main__':

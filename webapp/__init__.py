@@ -932,11 +932,11 @@ def discover(req_path,username):
     uploads = Upload.query.all()
     series= Series.query.all()
     episodes=Episode.query.all()
-
+    seriesInfo = db.session.query(Episode.title).join(Series.episode)
 
 
 #    uploads = send_from_directory(directory='videos',filename='videos')
-    return render_template('Discover.html',user=user,episodes=episodes,series=series,uploads=uploads,user_role=user_role,image_file=image_file)
+    return render_template('Discover.html',user=user,seriesInfo=seriesInfo,episodes=episodes,series=series,uploads=uploads,user_role=user_role,image_file=image_file)
 
 @app.route('/book/<int:id>')
 @login_required

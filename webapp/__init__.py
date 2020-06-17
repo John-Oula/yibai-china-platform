@@ -275,7 +275,45 @@ class Upload(db.Model):
         self.upload_ref = upload_ref
         self.user_id = user_id
 
+class Series(db.Model):
+    __tablename__ = 'series'
+    id = db.Column('id', db.Integer, primary_key=True)
+    title = db.Column('title', db.String(30))
+    category = db.Column('category', db.String(30))
+    description = db.Column('description', db.String(600))
+    price = db.Column('price', db.Integer)
+    timestamp = db.Column(db.DateTime, default=datetime.datetime.utcnow)
+    user_id = db.Column('user_id', db.Integer, db.ForeignKey('user.id'), nullable=False)
+    comments = db.relationship('Comment', backref='upload', lazy='dynamic')
+    episode = db.relationship('Episode', backref='sub', lazy=True)
 
+
+    def __repr__(self, id, title, category, description, price, upload_ref, user_id):
+        self.id = id
+        self.title = title
+        self.category = category
+        self.description = description
+        self.price = price
+        self.upload_ref = upload_ref
+        self.user_id = user_id
+
+class Episode(db.Model):
+    __tablename__ = 'episode'
+    id = db.Column('id', db.Integer, primary_key=True)
+    title = db.Column('title', db.String(30))
+    subtitle = db.Column('subtitle', db.String(30))
+    description = db.Column('description', db.String(600))
+    timestamp = db.Column(db.DateTime, default=datetime.datetime.utcnow)
+    upload_ref = db.Column('upload_ref', db.VARCHAR)
+
+
+    def __repr__(self, id, title, category, description, upload_ref, user_id):
+        self.id = id
+        self.title = title
+        self.category = category
+        self.description = description
+        self.upload_ref = upload_ref
+        self.user_id = user_id
 #
 
 class Follow(db.Model):

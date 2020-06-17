@@ -308,9 +308,10 @@ class Episode(db.Model):
     timestamp = db.Column(db.DateTime, default=datetime.datetime.utcnow)
     upload_ref = db.Column('upload_ref', db.VARCHAR)
     user_id = db.Column('user_id', db.Integer, db.ForeignKey('user.id'), nullable=True)
+    series_id = db.Column(db.Integer,db.ForeignKey('series.id'))
+    series = db.relationship('Series', backref='collection', lazy=True)
 
-
-    def __repr__(self, id, title, category, description, upload_ref ,user_id):
+    def __repr__(self, id, title, category, description, upload_ref ,user_id,series_id):
         self.id = id
         self.title = title
         self.category = category
@@ -318,6 +319,7 @@ class Episode(db.Model):
         self.upload_ref = upload_ref
 
         self.user_id = user_id
+        self.series_id = series_id
 #
 
 class Follow(db.Model):

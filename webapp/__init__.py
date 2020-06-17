@@ -284,7 +284,7 @@ class Series(db.Model):
     price = db.Column('price', db.Integer)
     timestamp = db.Column(db.DateTime, default=datetime.datetime.utcnow)
     user_id = db.Column('user_id', db.Integer, db.ForeignKey('user.id'), nullable=False)
-    comments = db.relationship('Comment', backref='upload', lazy='dynamic')
+    comments = db.relationship('Comment', backref='commenter', lazy='dynamic')
     episode = db.relationship('Episode', backref='sub', lazy=True)
 
 
@@ -305,15 +305,15 @@ class Episode(db.Model):
     description = db.Column('description', db.String(600))
     timestamp = db.Column(db.DateTime, default=datetime.datetime.utcnow)
     upload_ref = db.Column('upload_ref', db.VARCHAR)
+    series_id = db.Column('series_id', db.Integer, db.ForeignKey('series.id'), nullable=False)
 
-
-    def __repr__(self, id, title, category, description, upload_ref, user_id):
+    def __repr__(self, id, title, category, description, upload_ref, series_id):
         self.id = id
         self.title = title
         self.category = category
         self.description = description
         self.upload_ref = upload_ref
-        self.user_id = user_id
+        self.series_id = series_id
 #
 
 class Follow(db.Model):
@@ -329,6 +329,7 @@ class Comment(db.Model):
    timestamp = db.Column(db.DateTime, index=True, default=datetime.datetime.utcnow)
    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
    upload_id = db.Column(db.Integer, db.ForeignKey('upload.id'))
+   series_id = db.Column(db.Integer, db.ForeignKey('series.id'))
 
 
 

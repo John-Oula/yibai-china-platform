@@ -815,7 +815,7 @@ def user_profile(username):
     user_role = current_user.role
     session['username'] = username
     seriesId=Series.query.all()
-    seriesIdNum=seriesId.id + 1
+    seriesIdNum=int(seriesId.id) + 1
 
 
     return render_template('USER.html',seriesIdNum=seriesIdNum,postNum=postNum,followed_posts=followed_posts,user=user,user_role=user_role,all_users=all_users,all_posts = all_posts,author=author, image_file = image_file)

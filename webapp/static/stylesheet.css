@@ -19,13 +19,13 @@ ul{}
     margin-left: 20px;
 }
 .top-nav{
-    float: left;
     overflow: hidden;
     width:100%;
     min-width: 650px;
     box-sizing: border-box;
 }
 .top-nav ul li {
+    float:left;
     width: 20%;}
 .top-nav ul li a {
     display: block;

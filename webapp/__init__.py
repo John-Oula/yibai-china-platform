@@ -814,10 +814,11 @@ def user_profile(username):
     author = db.session.query(Post.title).join(User.posts)
     user_role = current_user.role
     session['username'] = username
+    seriesId=Series.query.all()
+    seriesIdNum=seriesId.id + 1
 
 
-
-    return render_template('USER.html',postNum=postNum,followed_posts=followed_posts,user=user,user_role=user_role,all_users=all_users,all_posts = all_posts,author=author, image_file = image_file)
+    return render_template('USER.html',seriesIdNum=seriesIdNum,postNum=postNum,followed_posts=followed_posts,user=user,user_role=user_role,all_users=all_users,all_posts = all_posts,author=author, image_file = image_file)
 #    return redirect(url_for('login'))
 
 #TRAINER PROFILE FUNCTIONS
@@ -1292,15 +1293,16 @@ def create(username):
 
 
 
-@app.route('/uploads/<username>',methods=['POST','GET'])
+@app.route('/uploads/<username><int:id>',methods=['POST','GET'])
 @login_required
-def upload(username):
+def upload(username,id):
     image_file = url_for('static', filename ='profile_pics/' + current_user.image_file)
     user_role = current_user.role
     user = User.query.filter_by(username=username).first_or_404()
     form = Upload_form()
     seriesForm = Series_form()
     episodeForm = Episode_form()
+
     if request.method == 'POST':
         file_hex = binascii.hexlify(os.urandom(8))
 
@@ -1313,7 +1315,7 @@ def upload(username):
         db.session.add(series)
 
 
-        episode = Episode(subtitle=episodeForm.subtitle.data,description=episodeForm.description.data,upload_ref=path,user_episode=current_user)
+        episode = Episode(subtitle=episodeForm.subtitle.data,description=episodeForm.description.data,upload_ref=path,user_episode=current_user,series_id=id)
         db.session.add(episode)
 
 

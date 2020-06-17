@@ -303,7 +303,7 @@ class Episode(db.Model):
     __tablename__ = 'episode'
     id = db.Column('id', db.Integer, primary_key=True)
     title = db.Column('title', db.String(30))
-    subtitle = db.Column('subtitle', db.String(30))
+
     description = db.Column('description', db.String(600))
     timestamp = db.Column(db.DateTime, default=datetime.datetime.utcnow)
     upload_ref = db.Column('upload_ref', db.VARCHAR)
@@ -1313,7 +1313,7 @@ def upload(username):
 
         episode = Episode(title=episodeForm.title.data,description=episodeForm.description.data,upload_ref=path,user_episode=current_user)
         db.session.add(episode)
-        db.session.flush()
+
 
         db.session.commit()
 

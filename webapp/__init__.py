@@ -746,7 +746,9 @@ def settings(username):
     user_role = current_user.role
     all_users = User.query.all()
     user = User.query.filter_by(username=username).first_or_404()
-
+    seriesId = Series.query.all()
+    for seriesId in seriesId:
+        seriesIdNum = int(seriesId.id) + 1
     form = UpdateAccount()
     if request.method == 'POST':
         if form.pic.data:
@@ -762,7 +764,7 @@ def settings(username):
         form.username.data = current_user.username
         form.password.data = current_user.password
         form.email.data = current_user.email
-    return render_template('SETTINGS.html',user=user,all_users = all_users,user_role=user_role,form=form,image_file=image_file)
+    return render_template('SETTINGS.html',seriesIdNum=seriesIdNum,user=user,all_users = all_users,user_role=user_role,form=form,image_file=image_file)
 
 
 @app.route('/verify/<username>',methods=['POST','GET'])
@@ -934,10 +936,12 @@ def discover(req_path,username):
     series= Series.query.all()
     episodes=Episode.query.all()
     seriesInfo = db.session.query(Episode.subtitle).join(Series.episode)
-
+    seriesId = Series.query.all()
+    for seriesId in seriesId:
+        seriesIdNum = int(seriesId.id) + 1
 
 #    uploads = send_from_directory(directory='videos',filename='videos')
-    return render_template('Discover.html',user=user,seriesInfo=seriesInfo,episodes=episodes,series=series,uploads=uploads,user_role=user_role,image_file=image_file)
+    return render_template('Discover.html',user=user,seriesIdNum=seriesIdNum,seriesInfo=seriesInfo,episodes=episodes,series=series,uploads=uploads,user_role=user_role,image_file=image_file)
 
 @app.route('/book/<int:id>')
 @login_required
@@ -1190,9 +1194,11 @@ def meetingInfo(username,meetingcode,post_id):
     all_users = User.query.all()
     author = db.session.query(Post.title).join(User.posts)
     user_role = current_user.role
+    seriesId = Series.query.all()
+    for seriesId in seriesId:
+        seriesIdNum = int(seriesId.id) + 1
 
-
-    return render_template('meeting.html',meetingStart=meetingStart,meetingEnd=meetingEnd,meetingTitle=meetingTitle,postId=postId,meetingUrl=meetingUrl,meeting_id=meeting_id,meetingcode=meetingcode,followed_posts=followed_posts,user=user,user_role=user_role,all_users=all_users,all_posts = all_posts,author=author, image_file = image_file)
+    return render_template('meeting.html',seriesIdNum=seriesIdNum,meetingStart=meetingStart,meetingEnd=meetingEnd,meetingTitle=meetingTitle,postId=postId,meetingUrl=meetingUrl,meeting_id=meeting_id,meetingcode=meetingcode,followed_posts=followed_posts,user=user,user_role=user_role,all_users=all_users,all_posts = all_posts,author=author, image_file = image_file)
 
 @app.route('/cancel/<int:meetingId>Code<int:meetingcode>',methods=['GET','POST'])
 @login_required
@@ -1260,6 +1266,9 @@ def create(username):
     lesson_form = Lesson_form()
     form = Session_form()
     verify_form = Verify_form()
+    seriesId = Series.query.all()
+    for seriesId in seriesId:
+        seriesIdNum = int(seriesId.id) + 1
     if request.method =='POST':
         fulltime = request.form['date-time']
         fullDate = datetime.fromtimestamp(int(fulltime)/1000).strftime('%Y-%m-%d')
@@ -1289,7 +1298,7 @@ def create(username):
         db.session.commit()
 
         return redirect(url_for('meetingInfo',meetingcode=meetingCode,username=current_user.username,post_id=post.id))
-    return render_template('CREATE1.html',user=user,user_role = user_role,form=form,verify_form=verify_form,lesson_form=lesson_form,image_file=image_file)
+    return render_template('CREATE1.html',seriesIdNum=seriesIdNum,user=user,user_role = user_role,form=form,verify_form=verify_form,lesson_form=lesson_form,image_file=image_file)
 
 
 
@@ -1302,7 +1311,9 @@ def upload(username,id):
     form = Upload_form()
     seriesForm = Series_form()
     episodeForm = Episode_form()
-
+    seriesId = Series.query.all()
+    for seriesId in seriesId:
+        seriesIdNum = int(seriesId.id) + 1
     if request.method == 'POST':
         file_hex = binascii.hexlify(os.urandom(8))
 
@@ -1323,7 +1334,7 @@ def upload(username,id):
 
  #       f.save(os.path.join(app.config['UPLOAD_FOLDER']+f))
         return redirect(url_for('discover',upload_ref=file_hex,username=current_user.username))
-    return render_template('UPLOADS.html',user=user,user_role=user_role,form =form,seriesForm=seriesForm,episodeForm=episodeForm,image_file=image_file)
+    return render_template('UPLOADS.html',user=user,seriesIdNum=seriesIdNum,user_role=user_role,form =form,seriesForm=seriesForm,episodeForm=episodeForm,image_file=image_file)
 
 
 @app.route('/lesson<int:id><username>', methods=['POST','GET'])

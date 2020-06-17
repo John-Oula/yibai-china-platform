@@ -656,13 +656,11 @@ def dashboard(username):
         f.close()
     my_posts = len(current_user.posts)
     image_file = url_for('static', filename ='profile_pics/' + current_user.image_file)
-#    for event in data:
-#
-#       #open and read the file after the appending: event._sa_instance_state = None
-#       f = open("demofile2.txt", "r") new_event= (jsonpickle.encode(data, unpicklable=False))
-#       print(f.read() print(new_event)
-#    print(current_user.username ,'has',len(current_user.posts),'posts',all_posts)
-    return render_template('Dashboard.html',uploads= uploads,user=user,my_posts=my_posts,book_posts=book_posts,total_users=total_users,user_role=user_role,all_users=all_users,user_posts = user_posts,image_file=image_file)
+
+    seriesId = Series.query.all()
+    for seriesId in seriesId:
+        seriesIdNum = int(seriesId.id) + 1
+    return render_template('Dashboard.html',seriesIdNum=seriesIdNum,uploads= uploads,user=user,my_posts=my_posts,book_posts=book_posts,total_users=total_users,user_role=user_role,all_users=all_users,user_posts = user_posts,image_file=image_file)
 
 
 

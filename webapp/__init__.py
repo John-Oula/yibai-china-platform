@@ -302,7 +302,7 @@ class Series(db.Model):
 class Episode(db.Model):
     __tablename__ = 'episode'
     id = db.Column('id', db.Integer, primary_key=True)
-    title = db.Column('title', db.String(30))
+    subtitle = db.Column('subtitle', db.String(30))
 
     description = db.Column('description', db.String(600))
     timestamp = db.Column(db.DateTime, default=datetime.datetime.utcnow)
@@ -310,9 +310,9 @@ class Episode(db.Model):
     user_id = db.Column('user_id', db.Integer, db.ForeignKey('user.id'), nullable=True)
     series_id = db.Column(db.Integer,db.ForeignKey('series.id'))
 
-    def __repr__(self, id, title, category, description, upload_ref ,user_id,series_id):
+    def __repr__(self, id,subtitle, category, description, upload_ref ,user_id,series_id):
         self.id = id
-        self.title = title
+        self.subtitle = subtitle
         self.category = category
         self.description = description
         self.upload_ref = upload_ref
@@ -440,7 +440,7 @@ class Series_form(FlaskForm):
     submit = SubmitField('Submit')
 
 class Episode_form(FlaskForm):
-    title = StringField('Title')
+    subtitle = StringField('Title')
     description = TextAreaField('Description')
     upload = FileField('Upload')
 
@@ -1313,7 +1313,7 @@ def upload(username):
         db.session.add(series)
         db.session.flush()
 
-        episode = Episode(title=episodeForm.title.data,description=episodeForm.description.data,upload_ref=path,user_episode=current_user)
+        episode = Episode(subtitle=episodeForm.title.data,description=episodeForm.description.data,upload_ref=path,user_episode=current_user)
         db.session.add(episode)
 
 

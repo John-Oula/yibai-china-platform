@@ -55,7 +55,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
 $(function(){
 
-$('button').click(function(){
+$('.btn-add').click(function(){
     $('.wrapper:first').clone().appendTo('.series-div');
 });
 

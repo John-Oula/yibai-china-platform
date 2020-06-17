@@ -309,7 +309,6 @@ class Episode(db.Model):
     upload_ref = db.Column('upload_ref', db.VARCHAR)
     user_id = db.Column('user_id', db.Integer, db.ForeignKey('user.id'), nullable=True)
     series_id = db.Column(db.Integer,db.ForeignKey('series.id'))
-    series = db.relationship('Series', backref='collection', lazy=True)
 
     def __repr__(self, id, title, category, description, upload_ref ,user_id,series_id):
         self.id = id
@@ -932,11 +931,12 @@ def discover(req_path,username):
     upload = os.listdir(abs_path)
     uploads = Upload.query.all()
     series= Series.query.all()
+    episodes=Episode.query.all()
 
 
 
 #    uploads = send_from_directory(directory='videos',filename='videos')
-    return render_template('Discover.html',user=user,series=series,uploads=uploads,user_role=user_role,image_file=image_file)
+    return render_template('Discover.html',user=user,episodes=episodes,series=series,uploads=uploads,user_role=user_role,image_file=image_file)
 
 @app.route('/book/<int:id>')
 @login_required

@@ -59,6 +59,10 @@
 
 <div class="uploads">
 <ul>
+    {% for series in series %}
+        <p class="upload-username"> {{ series.title}}</p>
+        <p class="upload-username"> subtitle:{{ series.sub.title}}</p>
+    {% endfor %}
 {% for  upload in uploads%}
     <card class="card upload-card" >
     <card class="card-body">

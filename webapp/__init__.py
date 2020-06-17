@@ -931,11 +931,12 @@ def discover(req_path,username):
     # Show directory contents
     upload = os.listdir(abs_path)
     uploads = Upload.query.all()
+    series= Series.query.all()
 
 
 
 #    uploads = send_from_directory(directory='videos',filename='videos')
-    return render_template('Discover.html',user=user,uploads=uploads,user_role=user_role,image_file=image_file)
+    return render_template('Discover.html',user=user,series=series,uploads=uploads,user_role=user_role,image_file=image_file)
 
 @app.route('/book/<int:id>')
 @login_required

@@ -24,15 +24,16 @@
         {{ seriesForm.title(class = "input-box-border border border-top-0 border-left-0 border-right-0") }}
         {{ seriesForm.category.label }}
         {{ seriesForm.category(class = "input-box-border border border-top-0 border-left-0 border-right-0") }}
-
-<li><button id="addclass" onclick="" style="background-color:white;border-color: #E55336;border-style: solid;width: 100px;border-radius: 3px">ADD</button></li>
+<div class="wrapper">
 <button type="button" class="collapsible">{{ episodeForm.subtitle.label }}{{ episodeForm.subtitle(class = "input-box-border border border-top-0 border-left-0 border-right-0") }}</button>
-<div class="content">
+<div class="content" >
 
         <span>Upload Video:</span><input style="margin-top: 20px" type="file" name="file"><br>
         {{ episodeForm.description(class = "description-field input-box-border border border-top-0 border-left-0 border-right-0",placeholder="Description") }}
 
 </div>
+</div>
+        <button>ADD</button>
     </div>
 
 

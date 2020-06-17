@@ -53,6 +53,13 @@ document.addEventListener('DOMContentLoaded', function() {
 
 });
 
+$(function(){
+
+$('button').click(function(){
+    $('.wrapper:first').clone().appendTo('.series-div');
+});
+
+});
 
 $(document).ready(function(){
   $("#addclass").click(function(){

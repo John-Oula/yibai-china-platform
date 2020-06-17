@@ -1313,7 +1313,7 @@ def upload(username):
         db.session.add(series)
         db.session.flush()
 
-        episode = Episode(subtitle=episodeForm.title.data,description=episodeForm.description.data,upload_ref=path,user_episode=current_user)
+        episode = Episode(subtitle=episodeForm.subtitle.data,description=episodeForm.description.data,upload_ref=path,user_episode=current_user)
         db.session.add(episode)
 
 

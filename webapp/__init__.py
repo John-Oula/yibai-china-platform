@@ -932,7 +932,7 @@ def discover(req_path,username):
     uploads = Upload.query.all()
     series= Series.query.all()
     episodes=Episode.query.all()
-    seriesInfo = db.session.query(Episode.title).join(Series.episode)
+    seriesInfo = db.session.query(Episode.subtitle).join(Series.episode)
 
 
 #    uploads = send_from_directory(directory='videos',filename='videos')

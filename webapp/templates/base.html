@@ -27,7 +27,7 @@
 <body class="home">
 {% endblock %}
 {% block nav %}
-<nav class="navbar  navbar-expand-lg navbar-expand-md navbar-expand-sm navbar-expand-xl  navbar-light">
+<nav class="top-nav navbar  navbar-expand-lg navbar-expand-md navbar-expand-sm navbar-expand-xl  navbar-light">
   <a class="navbar-brand" href="#"><img src="../static/100cg.png" alt="" width="80"></a>
       <img class="corner-design" src="../static/corner-design.png" alt="">
 
@@ -43,14 +43,7 @@
         <a class="nav-link " href="{{ url_for('discover_h') }}"  style="color: white ;font-family: josefin-sans,sans-serif;">DISCOVER</a>
       </li>
       <li class="nav-item nav-tag">
-        <a class="nav-link " href="{{ url_for('consult') }}"  style="color: white;font-family: josefin-sans,sans-serif;  ">CONSULTANCY</a>
-      </li>
-
-       <li class="nav-item nav-tag">
-        <a class="nav-link " href="{{ url_for('unitalk') }}"  style="color: white;font-family: josefin-sans,sans-serif;"><img src="../static/UNITALK.new.png" width="100" alt=""></a>
-      </li>
-               <li class="nav-item nav-tag">
-        <a class="nav-link " href="{{ url_for('corona') }}"  style="color: white;font-family: josefin-sans,sans-serif;">CORONAVIRUS</a>
+        <a class="nav-link " href="{{ url_for('live') }}"  style="color: white ;font-family: josefin-sans,sans-serif;">LIVE</a>
       </li>
 
 

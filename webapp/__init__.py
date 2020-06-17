@@ -492,9 +492,9 @@ def about():
     return render_template('ABOUT.html')
 
 
-@app.route('/coronavirus')
-def corona():
-    return render_template('corona.html')
+@app.route('/live')
+def live():
+    return render_template('live.html')
 
 def hash_password(password):
     """Hash a password for storing."""

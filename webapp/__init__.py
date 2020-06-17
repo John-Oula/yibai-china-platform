@@ -1311,7 +1311,7 @@ def upload(username):
 #        upload = Upload(title=form.title.data,description=form.description.data,category=form.category.data,price= form.price.data,upload_ref=path,uploader=current_user)
         series = Series(title=seriesForm.title.data,description=seriesForm.description.data,category=seriesForm.category.data,price= seriesForm.price.data,user_series=current_user)
         db.session.add(series)
-        db.session.flush()
+
 
         episode = Episode(subtitle=episodeForm.subtitle.data,description=episodeForm.description.data,upload_ref=path,user_episode=current_user)
         db.session.add(episode)

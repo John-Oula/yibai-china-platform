@@ -60,7 +60,11 @@
 <div class="uploads">
 <ul>
     {% for episode in episodes %}
-        <p class="upload-username"> {{ episode.sub.username}}</p>
+        <p class="upload-username"> {{ episode.sub.title}}</p>
+        <p class="upload-username"> subtitle:{{ episode.subtitle}}</p>
+    {% endfor %}
+        {% for series in series %}
+        <p class="upload-username"> {{ episode.sub.title}}</p>
         <p class="upload-username"> subtitle:{{ episode.subtitle}}</p>
     {% endfor %}
 {% for  upload in uploads%}

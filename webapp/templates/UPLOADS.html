@@ -20,30 +20,30 @@
 
 <form  class="form-upload text-left" action="" method="POST" enctype="multipart/form-data">
     <div class="series-div">
-         {{ form.title.label }}
-        {{ form.title(class = "input-box-border border border-top-0 border-left-0 border-right-0") }}
-        {{ form.category.label }}
-        {{ form.category(class = "input-box-border border border-top-0 border-left-0 border-right-0") }}
+         {{ seriesForm.title.label }}
+        {{ seriesForm.title(class = "input-box-border border border-top-0 border-left-0 border-right-0") }}
+        {{ seriesForm.category.label }}
+        {{ seriesForm.category(class = "input-box-border border border-top-0 border-left-0 border-right-0") }}
 
 
-<button type="button" class="collapsible">{{ form.title.label }}{{ form.title(class = "input-box-border border border-top-0 border-left-0 border-right-0") }}</button>
+<button type="button" class="collapsible">{{ episodeForm.title.label }}{{ episodeForm.title(class = "input-box-border border border-top-0 border-left-0 border-right-0") }}</button>
 <div class="content">
 
         <span>Upload Video:</span><input style="margin-top: 20px" type="file" name="file"><br>
-        {{ form.description(class = "description-field input-box-border border border-top-0 border-left-0 border-right-0",placeholder="Description") }}
+        {{ episodeForm.description(class = "description-field input-box-border border border-top-0 border-left-0 border-right-0",placeholder="Description") }}
 
 </div>
     </div>
 
 
-         {{ form.price.label }} <br>
-        {{ form.price(class = "input-box-border border border-top-0 border-left-0 border-right-0") }}
+         {{ seriesForm.price.label }} <br>
+        {{ seriesForm.price(class = "input-box-border border border-top-0 border-left-0 border-right-0") }}
     <br>
 
 
 
      <br>
-    {{ form.submit }}
+    {{ seriesForm.submit }}
 </form>
 
     </card>

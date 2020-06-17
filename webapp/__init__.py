@@ -137,6 +137,8 @@ class User(db.Model, UserMixin):
     phone = db.Column('phone', db.BIGINT(), nullable=True)
     posts = db.relationship('Post', backref='author', lazy=True)
     uploads = db.relationship('Upload', backref='uploader', lazy=True)
+    series = db.relationship('Series', backref='user_series', lazy=True)
+    episode = db.relationship('Episode', backref='user_episode', lazy=True)
     lesson = db.relationship('Lesson', backref=db.backref('user_lessons'))
     comments = db.relationship('Comment', backref='author', lazy='dynamic')
 
@@ -263,7 +265,7 @@ class Upload(db.Model):
     price = db.Column('price', db.Integer)
     upload_ref = db.Column('upload_ref', db.VARCHAR)
     timestamp = db.Column(db.DateTime, default=datetime.datetime.utcnow)
-    user_id = db.Column('user_id', db.Integer, db.ForeignKey('user.id'), nullable=False)
+    user_id = db.Column('user_id', db.Integer, db.ForeignKey('user.id'), nullable=True)
     comments = db.relationship('Comment', backref='upload', lazy='dynamic')
 
     def __repr__(self, id, title, category, description, price, upload_ref, user_id):
@@ -306,14 +308,17 @@ class Episode(db.Model):
     timestamp = db.Column(db.DateTime, default=datetime.datetime.utcnow)
     upload_ref = db.Column('upload_ref', db.VARCHAR)
     series_id = db.Column('series_id', db.Integer, db.ForeignKey('series.id'), nullable=False)
+    user_id = db.Column('user_id', db.Integer, db.ForeignKey('user.id'), nullable=True)
 
-    def __repr__(self, id, title, category, description, upload_ref, series_id):
+
+    def __repr__(self, id, title, category, description, upload_ref, series_id,user_id):
         self.id = id
         self.title = title
         self.category = category
         self.description = description
         self.upload_ref = upload_ref
         self.series_id = series_id
+        self.user_id = user_id
 #
 
 class Follow(db.Model):
@@ -427,6 +432,17 @@ class Upload_form(FlaskForm):
     upload = FileField('Upload')
     submit = SubmitField('Submit')
 
+class Series_form(FlaskForm):
+    title = StringField('Title')
+    category = SelectField('Category', choices=[('Mandarin','Mandarin'), ('Communication skills', 'Communication skills'), ('Academics', 'Academics'), ('Visa', 'Visa'), ('Living', 'Living'), ('Talent policy', 'Talent policy'), ('Finance & Law', 'Finance & Law'), ('Entrepreneur', 'Entrepreneur'), ('Others', 'Others')],widget=None)
+    description = TextAreaField('Description')
+    price = StringField('Price')
+    submit = SubmitField('Submit')
+
+class Episode_form(FlaskForm):
+    title = StringField('Title')
+    description = TextAreaField('Description')
+    upload = FileField('Upload')
 
 class Lesson_form(FlaskForm):
     title = StringField()
@@ -1281,6 +1297,8 @@ def upload(username):
     user_role = current_user.role
     user = User.query.filter_by(username=username).first_or_404()
     form = Upload_form()
+    seriesForm = Series_form()
+    episodeForm = Episode_form()
     if request.method == 'POST':
         file_hex = binascii.hexlify(os.urandom(8))
 
@@ -1288,13 +1306,20 @@ def upload(username):
         file_fn = file_hex + f_ext
         request.files['file'].save(os.path.join(app.root_path, 'static/videos', file_fn))
         path = os.path.join(file_fn)
-        upload = Upload(title=form.title.data,description=form.description.data,category=form.category.data,price= form.price.data,upload_ref=path,uploader=current_user)
-        db.session.add(upload)
+#        upload = Upload(title=form.title.data,description=form.description.data,category=form.category.data,price= form.price.data,upload_ref=path,uploader=current_user)
+        series = Series(title=seriesForm.title.data,description=seriesForm.description.data,category=seriesForm.category.data,price= seriesForm.price.data,user_series=current_user)
+        db.session.add(series)
+        db.session.flush()
+
+        episode = Episode(title=episodeForm.title.data,description=episodeForm.description.data,upload_ref=path,user_episode=current_user)
+        db.session.add(episode)
+        db.session.flush()
+
         db.session.commit()
 
  #       f.save(os.path.join(app.config['UPLOAD_FOLDER']+f))
         return redirect(url_for('discover',upload_ref=file_hex,username=current_user.username))
-    return render_template('UPLOADS.html',user=user,user_role=user_role,form =form,image_file=image_file)
+    return render_template('UPLOADS.html',user=user,user_role=user_role,form =form,seriesForm=seriesForm,episodeForm=episodeForm,image_file=image_file)
 
 
 @app.route('/lesson<int:id><username>', methods=['POST','GET'])

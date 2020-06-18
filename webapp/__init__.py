@@ -141,6 +141,7 @@ class User(db.Model, UserMixin):
     password = db.Column('password',db.String(500), nullable=False)
     image_file = db.Column(db.String(60), nullable=False, default='default.jpg')
     introduction = db.Column('introduction', db.String(500), nullable=True)
+    introduction_video = db.Column('introduction_video', db.String(60), nullable=True)
     id_type = db.Column('id_type', db.String(60), nullable=True)
     id_number = db.Column('id_number', db.String(), nullable=True)
     id_document = db.Column('id_document', db.String(60), nullable=True)
@@ -213,7 +214,7 @@ class User(db.Model, UserMixin):
         own = Post.query.filter_by(user_id=self.id)
         return followed.union(own).order_by(Post.timestamp.desc())
 
-    def __repr__(self, user_id, role, sub_role, fullname, username, password, image_file,introduction, id_type, id_number,
+    def __repr__(self, user_id, role, sub_role, fullname, username, password, image_file,introduction,introduction_video, id_type, id_number,
                  id_document, nationality, occupation, email, province, city, phone):
         self.user_id = user_id
         self.role = role
@@ -224,6 +225,7 @@ class User(db.Model, UserMixin):
         self.image_file = image_file
 
         self.introduction = introduction
+        self.introduction_video = introduction_video
         self.id_type = id_type
         self.id_number = id_number
         self.id_document = id_document

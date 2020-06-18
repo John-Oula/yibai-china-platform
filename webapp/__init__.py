@@ -968,7 +968,7 @@ def  post(id):
     post = Post.query.get_or404(id)
     return redirect(url_for('login'))
 
-@app.route('/videos/<int:id><upload_ref>' , methods=['POST','GET'])
+@app.route('/videos/<int:id>video<upload_ref>' , methods=['POST','GET'])
 @login_required
 
 def video(upload_ref,id):

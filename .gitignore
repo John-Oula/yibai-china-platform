@@ -1,6 +1,7 @@
 webapp/migrations
 webapp/unitest.py
 webapp/static/videos
+extra
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]

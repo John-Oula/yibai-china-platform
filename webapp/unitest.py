@@ -1,6 +1,6 @@
 from datetime import datetime, timedelta
 import unittest
-from webapp import app, Series, Episode
+from webapp import app, Series, Episode, Skill, Available
 from webapp import User, Post, Lesson, db, Comment, likes, Upload
 from flask import jsonify
 import psycopg2
@@ -31,6 +31,7 @@ class UserModelCase(unittest.TestCase):
         db.session.add(u8)
         db.session.add(u9)
         db.session.commit()
+        user_list=User.query.all()
 
         p1 = Post(user_id=1, title='tech', description='this is a test ',category='MANDARIN', date='2019-12-4')
         p2 = Post(user_id=1, title='china', description='this is a test', category="CAREER", date='2019-12-3')
@@ -79,48 +80,84 @@ class UserModelCase(unittest.TestCase):
         db.session.add(e4)
         db.session.commit()
 
+        skill1 = Skill(skill_title='autoCad')
+        skill2 = Skill(skill_title='business')
+        skill3 = Skill(skill_title='education')
+        skill4 = Skill(skill_title='painting')
+        db.session.add(skill1)
+        db.session.add(skill2)
+        db.session.add(skill3)
+        db.session.add(skill4)
+
+        skill1.user.append(u1)
+        skill2.user.append(u3)
+        skill3.user.append(u1)
+        skill4.user.append(u2)
+        for skill in u1.skill:
+            print("User 1 is skilled in",skill.skill_title)
+        db.session.commit()
+
+
+        date1 = Available(date_available='2019-03-10')
+        date2 = Available(date_available='2019-03-21')
+        date3 = Available(date_available='2019-04-15')
+        date4 = Available(date_available='2019-04-15')
+        db.session.add(date1)
+        db.session.add(date2)
+        db.session.add(date3)
+        db.session.add(date4)
+
+        date1.user.append(u1)
+        date2.user.append(u3)
+        date3.user.append(u1)
+        date4.user.append(u2)
+        for date in u1.available and u2.available:
+            print("User ",u1.id," is available on",date.date_available)
+        db.session.commit()
+
         posts = Post.query.all()
-        for lesson in p1.lesson:
-            print(lesson.title)
-
-            if lesson.post_id == p4.id:
-                print(lesson.title)
-            else:
-                pass
+#        for lesson in p1.lesson:
+#            print(lesson.title)
+#
+#            if lesson.post_id == p4.id:
+#                print(lesson.title)
+#            else:
+#                pass
         posts = Post.query.all()
-        for post in u1.lesson:
-            if post.post_id == p2.id:
-
-                print(post.title)
-            else:
-                pass
-
-        print(l1.lessons.title)
+#        for post in u1.lesson:
+#            if post.post_id == p2.id:
+#
+#                print(post.title)
+#            else:
+#                pass
+#
+#        print(l1.lessons.title)
         p1.bookers.append(u1)
         p2.bookers.append(u3)
         p4.bookers.append(u1)
         p3.bookers.append(u2)
         db.session.commit()
 
+
         user = User.query.all()
 
-        for posts in u2.book:
-            print(u2.username,'has','booked',posts.title,'session','on',posts.date)
-
-        for created_posts in u2.posts:
-            print(created_posts.title, created_posts.category)
+#        for posts in u2.book:
+#            print(u2.username,'has','booked',posts.title,'session','on',posts.date)
+#
+#        for created_posts in u2.posts:
+#            print(created_posts.title, created_posts.category)
 
         author1 = p1.author.username
         author2 = p4.author.username
         #       join=Post.query.join(user, (id == p1.user_id))
         #       print(join)
         print(author1, 'created session titled')
-        for episodes in s1.episode:
-            print(episodes.subtitle)
-
-        ep = e1.sub.title
-
-        print(ep)
+#        for episodes in s1.episode:
+#            print(episodes.subtitle)
+#
+#        ep = e1.sub.title
+#
+#        print(ep)
 
 
 

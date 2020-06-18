@@ -116,6 +116,20 @@ likes = db.Table('likes',
                 db.Column('user_id', db.Integer, db.ForeignKey('user.id')),
                 db.Column('upload_id', db.Integer, db.ForeignKey('upload.id')))
 
+skills = db.Table('skills',
+    db.Column('user_id', db.Integer, db.ForeignKey('user.id')),
+    db.Column('skill_title', db.String(20), db.ForeignKey('skill.skill_title'))
+)
+
+experiences = db.Table('experiences',
+    db.Column('user_id', db.Integer, db.ForeignKey('user.id')),
+    db.Column('exp_title', db.String(40), db.ForeignKey('experience.exp_title'))
+)
+
+available = db.Table('available',
+    db.Column('user_id', db.Integer, db.ForeignKey('user.id')),
+    db.Column('date_id', db.Integer, db.ForeignKey('availableStatus.id'))
+)
 
 class User(db.Model, UserMixin):
     __tablename__ = 'user'
@@ -126,6 +140,7 @@ class User(db.Model, UserMixin):
     username = db.Column('username', db.String(20), unique=True, nullable=True)
     password = db.Column('password',db.String(500), nullable=False)
     image_file = db.Column(db.String(60), nullable=False, default='default.jpg')
+    introduction = db.Column('introduction', db.String(500), nullable=True)
     id_type = db.Column('id_type', db.String(60), nullable=True)
     id_number = db.Column('id_number', db.String(), nullable=True)
     id_document = db.Column('id_document', db.String(60), nullable=True)
@@ -141,11 +156,18 @@ class User(db.Model, UserMixin):
     episode = db.relationship('Episode', backref='user_episode', lazy=True)
     lesson = db.relationship('Lesson', backref=db.backref('user_lessons'))
     comments = db.relationship('Comment', backref='author', lazy='dynamic')
-
+    skill = db.relationship('Skill',backref='user',secondary=skills,lazy ='dynamic')
+    available = db.relationship('Available',backref='user',secondary=available,lazy ='dynamic')
+    exp = db.relationship('Experience',backref='user',secondary=experiences,lazy ='dynamic')
     followed = db.relationship('User', secondary=followers,
                                primaryjoin=(followers.c.follower_id == id),
                                secondaryjoin=(followers.c.followed_id == id),
                                backref=db.backref('followers', lazy='dynamic'), lazy='dynamic')
+#    skill = db.relationship('User', secondary=skills,
+#                               primaryjoin=(skills.c.user_id == id),
+#                               secondaryjoin=(skills.c.skill_id == id),
+#                               backref=db.backref('user', lazy='dynamic'), lazy='dynamic')
+
     book = db.relationship('Post', secondary=book,backref=db.backref('bookers', lazy='dynamic'))
     likes = db.relationship('Upload', secondary=likes,backref=db.backref('liked', lazy='dynamic'))
 
@@ -191,7 +213,7 @@ class User(db.Model, UserMixin):
         own = Post.query.filter_by(user_id=self.id)
         return followed.union(own).order_by(Post.timestamp.desc())
 
-    def __repr__(self, user_id, role, sub_role, fullname, username, password, image_file, id_type, id_number,
+    def __repr__(self, user_id, role, sub_role, fullname, username, password, image_file,introduction, id_type, id_number,
                  id_document, nationality, occupation, email, province, city, phone):
         self.user_id = user_id
         self.role = role
@@ -201,6 +223,7 @@ class User(db.Model, UserMixin):
         self.password = password
         self.image_file = image_file
 
+        self.introduction = introduction
         self.id_type = id_type
         self.id_number = id_number
         self.id_document = id_document
@@ -211,6 +234,21 @@ class User(db.Model, UserMixin):
         self.city = city
         self.phone = phone
 
+class Skill(db.Model):
+    __tablename__ = 'skill'
+    id = db.Column('id', db.Integer, primary_key=True)
+    skill_title = db.Column(db.String(20),unique=True)
+
+class Experience(db.Model):
+    __tablename__ = 'experience'
+    id = db.Column('id', db.Integer, primary_key=True)
+    exp_title = db.Column(db.String(40),unique=True)
+
+class Available(db.Model):
+    __tablename__ = 'availableStatus'
+    id = db.Column('id', db.Integer, primary_key=True)
+    date_available = db.Column(db.String())
+    timestamp = db.Column(db.DateTime, default=datetime.datetime.utcnow)
 
 class Post(db.Model):
     __tablename__ = 'post'
@@ -799,7 +837,7 @@ def  logout():
     return redirect(url_for('login'))
 
 
-@app.route('/<username>')
+@app.route('/session/<username>')
 @login_required
 def user_profile(username):
 
@@ -821,7 +859,31 @@ def user_profile(username):
 
 
     return render_template('USER.html',seriesIdNum=seriesIdNum,postNum=postNum,followed_posts=followed_posts,user=user,user_role=user_role,all_users=all_users,all_posts = all_posts,author=author, image_file = image_file)
-#    return redirect(url_for('login'))
+
+@app.route('/<username>')
+@login_required
+def my_profile(username):
+
+    user = User.query.filter_by(username=username).first_or_404()
+    image_file = url_for('static', filename ='profile_pics/' + current_user.image_file)
+    followed_posts=Post.query.join(followers, (followers.c.followed_id == Post.user_id)).all()
+
+    all_posts = Post.query.all()
+    postNum=len(all_posts)
+
+    all_users = User.query.all()
+    author = db.session.query(Post.title).join(User.posts)
+    user_role = current_user.role
+    session['username'] = username
+    seriesId=Series.query.all()
+    for seriesId in seriesId:
+        seriesIdNum = int(seriesId.id) + 1
+
+
+
+    return render_template('landingProfile.html',seriesIdNum=seriesIdNum,postNum=postNum,followed_posts=followed_posts,user=user,user_role=user_role,all_users=all_users,all_posts = all_posts,author=author, image_file = image_file)
+
+
 
 #TRAINER PROFILE FUNCTIONS
 

@@ -228,6 +228,18 @@ form#signup-form{
 }
 
 /*PROFILE*/
+.info-card-wrapper{
+    display: flex;
+    flex-direction: row;
+}
+.info-card{
+    background-color: white;
+    width: 27%;
+    height: 27%;
+    padding: 20px;
+    margin: 10px;
+}
+
 .profile-bar {
    background-color :#E74525 ;
    width: 307px;

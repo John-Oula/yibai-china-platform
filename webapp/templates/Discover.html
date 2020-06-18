@@ -62,11 +62,9 @@
     {% for episode in episodes %}
         <p class="upload-username"> {{ episode.sub.title}}</p>
         <p class="upload-username"> subtitle:{{ episode.subtitle}}</p>
+        <li><a href="{{ url_for('video',upload_ref=episode.upload_ref,id=episode.id) }}"><iframe width="250" height="200"  src="../static/videos/{{ episode.upload_ref }}" alt=""></iframe></a></li></li>
     {% endfor %}
-        {% for series in series.episodes %}
-        <p class="upload-username"> {{ series.subtitle}}</p>
-        <p class="upload-username"> ep:{{ series.description}}</p>
-    {% endfor %}
+
 {% for  upload in uploads%}
     <card class="card upload-card" >
     <card class="card-body">

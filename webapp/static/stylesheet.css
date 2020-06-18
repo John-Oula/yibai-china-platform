@@ -1211,6 +1211,23 @@ img.corner-design{
     display: none;
 }
 
+#like-icon{
+    margin-left: 510px;
+    margin-right: 7px;
+}
+
+#unlike-icon{
+    margin-left: 510px;
+    margin-right: 7px;
+}
+.like-wrapper{
+    display: flex;
+}
+
+p.likes{
+    margin: 3px;
+    color:gray;
+}
 /* video */
 
 @media screen and (max-width: 600px){

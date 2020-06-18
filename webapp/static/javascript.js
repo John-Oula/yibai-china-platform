@@ -78,6 +78,69 @@ function myFunction() {
 }
 
 
+
+$(document).ready(function(){
+$('.like-btn').click(function(e){
+  e.preventDefault();
+
+  var likeURL = $(this).attr("data-href");
+
+
+  req = $.ajax({
+    url:likeURL,
+    type:'GET',
+    data:{},
+    success:function (data) {
+      console.log(data)
+    },error:function (error) {
+      console.log(error)
+      console.log("error")
+
+    }
+
+  });
+  req.done(function(data){
+    $('.likes').text(data.likes);
+    $('.like-btn').css("display","none");
+    $('#unlike-btn').css("display","block");
+  })
+
+
+})
+
+  });
+
+$(document).ready(function(){
+  $('#unlike-btn').click(function(e){
+  e.preventDefault();
+  var unlikeURL = $(this).attr("data-href");
+
+
+  req = $.ajax({
+    url:unlikeURL,
+    type:'GET',
+    data:{},
+    success:function (data) {
+      console.log(data)
+    },error:function (error) {
+      console.log(error)
+      console.log("error")
+
+    }
+
+  });
+  req.done(function(data){
+    $('.likes').text(data.likes);
+    $('.like-btn').css("display","block");
+    $('#unlike-btn').css("display","none");
+
+  })
+
+
+})
+  });
+
+
 function openCity(evt, cityName) {
   // Declare all variables
   var i, tabcontent, tablinks;

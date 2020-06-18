@@ -69,10 +69,10 @@ class UserModelCase(unittest.TestCase):
         db.session.add(s1)
         db.session.commit()
 
-        e1 = Episode(user_id=1, subtitle='subtitle=tech', description='this is a test ',upload_ref='c66bc66048db6fb0.mp4' , timestamp='2019-12-4')
-        e2 = Episode(user_id=1, subtitle='tech', description='this is a test ',upload_ref='c66bc66048db6fb0.mp4' , timestamp='2019-12-4')
-        e3 = Episode(user_id=1, subtitle='ech', description='this is a test ',upload_ref='c66bc66048db6fb0.mp4' , timestamp='2019-12-4')
-        e4 = Episode(user_id=1, subtitle='suble=tech', description='this is a test ',upload_ref='c66bc66048db6fb0.mp4' , timestamp='2019-12-4')
+        e1 = Episode(user_id=1, subtitle='subtitle=tech', description='this is a test ',upload_ref='c66bc66048db6fb0.mp4' , series_id=1,timestamp='2019-12-4')
+        e2 = Episode(user_id=1, subtitle='tech', description='this is a test ',upload_ref='c66bc66048db6fb0.mp4' , series_id=1,timestamp='2019-12-4')
+        e3 = Episode(user_id=1, subtitle='ech', description='this is a test ',upload_ref='c66bc66048db6fb0.mp4' ,series_id=1, timestamp='2019-12-4')
+        e4 = Episode(user_id=1, subtitle='suble=tech', description='this is a test ',upload_ref='c66bc66048db6fb0.mp4' , series_id=1,timestamp='2019-12-4')
         db.session.add(e1)
         db.session.add(e2)
         db.session.add(e3)
@@ -123,6 +123,6 @@ class UserModelCase(unittest.TestCase):
         print(ep)
 
 
-db.drop_all()
+
 if __name__ == '__main__':
     unittest.main(verbosity=2)

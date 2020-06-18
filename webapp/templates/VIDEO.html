@@ -58,7 +58,7 @@
             <a href="{{ url_for('user_profile',username = current_user.username) }}" style="color: white"><img id="top-icon-u" class="icon-u" src="../static/sessions-w.png" alt=""></a>
             <a href="{{ url_for('dashboard', username=current_user.username ) }}" style="color: white"><img class="icon-u" src="../static/dashboard.png" alt=""></a>
             <a href="{{ url_for('discover', username=current_user.username ) }}" style="color: white"><img class="icon-u" src="../static/discover-w.png" alt=""></a>
-            <a href="{{ url_for('upload', username=current_user.username ) }}" style="color: white"><img class="icon-u" src="../static/uploads-w.png" alt=""></a>
+            <a href="{{ url_for('upload', username=current_user.username,id=seriesIdNum ) }}" style="color: white"><img class="icon-u" src="../static/uploads-w.png" alt=""></a>
 
 
 
@@ -83,7 +83,7 @@
         </form>
 
         <div style="margin-left: 40px">
-        <video-js class="video-js video-page vjs-big-play-centered" data-setup='{}' controls preload="none">
+        <video-js videoId="{{ videoId }}" videoRef="{{ videoRef }}"class="video-js video-page vjs-big-play-centered" data-setup='{}' controls preload="none">
           <source src="../static/videos/{{ video.upload_ref }}" type="video/mp4">
         </video-js>
         <h3 class="video-text">{{ video.title }}</h3>
@@ -95,14 +95,21 @@
 
                 </div>
                 <div class="col-8">
-                    {% if current_user not in video.liked %}
-                                            <p style="font-size: 12px;color:gray;margin-left: 7px" class="text-justify text-left "><a href="{{ url_for('like' ,id=video.id) }}"><img  style="margin-left: 510px;margin-right: 7px" src="../static/grey_heart@2x.png" alt="" width="20"></a>{{ video.liked.count() }} </p>
+                <div class="row like-wrapper">
+                {% if current_user not in video.liked %}
+                     <a class='like-btn' data-href='{{ url_for('like' ,id=video.id) }}' href='#' ><img  type="button" id="like-icon"  src="../static/grey_heart@2x.png" alt="" width="20"></a>
+                     <a style="display: none" id='unlike-btn' data-href='{{ url_for('unlike' ,id=video.id) }}' href='#' ><img  type="button" id="unlike-icon"  src="../static/heart.png" alt="" width="20"></a>
 
-                    {% else %}
-                                            <p style="font-size: 12px;color:gray;margin-left: 7px" class="text-justify text-left "><a href="{{ url_for('unlike' ,id=video.id) }}"><img  style="margin-left: 510px;margin-right: 7px" src="../static/heart.png" alt="" width="20"></a>{{ video.liked.count() }} </p>
+                    <p class="likes"  class="text-justify text-left " data-likes="{{ video.liked.count()  }}"></p>
+                {% else %}
+                <a style="display: none" class='like-btn' data-href='{{ url_for('like' ,id=video.id) }}' href='#' ><img  type="button" id="like-icon"  src="../static/grey_heart@2x.png" alt="" width="20"></a>
+                    <a id='unlike-btn' data-href='{{ url_for('unlike' ,id=video.id) }}' href='#' ><img  type="button" id="unlike-icon"  src="../static/heart.png" alt="" width="20"></a>
+                    <p class="likes"  class="text-justify text-left " data-likes="{{ video.liked.count()  }}"></p>
+                {% endif %}
+                </div>
 
 
-                    {% endif %}
+
                     <button style="margin-left: 510px" id="card-btn" value="FOLLOW" >FOLLOW</button>
                 </div>
                 </div>
@@ -150,7 +157,7 @@
                 <card class="card-body video-text-list">
                     <div class="row">
                         <div class="col-6">
-                    <a href="{{ url_for('video',upload_ref=upload.upload_ref) }}"><video width="160" height="100" src="../static/videos/{{ upload.upload_ref }}" alt=""></video></a>
+                    <a href="{{ url_for('video',upload_ref=upload.upload_ref,id=upload.id) }}"><video width="160" height="100" src="../static/videos/{{ upload.upload_ref }}" alt=""></video></a>
                         </div>
                         <div class="col">
                     <div >{{ upload.title }}</div><br>

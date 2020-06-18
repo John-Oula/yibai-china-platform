@@ -12,7 +12,7 @@ import os
 import re
 from os import urandom
 from PIL import Image
-from flask import Flask,render_template, url_for, flash, redirect, session, request, send_from_directory
+from flask import Flask, render_template, url_for, flash, redirect, session, request, send_from_directory, jsonify
 from flask_migrate import Migrate
 from flask_login import login_user, login_required, current_user, logout_user,UserMixin, LoginManager
 from flask_mail import Mail,Message
@@ -968,15 +968,20 @@ def  post(id):
     post = Post.query.get_or404(id)
     return redirect(url_for('login'))
 
-@app.route('/videos/<upload_ref>' , methods=['POST','GET'])
+@app.route('/videos/<int:id><upload_ref>' , methods=['POST','GET'])
 @login_required
 
-def video(upload_ref):
+def video(upload_ref,id):
     form = Comment_form()
     video = Upload.query.filter_by(upload_ref=upload_ref).first()
     uploads  = Upload.query.all()
     user = User.query.all()
     comments = Comment.query.all()
+    seriesId = Series.query.all()
+    videoId=id
+    videoRef=upload_ref
+    for seriesId in seriesId:
+        seriesIdNum = int(seriesId.id) + 1
     if request.method == 'POST':
         comment = Comment(content = form.content.data,user_id=current_user.id,upload_id=video.id)
         db.session.add(comment)
@@ -984,29 +989,30 @@ def video(upload_ref):
         return redirect(url_for('video',upload_ref=video.upload_ref))
 
 
-    return render_template('VIDEO.html',comments = comments,video=video,uploads=uploads,user=user,form=form)
+    return render_template('VIDEO.html',videoRef=videoRef,videoId=videoId,seriesIdNum=seriesIdNum,comments = comments,video=video,uploads=uploads,user=user,form=form)
 
-@app.route('/like/video=<int:id>')
+@app.route('/like/video<int:id>')
 @login_required
 def like(id):
     video = Upload.query.filter_by(id=id).first()
     video.liked.append(current_user)
     db.session.commit()
-    return redirect(url_for('video',upload_ref=video.upload_ref))
+    likes= video.liked.count()
+    return jsonify({'result':'success','likes':likes})
 
 def unlike():
     video = Upload.query.filter_by(id=id).first()
     video.liked.remove(current_user)
     db.session.commit()
 
-@app.route('/unlike/video=<int:id>')
+@app.route('/unlike/video<int:id>')
 @login_required
 def unlike(id):
     video = Upload.query.filter_by(id=id).first()
     video.liked.remove(current_user)
     db.session.commit()
-    return redirect(url_for('video',upload_ref=video.upload_ref))
-
+    likes= video.liked.count()
+    return jsonify({'result':'success','likes':likes})
 
 def createMeeting(title,fulltime,end_time):
     num = random.randint(0, 999999999)
@@ -1314,26 +1320,43 @@ def upload(username,id):
     seriesId = Series.query.all()
     for seriesId in seriesId:
         seriesIdNum = int(seriesId.id) + 1
-    if request.method == 'POST':
-        file_hex = binascii.hexlify(os.urandom(8))
+    if get_Host_name_IP('CJAY') == True:
+        if request.method == 'POST':
+            random_hex = urandom(8).hex()
+            file = request.files['file']
+            _, f_ext = os.path.splitext(file.filename)
+            file_hex = random_hex
+            file_fn = random_hex + f_ext
+            file.save(os.path.join(app.root_path, 'static/videos', file_fn))
+            path = os.path.join(file_fn)
+            series = Series(title=seriesForm.title.data, description=seriesForm.description.data,
+                            category=seriesForm.category.data, price=seriesForm.price.data, user_series=current_user)
+            db.session.add(series)
+            episode = Episode(subtitle=episodeForm.subtitle.data, description=episodeForm.description.data,
+                              upload_ref=path, user_episode=current_user, series_id=id)
+            db.session.add(episode)
 
-        _, f_ext = os.path.splitext(request.files['file'].filename)
-        file_fn = file_hex + f_ext
-        request.files['file'].save(os.path.join(app.root_path, 'static/videos', file_fn))
-        path = os.path.join(file_fn)
-#        upload = Upload(title=form.title.data,description=form.description.data,category=form.category.data,price= form.price.data,upload_ref=path,uploader=current_user)
-        series = Series(title=seriesForm.title.data,description=seriesForm.description.data,category=seriesForm.category.data,price= seriesForm.price.data,user_series=current_user)
-        db.session.add(series)
+            db.session.commit()
+            return redirect(url_for('discover',upload_ref=file_hex,username=current_user.username))
 
+    else:
+        if request.method == 'POST':
+            file_hex = binascii.hexlify(os.urandom(8))
 
-        episode = Episode(subtitle=episodeForm.subtitle.data,description=episodeForm.description.data,upload_ref=path,user_episode=current_user,series_id=id)
-        db.session.add(episode)
+            _, f_ext = os.path.splitext(request.files['file'].filename)
+            file_fn = file_hex + f_ext
+            request.files['file'].save(os.path.join(app.root_path, 'static/videos', file_fn))
+            path = os.path.join(file_fn)
+            #        upload = Upload(title=form.title.data,description=form.description.data,category=form.category.data,price= form.price.data,upload_ref=path,uploader=current_user)
+            series = Series(title=seriesForm.title.data, description=seriesForm.description.data,
+                            category=seriesForm.category.data, price=seriesForm.price.data, user_series=current_user)
+            db.session.add(series)
+            episode = Episode(subtitle=episodeForm.subtitle.data, description=episodeForm.description.data,
+                              upload_ref=path, user_episode=current_user, series_id=id)
+            db.session.add(episode)
 
-
-        db.session.commit()
-
- #       f.save(os.path.join(app.config['UPLOAD_FOLDER']+f))
-        return redirect(url_for('discover',upload_ref=file_hex,username=current_user.username))
+            db.session.commit()
+            return redirect(url_for('discover',upload_ref=file_hex,username=current_user.username))
     return render_template('UPLOADS.html',user=user,seriesIdNum=seriesIdNum,user_role=user_role,form =form,seriesForm=seriesForm,episodeForm=episodeForm,image_file=image_file)
 
 

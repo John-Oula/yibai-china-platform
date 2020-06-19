@@ -1429,7 +1429,7 @@ def fileRefServer(name):
 
     return os.path.join(file_fn)
 
-@app.route('/uploads/<int:id><username>',methods=['POST','GET'])
+@app.route('/uploads/<int:id>id<username>',methods=['POST','GET'])
 @login_required
 def upload(username,id):
     image_file = url_for('static', filename ='profile_pics/' + current_user.image_file)
@@ -1481,7 +1481,7 @@ def upload(username,id):
             db.session.add(series)
             db.session.flush()
             episode = Episode(subtitle=episodeForm.subtitle.data, description=episodeForm.description.data,
-                              upload_ref=videoPath,auido_ref = audioPath,transcript_ref=transcriptPath, user_episode=current_user)
+                              upload_ref=videoPath,auido_ref = audioPath,transcript_ref=transcriptPath, user_episode=current_user, series_id=id)
             db.session.add(episode)
 
             db.session.commit()

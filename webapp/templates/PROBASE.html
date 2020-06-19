@@ -66,90 +66,90 @@
 
     {%  if current_user.role == 2 %}
         <div class="side-nav-menu">
-            <a href="{{ url_for('user_profile', username = current_user.username) }}" style="color: white"><img class="icon" src="../static/sessions-w.png" alt="">ASSIGN</a>
-            <a href="{{ url_for('dashboard', username = current_user.username) }}" style="color: white"><img class="icon" src="../static/dashboard.png" alt="">DASHBOARD</a>
-            <a href="{{ url_for('verify', username = current_user.username) }}" style="color: white"><img class="icon" src="../static/discover-w.png" alt="">VERIFY</a>
+            <a href="{{ url_for('user_profile', username = current_user.username) }}" style="color: white"><img class="icon" src="../static/sessions-w.svg" alt="">ASSIGN</a>
+            <a href="{{ url_for('dashboard', username = current_user.username) }}" style="color: white"><img class="icon" src="../static/dash-w.svg" alt="">DASHBOARD</a>
+            <a href="{{ url_for('verify', username = current_user.username) }}" style="color: white"><img class="icon" src="../static/disc-w.svg" alt="">VERIFY</a>
 
             <a href="" style="color: white;padding: 0px"><img class="icon" src="../static/badge.png" alt="">MANAGE</a>
 
             <div id="botrnav" style="padding: 0px">
-                <a href="{{ url_for('settings', username = current_user.username) }}" style="color: white"><img class="icon" src="../static/SETTINGS.png" alt="" style="color: white">SETTINGS</a>
+                <a href="{{ url_for('settings', username = current_user.username) }}" style="color: white"><img class="icon" src="../static/settings-w.svg" alt="" style="color: white">SETTINGS</a>
                 <br>
-                <a href="{{ url_for('logout') }}" style="color: white"><img class="icon" src="../static/logout.png" alt="">LOGOUT</a>
+                <a href="{{ url_for('logout') }}" style="color: white"><img class="icon" src="../static/logoutw.svg" alt="">LOGOUT</a>
             </div>
         </div>
 
             {% elif  current_user.role == 1 and current_user.sub_role == 0 %}
         <div class="side-nav-menu" style="margin-left: 55px">
-        <a href="{{ url_for('session_admin', id = user.id) }}" style="color: white"><img class="icon" src="../static/sessions-w.png" alt="">SESSIONS</a>
+        <a href="{{ url_for('session_admin', id = user.id) }}" style="color: white"><img class="icon" src="../static/sessions-w.svg" alt="">SESSIONS</a>
         <div id="botrnav" style="padding: 0px">
-            <a href="{{ url_for('settings',username= current_user.username) }}" style="color: white"><img class="icon" src="../static/SETTINGS.png" alt="" style="color: white">SETTINGS</a>
+            <a href="{{ url_for('settings',username= current_user.username) }}" style="color: white"><img class="icon" src="../static/settings-w.svg" alt="" style="color: white">SETTINGS</a>
             <br>
-            <a href="{{ url_for('logout') }}" style="color: white"><img class="icon" src="../static/logout.png" alt="">LOGOUT</a>
+            <a href="{{ url_for('logout') }}" style="color: white"><img class="icon" src="../static/logoutw.svg" alt="">LOGOUT</a>
         </div>
 
 
         {% elif  current_user.role == 1 and current_user.sub_role == 1 %}
             <div class="side-nav-menu" style="margin-left: 55px">
-            <a href="{{ url_for('video_admin', id = current_user.id) }}" style="color: white"><img class="icon" src="../static/sessions-w.png" alt="">UPLOADED VIDEOS</a>
-            <a href="{{ url_for('video_admin_dashboard') }}" style="color: white"><img class="icon" src="../static/dashboard.png" alt="">DASHBOARD</a>
+            <a href="{{ url_for('video_admin', id = current_user.id) }}" style="color: white"><img class="icon" src="../static/sessions-w.svg" alt="">UPLOADED VIDEOS</a>
+            <a href="{{ url_for('video_admin_dashboard') }}" style="color: white"><img class="icon" src="../static/dash-w.svg" alt="">DASHBOARD</a>
             <div id="botrnav" style="padding: 0px">
-                <a href="{{ url_for('settings',username= current_user.username) }}" style="color: white"><img class="icon" src="../static/SETTINGS.png" alt="" style="color: white">SETTINGS</a>
+                <a href="{{ url_for('settings',username= current_user.username) }}" style="color: white"><img class="icon" src="../static/settings-w.svg" alt="" style="color: white">SETTINGS</a>
                 <br>
-                <a href="{{ url_for('logout') }}" style="color: white"><img class="icon" src="../static/logout.png" alt="">LOGOUT</a>
+                <a href="{{ url_for('logout') }}" style="color: white"><img class="icon" src="../static/logoutw.svg" alt="">LOGOUT</a>
             </div>
 
 
             {% elif  current_user.role == 1 and current_user.sub_role == 2 %}
             <div class="side-nav-menu" style="margin-left: 55px">
 
-            <a href="{{ url_for('user_profile', username = current_user.username) }}" style="color: white"><img class="icon" src="../static/sessions-w.png" alt="">INFORMATION</a>
-            <a href="{{ url_for('dashboard', username = current_user.username) }}" style="color: white"><img class="icon" src="../static/dashboard.png" alt="">DASHBOARD</a>
+            <a href="{{ url_for('user_profile', username = current_user.username) }}" style="color: white"><img class="icon" src="../static/sessions-w.svg" alt="">INFORMATION</a>
+            <a href="{{ url_for('dashboard', username = current_user.username) }}" style="color: white"><img class="icon" src="../static/dash-w.svg" alt="">DASHBOARD</a>
 
 
 
                 <div id="botrnav" style="padding: 0px">
-                    <a href="{{ url_for('settings',username= current_user.username) }}" style="color: white"><img class="icon" src="../static/SETTINGS.png" alt="" style="color: white">SETTINGS</a>
+                    <a href="{{ url_for('settings',username= current_user.username) }}" style="color: white"><img class="icon" src="../static/settings-w.svg" alt="" style="color: white">SETTINGS</a>
                     <br>
-                    <a href="{{ url_for('logout') }}" style="color: white"><img class="icon" src="../static/logout.png" alt="">LOGOUT</a>
+                    <a href="{{ url_for('logout') }}" style="color: white"><img class="icon" src="../static/logoutw.svg" alt="">LOGOUT</a>
                 </div>
 
             {% elif  current_user.role == 1 and current_user.sub_role == 3 %}
                 <div class="side-nav-menu" style="margin-left: 55px">
 
-                <a href="{{ url_for('user_profile', username = current_user.username ) }}" style="color: white"><img class="icon" src="../static/sessions-w.png" alt="">PAYMENT</a>
+                <a href="{{ url_for('user_profile', username = current_user.username ) }}" style="color: white"><img class="icon" src="../static/sessions-w.svg" alt="">PAYMENT</a>
                     <div id="botrnav" style="padding: 0px">
-                        <a href="{{ url_for('settings',username= current_user.username) }}" style="color: white"><img class="icon" src="../static/SETTINGS.png" alt="" style="color: white">SETTINGS</a>
+                        <a href="{{ url_for('settings',username= current_user.username) }}" style="color: white"><img class="icon" src="../static/settings-w.svg" alt="" style="color: white">SETTINGS</a>
                         <br>
-                        <a href="{{ url_for('logout') }}" style="color: white"><img class="icon" src="../static/logout.png" alt="">LOGOUT</a>
+                        <a href="{{ url_for('logout') }}" style="color: white"><img class="icon" src="../static/logoutw.svg" alt="">LOGOUT</a>
                     </div>
 
             {% elif current_user.role == 1 and current_user.sub_role == 4 %}
                 <div class="side-nav-menu" style="margin-left: 55px">
 
-            <a href="{{ url_for('user_profile', username = current_user.username) }}" style="color: white"><img class="icon" src="../static/sessions-w.png" alt="">PAYMENT</a>
-            <a href="{{ url_for('dashboard', username = current_user.username) }}" style="color: white"><img class="icon" src="../static/dashboard.png" alt="">DASHBOARD</a>
+            <a href="{{ url_for('user_profile', username = current_user.username) }}" style="color: white"><img class="icon" src="../static/sessions-w.svg" alt="">PAYMENT</a>
+            <a href="{{ url_for('dashboard', username = current_user.username) }}" style="color: white"><img class="icon" src="../static/dash-w.svg" alt="">DASHBOARD</a>
 
 
 
 
                 <div id="botrnav" style="padding: 0px">
-                    <a href="{{ url_for('settings',username= current_user.username) }}" style="color: white"><img class="icon" src="../static/SETTINGS.png" alt="" style="color: white">SETTINGS</a>
+                    <a href="{{ url_for('settings',username= current_user.username) }}" style="color: white"><img class="icon" src="../static/settings-w.svg" alt="" style="color: white">SETTINGS</a>
                     <br>
-                    <a href="{{ url_for('logout') }}" style="color: white"><img class="icon" src="../static/logout.png" alt="">LOGOUT</a>
+                    <a href="{{ url_for('logout') }}" style="color: white"><img class="icon" src="../static/logoutw.svg" alt="">LOGOUT</a>
                 </div>
     {% else %}
                 <div class="side-nav-menu">
-            <a href="{{ url_for('user_profile', username = current_user.username) }}" style="color: white"><img class="icon" src="../static/sessions-w.png" alt="">SESSIONS</a>
-            <a href="{{ url_for('dashboard', username = current_user.username) }}" style="color: white"><img class="icon" src="../static/dashboard.png" alt="">DASHBOARD</a>
-            <a href="{{ url_for('discover', username = current_user.username) }}" style="color: white"><img class="icon" src="../static/discover-w.png" alt="">DISCOVER</a>
-            <a href="{{ url_for('upload', username = current_user.username ,id=seriesIdNum) }}" style="color: white"><img class="icon" src="../static/uploads-w.png" alt="">UPLOAD</a>
+            <a href="{{ url_for('user_profile', username = current_user.username) }}" style="color: white"><img class="icon" src="../static/sessions-w.svg" alt="">SESSIONS</a>
+            <a href="{{ url_for('dashboard', username = current_user.username) }}" style="color: white"><img class="icon" src="../static/dash-w.svg" alt="">DASHBOARD</a>
+            <a href="{{ url_for('discover', username = current_user.username) }}" style="color: white"><img class="icon" src="../static/disc-w.svg" alt="">DISCOVER</a>
+            <a href="{{ url_for('upload', username = current_user.username ,id=seriesIdNum) }}" style="color: white"><img class="icon" src="../static/uploads-w.svg" alt="">UPLOAD</a>
 
 
             <div id="botrnav" style="padding: 0px">
-                <a href="{{ url_for('settings', username = current_user.username) }}" style="color: white"><img class="icon" src="../static/SETTINGS.png" alt="" style="color: white">SETTINGS</a>
+                <a href="{{ url_for('settings', username = current_user.username) }}" style="color: white"><img class="icon" src="../static/settings-w.svg" alt="" style="color: white">SETTINGS</a>
                 <br>
-                <a href="{{ url_for('logout') }}" style="color: white"><img class="icon" src="../static/logout.png" alt="">LOGOUT</a>
+                <a href="{{ url_for('logout') }}" style="color: white"><img class="icon" src="../static/logoutw.svg" alt="">LOGOUT</a>
             </div>
         </div>
 

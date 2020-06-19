@@ -89,16 +89,27 @@
         </form>
     </div>
 
-<card class="card text-center shadow-lg " id="create_card_trainer">
-    <card class="card-body">
-        <p style="font-size: 20px">SCHEDULE A MEETING</p>
-        <button id="create_btn" value="CREATE"><a href="{{ url_for('create', username = current_user.username) }}" style="color: white">CREATE</a></button>
+<card class="card shadow-lg " id="create_card_trainer">
+    <card class="card-body text-center">
+        <div class="flex-content">
+        <a href="{{ url_for('create', username = current_user.username) }}" style="color: white">
+        <div class="square-wrapper text-center">
+        <p >Schedule a live session</p>
+        </div>
+        </a>
+
+        <a id="available" href="{{ url_for('available', username = current_user.username) }}" style="color: white">
+        <div class="square-wrapper text-center">
+        <p >Schedule a free time</p>
+        </div>
+        </a>
+        </div>
     </card>
 </card>
     <br>
     <br>
 
-
+<div id="calendar" class="calendar-toggle"></div>
 
 
 {% if current_user.posts %}

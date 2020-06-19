@@ -18,14 +18,23 @@
 <card class="card shadow-lg" id="create_card" style="height: 500px">
     <card class="card-body">
 
-<form  class="form-upload text-left" action="" method="POST" enctype="multipart/form-data">
+<form  id="ajax" class="form-upload text-left" action="" method="POST" enctype="multipart/form-data">
+    <fieldset>
+         {{ form.hidden_tag() }}
+
     <div class="series-div">
          {{ seriesForm.title.label }}
         {{ seriesForm.title(class = "input-box-border border border-top-0 border-left-0 border-right-0") }}
         {{ seriesForm.category.label }}
         {{ seriesForm.category(class = "input-box-border border border-top-0 border-left-0 border-right-0") }}
 <div class="wrapper">
-<button type="button" class="collapsible">{{ episodeForm.subtitle.label }}{{ episodeForm.subtitle(class = "input-box-border border border-top-0 border-left-0 border-right-0") }}</button>
+<button type="button" class="collapsible">
+    {{ episodeForm.subtitle.label }}
+
+    {{ episodeForm.subtitle(class = "input-box-border border border-top-0 border-left-0 border-right-0") }}
+    <a class="add-btn" url="{{ url_for('upload',username=current_user.username,id=seriesIdNum) }}"><input
+            type="submit"></a>
+</button>
 <div class="content" >
 
         <span>Upload Video:</span><input style="margin-top: 20px" type="file" name="file"><br>
@@ -45,6 +54,7 @@
 
      <br>
     {{ seriesForm.submit }}
+        </fieldset>
 </form>
 <button class="btn-add">ADD</button>
     </card>

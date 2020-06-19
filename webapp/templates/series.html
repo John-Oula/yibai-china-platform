@@ -86,26 +86,17 @@
         <video-js videoId="{{ videoId }}" videoRef="{{ videoRef }}"class="video-js video-page vjs-big-play-centered" data-setup='{}' controls preload="none">
           <source src="../static/videos/{{ video.upload_ref }}" type="video/mp4">
         </video-js>
-        <h3 class="video-text">{{ video.title }}</h3>
+        <h3 class="video-text">{{ video.sub.title }}</h3>
 
 
             <div class="row">
                 <div class="col-4">
-            <img src="../static/profile_pics/{{ video.uploader.image_file}}" class="rounded-circle  profilepic shadow-lg" width="50" height="50" alt="" style="margin-top: 15px;margin-bottom: 15px;margin-right: 10px">{{ video.uploader.username}}
+            <img src="../static/profile_pics/{{ video.user_episode.image_file}}" class="rounded-circle  profilepic shadow-lg" width="50" height="50" alt="" style="margin-top: 15px;margin-bottom: 15px;margin-right: 10px">{{ video.user_episode.username}}
 
                 </div>
                 <div class="col-8">
                 <div class="row like-wrapper">
-                {% if current_user not in video.liked %}
-                     <a class='like-btn' data-href='{{ url_for('like' ,id=video.id) }}' href='#' ><img  type="button" id="like-icon"  src="../static/grey_heart@2x.png" alt="" width="20"></a>
-                     <a style="display: none" id='unlike-btn' data-href='{{ url_for('unlike' ,id=video.id) }}' href='#' ><img  type="button" id="unlike-icon"  src="../static/heart.png" alt="" width="20"></a>
 
-                    <p class="likes"  class="text-justify text-left " data-likes="{{ video.liked.count()  }}"></p>
-                {% else %}
-                <a style="display: none" class='like-btn' data-href='{{ url_for('like' ,id=video.id) }}' href='#' ><img  type="button" id="like-icon"  src="../static/grey_heart@2x.png" alt="" width="20"></a>
-                    <a id='unlike-btn' data-href='{{ url_for('unlike' ,id=video.id) }}' href='#' ><img  type="button" id="unlike-icon"  src="../static/heart.png" alt="" width="20"></a>
-                    <p class="likes"  class="text-justify text-left " data-likes="{{ video.liked.count()  }}"></p>
-                {% endif %}
                 </div>
 
 
@@ -133,17 +124,13 @@
 
 <div id="Paris" class="tabcontent">
 <ul>
-{% for comment in video.comments %}
-    <li><div style="color: black"><img style="margin-right: 10px" src="../static/profile_pics/{{ comment.author.image_file }} " alt="" width="40" class="rounded-circle  profilepic shadow-lg">{{ comment.author.username }}</div></li>
-    <li><p style="color: black">{{ comment.content }}</p></li>
-{% endfor %}
+
 </ul>
 
 </div>
 
 <div id="Tokyo" class="tabcontent">
-  <h3>Tokyo</h3>
-  <p>Tokyo is the capital of Japan.</p>
+
 </div>
 </div>
 </div>
@@ -152,21 +139,18 @@
         <ul><div class="video-list">
 
             <li style="padding: 0px;margin: 0px">
-                {% for upload in uploads %}
+                {% for episode in episodes %}
+
                 <card class="card video-card" >
                 <card class="card-body video-text-list">
                     <div class="row">
                         <div class="col-6">
-                    <a href="{{ url_for('video',upload_ref=upload.upload_ref,id=upload.id) }}"><video width="160" height="100" src="../static/videos/{{ upload.upload_ref }}" alt=""></video></a>
+                    <a href="{{ url_for('video',upload_ref=episode.upload_ref,id=episode.id) }}"><video width="160" height="100" src="../static/videos/{{ episode.upload_ref }}" alt=""></video></a>
                         </div>
                         <div class="col">
-                    <div >{{ upload.title }}</div><br>
-                            {% if upload.price == 0 %}
-                            <div></div>
-                            {% else %}
-                            <div>{{ upload.price }}</div>
-                            {% endif %}
-                    <div>{{ user.uploader }}</div>
+                    <div >{{ episode.subtitle }}</div><br>
+
+                    <div>{{ episode.uploader }}</div>
                         </div>
                     </div>
                 </card>

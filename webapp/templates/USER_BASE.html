@@ -39,33 +39,33 @@
 
     {%  if current_user.role == 2 %}
 <div class="text-center">
-    <a href="{{ url_for('user_profile',username = current_user.username) }}"><img id="top-icon-u" style="margin-top: 60px" class="icon-u" src="../static/sessions-w.png" alt=""></a>
-            <a href="{{ url_for('user_profile',username = current_user.username) }}" style="color: white"><img class="icon-u" src="../static/dashboard.png" alt=""></a>
-            <a href="{{ url_for('user_profile',username = current_user.username) }}" style="color: white"><img class="icon-u" src="../static/discover-w.png" alt=""></a>
+    <a href="{{ url_for('user_profile',username = current_user.username) }}"><img id="top-icon-u" style="margin-top: 60px" class="icon-u" src="../static/sessions-w.svg" alt=""></a>
+            <a href="{{ url_for('user_profile',username = current_user.username) }}" style="color: white"><img class="icon-u" src="../static/dash-w.svg" alt=""></a>
+            <a href="{{ url_for('user_profile',username = current_user.username) }}" style="color: white"><img class="icon-u" src="../static/disc-w.svg" alt=""></a>
 
 
                 <a href="/SETTINGS" style="color: white;padding: 0px"><img class="icon-u" src="../static/badge.png" alt=""></a>
 
                 <div id="botrnav" style="padding: 0px">
-                    <a href="/SETTINGS" style="color: white"><img class="icon-u" src="../static/SETTINGS.png" alt="" style="color: white"></a>
+                    <a href="/SETTINGS" style="color: white"><img class="icon-u" src="../static/settings-w.svg" alt="" style="color: white"></a>
                     <br>
-                    <a href="{{ url_for('logout',username = current_user.username) }}" style="color: white"><img class="icon-u" src="../static/logout.png" alt=""></a>
+                    <a href="{{ url_for('logout',username = current_user.username) }}" style="color: white"><img class="icon-u" src="../static/logoutw.svg" alt=""></a>
                 </div>
 </div>
     {% else %}
 <div class="text-center">
 
-            <a href="{{ url_for('user_profile',username = current_user.username) }}" style="color: white"><img id="top-icon-u" class="icon-u" src="../static/sessions-w.png" alt=""></a>
-            <a href="/DASHBOARD" style="color: white"><img class="icon-u" src="../static/dashboard.png" alt=""></a>
-            <a href="/DISCOVER" style="color: white"><img class="icon-u" src="../static/discover-w.png" alt=""></a>
-            <a href="/UPLOADS" style="color: white"><img class="icon-u" src="../static/uploads-w.png" alt=""></a>
+            <a href="{{ url_for('user_profile',username = current_user.username) }}" style="color: white"><img id="top-icon-u" class="icon-u" src="../static/sessions-w.svg" alt=""></a>
+            <a href="/DASHBOARD" style="color: white"><img class="icon-u" src="../static/dash-w.svg" alt=""></a>
+            <a href="/DISCOVER" style="color: white"><img class="icon-u" src="../static/disc-w.svg" alt=""></a>
+            <a href="/UPLOADS" style="color: white"><img class="icon-u" src="../static/uploads-w.svg" alt=""></a>
 
 
 
                 <div id="botrnav" style="padding: 0px">
-                    <a href="/SETTINGS" style="color: white"><img class="icon-u" src="../static/SETTINGS.png" alt="" style="color: white"></a>
+                    <a href="/SETTINGS" style="color: white"><img class="icon-u" src="../static/settings-w.svg" alt="" style="color: white"></a>
                     <br>
-                    <a href="{{ url_for('logout') }}" style="color: white"><img class="icon-u" src="../static/logout.png" alt=""></a>
+                    <a href="{{ url_for('logout') }}" style="color: white"><img class="icon-u" src="../static/logoutw.svg" alt=""></a>
                 </div>
     {% endif %}
     </div>

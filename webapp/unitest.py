@@ -54,7 +54,7 @@ class UserModelCase(unittest.TestCase):
         db.session.add(l4)
         db.session.commit()
 
-        up1 = Upload(title = 'funcionality',user_id=1)
+        up1 = Upload(title = 'funcionality',upload_ref='e4ddb88bfcfe5661.mp4',user_id=1)
         c1 = Comment(content = 'This is just a test.This is for the funcionality',user_id=1,upload_id=1)
         c2 = Comment(content = 'This is just a test.This is for the funcionality',user_id=2,upload_id=1)
         c3 = Comment(content = 'This is just a test.This is for the funcionality',user_id=3,upload_id=1)

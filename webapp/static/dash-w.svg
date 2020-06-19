@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="24" height="21" viewBox="0 0 24 21">
+  <defs>
+    <style>
+      .cls-1 {
+        fill: #fff;
+      }
+    </style>
+  </defs>
+  <path id="window-maximize" class="cls-1" d="M21.75,32H2.25A2.251,2.251,0,0,0,0,34.25v16.5A2.251,2.251,0,0,0,2.25,53h19.5A2.251,2.251,0,0,0,24,50.75V34.25A2.251,2.251,0,0,0,21.75,32Zm0,18.469a.282.282,0,0,1-.281.281H2.531a.282.282,0,0,1-.281-.281V39.5h19.5Z" transform="translate(0 -32)"/>
+</svg>

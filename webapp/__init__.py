@@ -326,7 +326,7 @@ class Series(db.Model):
     price = db.Column('price', db.Integer)
     timestamp = db.Column(db.DateTime, default=datetime.datetime.utcnow)
     user_id = db.Column('user_id', db.Integer, db.ForeignKey('user.id'), nullable=False)
-    comments = db.relationship('Comment', backref='commenter', lazy='dynamic')
+    comments = db.relationship('Comment', backref='series', lazy='dynamic')
     episode = db.relationship('Episode', backref='sub', lazy=True)
 
 
@@ -349,6 +349,7 @@ class Episode(db.Model):
     upload_ref = db.Column('upload_ref', db.VARCHAR)
     user_id = db.Column('user_id', db.Integer, db.ForeignKey('user.id'), nullable=True)
     series_id = db.Column(db.Integer,db.ForeignKey('series.id'))
+    comments = db.relationship('Comment', backref='episode', lazy='dynamic')
 
     def __repr__(self, id,subtitle, category, description, upload_ref ,user_id,series_id):
         self.id = id
@@ -375,6 +376,7 @@ class Comment(db.Model):
    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
    upload_id = db.Column(db.Integer, db.ForeignKey('upload.id'))
    series_id = db.Column(db.Integer, db.ForeignKey('series.id'))
+   episode_id = db.Column(db.Integer, db.ForeignKey('episode.id'))
 
 
 
@@ -478,6 +480,8 @@ class Series_form(FlaskForm):
     description = TextAreaField('Description')
     price = StringField('Price')
     submit = SubmitField('Submit')
+
+
 
 class Episode_form(FlaskForm):
     subtitle = StringField('Title')
@@ -860,7 +864,7 @@ def user_profile(username):
 
 
 
-    return render_template('USER.html',seriesIdNum=seriesIdNum,postNum=postNum,followed_posts=followed_posts,user=user,user_role=user_role,all_users=all_users,all_posts = all_posts,author=author, image_file = image_file)
+    return render_template('sessions.html', seriesIdNum=seriesIdNum, postNum=postNum, followed_posts=followed_posts, user=user, user_role=user_role, all_users=all_users, all_posts = all_posts, author=author, image_file = image_file)
 
 @app.route('/<username>')
 @login_required
@@ -965,10 +969,9 @@ def save_pic(form_pic):
 UPLOADS_URL = 'http://121.40.119.211/static/videos'
 
 
-@app.route('/discover/<username>', defaults={'req_path': ''})
-@app.route('/<path:req_path>')
+@app.route('/discover/<username>')
 @login_required
-def discover(req_path,username):
+def discover(username):
     user = User.query.filter_by(username=username).first_or_404()
 
     session['username'] = current_user.username
@@ -978,24 +981,9 @@ def discover(req_path,username):
 
     # Permission
     user_role = current_user.role
-    if get_Host_name_IP('CJAY') == True:
-        BASE_DIR = '/Users/ASUS/Desktop/webApp/webapp/static'
-    else:
-        BASE_DIR = '/var/www/App/webapp/static'
 
-    # Joining the base and the requested path
-    abs_path = os.path.join(BASE_DIR, req_path)
 
-    # Return 404 if path doesn't exist
-    if not os.path.exists(abs_path):
-        return os.abort(404)
 
-    # Check if path is a file and serve
-    if os.path.isfile(abs_path):
-        return send_from_directory(abs_path)
-
-    # Show directory contents
-    upload = os.listdir(abs_path)
     uploads = Upload.query.all()
     series= Series.query.all()
     episodes=Episode.query.all()
@@ -1054,6 +1042,31 @@ def video(upload_ref,id):
 
 
     return render_template('VIDEO.html',videoRef=videoRef,videoId=videoId,seriesIdNum=seriesIdNum,comments = comments,video=video,uploads=uploads,user=user,form=form)
+
+@app.route('/series/<int:seriesid>Id<int:id>video<upload_ref>' , methods=['POST','GET'])
+@login_required
+
+def series(upload_ref,id,seriesid):
+    form = Comment_form()
+    video = Episode.query.filter_by(upload_ref=upload_ref).first()
+    uploads  = Upload.query.all()
+    episodes = Episode.query.all()
+
+    comments = Comment.query.all()
+    seriesId = Series.query.all()
+    videoId=id
+    videoRef=upload_ref
+    for seriesId in seriesId:
+        seriesIdNum = int(seriesId.id) + 1
+    if request.method == 'POST':
+        comment = Comment(content = form.content.data,user_id=current_user.id,upload_id=video.id)
+        db.session.add(comment)
+        db.session.commit()
+        return redirect(url_for('series',upload_ref=video.upload_ref))
+
+
+    return render_template('series.html',episodes=episodes,videoRef=videoRef,videoId=videoId,seriesIdNum=seriesIdNum,comments = comments,video=video,uploads=uploads,user=user,form=form)
+
 
 @app.route('/like/video<int:id>')
 @login_required
@@ -1370,6 +1383,42 @@ def create(username):
         return redirect(url_for('meetingInfo',meetingcode=meetingCode,username=current_user.username,post_id=post.id))
     return render_template('CREATE1.html',seriesIdNum=seriesIdNum,user=user,user_role = user_role,form=form,verify_form=verify_form,lesson_form=lesson_form,image_file=image_file)
 
+@app.route('/available/<username>',methods=['GET','POST'])
+@login_required
+def available(username):
+    user = User.query.filter_by(username=username).first_or_404()
+    image_file = url_for('static', filename ='profile_pics/' + current_user.image_file)
+    user_role = current_user.role
+
+    verify_form = Verify_form()
+    seriesId = Series.query.all()
+    for seriesId in seriesId:
+        seriesIdNum = int(seriesId.id) + 1
+    if request.method =='POST':
+        fulltime = request.form['date-time']
+        fullDate = datetime.fromtimestamp(int(fulltime)/1000).strftime('%Y-%m-%d')
+        startTime = datetime.fromtimestamp(int(fulltime)/1000).strftime('%H:%M')
+        end_time =request.form['end-time']
+        endTime=datetime.fromtimestamp(int(end_time)/1000).strftime('%H:%M')
+        print(fulltime)
+        print(end_time)
+        print(fullDate)
+#        start = re.split(r'([T+])', time)
+#        end = re.split(r'([T+])', end_time)
+
+
+
+
+        available = Available(date_available=fullDate)
+        verify = User(id_type = verify_form.id_type.data,id_number = verify_form.id_number.data,id_document = verify_form.id_document.data,
+                     nationality = verify_form.nationality.data,occupation = verify_form.occupation.data,email = verify_form.email.data,phone = verify_form.phone.data)
+
+        db.session.add(available)
+
+        db.session.commit()
+
+        return redirect(url_for('my_profile',username=current_user.username))
+    return render_template('available.html',seriesIdNum=seriesIdNum,user=user,user_role = user_role,form=form,verify_form=verify_form,image_file=image_file)
 
 
 @app.route('/uploads/<int:id><username>',methods=['POST','GET'])
@@ -1401,8 +1450,7 @@ def upload(username,id):
             db.session.add(episode)
 
             db.session.commit()
-            return redirect(url_for('discover',upload_ref=file_hex,username=current_user.username))
-
+            return jsonify({'response': 'succes'})
     else:
         if request.method == 'POST':
             file_hex = binascii.hexlify(os.urandom(8))
@@ -1420,7 +1468,7 @@ def upload(username,id):
             db.session.add(episode)
 
             db.session.commit()
-            return redirect(url_for('discover',upload_ref=file_hex,username=current_user.username))
+            return jsonify({'response':'succes'})
     return render_template('UPLOADS.html',user=user,seriesIdNum=seriesIdNum,user_role=user_role,form =form,seriesForm=seriesForm,episodeForm=episodeForm,image_file=image_file)
 
 

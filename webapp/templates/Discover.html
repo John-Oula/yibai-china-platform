@@ -60,9 +60,17 @@
 <div class="uploads">
 <ul>
     {% for episode in episodes %}
-        <p class="upload-username"> {{ episode.sub.title}}</p>
-        <p class="upload-username"> subtitle:{{ episode.subtitle}}</p>
-        <li><a href="{{ url_for('video',upload_ref=episode.upload_ref,id=episode.id) }}"><iframe width="250" height="200"  src="../static/videos/{{ episode.upload_ref }}" alt=""></iframe></a></li></li>
+        <card class="card upload-card" >
+            <card class="card-body">
+                <li><a href="{{ url_for('series',seriesid=episode.sub.id,upload_ref=episode.upload_ref,id=episode.id) }}"><video width="250" height="200" type="video/mp4" src="../static/videos/{{ episode.upload_ref }}" alt=""></video></a></li></li>
+                <p>{{ episode.sub.title}}</p>
+                <p class="upload-username">Uploaded by {{ episode.user_episode.username}}</p>
+                <p class="upload-username">{{ episode.sub.episode.count(subtitles) }}</p>
+            </card>
+        </card>
+
+
+
     {% endfor %}
 
 {% for  upload in uploads%}

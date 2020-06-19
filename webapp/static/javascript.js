@@ -140,7 +140,43 @@ $(document).ready(function(){
 })
   });
 
+$(document).ready(function(){
 
+  $('#ajax').on('submit',function(){
+  var that = $(this),
+    url = that.attr('url'),
+      data={};
+  that.find('[name]').each(function (index,value) {
+    var that = $(this),
+        name= that.attr('name'),
+        value = that.val();
+    data[name] = value;
+
+  });
+  console.log(data);
+
+
+
+
+    var csrf_token = $('input#csrf_token').attr('value');
+    $.ajax({
+      url:url,
+      type:"post",
+      data:JSON.stringify(data) ,
+      contentType: "application/json; charset=utf-8", // this
+      dataType: "json",
+      beforeSend: function(xhr, settings) {
+          if (!/^(GET|HEAD|OPTIONS|TRACE)$/i.test(settings.type) && !this.crossDomain) {
+              xhr.setRequestHeader("X-CSRFToken", csrf_token);
+          }
+      },
+      success:function(response){
+        console.log(response);
+      }
+    });
+    return false;
+});
+});
 function openCity(evt, cityName) {
   // Declare all variables
   var i, tabcontent, tablinks;

@@ -304,17 +304,21 @@ class Upload(db.Model):
     description = db.Column('description', db.String(600))
     price = db.Column('price', db.Integer)
     upload_ref = db.Column('upload_ref', db.VARCHAR)
+    transcript_ref = db.Column('transcript_ref', db.VARCHAR)
+    auido_ref = db.Column('auido_ref', db.VARCHAR)
     timestamp = db.Column(db.DateTime, default=datetime.datetime.utcnow)
     user_id = db.Column('user_id', db.Integer, db.ForeignKey('user.id'), nullable=True)
     comments = db.relationship('Comment', backref='upload', lazy='dynamic')
 
-    def __repr__(self, id, title, category, description, price, upload_ref, user_id):
+    def __repr__(self, id, title, category, description, price, upload_ref,transcript_ref,auido_ref, user_id):
         self.id = id
         self.title = title
         self.category = category
         self.description = description
         self.price = price
         self.upload_ref = upload_ref
+        self.transcript_ref = transcript_ref
+        self.auido_ref = auido_ref
         self.user_id = user_id
 
 class Series(db.Model):
@@ -350,14 +354,18 @@ class Episode(db.Model):
     user_id = db.Column('user_id', db.Integer, db.ForeignKey('user.id'), nullable=True)
     series_id = db.Column(db.Integer,db.ForeignKey('series.id'))
     comments = db.relationship('Comment', backref='episode', lazy='dynamic')
+    upload_ref = db.Column('upload_ref', db.VARCHAR)
+    transcript_ref = db.Column('transcript_ref', db.VARCHAR)
+    auido_ref = db.Column('auido_ref', db.VARCHAR)
 
-    def __repr__(self, id,subtitle, category, description, upload_ref ,user_id,series_id):
+    def __repr__(self, id,subtitle, category, description, upload_ref, transcript_ref,auido_ref ,user_id,series_id):
         self.id = id
         self.subtitle = subtitle
         self.category = category
         self.description = description
         self.upload_ref = upload_ref
-
+        self.transcript_ref = transcript_ref
+        self.auido_ref = auido_ref
         self.user_id = user_id
         self.series_id = series_id
 #
@@ -487,6 +495,8 @@ class Episode_form(FlaskForm):
     subtitle = StringField('Title')
     description = TextAreaField('Description')
     upload = FileField('Upload')
+    transcript = FileField('Upload')
+    audio = FileField('Upload')
 
 class Lesson_form(FlaskForm):
     title = StringField()

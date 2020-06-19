@@ -148,7 +148,7 @@
                 <card class="card-body video-text-list">
                     <div class="row">
                         <div class="col-6">
-                    <a href="{{ url_for('video',upload_ref=episode.upload_ref,id=episode.id) }}"><video width="160" height="100" src="../static/videos/{{ episode.upload_ref }}" alt=""></video></a>
+                    <a href="{{ url_for('series',seriesid=episode.sub.id,upload_ref=episode.upload_ref,id=episode.id) }}"><video width="160" height="100" src="../static/videos/{{ episode.upload_ref }}" alt=""></video></a>
                         </div>
                         <div class="col">
                     <div >{{ episode.subtitle }}</div><br>

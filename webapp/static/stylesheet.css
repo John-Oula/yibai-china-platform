@@ -1113,6 +1113,8 @@ font-family: Josefin Sans,sans-serif;
 
 .uploads{
     margin-left: 30px;
+    display: flex;
+    flex-direction: row;
 }
 
 .session-container{
@@ -1131,6 +1133,12 @@ font-family: Josefin Sans,sans-serif;
 .video-list{
     margin-top: 115.6px;
 }
+
+ul.upload-list{
+    display: flex;
+    flex-direction: row;
+}
+
 
 .video-card{
     width: 400px;
@@ -1180,6 +1188,7 @@ font-family: Josefin Sans,sans-serif;
     height: fit-content;
     width: fit-content;
     margin-top: 30px;
+    margin: 6px;
 }
 .series-div{
     border-style: solid;

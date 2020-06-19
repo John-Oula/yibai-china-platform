@@ -15,6 +15,7 @@
 
     <div class="main">
         <div class="session-container">
+        <div class="landing-container">
             <div id="overview">
             <div class="info-card-wrapper  text-center">
                 <card class="card info-card shadow-sm">
@@ -39,12 +40,25 @@
                     <div class="schedule-wrapper">
                     <card class="card schedule-card">
                         <card class="card-body">
-                            <h3>Select a date where you are available for consultation</h3>
+                            <h6>Select a date where you are available for consultation</h6>
                         </card>
                     </card>
                 </div>
                 </div>
             </div>
+            <div class="followers-card-wrapper">
+                <card class="card followers-card text-center">
+                    <card class="card-body">
+                    <h6>Suggested for you</h6>
+                        {% for user in user %}
+                            <p>{{ user.username }}</p>
+
+                        {% endfor %}
+
+                    </card>
+                </card>
+            </div>
+        </div>
         </div>
     </div>
 

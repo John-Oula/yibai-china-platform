@@ -1281,6 +1281,19 @@ p.likes{
 
 }
 
+.followers-card-wrapper{
+    width: 30%;
+    height: 400px;
+    padding: 20px;
+}
+
+.landing-container{
+    display: flex;
+}
+.followers-card{
+    height: inherit;
+    padding: 15px;
+}
 /* video */
 
 @media screen and (max-width: 600px){

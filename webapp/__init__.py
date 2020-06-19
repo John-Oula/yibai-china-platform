@@ -542,34 +542,13 @@ def profile():
     return render_template('USER_BASE.html')
 
 
-@app.route('/discover_h', defaults={'req_path': ''})
-@app.route('/<path:req_path>')
-def discover_h(req_path):
+@app.route('/discover_h')
 
-    # Permission
+def discover_h():
 
-    if get_Host_name_IP('CJAY') == True:
-        BASE_DIR = '/Users/ASUS/Desktop/webApp/webapp/static'
-    else:
-        BASE_DIR = '/var/www/App/webapp/static'
-
-    # Joining the base and the requested path
-    abs_path = os.path.join(BASE_DIR, req_path)
-
-    # Return 404 if path doesn't exist
-    if not os.path.exists(abs_path):
-        return os.abort()
-
-    # Check if path is a file and serve
-    if os.path.isfile(abs_path):
-        return send_from_directory(abs_path)
-
-    # Show directory contents
-    upload = os.listdir(abs_path)
     uploads = Upload.query.all()
 
 
-#    uploads = send_from_directory(directory='videos',filename='videos')
     return render_template('discover_h.html',user=user,uploads=uploads)
 
 @app.route('/event')

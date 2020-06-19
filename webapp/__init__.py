@@ -1479,7 +1479,7 @@ def upload(username,id):
                             category=seriesForm.category.data, price=seriesForm.price.data, user_series=current_user)
             db.session.add(series)
             episode = Episode(subtitle=episodeForm.subtitle.data, description=episodeForm.description.data,
-                              upload_ref=videoPath,auido_ref = audioPath,transcript_ref=transcriptPath, auduser_episode=current_user, series_id=id)
+                              upload_ref=videoPath,auido_ref = audioPath,transcript_ref=transcriptPath, user_episode=current_user, series_id=id)
             db.session.add(episode)
 
             db.session.commit()

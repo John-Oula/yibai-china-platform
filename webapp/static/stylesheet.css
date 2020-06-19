@@ -1129,7 +1129,7 @@ font-family: Josefin Sans,sans-serif;
 }
 
 .video-list{
-    margin-top: 74px;
+    margin-top: 115.6px;
 }
 
 .video-card{
@@ -1189,6 +1189,7 @@ font-family: Josefin Sans,sans-serif;
 }
 .upload-username{
     font-size: 10px;
+    flex-direction: row;
 }
 
 p.login-text{
@@ -1293,6 +1294,18 @@ p.likes{
 .followers-card{
     height: inherit;
     padding: 15px;
+}
+
+.icon-list{
+    color: #48B06F;
+    float: right;
+
+}
+
+.video-thumb-icon{
+    width: 12px;
+    padding: 2px;
+    cursor: pointer;
 }
 /* video */
 

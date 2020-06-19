@@ -1039,7 +1039,7 @@ def series(upload_ref,id,seriesid):
     form = Comment_form()
     video = Episode.query.filter_by(upload_ref=upload_ref).first()
     uploads  = Upload.query.all()
-    episodes = Episode.query.all()
+    episodes = Episode.query.filter_by(series_id=seriesid)
 
     comments = Comment.query.all()
     seriesId = Series.query.all()
@@ -1410,6 +1410,25 @@ def available(username):
     return render_template('available.html',seriesIdNum=seriesIdNum,user=user,user_role = user_role,form=form,verify_form=verify_form,image_file=image_file)
 
 
+def fileRef(file):
+    random_hex = urandom(8).hex()
+
+    _, f_ext = os.path.splitext(file.filename)
+    file_hex = random_hex
+    file_fn = random_hex + f_ext
+    file.save(os.path.join(app.root_path, 'static/videos', file_fn))
+    return os.path.join(file_fn)
+
+def fileRefServer(name):
+
+
+    _, f_ext = os.path.splitext(request.files[name].filename)
+    file_hex = binascii.hexlify(os.urandom(8))
+    file_fn = file_hex + f_ext
+    request.files[name].save(os.path.join(app.root_path, 'static/videos', file_fn))
+
+    return os.path.join(file_fn)
+
 @app.route('/uploads/<int:id><username>',methods=['POST','GET'])
 @login_required
 def upload(username,id):
@@ -1424,41 +1443,48 @@ def upload(username,id):
         seriesIdNum = int(seriesId.id) + 1
     if get_Host_name_IP('CJAY') == True:
         if request.method == 'POST':
-            random_hex = urandom(8).hex()
-            file = request.files['file']
-            _, f_ext = os.path.splitext(file.filename)
-            file_hex = random_hex
-            file_fn = random_hex + f_ext
-            file.save(os.path.join(app.root_path, 'static/videos', file_fn))
-            path = os.path.join(file_fn)
+            videoFile = request.files['video-file']
+            audioFile = request.files['audio-file']
+            transcriptFile = request.files['transcript-file']
+
+            if videoFile is not None:
+                videoPath = fileRef(videoFile)
+
+            if audioFile is not None:
+                audioPath = fileRef(audioFile)
+
+            if transcriptFile is not None :
+                transcriptPath = fileRef(transcriptFile)
+
+
+
+
             series = Series(title=seriesForm.title.data, description=seriesForm.description.data,
                             category=seriesForm.category.data, price=seriesForm.price.data, user_series=current_user)
             db.session.add(series)
             episode = Episode(subtitle=episodeForm.subtitle.data, description=episodeForm.description.data,
-                              upload_ref=path, user_episode=current_user, series_id=id)
+                              upload_ref=videoPath,transcript_ref= transcriptPath,auido_ref=audioPath,user_episode=current_user, series_id=id)
             db.session.add(episode)
 
             db.session.commit()
             return jsonify({'response': 'succes'})
     else:
         if request.method == 'POST':
-            file_hex = binascii.hexlify(os.urandom(8))
 
-            _, f_ext = os.path.splitext(request.files['file'].filename)
-            file_fn = file_hex + f_ext
-            request.files['file'].save(os.path.join(app.root_path, 'static/videos', file_fn))
-            path = os.path.join(file_fn)
+            videoPath = fileRefServer('video-file')
+            audioPath = fileRefServer('audio-file')
+            transcriptPath = fileRefServer('transcript-file')
             #        upload = Upload(title=form.title.data,description=form.description.data,category=form.category.data,price= form.price.data,upload_ref=path,uploader=current_user)
             series = Series(title=seriesForm.title.data, description=seriesForm.description.data,
                             category=seriesForm.category.data, price=seriesForm.price.data, user_series=current_user)
             db.session.add(series)
             episode = Episode(subtitle=episodeForm.subtitle.data, description=episodeForm.description.data,
-                              upload_ref=path, user_episode=current_user, series_id=id)
+                              upload_ref=videoPath,auido_ref = audioPath,transcript_ref=transcriptPath, auduser_episode=current_user, series_id=id)
             db.session.add(episode)
 
             db.session.commit()
-            return jsonify({'response':'succes'})
-    return render_template('UPLOADS.html',user=user,seriesIdNum=seriesIdNum,user_role=user_role,form =form,seriesForm=seriesForm,episodeForm=episodeForm,image_file=image_file)
+            return redirect(url_for('discover', username = current_user.username))
+        return render_template('UPLOADS.html',user=user,seriesIdNum=seriesIdNum,user_role=user_role,form =form,seriesForm=seriesForm,episodeForm=episodeForm,image_file=image_file)
 
 
 @app.route('/lesson<int:id><username>', methods=['POST','GET'])

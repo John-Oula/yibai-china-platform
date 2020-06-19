@@ -15,7 +15,7 @@
 {% block body %}
 <div class="main">
 <div class="session-container">
-<card class="card shadow-lg" id="create_card" style="height: 500px">
+<card class="card shadow-lg" id="create_card" >
     <card class="card-body">
 
 <form  id="ajax" class="form-upload text-left" action="" method="POST" enctype="multipart/form-data">
@@ -37,7 +37,9 @@
 </button>
 <div class="content" >
 
-        <span>Upload Video:</span><input style="margin-top: 20px" type="file" name="file"><br>
+        <span>Upload Video:</span><input style="margin-top: 20px" type="file" name="video-file"><br>
+        <span>Upload Transcript(PDF format):</span><input style="margin-top: 20px" type="file" name="transcript-file"><br>
+        <span>Upload Audio(mp3 format):</span><input style="margin-top: 20px" type="file" name="audio-file"><br>
         {{ episodeForm.description(class = "description-field input-box-border border border-top-0 border-left-0 border-right-0",placeholder="Description") }}
 
 </div>

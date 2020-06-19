@@ -78,15 +78,18 @@
 
 <div class="row">
     <div class="col-8">
+
              <form class="text-center signup-form" method="post" action="" style="margin-top: 10px"><input class="search" type="search">
 
         </form>
 
         <div style="margin-left: 40px">
+            <h3 class="video-text">{{ video.sub.title }}</h3>
         <video-js videoId="{{ videoId }}" videoRef="{{ videoRef }}"class="video-js video-page vjs-big-play-centered" data-setup='{}' controls preload="none">
           <source src="../static/videos/{{ video.upload_ref }}" type="video/mp4">
         </video-js>
-        <h3 class="video-text">{{ video.sub.title }}</h3>
+
+        <h5 class="video-text">{{ video.subtitle }}</h5>
 
 
             <div class="row">

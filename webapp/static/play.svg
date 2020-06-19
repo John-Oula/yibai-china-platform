@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="24" height="29.493" viewBox="0 0 24 29.493">
+  <defs>
+    <style>
+      .cls-1 {
+        fill: #48b06f;
+      }
+    </style>
+  </defs>
+  <path id="play" class="cls-1" d="M22.736,12.4,3.879.41A2.559,2.559,0,0,0,0,2.789V26.757a2.573,2.573,0,0,0,3.879,2.379L22.736,17.155a2.871,2.871,0,0,0,0-4.758Z" transform="translate(0 -0.032)"/>
+</svg>

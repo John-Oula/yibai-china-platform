@@ -1293,6 +1293,7 @@ def modify_meeting(username,meetingId,post_id):
     lesson_form = Lesson_form()
     form = Session_form()
     verify_form = Verify_form()
+    seriesId = Series.query.all()
     for seriesId in seriesId:
         seriesIdNum = int(seriesId.id) + 1
     if request.method == 'POST':

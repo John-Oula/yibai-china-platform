@@ -1293,7 +1293,8 @@ def modify_meeting(username,meetingId,post_id):
     lesson_form = Lesson_form()
     form = Session_form()
     verify_form = Verify_form()
-
+    for seriesId in seriesId:
+        seriesIdNum = int(seriesId.id) + 1
     if request.method == 'POST':
         fulltime = request.form['date-time']
         fullDate = datetime.fromtimestamp(int(fulltime) / 1000).strftime('%Y-%m-%d')
@@ -1328,7 +1329,7 @@ def modify_meeting(username,meetingId,post_id):
 
 
         return redirect(url_for('meetingInfo', meetingcode=meetingCode, username=current_user.username,post_id=post_id))
-    return render_template('modify.html',user=user,user_role = user_role,form=form,verify_form=verify_form,lesson_form=lesson_form,image_file=image_file)
+    return render_template('modify.html',seriesIdNum=seriesIdNum,user=user,user_role = user_role,form=form,verify_form=verify_form,lesson_form=lesson_form,image_file=image_file)
 @app.route('/create/<username>',methods=['GET','POST'])
 @login_required
 def create(username):

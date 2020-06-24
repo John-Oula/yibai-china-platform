@@ -155,7 +155,7 @@
             </div>
 
         <div>
-                     {% if not current_user.bookpos %}
+                     {% if not current_user.book %}
                                 <a id="book" data-href="{{ url_for('book', id=post.id) }}"> <button type="button" id="book-btn" class="common-btn" >Book</button></a>
                                 <a style="display: none" id="unbook" data-href="{{ url_for('unbook', id=post.id) }}"><button type="button" id="unbook-btn" class="common-btn" >Unbook</button></a>
                                 {% else %}
@@ -164,11 +164,11 @@
                                 {% endif %}
         </div>
 
+    </card>
+    </card>
+    {% endfor %}
     {% endif %}
-    </card>
-    </card>
-{% endfor %}
-    </div>
+</div>
 
 
 </div>

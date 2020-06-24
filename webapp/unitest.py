@@ -1,6 +1,6 @@
 from datetime import datetime, timedelta
 import unittest
-from webapp import app, Series, Episode, Skill, Available
+from webapp import app, Series, Episode, Skill, Available, follow
 from webapp import User, Post, Lesson, db, Comment, likes, Upload
 from flask import jsonify
 import psycopg2
@@ -34,9 +34,9 @@ class UserModelCase(unittest.TestCase):
         user_list=User.query.all()
 
         p1 = Post(user_id=1, title='tech', description='this is a test ',category='MANDARIN', date='2019-12-4')
-        p2 = Post(user_id=1, title='china', description='this is a test', category="CAREER", date='2019-12-3')
-        p3 = Post(user_id=4, title='biz', description='this is a test', category="LEGAL", date='2019-12-2')
-        p4 = Post(user_id=2, title='living', description='this is a test', category="BUSINESS", date='2019-12-1')
+        p2 = Post(user_id=2, title='china', description='this is a test', category="CAREER", date='2019-12-3')
+        p3 = Post(user_id=3, title='biz', description='this is a test', category="LEGAL", date='2019-12-2')
+        p4 = Post(user_id=4, title='living', description='this is a test', category="BUSINESS", date='2019-12-1')
         db.session.add(p1)
         db.session.add(p2)
         db.session.add(p3)
@@ -139,6 +139,25 @@ class UserModelCase(unittest.TestCase):
         db.session.commit()
 
 
+        u1.followed.append(u4)
+        u1.followed.append(u3)
+        u1.followed.append(u2)
+        u2.followed.append(u8)
+        u3.followed.append(u8)
+        u3.followed.append(u1)
+        db.session.commit()
+        u2.followers.count()
+        assert u2.followers.count() == 1
+        count = 0
+        for followers in u1.followed:
+
+            print(u1.username," is followed by ",followers.username)
+            count += count
+        print(count)
+
+
+
+
         user = User.query.all()
 
 #        for posts in u2.book:
@@ -158,7 +177,41 @@ class UserModelCase(unittest.TestCase):
 #        ep = e1.sub.title
 #
 #        print(ep)
+  # setup the followers
+        up1 = u1.followed_uploads().all()
+        # check the followed posts of each user
+        f1 = u1.followed_posts()
 
+        f2 = u2.followed_posts().all()
+        f3 = u3.followed_posts().all()
+        f4 = u4.followed_posts().all()
+
+
+        def update():
+            f = u3.followed_posts().all()
+            for i in f:
+                print(type(i))
+
+                posts = [i]
+                final = posts.append(i)
+                print(final)
+            return print(final)
+        pass
+        update()
+
+
+#        print(len(up1))
+#        print(len(f2))
+#        print(len(f3))
+#        print(len(f4))
+#        assert len(f1) == 4
+#        assert len(f2) == 2
+#        assert len(f3) == 2
+#        assert len(f4) == 1
+#        assert f1 == [p4, p3, p2,p1]
+#        assert f2 == [p4, p2]
+#        assert f3 == [p3, p2]
+#        assert f4 == [p4]
 
 
 if __name__ == '__main__':

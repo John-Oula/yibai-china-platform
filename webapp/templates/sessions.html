@@ -6,7 +6,7 @@
     {{ super() }}
 
 {% endblock %}
-
+<div class="root">
 {% block nav %}
     {{ super() }}
 {% endblock %}
@@ -252,14 +252,18 @@
 {% endblock %}
 
 
-</div>
+
 
 
 
 {% endblock %}
-
+{% block rightBlock %}
+    {{ super() }}
+{% endblock %}
+</div>
 
 {% block script %}
     {{ super() }}
 
 {% endblock %}
+</div>

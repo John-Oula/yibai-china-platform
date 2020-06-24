@@ -110,6 +110,8 @@ $('.like-btn').click(function(e){
 
   });
 
+
+
 $(document).ready(function(){
   $('#unlike-btn').click(function(e){
   e.preventDefault();
@@ -141,6 +143,179 @@ $(document).ready(function(){
   });
 
 
+
+
+$(document).ready(function(){
+  $('#submit-btn').click(function(e){
+  e.preventDefault();
+  var postURL = $(this).attr("data-href");
+    var csrf_token = $("#csrf").attr("value");
+
+  req = $.ajax({
+    url:postURL,
+    type:'POST',
+    data:{
+      title : $('#titleForm').val(),
+      description : $('#descriptionForm').val(),
+      price : $('#priceForm').val(),
+      category : $('#categoryForm').val(),
+      videofile : $('#file').val(),
+      audioFile : $('#audiofile').val(),
+      transcriptFile : $('#transcriptfile').val(),
+    },
+    headers: {
+    'Csrf-Token': csrf_token
+  },
+    success:function (data) {
+      console.log(data)
+    },error:function (error) {
+      console.log(error)
+      console.log("error")
+
+    }
+
+  });
+  req.done(function(data){
+
+    $('#submit-btn').css("background-color","black");
+
+  })
+
+
+})
+  });
+
+
+
+
+function updateText(word,verb){
+  word.text(verb)
+}
+$(document).ready(function(){
+$('#follow').click(function(e){
+  e.preventDefault();
+
+  var followURL = $(this).attr("data-href");
+
+
+  req = $.ajax({
+    url:followURL,
+    type:'GET',
+    data:{},
+    success:function (data) {
+      console.log(data)
+    },error:function (error) {
+      console.log(error)
+      console.log("error")
+
+    }
+
+  });
+  req.done(function(data){
+    $('#followers-count').text(data.followers);
+    $('#follow').css("display","none");
+    $('#unfollow').css("display","block");
+  })
+
+
+})
+$('#unfollow').click(function(e){
+  e.preventDefault();
+
+  var unfollowURL = $(this).attr("data-href");
+
+
+  req = $.ajax({
+    url:unfollowURL,
+    type:'GET',
+    data:{},
+    success:function (data) {
+      console.log(data)
+    },error:function (error) {
+      console.log(error)
+      console.log("error")
+
+    }
+
+  });
+  req.done(function(data){
+    $('#followers-count').text(data.followers);
+    $('#follow').css("display","block");
+    $('#unfollow').css("display","none");
+  })
+
+
+})
+
+  });
+
+
+$(document).ready(function(){
+$('#book').click(function(e){
+  e.preventDefault();
+
+  var bookURL = $(this).attr("data-href");
+
+
+  req = $.ajax({
+    url:bookURL,
+    type:'GET',
+    data:{},
+    success:function (data) {
+      console.log(data)
+    },error:function (error) {
+      console.log(error)
+      console.log("error")
+
+    }
+
+  });
+  req.done(function(data){
+    $('#book').css("display","none");
+    $('#unbook').css("display","block");
+  })
+
+
+})
+$('#unbook').click(function(e){
+  e.preventDefault();
+
+  var unbookURL = $(this).attr("data-href");
+
+
+  req = $.ajax({
+    url:unbookURL,
+    type:'GET',
+    data:{},
+    success:function (data) {
+      console.log(data)
+    },error:function (error) {
+      console.log(error)
+      console.log("error")
+
+    }
+
+  });
+  req.done(function(data){
+    $('#book').css("display","block");
+    $('#unbook').css("display","none");
+  })
+
+
+})
+
+
+
+  });
+
+function update() {
+  $.getJSON("/updateFeed", function(data) {
+    console.log(data)
+//    $("#feed-content").html(data);
+    window.setTimeout(update, 10000);
+  });
+}
+update()
 function openCity(evt, cityName) {
   // Declare all variables
   var i, tabcontent, tablinks;
@@ -184,8 +359,62 @@ function Event(new_event){
   return new_event
 }
 
+$(window).scroll(function() {
+    $('video').each(function() {
+        if ($(this).visible(true)) {
+            $(this)[0].play();
+        } else {
+            $(this)[0].pause();
+        }
+    })
+});
+
+$(document).ready(function(){
+  $('#sessions-btn').click(function(e){
+  e.preventDefault();
+    var sessionURL = $(this).attr("data-href");
+
+  req = $.ajax({
+    url:sessionURL,
+    type:'GET',
+    data:{},
+    success:function (data) {
+      console.log(data)
+    },error:function (error) {
+      console.log(error)
+      console.log("error")
+
+    }
+
+  });
+  req.done(function(data){
+    $('#feed-content').css('display','none');
+$('#session-content').css('display','block');
+});
 
 
+});
+$('#posts-btn').click(function(e){
+  e.preventDefault();
+      var postsURL = $(this).attr("data-href");
 
+  req = $.ajax({
+    url:postsURL,
+    type:'GET',
+    data:{},
+    success:function (data) {
+      console.log(data)
+    },error:function (error) {
+      console.log(error)
+      console.log("error")
 
+    }
+
+  });
+  req.done(function(data){
+$('#feed-content').css('display','block');
+$('#session-content').css('display','none');
+});
+  });
+  });
 

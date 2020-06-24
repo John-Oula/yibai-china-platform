@@ -54,7 +54,7 @@
                 {% endfor %}
         {% else %}
                 {{ form.username(class = "signup-input",placeholder="Username") }}
-
+                <span style="font-size: 10px">Minimum of 4 characters with no whitespace</span>
             {% endif %}
 
 
@@ -68,7 +68,8 @@
                 {% endfor %}
         {% else %}
                 {{ form.password(class = "signup-input",placeholder="Password") }}
-            {% endif %}
+         <span style="font-size: 10px">Minimum of 6 characters</span>
+         {% endif %}
 
          {% if form.confirm_password.errors %}
         {{ form.confirm_password(class = "signup-input is-invalid",placeholder="Password") }}
@@ -86,7 +87,7 @@
             <br>
 
 
-       <p class="form-rules"> <input type="radio" >By clicking Agree & Join, you agree to the LinkedIn User Agreement, Privacy Policy, and Cookie Policy.</p>
+       <p class="form-rules"> <input type="radio" >By clicking Agree & Join, you agree to the 100chinaguide User Agreement, Privacy Policy, and Cookie Policy.</p>
 
         {{ form.submit(id = "signup-long-btn") }}
         </fieldset>

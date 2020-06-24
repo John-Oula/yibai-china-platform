@@ -79,18 +79,23 @@
         <img id="profilepic-u" src="{{ image_file }}" alt="" class="rounded-circle  profilepic shadow-lg" width="200" height="200">
 <div class="text-center" style="margin-left: 70px">
   <p id="profilename-u">{{ user.username }}</p>
-<div>
-  <p style="margin-top: 30px;font-size: 13px">{{ user.followers.count() }}
-      {% if user.followers.count() == 1 %}
-      subscriber
+<span>
+    <span id="followers-count">{{ user.followers.count() }}</span>
+    <span style="display: inline">
+    {% if user.followers.count() == 1 %}
+      follower
       {% else %}
-      subscribers
-      {% endif %}</p>
+      followers
+      {% endif %}</span></span>
         {% if user == current_user %}
         {% elif not current_user.is_following(user) %}
-        <button style="color: white" id="card-btn"><a href="{{ url_for('follow', username=user.username) }}" style="color: white">Subscribe</a></button></p>
+
+           <a id="follow" data-href="{{ url_for('follow', username=user.username) }}"> <button type="button" id="follow-btn" class="common-btn" >Follow</button></a>
+           <a style="display: none" id="unfollow" data-href="{{ url_for('unfollow', username=user.username) }}"><button type="button" id="unfollow-btn" class="common-btn" >Unfollow</button></a>
         {% else %}
-        <button style="width: fit-content;color: white" id="card-btn"><a style="color: white" href="{{ url_for('unfollow', username=user.username) }}">Unsubscribe</a></button>
+                       <a style="display: none" id="follow" data-href="{{ url_for('follow', username=user.username) }}"><button type="button" id="follow-btn" class="common-btn" >Follow</button></a>
+                       <a id="unfollow" data-href="{{ url_for('unfollow', username=user.username) }}" ><button type="button" id="unfollow-btn" class="common-btn" >Unfollow</button></a>
+
         {% endif %}
 </div>
 </div>

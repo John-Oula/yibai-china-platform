@@ -1,0 +1,199 @@
+{%  extends "feedbase.html" %}
+
+{% block title %}{{ super() }}{% endblock %}
+
+{% block head %}
+    {{ super() }}
+
+{% endblock %}
+
+{% block nav %}
+    {{ super() }}
+{% endblock %}
+
+{% block body %}
+<div class="main">
+
+
+<div class="session-container">
+
+ <div>
+
+         <form  class="text-center signup-form" action=""><input class="search" type="search">
+
+        </form>
+    </div>
+
+<card class="card shadow-sm quick-upload" >
+    <card class="card-body">
+
+            <span>QUICK UPLOAD</span>
+        <div class="upload-btn-list">
+            <span><a type="button" data-toggle="modal" data-target="#myModal"> <img src="../static/file.svg" alt="">File</a></span>
+            <span><a type="button" data-toggle="modal" data-target="#myModal"> <img src="../static/play.svg" alt="">Video</a></span>
+            <span><a type="button" data-toggle="modal" data-target="#myModal"> <img src="../static/volume-down.svg" alt="">Audio</a></span>
+        </div>
+
+    </card>
+</card>
+    <br>
+<div class="btn-group">
+
+    <a id="posts-btn" data-href="{{ url_for("fetchPosts") }}"><button   type="button" class="btn btn-primary">Posts</button></a>
+    <a id="sessions-btn" data-href="{{ url_for("fetchSessions") }}"><button   type="button" class="btn btn-primary">Session</button></a>
+</div>
+    <br>
+    <br>
+      <!-- Trigger the modal with a button -->
+
+  <!-- Modal -->
+  <div class="modal fade" id="myModal" role="dialog">
+    <div class="modal-dialog">
+
+      <!-- Modal content-->
+      <div class="modal-content">
+        <div class="modal-header">
+            <h6 class="modal-title">Quick Upload</h6>
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+
+        </div>
+        <div class="modal-body">
+          <form id="#uploadForm" class="text-left" action="" method="POST" enctype="multipart/form-data">
+               <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+              <input placeholder="Title" type="text" name="title" id="titleForm">
+
+    <br>
+              <input placeholder="Description" type="text" name="description" id="descriptionForm">
+
+
+    <br>
+              <input placeholder="price" type="text" name="price" id="priceForm">
+
+
+    <br>
+              <select  name="category" id="categoryForm">
+  <option value="MANDARIN">MANDARIN</option>
+  <option value="BUSINESS">BUSINESS</option>
+  <option value="LIVING">LIVING</option>
+  <option value="CAREER">CAREER</option>
+</select>
+    <br>
+    <input style="margin-top: 20px" type="file" id="#file" name="file"><br>
+    <input style="margin-top: 20px" type="file" id="#audiofile" name="audiofile"><br>
+    <input style="margin-top: 20px" type="file" id="#transcriptfile" name="transcriptfile"><br>
+     <br>
+     <a id="submit" data-href="{{ url_for('quickupload', username=current_user.username) }}"> <button type="button" id="submit-btn" class="common-btn" >Post</button></a>
+
+</form>
+
+        </div>
+
+      </div>
+
+    </div>
+  </div>
+
+{% if current_user.followed_posts() == 0 %}
+    <div class="text-center">
+    <h6>You don't follow anybody yet</h6>
+    </div>
+    {% else %}
+<div id="feed-content">
+    <div class="post-wrapper ">
+    <card class="card" id="session-card">
+    <card class="card-body">
+
+        {% for post in followed_posts %}
+        <div class="profile-pic-thumb-wrapper">
+            <img id="profilepic" src="../static/profile_pics/{{ post.author.image_file }}" alt="">
+        </div>
+            <div class="session-text">
+            <h6 class="text-uppercase">{{ post.title }}</h6>
+            <span>{{ post.author.username }}</span>
+            <span>{{ post.date }}</span>
+            <span>{{ post.start_time }} - {{ post.end_time }}</span>
+            </div>
+
+        <div>
+                     {% if not current_user.bookpos %}
+                                <a id="book" data-href="{{ url_for('book', id=post.id) }}"> <button type="button" id="book-btn" class="common-btn" >Book</button></a>
+                                <a style="display: none" id="unbook" data-href="{{ url_for('unbook', id=post.id) }}"><button type="button" id="unbook-btn" class="common-btn" >Unbook</button></a>
+                                {% else %}
+                                <a style="display: none" id="book" data-href="{{ url_for('book', id=post.id) }}"><button type="button" id="book-btn" class="common-btn" >Book</button></a>
+                                <a id="unbook" data-href="{{ url_for('unbook', id=post.id) }}" ><button type="button" id="unbook-btn" class="common-btn" >Unbook</button></a>
+                                {% endif %}
+        </div>
+        {% endfor %}
+    {% endif %}
+    </card>
+    </card>
+</div>
+
+
+</div>
+
+{% if current_user.followed_posts() == 0 %}
+    {% else %}
+<div id="session-content">
+        <div class="text-center">
+    <h6>You don't follow anybody yet</h6>
+    </div>
+    <div class="post-wrapper ">
+    <card class="card" id="session-card">
+    <card class="card-body">
+
+        {% for post in followed_posts %}
+        <div class="profile-pic-thumb-wrapper">
+            <img id="profilepic" src="../static/profile_pics/{{ post.author.image_file }}" alt="">
+        </div>
+            <div class="session-text">
+            <h6 class="text-uppercase">{{ post.title }}</h6>
+            <span>{{ post.author.username }}</span>
+            <span>{{ post.date }}</span>
+            <span>{{ post.start_time }} - {{ post.end_time }}</span>
+            </div>
+
+        <div>
+                     {% if not current_user.bookpos %}
+                                <a id="book" data-href="{{ url_for('book', id=post.id) }}"> <button type="button" id="book-btn" class="common-btn" >Book</button></a>
+                                <a style="display: none" id="unbook" data-href="{{ url_for('unbook', id=post.id) }}"><button type="button" id="unbook-btn" class="common-btn" >Unbook</button></a>
+                                {% else %}
+                                <a style="display: none" id="book" data-href="{{ url_for('book', id=post.id) }}"><button type="button" id="book-btn" class="common-btn" >Book</button></a>
+                                <a id="unbook" data-href="{{ url_for('unbook', id=post.id) }}" ><button type="button" id="unbook-btn" class="common-btn" >Unbook</button></a>
+                                {% endif %}
+        </div>
+        {% endfor %}
+    {% endif %}
+    </card>
+    </card>
+</div>
+
+
+</div>
+
+
+</div>
+
+
+
+
+{% block mobileNav %}
+    {{ super() }}
+{% endblock %}
+
+
+
+
+
+
+{% endblock %}
+{% block rightBlock %}
+    {{ super() }}
+{% endblock %}
+</div>
+
+{% block script %}
+    {{ super() }}
+
+{% endblock %}
+</div>

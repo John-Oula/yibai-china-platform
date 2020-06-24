@@ -21,6 +21,7 @@ from wtforms import *
 from wtforms.validators import Required
 from flask_wtf.file import FileField
 import binascii
+from flask_wtf.csrf import CSRFProtect
 
 
 ### Tencent live video imports ###
@@ -46,9 +47,11 @@ from itsdangerous import TimedJSONWebSignatureSerializer as Serializer
 import psycopg2
 import base64
 import socket
+
 app = Flask(__name__)
 
 
+csrf = CSRFProtect(app)
 # IP address
 def get_Host_name_IP(hostname):
     try:
@@ -73,6 +76,7 @@ app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 app.config['SECRET_KEY'] = 'Adawug;irwugw79536870635785ty0875y03davvavavdey'
 appID=200000164
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+app.config['WTF_CSRF_ENABLED'] = True
 if get_Host_name_IP('CJAY') == True:
     app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:@qwerty1234!@localhost/postgres'
 else:
@@ -214,6 +218,13 @@ class User(db.Model, UserMixin):
         own = Post.query.filter_by(user_id=self.id)
         return followed.union(own).order_by(Post.timestamp.desc())
 
+    def followed_uploads(self):
+        followed = Upload.query.join(
+            followers, (followers.c.followed_id == Upload.user_id)).filter(
+            followers.c.follower_id == self.id)
+        own = Upload.query.filter_by(user_id=self.id)
+        return followed.union(own).order_by(Upload.timestamp.desc())
+
     def __repr__(self, user_id, role, sub_role, fullname, username, password, image_file,introduction,introduction_video, id_type, id_number,
                  id_document, nationality, occupation, email, province, city, phone):
         self.user_id = user_id
@@ -261,13 +272,14 @@ class Post(db.Model):
     category = db.Column('category', db.String(10), nullable=True)
     description = db.Column('description', db.String(100), nullable=True)
     files = db.Column('file', db.String)
+    timestamp = db.Column(db.DateTime, default=datetime.datetime.utcnow)
     date = db.Column('Date', db.String, nullable=True)
     user_id = db.Column('user_id', db.Integer, db.ForeignKey('user.id'), nullable=True)
     start_time = db.Column("Start Time", db.String, nullable=True)
     end_time = db.Column('End time', db.String, nullable=True)
     lesson = db.relationship('Lesson', backref=db.backref('lessons'))
 
-    def __repr__(self, id,meetingCode, verified, title, category, description, files, date, user_id, start_time,
+    def __repr__(self, id,meetingCode, verified, title, category, description, files, timestamp ,date, user_id, start_time,
                  end_time):
         self.id = id
         self.meetingCode = meetingCode
@@ -276,6 +288,7 @@ class Post(db.Model):
         self.category = category
         self.files = files
         self.description = description
+        self.timestamp = timestamp
         self.date = date
         self.user_id = user_id
         self.start_time = start_time
@@ -320,6 +333,8 @@ class Upload(db.Model):
         self.transcript_ref = transcript_ref
         self.auido_ref = auido_ref
         self.user_id = user_id
+
+
 
 class Series(db.Model):
     __tablename__ = 'series'
@@ -480,6 +495,8 @@ class Upload_form(FlaskForm):
     description = TextAreaField('Description')
     price = StringField('Price')
     upload = FileField('Upload')
+    transcript = FileField('Upload')
+    audio = FileField('Upload')
     submit = SubmitField('Submit')
 
 class Series_form(FlaskForm):
@@ -643,7 +660,7 @@ def login():
                 elif current_user.role == 1 and current_user.sub_role == 4:
                     return redirect(url_for('badge_admin',id = current_user.id))
                 else:
-                    return redirect(url_for('user_profile', username=current_user.username))
+                    return redirect(url_for('feed', username=current_user.username))
             else:
                 pass
         return render_template('LOGIN.html', form=form)
@@ -878,6 +895,29 @@ def my_profile(username):
 
     return render_template('landingProfile.html',seriesIdNum=seriesIdNum,postNum=postNum,followed_posts=followed_posts,user=user,user_role=user_role,all_users=all_users,all_posts = all_posts,author=author, image_file = image_file)
 
+@app.route('/feed/<username>')
+@login_required
+def feed(username):
+
+    user = User.query.filter_by(username=username).first_or_404()
+    image_file = url_for('static', filename ='profile_pics/' + current_user.image_file)
+#    followed_posts=Post.query.join(followers, (followers.c.followed_id == Post.user_id)).all()
+    suggestUser = User.query.filter_by(id=3).first_or_404()
+    form = Upload_form()
+    all_users = User.query.all()
+    followed_posts = current_user.followed_posts()
+
+
+    author = db.session.query(Post.title).join(User.posts)
+    user_role = current_user.role
+    session['username'] = username
+    seriesId=Series.query.all()
+    for seriesId in seriesId:
+        seriesIdNum = int(seriesId.id) + 1
+
+
+
+    return render_template('feed.html',form=form,suggestUser=suggestUser,seriesIdNum=seriesIdNum,followed_posts=followed_posts,user=user,user_role=user_role,all_users=all_users,author=author, image_file = image_file)
 
 
 #TRAINER PROFILE FUNCTIONS
@@ -894,17 +934,26 @@ def user(username):
 
     user = User.query.filter_by(username=username).first_or_404()
     image_file = url_for('static', filename ='profile_pics/' + user.image_file)
+    suggestUser = User.query.filter_by(id=3).first_or_404()
 
     all_posts = Post.query.all()
     all_lessons = Lesson.query.all()
-
+    seriesId=Series.query.all()
+    for seriesId in seriesId:
+        seriesIdNum = int(seriesId.id) + 1
 
 #    uploads = url_for('static', filename='videos/' + current_user.uploads)
 #    followed_posts = Post.query(User).join(Post)
 #    print(followed_posts)
-    return render_template('USER_BASE.html',user=user,image_file=image_file,all_posts=all_posts,all_lessons = all_lessons)
+    return render_template('USER_BASE.html',suggestUser=suggestUser,seriesIdNum=seriesIdNum,user=user,image_file=image_file,all_posts=all_posts,all_lessons = all_lessons)
 
 
+def followerCount(user):
+    count = 0
+    for followers in user.followed:
+        followers.username
+        count += 1
+    return count
 
 
 @app.route('/follow/<username>')
@@ -917,10 +966,11 @@ def follow(username):
     if user == current_user:
         flash('You cannot follow yourself!')
         return redirect(url_for('user', username=username))
-    current_user.follow(user)
+    current_user.followed.append(user)
     db.session.commit()
+    followers = user.followers.count()
     flash('You are following {}!'.format(username))
-    return redirect(url_for('user', username=username))
+    return jsonify({'result':'success','followers':followers})
 
 @app.route('/unfollow/<username>')
 @login_required
@@ -932,10 +982,12 @@ def unfollow(username):
     if user == current_user:
         flash('You cannot unfollow yourself!')
         return redirect(url_for('user', username=username))
-    current_user.unfollow(user)
+    current_user.followed.remove(user)
     db.session.commit()
+    followers = user.followers.count()
+
     flash('You are not following {}.'.format(username))
-    return redirect(url_for('user', username=username))
+    return jsonify({'result':'success','followers':followers})
 
 
 
@@ -991,7 +1043,7 @@ def book(id):
     post.bookers.append(current_user)
     db.session.commit()
 
-    return redirect(url_for('user_profile',username=current_user.username))
+    return jsonify({'result':'success'})
 
 @app.route('/unbook/<int:id>')
 @login_required
@@ -999,8 +1051,7 @@ def unbook(id):
     post=Post.query.filter_by(id=id).first()
     post.bookers.remove(current_user)
     db.session.commit()
-
-    return redirect(url_for('user_profile',username=current_user.username))
+    return jsonify({'result': 'success'})
 
 
 @app.route('/post/<int:id>')
@@ -1304,7 +1355,7 @@ def modify_meeting(username,meetingId,post_id):
         endTime = datetime.fromtimestamp(int(end_time) / 1000).strftime('%H:%M')
 
         #        start = re.split(r'([T+])', time)
-        #        end = re.split(r'([T+])', end_time)
+        #        end = re.split(r'([T+])', end_time)#382a2a1a
 
         meeting = modifyMeeting(form.title.data, fulltime,end_time,meetingId,current_user.username,1 )
 
@@ -1431,6 +1482,60 @@ def fileRefServer(name):
 
     return os.path.join(file_fn)
 
+@app.route('/quickuploads/<username>',methods=['POST'])
+@login_required
+def quickupload(username):
+    image_file = url_for('static', filename ='profile_pics/' + current_user.image_file)
+    user_role = current_user.role
+    user = User.query.filter_by(username=username).first_or_404()
+    form = Upload_form()
+    seriesForm = Series_form()
+    episodeForm = Episode_form()
+    seriesId = Series.query.all()
+    for seriesId in seriesId:
+        seriesIdNum = int(seriesId.id) + 1
+    if get_Host_name_IP('CJAY') == True:
+        if request.method == 'POST':
+            videoFile = request.files['file']
+            audioFile = request.files['audiofile']
+            transcriptFile = request.files['transcriptfile']
+            if videoFile is not None:
+                videoPath = fileRef(videoFile)
+
+            if audioFile is not None:
+                audioPath = fileRef(audioFile)
+
+            if transcriptFile is not None :
+                transcriptPath = fileRef(transcriptFile)
+
+            upload = Upload(title=request.form['title'],description=request.form['description'],category=request.form['category'],price= request.form['price'],upload_ref=videoPath,transcript_ref= transcriptPath,auido_ref=audioPath,uploader=current_user)
+            db.session.add(upload)
+            db.session.commit()
+
+            return jsonify({'response': 'succes'})
+    else:
+        if request.method == 'POST':
+            videoFile=form.upload.data
+            audioFile=form.audio.data
+            transcriptFile=form.transcript.data
+            if videoFile is not None:
+                videoPath = fileRefServer(videoFile)
+
+            if audioFile is not None:
+                audioPath = fileRefServer(audioFile)
+
+            if transcriptFile is not None :
+                transcriptPath = fileRefServer(transcriptFile)
+
+
+            upload = Upload(title=form.title.data,description=form.description.data,category=form.category.data,price= form.price.data,upload_ref=videoPath,transcript_ref= transcriptPath,auido_ref=audioPath,uploader=current_user)
+            db.session.add(upload)
+
+            db.session.commit()
+            return jsonify({'response': 'succes'})
+        return render_template('UPLOADS.html',user=user,seriesIdNum=seriesIdNum,user_role=user_role,form =form,seriesForm=seriesForm,episodeForm=episodeForm,image_file=image_file)
+
+
 @app.route('/uploads/<int:id>id<username>',methods=['POST','GET'])
 @login_required
 def upload(username,id):
@@ -1489,6 +1594,7 @@ def upload(username,id):
             db.session.commit()
             return redirect(url_for('discover', username = current_user.username))
         return render_template('UPLOADS.html',user=user,seriesIdNum=seriesIdNum,user_role=user_role,form =form,seriesForm=seriesForm,episodeForm=episodeForm,image_file=image_file)
+
 
 
 @app.route('/lesson<int:id><username>', methods=['POST','GET'])
@@ -1726,7 +1832,53 @@ def test(username):
     return response.json()
 
 
+@app.route('/updateFeed', methods=['GET'])
+def updateFeed():
+    followed_posts = current_user.followed_posts().all()
 
+    if current_user.id not in current_user.followed_posts().all() :
+        pass
+
+    try:
+        for post in followed_posts:
+            updatedPosts=post
+            data = jsonify({'title':updatedPosts.title,'category':updatedPosts.category,'start_time':updatedPosts.start_time,'end_time':updatedPosts.end_time,'uploader': updatedPosts.author.username})
+        return data
+    except:
+        return jsonify({'result':'current user is not following any user'})
+    pass
+
+@app.route('/fetchSessions', methods=['GET'])
+def fetchSessions():
+    followed_posts = current_user.followed_posts().all()
+
+    if current_user.id not in current_user.followed_posts().all():
+        pass
+
+    try:
+        for post in followed_posts:
+            updatedPosts=post
+            data = jsonify({'title':updatedPosts.title,'category':updatedPosts.category,'start_time':updatedPosts.start_time,'end_time':updatedPosts.end_time,'uploader': updatedPosts.author.username})
+        return data
+    except:
+        return jsonify({'result':'current user is not following any user'})
+    pass
+
+@app.route('/fetchPosts', methods=['GET'])
+def fetchPosts():
+    followed_uploads = current_user.followed_posts().all()
+
+    if current_user.id not in current_user.followed_uploads().all():
+        pass
+
+    try:
+        for post in followed_uploads:
+            updatedPosts=post
+            data = jsonify({'title':updatedPosts.title,'category':updatedPosts.category,'start_time':updatedPosts.start_time,'end_time':updatedPosts.end_time,'uploader': updatedPosts.author.username})
+        return data
+    except:
+        return jsonify({'result':'current user is not following any user'})
+    pass
 
 if __name__ == '__main__':
 

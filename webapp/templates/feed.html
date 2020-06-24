@@ -131,7 +131,7 @@
 
 
 </div>
-
+{% for post in followed_posts %}
 {% if current_user.followed_posts() == 0 %}
     {% else %}
 <div id="session-content">
@@ -139,7 +139,7 @@
     <h6>You don't follow anybody yet</h6>
     </div>
     <div class="post-wrapper ">
-      {% for post in followed_posts %}
+
     <card class="card" id="session-card">
     <card class="card-body">
 
@@ -166,13 +166,13 @@
 
     </card>
     </card>
-    {% endfor %}
+
     {% endif %}
 </div>
 
 
 </div>
-
+{% endfor %}
 
 </div>
 

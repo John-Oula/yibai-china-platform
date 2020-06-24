@@ -139,10 +139,11 @@
     <h6>You don't follow anybody yet</h6>
     </div>
     <div class="post-wrapper ">
+      {% for post in followed_posts %}
     <card class="card" id="session-card">
     <card class="card-body">
 
-        {% for post in followed_posts %}
+
         <div class="profile-pic-thumb-wrapper">
             <img id="profilepic" src="../static/profile_pics/{{ post.author.image_file }}" alt="">
         </div>
@@ -162,11 +163,12 @@
                                 <a id="unbook" data-href="{{ url_for('unbook', id=post.id) }}" ><button type="button" id="unbook-btn" class="common-btn" >Unbook</button></a>
                                 {% endif %}
         </div>
-        {% endfor %}
+
     {% endif %}
     </card>
     </card>
-</div>
+{% endfor %}
+    </div>
 
 
 </div>

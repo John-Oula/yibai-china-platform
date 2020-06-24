@@ -436,7 +436,10 @@ li#burgermenu-text{
 
 
 .post-wrapper{
-    width: 543px;
+    width: 65%;
+    height: 182px;
+    margin-left: 15%;
+    margin-right: 15%;
     height: 182px;
 }
 
@@ -564,11 +567,10 @@ input.search{
 #session-card{
     background-color: white;
     border-radius: 20px;
-    width: 80%;
+    width: auto;
     margin-left: 0px;
     height: fit-content;
     margin-top: 70px;
-    padding: 5px;
 
 }
 

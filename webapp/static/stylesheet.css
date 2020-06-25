@@ -1455,3 +1455,391 @@ p.likes{
 /* video */
 
 
+@media screen and (max-width: 600px){
+body{
+    margin: 0 0 55px 0;
+}
+
+.bot-nav{
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    height: 55px;
+    background-color: white;
+    display: flex;
+    overflow-x: auto;
+}
+.navLink{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    flex-grow: 1;
+    min-width: 50px;
+    overflow: hidden;
+    white-space: nowrap;
+    text-decoration: none;
+    color: #444444;
+    font-size: 10px;
+    font-family: Josefin Sans, sans-serif;
+
+}
+
+.navLink:hover{
+    text-decoration: none;
+    color:#E74525 ;
+}
+.navLink-center {
+    background-color: #E74525;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    flex-grow: 1;
+    min-width: 50px;
+    overflow: hidden;
+    white-space: nowrap;
+    text-decoration: none;
+    color: white;
+    font-size: 10px;
+    font-family: Josefin Sans, sans-serif;
+}
+.navLink-center:hover{
+    text-decoration: none;
+    color:#444444 ;
+}
+
+ .sidenav-u{
+      padding: 0px;
+ }
+ .profile-pic-wrapper{
+    margin-top: 10px;
+    margin-left: 0%;
+    width: 60px;
+    height: 60px;
+ }
+ #profilepic{
+    display: inline;
+    width: 100%;
+    height: auto; }
+ .side-nav-menu{
+     display: none;
+ }
+ #profilename{
+     font-size: 14px;
+     margin-bottom: 0px;
+     margin-top: 17px;
+
+ }
+ #burgermenu{
+    float: right;
+    position: fixed;
+    right: 10px;
+    width: fit-content;
+}
+ .subscribers{
+     margin-top: 5%;
+     margin-left:0px;
+ }
+ .info-text{
+ }
+ .search{
+     display: none;
+ }
+ card#create_card_trainer{
+    background-color: white;
+    border-radius: 20px;
+    border-style: none;
+    height: 227px;
+    width: inherit;
+    margin-top: 40px;
+
+
+
+
+
+ }
+ .main{
+     margin-left: 0px;
+ }
+ .session-container{
+     margin-left: 0px;
+ }
+ .session{
+     margin-top: 10px;
+     margin-left: 5%;
+ }
+ #my-session-card{
+    margin-left: 5%;
+    width: 90%;
+    height: 213px;
+    margin-right: 5%;
+    margin-top: 15px;
+
+ }
+ .session-card-right{
+     margin-left: 0px;
+ }
+ .meeting-details{
+     font-size: 13px;
+ }
+ .mobile-nav{
+     height: 61px;
+     width: 100%;
+     display: flex;
+     background-color: white;
+     position: fixed;
+     left: 0;
+     bottom: 0;
+ }
+
+ .mobile-nav-link{
+     margin-left: 31px;
+ }
+ .mobile-icon{
+     width: 25px;
+     font-size: 10px;
+ }
+/* create meeting*/
+  card#create_card{
+    margin-left: 5%;
+    width: 90%;
+    height: fit-content;
+    margin-right: 5%;
+    margin-top: 25px;
+    padding-right: 5%;
+    padding-left: 5%;
+  }
+  #calendar{
+      width: 100%;
+  }
+  .session-container{
+      margin-top: 70px;
+
+  }
+   #create_card.card-body{
+     padding: 0px;
+
+  }
+  .description-field{
+      width: 250%;
+  }
+  #create_card form{
+      width: 100%;
+  }
+  body{
+      overflow-x: hidden;
+  }
+  /*main*/
+    #navbarTogglerDemo01{
+        background-color: #1B1C1D;
+        z-index: 5;
+    }
+    #nav-search{
+        display: none;
+    }
+  .home{
+      background-color: white;
+      background-image: url("mobile-home.png");
+        /* Center and scale the image nicely */
+  background-repeat: no-repeat;
+  background-size: cover;
+    /* Needed to position the navbar */
+    width: 100%;
+  }
+  .home-wrapper{
+      position: relative;
+      overflow-x: hidden;
+  }
+  .title{
+      margin-top: 800px;
+      font-size: 22px;
+  }
+  #home-image-one{
+      display:none;
+  }
+  div#home-image-two.col-6{
+      display:none;
+  }
+  #home-image-two{
+      margin-top: 10%;
+      background-color: #E74525;
+      height: 500px;
+      width: auto;
+  }
+  .right-home-text{
+    margin-right: 0px;
+    display: block;
+    margin-left: 5%;
+}
+  .left-home-text{
+    text-align: left;
+    margin-left: 0px;
+      margin-left: 5%;
+}
+  div.col-6{
+      display:none;
+  }
+  div.col-4.left-home-text{
+      width: 100%;
+      display: block;
+
+  }
+  p.upper-text{
+      margin-top: 20px;
+  }
+  p.lower-text{
+      margin-top: 10px;
+  }
+    #home-image-three{
+      margin-top: 10%;
+
+      height: 500px;
+
+  }
+    .home-signup{
+        height: 298px;
+        width: auto;
+        background-color: #1B1C1D;
+        margin-top: 15%;
+        padding: 10px;
+
+    }
+    h3.bottom-header{
+        margin-top: 15%;
+    }
+
+    /*login and signup */
+    .sign-up-text{
+        display: None;
+    }
+    .signup-img{
+        display: none;
+    }
+    div.col-lg-7.col-md-7.col-sm-7{
+        display: none;
+    }
+    .signup{
+              background-color: white;
+      background-image: url("login-signup-bg.png");
+        /* Center and scale the image nicely */
+    background-size: cover;
+    width: 100%;
+    height: 80%;
+
+    }
+  card#login-card{
+    margin-left: 5%;
+    width: 90%;
+
+    margin-right: 5%;
+    margin-top: 25px;
+    padding-right: 5%;
+    padding-left: 5%;
+  }
+    card#signup-card{
+    margin-left: 5%;
+    width: 90%;
+
+    margin-right: 5%;
+    margin-top: 25px;
+    padding-right: 5%;
+    padding-left: 5%;
+  }
+  .corner-image{
+    background-image: url("corner-design.png");
+    background-repeat: no-repeat;
+
+    background-size: initial;
+    top: 0;
+    right: 0;
+    height: 100px;
+    width: 100px;
+    position: absolute;
+  }
+  .hero-image{
+      background-image: none;
+  }
+  #y{
+      background-image: url("corner-design.png");
+    background-repeat: no-repeat;
+    background-size: initial;
+    float: right;
+    height: initial;
+  }
+  .corner-design{
+      height: 50px;
+      width: 50px;
+  }
+  .hero-text{
+      font-size: 25px;
+      text-align: left;
+      position: initial;
+      margin-left: 5%;
+      display: none;
+
+  }
+  .discover-list{
+      display: none;
+  }
+  .category-title{
+      display: none;
+
+  }
+
+  .video-window{
+      width: 100%;
+      height: 161px;
+  }
+  #card.video-thumb-card{
+    margin-top: 15%;
+    width: 100%;
+    margin-left: 0px;
+ }
+  div.col-2{
+      display: none;
+  }
+  div.dashboard-card{
+      padding: 10% 10% 10% 5%;
+  }
+  #dashboard-card{
+    width: 45%;
+    height: 100px;
+    margin-left: 5%;
+    margin-top: 45px;
+  }
+  .dashboard-content {
+
+    font-size: 35px;
+    padding-left: 8%;
+  }
+  .dashboard-body{
+      display: flex;
+  }
+  #dashboard-long-card{
+      width: 80%;
+      height: 200px;
+      margin-top: 0px;
+      margin-left: 10%;
+      margin-right: 10%;
+      align-content: center;
+  }
+  #dashboard-long-card.dashboard-content p{
+
+    font-size: 40px;
+    padding-left: 8%;
+  }
+  .form-upload{
+      margin-left: 0px;
+  }
+  .form-upload textarea{
+      width: 100%;
+  }
+  div.col-4{
+      display: none;
+  }
+  .settings-card{
+      overflow-x: hidden;
+      overflow-y: hidden;
+  }
+  }

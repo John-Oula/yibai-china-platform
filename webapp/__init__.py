@@ -1891,7 +1891,7 @@ def send_reset_email(user):
                   recipients=[user.email])
     url = {url_for('reset_token',token=token,_external=True)}
     message = "Follow the link to reset your password.The link will expire in 5 minutes\n"
-    msg.body = "%s\n%s" % message , url
+    msg.body = "%s\n%s" % (message , url)
     mail.send(msg)
 
 @app.route('/reset_password' , methods=['POST','GET'])

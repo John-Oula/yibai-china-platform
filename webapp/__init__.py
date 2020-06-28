@@ -50,7 +50,7 @@ import socket
 
 app = Flask(__name__)
 
-
+authentication= 'authentication@100chinaguide.com'
 csrf = CSRFProtect(app)
 # IP address
 def get_Host_name_IP(hostname):
@@ -85,7 +85,7 @@ else:
 SecretId = 'JIRMZ6O3Qm5KDwCHsgYnlxatGeXq7dfFcjEk'
 SecretKey ='wZn5NeGCqxg4r8XaDum2EMzRhIvWHtcU'
 
-mail = Mail(app)
+
 #### MODELS ####
 db = SQLAlchemy(app)
 db.init_app(app)
@@ -96,14 +96,14 @@ migrate = Migrate(app,db)
 login_manager = LoginManager()
 login_manager.init_app(app)
 
-app.config['MAIL_SERVER']='mail.100chinaguide.com'
-app.config['MAIL_PORT'] = 587
+app.config['MAIL_SERVER']='smtp.100chinaguide.com'
+app.config['MAIL_PORT'] = 80
 app.config['MAIL_USERNAME'] = 'authentication@100chinaguide.com'
 app.config['MAIL_PASSWORD'] = 'verify@2020'
 app.config['MAIL_USE_TLS'] = False
 app.config['MAIL_USE_SSL'] = False
 
-
+mail = Mail(app)
 @login_manager.user_loader
 def load_user(user_id):
     return User.query.get(int(user_id))
@@ -549,10 +549,10 @@ def home():
 
 @app.route('/sent')
 def sent():
-    msg = Message("Testing",recipients=["johnoula@icloud.com"])
+    msg = Message("Testing",sender=authentication,recipients=["johnoula@icloud.com"])
     mail.send(msg)
 
-    return True
+    return jsonify({'result':'Success'})
 
 @app.route('/profile')
 @login_required
@@ -660,7 +660,7 @@ def login():
                 elif current_user.role == 1 and current_user.sub_role == 4:
                     return redirect(url_for('badge_admin',id = current_user.id))
                 else:
-                    return redirect(url_for('feed', username=current_user.username))
+                    return redirect(url_for('user_profile', username=current_user.username))
             else:
                 pass
         return render_template('LOGIN.html', form=form)
@@ -1013,6 +1013,7 @@ UPLOADS_URL = 'http://121.40.119.211/static/videos'
 @app.route('/discover/<username>')
 @login_required
 def discover(username):
+    page = request.args.get('page', type=int)
     user = User.query.filter_by(username=username).first_or_404()
 
     session['username'] = current_user.username
@@ -1025,8 +1026,9 @@ def discover(username):
 
 
 
-    uploads = Upload.query.all()
-    series= Series.query.all()
+    uploads = Upload.query.order_by(Upload.timestamp.desc()).paginate(per_page=4,error_out=False,page=page)
+
+    series= Series.query.order_by(Series.timestamp.desc()).paginate(per_page=2,error_out=False,page=page)
     episodes=Episode.query.all()
     seriesInfo = db.session.query(Episode.subtitle).join(Series.episode)
     seriesId = Series.query.all()
@@ -1034,7 +1036,7 @@ def discover(username):
         seriesIdNum = int(seriesId.id) + 1
 
 #    uploads = send_from_directory(directory='videos',filename='videos')
-    return render_template('Discover.html',user=user,seriesIdNum=seriesIdNum,seriesInfo=seriesInfo,episodes=episodes,series=series,uploads=uploads,user_role=user_role,image_file=image_file)
+    return render_template('Discover.html',user=user,page=page,seriesIdNum=seriesIdNum,seriesInfo=seriesInfo,episodes=episodes,series=series,uploads=uploads,user_role=user_role,image_file=image_file)
 
 @app.route('/book/<int:id>')
 @login_required
@@ -1575,7 +1577,9 @@ def upload(username,id):
             db.session.add(episode)
 
             db.session.commit()
-            return jsonify({'response': 'succes'})
+            return redirect(url_for('discover', username = current_user.username))
+        return render_template('UPLOADS.html',user=user,seriesIdNum=seriesIdNum,user_role=user_role,form =form,seriesForm=seriesForm,episodeForm=episodeForm,image_file=image_file)
+
     else:
         if request.method == 'POST':
 
@@ -1879,6 +1883,41 @@ def fetchPosts():
     except:
         return jsonify({'result':'current user is not following any user'})
     pass
+
+def send_reset_email(user):
+    token = user.get_reset_token()
+    msg = Message('Password Reset Requset',
+                  sender=authentication,
+                  recipients=[user.email])
+    msg.body = f'''Follow the link to reset your password.The link will expire in 5 minutes {url_for('reset_token',token=token,_external=True)}'''
+    mail.send(msg)
+
+@app.route('/reset_password' , methods=['POST','GET'])
+def reset_request():
+    form = Request_reset(request.form)
+    if  request.method == 'POST':
+        user = User.query.filter_by(email = form.email.data).first()
+        send_reset_email(user)
+        flash('An email has been sent to your mail')
+    return render_template('request_reset.html', form =form)
+
+@app.route('/reset_password/<token>' , methods=['POST','GET'])
+def password_token(token):
+    user = User.verify_reset_token(token)
+    if user is None:
+        flash('That is an invalid or expired token','warning')
+        return redirect(url_for('reset_request'))
+    form = Reset_password()
+    if form.validate_on_submit() and request.method == "POST":
+
+        hashed_password = hash_password(form.password.data)
+        user.password = hashed_password
+        db.session.commit()
+        flash('Updated')
+
+        return redirect(url_for('login'))
+    return render_template('reset_password.html', form=form)
+
 
 if __name__ == '__main__':
 

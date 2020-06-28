@@ -12,7 +12,7 @@ class UserModelCase(unittest.TestCase):
         db.create_all()
 
     def test_functions(self):
-        u1 = User(role=2,username='john', password='thisatest',   fullname='John Oula',id_type='Passport',id_number='AK0123545',nationality='American',occupation='Engineer',email="thisisatest1@gmail.com",province='Jiangsu',city='Nanjing',phone='133023545797')
+        u1 = User(role=2,username='john', password='thisatest',   fullname='John Oula',id_type='Passport',id_number='AK0123545',nationality='American',occupation='Engineer',email="johnoula@icloud.com",province='Jiangsu',city='Nanjing',phone='133023545797')
         u2 = User(role=1,username='eliora', password='thisisatest',fullname='Eliora Kwa',id_type='Passport',id_number='AK0123545',nationality='American',occupation='Engineer',email="thisisatest2@gmail.com",province='Jiangsu',city='Nanjing',phone='133023545797')
         u3 = User(role=0,username='kemal', password='thisisatest',fullname='Kemal ',id_type='Passport',id_number='AK0123545',nationality='American',occupation='Engineer',email="thisisatest3@gmail.com",province='Jiangsu',city='Nanjing',phone='133023545797')
         u4 = User(role=0,username='maggie', password='thisisatest', fullname='Maggie Ma',id_type='Passport',id_number='AK0123545',nationality='American',occupation='Engineer',email="thisisatest4@gmail.com",province='Jiangsu',city='Nanjing',phone='133023545797')
@@ -43,6 +43,9 @@ class UserModelCase(unittest.TestCase):
         db.session.add(p4)
         db.session.commit()
 
+        pages = Post.query.paginate(per_page=1)
+        print(pages)
+
         l1 = Lesson(title='Introduction', description="this is a test", post_id=1, user_id=1)
         l2 = Lesson(title='Introduction II', description="this is a test", post_id=1, user_id=1)
         l3 = Lesson(title='Introduction III', description="this is a test", post_id=1, user_id=2)
@@ -55,11 +58,25 @@ class UserModelCase(unittest.TestCase):
         db.session.commit()
 
         up1 = Upload(title = 'funcionality',upload_ref='e4ddb88bfcfe5661.mp4',user_id=1)
+        up2 = Upload(title = 'funcionality',upload_ref='e4ddb88bfcfe5661.mp4',user_id=2)
+        up3 = Upload(title = 'funcionality',upload_ref='e4ddb88bfcfe5661.mp4',user_id=2)
+        up4 = Upload(title = 'funcionality',upload_ref='e4ddb88bfcfe5661.mp4',user_id=3)
+        up5 = Upload(title = 'funcionality',upload_ref='e4ddb88bfcfe5661.mp4',user_id=3)
+        up6 = Upload(title = 'funcionality',upload_ref='e4ddb88bfcfe5661.mp4',user_id=4)
+        up7 = Upload(title = 'funcionality',upload_ref='e4ddb88bfcfe5661.mp4',user_id=4)
+        up8 = Upload(title = 'funcionality',upload_ref='e4ddb88bfcfe5661.mp4',user_id=1)
         c1 = Comment(content = 'This is just a test.This is for the funcionality',user_id=1,upload_id=1)
         c2 = Comment(content = 'This is just a test.This is for the funcionality',user_id=2,upload_id=1)
         c3 = Comment(content = 'This is just a test.This is for the funcionality',user_id=3,upload_id=1)
         c4 = Comment(content = 'This is just a test.This is for the funcionality',user_id=4,upload_id=1)
         db.session.add(up1)
+        db.session.add(up2)
+        db.session.add(up3)
+        db.session.add(up4)
+        db.session.add(up5)
+        db.session.add(up6)
+        db.session.add(up7)
+        db.session.add(up8)
         db.session.add(c1)
         db.session.add(c2)
         db.session.add(c3)
@@ -198,7 +215,7 @@ class UserModelCase(unittest.TestCase):
             return print(final)
         pass
         update()
-
+        print(u1.get_reset_token())
 
 #        print(len(up1))
 #        print(len(f2))

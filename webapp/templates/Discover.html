@@ -59,34 +59,9 @@
 
 <div class="uploads">
 <ul class="upload-list">
-    {% for episode in episodes %}
-        <card class="card upload-card" >
-            <card class="card-body">
-                <li><a href="{{ url_for('series',seriesid=episode.sub.id,upload_ref=episode.upload_ref,id=episode.id) }}"><video width="250" height="200" type="video/mp4" src="../static/videos/{{ episode.upload_ref }}" alt=""></video></a></li></li>
-                <h6>{{ episode.sub.title}}</h6>
-                <p class="upload-username">Uploaded by {{ episode.user_episode.username}}
-                   <span class="icon-list">
-                       {% if episode.upload_ref %}
-                       <img class="video-thumb-icon" src="../static/play.svg" form="video" alt="">
-                       {% endif %}
-                       {% if episode.transcript_ref  %}
-                        <img class="video-thumb-icon" src="../static/file.svg" form="transcript" alt="">
-                       {% endif %}
-                       {% if episode.audio_ref %}
-                       <img class="video-thumb-icon" src="../static/volume-down.svg" form="audio" alt="">
-                        {% endif %}
-                   </span>
-                </p>
 
 
-            </card>
-        </card>
-
-
-
-    {% endfor %}
-
-{% for  upload in uploads%}
+{% for  upload in uploads.items%}
     <card class="card upload-card" >
     <card class="card-body">
         <li><a href="{{ url_for('video',upload_ref=upload.upload_ref,id=upload.id) }}"><video width="250" height="200" type="video/mp4" src="../static/videos/{{ upload.upload_ref }}" alt=""></video></a></li></li>
@@ -115,9 +90,19 @@
     </card>
     </card>
 
+
+
+    {% endfor %}
+    {% for page in uploads.iter_pages() %}
+        {% if page %}
+    <a href="{{ url_for('discover',username= current_user.username,page= page) }}">{{page}}</a>
+        {% else %}
+            ...
+        {% endif %}
     {% endfor %}
 {% endblock %}
 </ul>
+
 </div>
 </div>
 {% block script %}

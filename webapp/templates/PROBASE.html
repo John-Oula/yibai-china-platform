@@ -143,7 +143,7 @@
                 <div class="side-nav-menu">
             <a href="{{ url_for('user_profile', username = current_user.username) }}" style="color: white"><img class="icon" src="../static/sessions-w.svg" alt="">SESSIONS</a>
             <a href="{{ url_for('dashboard', username = current_user.username) }}" style="color: white"><img class="icon" src="../static/dash-w.svg" alt="">DASHBOARD</a>
-            <a href="{{ url_for('discover', username = current_user.username) }}" style="color: white"><img class="icon" src="../static/disc-w.svg" alt="">DISCOVER</a>
+            <a href="{{ url_for('discover', username = current_user.username ) }}" style="color: white"><img class="icon" src="../static/disc-w.svg" alt="">DISCOVER</a>
             <a href="{{ url_for('upload', username = current_user.username ,id=seriesIdNum) }}" style="color: white"><img class="icon" src="../static/uploads-w.svg" alt="">UPLOAD</a>
 
 
@@ -191,7 +191,7 @@
 <nav class="bot-nav" >
     <a class="navLink" href="{{ url_for('user_profile', username = current_user.username) }}"><img class="mobile-icon" src="../static/sessions.svg" alt=""><span class="nav_text">Sessions</span></a>
     <a class="navLink" href="{{ url_for('dashboard', username = current_user.username) }}"><img class="mobile-icon" src="../static/dasboard.svg" alt=""><span class="nav_text">Dashboard</span></a>
-    <a class="navlink navLink-center"  href="{{ url_for('discover', username = current_user.username) }}"><img class="mobile-icon" src="../static/discover.svg" alt=""><span class="nav_text">Discover</span></a>
+    <a class="navlink navLink-center"  href="{{ url_for('discover', username = current_user.username ) }}"><img class="mobile-icon" src="../static/discover.svg" alt=""><span class="nav_text">Discover</span></a>
     <a class="navLink" href="{{ url_for('upload', username = current_user.username ,id=seriesIdNum) }}"><img class="mobile-icon" src="../static/uploads.svg" alt=""><span class="nav_text">Uploads</span></a>
     <a class="navLink" href="{{ url_for('settings', username = current_user.username) }}"><img class="mobile-icon" src="../static/settings.svg" alt=""><span class="nav_text">Settings</span></a>
 </nav>

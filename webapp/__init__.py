@@ -694,16 +694,16 @@ def dashboard(username):
 #    output = post_schema.dump(all_users)
 #    return jsonify({output.data })
 #    print(output)
-    for booked in current_user.book:
-        post_dict={
-            "title": booked.title  ,
-        "date": booked.date ,
-        "start": booked.start_time
-        }
-        print(post_dict)
-        f = open("package.json", "a")
-        f.write(str(post_dict),)
-        f.close()
+#   for booked in current_user.book:
+#       post_dict={
+#           "title": booked.title  ,
+#       "date": booked.date ,
+#       "start": booked.start_time
+#       }
+#       print(post_dict)
+#       f = open("package.json", "a")
+#       f.write(str(post_dict),)
+#       f.close()
     my_posts = len(current_user.posts)
     image_file = url_for('static', filename ='profile_pics/' + current_user.image_file)
 

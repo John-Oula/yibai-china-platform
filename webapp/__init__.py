@@ -858,6 +858,7 @@ def user_profile(username):
     followed_posts=Post.query.join(followers, (followers.c.followed_id == Post.user_id)).all()
 
     all_posts = Post.query.all()
+    posts = Post.query.all()
     postNum=len(all_posts)
 
     all_users = User.query.all()
@@ -870,7 +871,7 @@ def user_profile(username):
 
 
 
-    return render_template('sessions.html', seriesIdNum=seriesIdNum, postNum=postNum, followed_posts=followed_posts, user=user, user_role=user_role, all_users=all_users, all_posts = all_posts, author=author, image_file = image_file)
+    return render_template('sessions.html', seriesIdNum=seriesIdNum,posts=posts, postNum=postNum, followed_posts=followed_posts, user=user, user_role=user_role, all_users=all_users, all_posts = all_posts, author=author, image_file = image_file)
 
 @app.route('/<username>')
 @login_required

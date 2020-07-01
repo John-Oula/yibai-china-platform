@@ -509,7 +509,7 @@ class Series_form(FlaskForm):
 
 
 class Episode_form(FlaskForm):
-    subtitle = StringField('Title')
+    subtitle = StringField('Subtitle')
     description = TextAreaField('Description')
     upload = FileField('Upload')
     transcript = FileField('Upload')
@@ -1484,23 +1484,23 @@ def fileRefServer(name):
 
     return os.path.join(file_fn)
 
-@app.route('/quickuploads/<username>',methods=['POST'])
+@app.route('/quickuploads/<username>',methods=['POST','GET'])
 @login_required
 def quickupload(username):
     image_file = url_for('static', filename ='profile_pics/' + current_user.image_file)
     user_role = current_user.role
     user = User.query.filter_by(username=username).first_or_404()
     form = Upload_form()
-    seriesForm = Series_form()
-    episodeForm = Episode_form()
+
     seriesId = Series.query.all()
     for seriesId in seriesId:
         seriesIdNum = int(seriesId.id) + 1
     if get_Host_name_IP('CJAY') == True:
         if request.method == 'POST':
-            videoFile = request.files['file']
-            audioFile = request.files['audiofile']
-            transcriptFile = request.files['transcriptfile']
+            videoFile = request.files['video-file']
+            audioFile = request.files['audio-file']
+            transcriptFile = request.files['transcript-file']
+
             if videoFile is not None:
                 videoPath = fileRef(videoFile)
 
@@ -1514,37 +1514,51 @@ def quickupload(username):
             db.session.add(upload)
             db.session.commit()
 
-            return jsonify({'response': 'succes'})
+            return redirect(url_for('discover', username = current_user.username))
+        return render_template('quickUpload.html', user=user, seriesIdNum=seriesIdNum, user_role=user_role, form=form,
+                               image_file=image_file)
+
     else:
         if request.method == 'POST':
-            videoFile=form.upload.data
-            audioFile=form.audio.data
-            transcriptFile=form.transcript.data
+            videoFile = request.files['video-file']
+            audioFile = request.files['audio-file']
+            transcriptFile = request.files['transcript-file']
+
             if videoFile is not None:
-                videoPath = fileRefServer(videoFile)
+                videoPath = fileRef(videoFile)
 
             if audioFile is not None:
-                audioPath = fileRefServer(audioFile)
+                audioPath = fileRef(audioFile)
 
             if transcriptFile is not None :
-                transcriptPath = fileRefServer(transcriptFile)
-
-
+                transcriptPath = fileRef(transcriptFile)
             upload = Upload(title=form.title.data,description=form.description.data,category=form.category.data,price= form.price.data,upload_ref=videoPath,transcript_ref= transcriptPath,auido_ref=audioPath,uploader=current_user)
             db.session.add(upload)
 
             db.session.commit()
-            return jsonify({'response': 'succes'})
-        return render_template('UPLOADS.html',user=user,seriesIdNum=seriesIdNum,user_role=user_role,form =form,seriesForm=seriesForm,episodeForm=episodeForm,image_file=image_file)
+            redirect(url_for('discover', username = current_user.username))
+        return render_template('quickUpload.html',user=user,seriesIdNum=seriesIdNum,user_role=user_role,form =form,image_file=image_file)
 
 
-@app.route('/uploads/<int:id>id<username>',methods=['POST','GET'])
+@app.route('/uploads/<username>',methods=['POST','GET'])
 @login_required
-def upload(username,id):
+def upload(username):
     image_file = url_for('static', filename ='profile_pics/' + current_user.image_file)
     user_role = current_user.role
     user = User.query.filter_by(username=username).first_or_404()
-    form = Upload_form()
+    seriesId = Series.query.all()
+    for seriesId in seriesId:
+        seriesIdNum = int(seriesId.id) + 1
+
+        return render_template('UPLOADS.html',user=user,user_role=user_role,seriesIdNum=seriesIdNum,image_file=image_file)
+
+
+@app.route('/series_uploads/<int:id>id<username>',methods=['POST','GET'])
+@login_required
+def series_upload(username,id):
+    image_file = url_for('static', filename ='profile_pics/' + current_user.image_file)
+    user_role = current_user.role
+    user = User.query.filter_by(username=username).first_or_404()
     seriesForm = Series_form()
     episodeForm = Episode_form()
     seriesId = Series.query.all()
@@ -1578,7 +1592,7 @@ def upload(username,id):
 
             db.session.commit()
             return redirect(url_for('discover', username = current_user.username))
-        return render_template('UPLOADS.html',user=user,seriesIdNum=seriesIdNum,user_role=user_role,form =form,seriesForm=seriesForm,episodeForm=episodeForm,image_file=image_file)
+        return render_template('seriesUpload.html',user=user,seriesIdNum=seriesIdNum,user_role=user_role,form =form,seriesForm=seriesForm,episodeForm=episodeForm,image_file=image_file)
 
     else:
         if request.method == 'POST':
@@ -1597,8 +1611,7 @@ def upload(username,id):
 
             db.session.commit()
             return redirect(url_for('discover', username = current_user.username))
-        return render_template('UPLOADS.html',user=user,seriesIdNum=seriesIdNum,user_role=user_role,form =form,seriesForm=seriesForm,episodeForm=episodeForm,image_file=image_file)
-
+        return render_template('seriesUpload.html',user=user,seriesIdNum=seriesIdNum,user_role=user_role,form =form,seriesForm=seriesForm,episodeForm=episodeForm,image_file=image_file)
 
 
 @app.route('/lesson<int:id><username>', methods=['POST','GET'])

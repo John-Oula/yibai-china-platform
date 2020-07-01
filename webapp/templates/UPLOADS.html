@@ -17,48 +17,20 @@
 <div class="session-container">
 <card class="card shadow-lg" id="create_card" >
     <card class="card-body">
+        <div class="flex-content">
+        <a href="{{ url_for('quickupload', username = current_user.username) }}" style="color: white">
+        <div class="square-wrapper text-center">
+        <p >Single Upload</p>
+        </div>
+        </a>
 
-<form  id="ajax" class="form-upload text-left" action="" method="POST" enctype="multipart/form-data">
-    <fieldset>
-         {{ form.hidden_tag() }}
+        <a id="available" href="{{ url_for('series_upload', username = current_user.username , id=seriesIdNum) }}" style="color: white">
+        <div class="square-wrapper text-center">
+        <p >Series Upload</p>
+        </div>
+        </a>
+        </div>
 
-    <div class="series-div">
-         {{ seriesForm.title.label }}
-        {{ seriesForm.title(class = "input-box-border border border-top-0 border-left-0 border-right-0") }}
-        {{ seriesForm.category.label }}
-        {{ seriesForm.category(class = "input-box-border border border-top-0 border-left-0 border-right-0") }}
-<div class="wrapper">
-<button type="button" class="collapsible">
-    {{ episodeForm.subtitle.label }}
-
-    {{ episodeForm.subtitle(class = "input-box-border border border-top-0 border-left-0 border-right-0") }}
-    <a class="add-btn" url="{{ url_for('upload',username=current_user.username,id=seriesIdNum) }}"><input
-            type="submit"></a>
-</button>
-<div class="content" >
-
-        <span>Upload Video:</span><input style="margin-top: 20px" type="file" name="video-file"><br>
-        <span>Upload Transcript(PDF format):</span><input style="margin-top: 20px" type="file" name="transcript-file"><br>
-        <span>Upload Audio(mp3 format):</span><input style="margin-top: 20px" type="file" name="audio-file"><br>
-        {{ episodeForm.description(class = "description-field input-box-border border border-top-0 border-left-0 border-right-0",placeholder="Description") }}
-
-</div>
-</div>
-
-    </div>
-
-
-         {{ seriesForm.price.label }} <br>
-        {{ seriesForm.price(class = "input-box-border border border-top-0 border-left-0 border-right-0") }}
-    <br>
-
-
-
-     <br>
-    {{ seriesForm.submit }}
-        </fieldset>
-</form>
-<button class="btn-add">ADD</button>
     </card>
 </card>
 

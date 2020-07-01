@@ -145,45 +145,7 @@ $(document).ready(function(){
 
 
 
-$(document).ready(function(){
-  $('#submit-btn').click(function(e){
-  e.preventDefault();
-  var postURL = $(this).attr("data-href");
-    var csrf_token = $("#csrf").attr("value");
 
-  req = $.ajax({
-    url:postURL,
-    type:'POST',
-    data:{
-      title : $('#titleForm').val(),
-      description : $('#descriptionForm').val(),
-      price : $('#priceForm').val(),
-      category : $('#categoryForm').val(),
-      videofile : $('#file').val(),
-      audioFile : $('#audiofile').val(),
-      transcriptFile : $('#transcriptfile').val(),
-    },
-    headers: {
-    'Csrf-Token': csrf_token
-  },
-    success:function (data) {
-      console.log(data)
-    },error:function (error) {
-      console.log(error)
-      console.log("error")
-
-    }
-
-  });
-  req.done(function(data){
-
-    $('#submit-btn').css("background-color","black");
-
-  })
-
-
-})
-  });
 
 
 

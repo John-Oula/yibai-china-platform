@@ -6,12 +6,12 @@
       }
 
       .cls-1 {
-        stroke: #e74525;
+        stroke: #fff;
         stroke-width: 3px;
       }
 
       .cls-2 {
-        fill: #e74525;
+        fill: #fff;
       }
 
       .cls-3 {

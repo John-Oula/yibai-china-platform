@@ -1319,6 +1319,7 @@ p.likes{
     display: inline-block;
 }
 @media screen and (max-width: 600px){
+
 body{
     margin: 0 0 55px 0;
 }
@@ -1343,7 +1344,7 @@ body{
     white-space: nowrap;
     text-decoration: none;
     color: #444444;
-    font-size: 10px;
+    font-size: 12px;
     font-family: Josefin Sans, sans-serif;
 
 }
@@ -1371,7 +1372,17 @@ body{
     text-decoration: none;
     color:#444444 ;
 }
-
+ .sidenav{
+  width: 100%; /* Set the width of the sidebar */
+  position: fixed; /* Fixed Sidebar (stay in place on scroll) */
+  z-index: 1; /* Stay on top */
+  top: 0; /* Stay at the top */
+  left: 0;
+  background-color: #DCDCDC; /* Black */
+  overflow-x: hidden; /* Disable horizontal scroll */
+  overflow-y: hidden; /* Disable horizontal scroll */
+  height: 80px;
+ display: flex}
  .sidenav-u{
       padding: 0px;
  }
@@ -1392,7 +1403,7 @@ body{
      font-size: 14px;
      margin-bottom: 0px;
      margin-top: 17px;
-
+     color: black;
  }
  #burgermenu{
     float: right;
@@ -1405,21 +1416,17 @@ body{
      margin-left:0px;
  }
  .info-text{
+     margin-left: 5%;
  }
  .search{
      display: none;
  }
  card#create_card_trainer{
-    background-color: white;
-    border-radius: 20px;
-    border-style: none;
-    height: 227px;
-    width: inherit;
-    margin-top: 40px;
-
-
-
-
+    margin-top: 100px;
+    margin-left: 5%;
+    width: 90%;
+    height: 213px;
+    margin-right: 5%;
 
  }
  .main{
@@ -1446,15 +1453,7 @@ body{
  .meeting-details{
      font-size: 13px;
  }
- .mobile-nav{
-     height: 61px;
-     width: 100%;
-     display: flex;
-     background-color: white;
-     position: fixed;
-     left: 0;
-     bottom: 0;
- }
+
 
  .mobile-nav-link{
      margin-left: 31px;
@@ -1705,4 +1704,11 @@ body{
       overflow-x: hidden;
       overflow-y: hidden;
   }
-  }
+  .top-nav{
+    overflow: hidden;
+    width:100%;
+    box-sizing: border-box;
+      min-width: 400px;
+}
+}
+

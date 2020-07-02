@@ -1526,13 +1526,13 @@ def quickupload(username):
             transcriptFile = request.files['transcript-file']
 
             if videoFile is not None:
-                videoPath = fileRef(videoFile)
+                videoPath = fileRefServer(videoFile)
 
             if audioFile is not None:
-                audioPath = fileRef(audioFile)
+                audioPath = fileRefServer(audioFile)
 
             if transcriptFile is not None :
-                transcriptPath = fileRef(transcriptFile)
+                transcriptPath = fileRefServer(transcriptFile)
             upload = Upload(title=form.title.data,description=form.description.data,category=form.category.data,price= form.price.data,upload_ref=videoPath,transcript_ref= transcriptPath,auido_ref=audioPath,uploader=current_user)
             db.session.add(upload)
 

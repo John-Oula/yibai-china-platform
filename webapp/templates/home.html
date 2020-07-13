@@ -17,6 +17,10 @@
     {{ super() }}
 {% endblock %}
 
+{% block topNav %}
+    {{ super() }}
+{% endblock %}
+
 {% block body %}
 <div class="home-wrapper">
  <p class="text-center title"  >Why 100ChinaGuide?</p>
@@ -175,4 +179,15 @@
         </card>
     </card>
 </div>
+
+ <div id="page-content">
+ </div>
+{% endblock %}
+
+{% block bottomNav %}
+    {{ super() }}
+{% endblock %}
+
+{% block script %}
+    {{ super() }}
 {% endblock %}

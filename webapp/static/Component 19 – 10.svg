@@ -1,0 +1,59 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="405" height="88.17" viewBox="0 0 405 88.17">
+  <defs>
+    <style>
+      .cls-1 {
+        fill: #fff;
+      }
+
+      .cls-2 {
+        fill: #707070;
+        font-size: 12px;
+        font-family: Roboto-Regular, Roboto;
+        letter-spacing: 0.032em;
+      }
+
+      .cls-3 {
+        fill: #1492e6;
+      }
+
+      .cls-4 {
+        opacity: 0.5;
+      }
+
+      .cls-5 {
+        fill: none;
+      }
+
+      .cls-6 {
+        filter: url(#Surface);
+      }
+    </style>
+    <filter id="Surface" x="0" y="0" width="405" height="88.17" filterUnits="userSpaceOnUse">
+      <feOffset dy="-6" input="SourceAlpha"/>
+      <feGaussianBlur stdDeviation="5" result="blur"/>
+      <feFlood flood-opacity="0.2"/>
+      <feComposite operator="in" in2="blur"/>
+      <feComposite in="SourceGraphic"/>
+    </filter>
+  </defs>
+  <g id="Component_19_10" data-name="Component 19 – 10" transform="translate(15 21)">
+    <g class="cls-6" transform="matrix(1, 0, 0, 1, -15, -21)">
+      <path id="Surface-2" data-name="Surface" class="cls-1" d="M75-1380.83H450V-1439H75Z" transform="translate(-60 1460)"/>
+    </g>
+    <g id="Group_573" data-name="Group 573" transform="translate(0 -708)">
+      <text id="Home" class="cls-2" transform="translate(25 754.5)"><tspan x="0" y="0">Home</tspan></text>
+      <path id="Path_357" data-name="Path 357" class="cls-3" d="M23.372,7.779l-10.5-7.5a1.5,1.5,0,0,0-1.743,0l-10.5,7.5a1.5,1.5,0,0,0,1.743,2.442L3,9.772V22.5A1.5,1.5,0,0,0,4.5,24h15A1.5,1.5,0,0,0,21,22.5V9.772a2.557,2.557,0,0,0,1.5.728,1.5,1.5,0,0,0,.873-2.721ZM18,21H15V16.5a3,3,0,0,0-6,0V21H6V7.629l6-4.286,6,4.286Z" transform="translate(29 717)"/>
+    </g>
+    <g id="Group_574" data-name="Group 574" transform="translate(0 -708)">
+      <g id="Icon_Circle_Filled" data-name="Icon / Circle / Filled" class="cls-4" transform="translate(323 717)">
+        <rect id="Box" class="cls-5" width="24" height="24"/>
+        <path id="shape" class="cls-3" d="M60-38A10,10,0,0,0,50-28,10,10,0,0,0,60-18,10,10,0,0,0,70-28,10,10,0,0,0,60-38Zm0,3a3,3,0,0,1,3,3,3,3,0,0,1-3,3,3,3,0,0,1-3-3A3,3,0,0,1,60-35Zm0,14.2a7.2,7.2,0,0,1-6-3.22c.03-1.99,4-3.08,6-3.08s5.97,1.09,6,3.08A7.2,7.2,0,0,1,60-20.8Z" transform="translate(-48 40)"/>
+      </g>
+      <text id="Profile" class="cls-2" transform="translate(317 754.5)"><tspan x="0" y="0">Profile</tspan></text>
+    </g>
+    <g id="Group_572" data-name="Group 572" transform="translate(0 -708)">
+      <path id="podcast" class="cls-3" d="M12.536,22.9c-.241.891-1.152,1.1-2.036,1.1s-1.795-.208-2.036-1.1A34.157,34.157,0,0,1,7.5,16.676c0-1.648,1.46-2.051,3-2.051s3,.4,3,2.051a34.19,34.19,0,0,1-.964,6.226ZM7.353,13.526a4.5,4.5,0,1,1,6.294,0,.282.282,0,0,0,.029.431,3.119,3.119,0,0,1,1,1.189.279.279,0,0,0,.443.089,6.75,6.75,0,1,0-9.229,0,.279.279,0,0,0,.443-.088,3.118,3.118,0,0,1,1-1.189.282.282,0,0,0,.029-.431ZM10.5,0A10.5,10.5,0,0,0,5.894,19.941a.281.281,0,0,0,.4-.3c-.112-.727-.2-1.451-.253-2.078a.282.282,0,0,0-.126-.211,8.25,8.25,0,1,1,9.054.076c-.047.658-.144,1.434-.264,2.214a.281.281,0,0,0,.4.3A10.5,10.5,0,0,0,10.5,0Zm0,7.5a3,3,0,1,0,3,3A3,3,0,0,0,10.5,7.5Z" transform="translate(177 718)"/>
+      <text id="Live" class="cls-2" transform="translate(177 754.5)"><tspan x="0" y="0">Live</tspan></text>
+    </g>
+  </g>
+</svg>

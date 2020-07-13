@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24" height="24" viewBox="0 0 24 24">
+  <defs>
+    <style>
+      .cls-1 {
+        fill: none;
+      }
+
+      .cls-2 {
+        clip-path: url(#clip-path);
+      }
+
+      .cls-3 {
+        fill: #707070;
+      }
+    </style>
+    <clipPath id="clip-path">
+      <rect class="cls-1" width="24" height="24"/>
+    </clipPath>
+  </defs>
+  <g id="Icon_Shopping_Cart_Filled" data-name="Icon / Shopping Cart / Filled" class="cls-2">
+    <path id="Path_989" data-name="Path 989" class="cls-3" d="M20-18a2,2,0,0,0-1.99,2A2,2,0,0,0,20-14a2.006,2.006,0,0,0,2-2A2.006,2.006,0,0,0,20-18ZM14-34v2h2l3.6,7.59-1.35,2.44A2,2,0,0,0,20-19H32v-2H20l1.1-2h7.45a1.991,1.991,0,0,0,1.75-1.03l3.58-6.49A1,1,0,0,0,33.01-32H18.21l-.94-2ZM30-18a2,2,0,0,0-1.99,2A2,2,0,0,0,30-14a2.006,2.006,0,0,0,2-2A2.006,2.006,0,0,0,30-18Z" transform="translate(-12 36)"/>
+    <rect id="Box" class="cls-1" width="24" height="24"/>
+  </g>
+</svg>

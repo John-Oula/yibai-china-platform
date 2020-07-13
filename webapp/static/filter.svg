@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24" height="24" viewBox="0 0 24 24">
+  <defs>
+    <style>
+      .cls-1 {
+        fill: none;
+      }
+
+      .cls-2 {
+        clip-path: url(#clip-path);
+      }
+
+      .cls-3 {
+        fill: #707070;
+      }
+    </style>
+    <clipPath id="clip-path">
+      <rect class="cls-1" width="24" height="24"/>
+    </clipPath>
+  </defs>
+  <g id="Icon_Tune_Rounded" data-name="Icon / Tune / Rounded" class="cls-2">
+    <rect id="Box" class="cls-1" width="24" height="24"/>
+    <path id="Path_2048" data-name="Path 2048" class="cls-3" d="M60.9,55h2V53h4V51h-4V49h-2Zm6,4V57h-10v2Zm-14-4v2h-4v2h4v2h2V55Zm6,12V65h8V63h-8V61h-2v6Zm-10-16v2h10V51Zm0,12v2h6V63Z" transform="translate(-46 -46)"/>
+  </g>
+</svg>

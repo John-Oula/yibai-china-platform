@@ -1185,8 +1185,7 @@ ul.upload-list{
 .upload-card{
     height: fit-content;
     width: fit-content;
-    margin-top: 30px;
-    margin: 6px;
+
 }
 .series-div{
     border-style: solid;
@@ -1399,10 +1398,10 @@ body{
       padding: 0px;
  }
  .profile-pic-wrapper{
-    margin-top: 10px;
-    margin-left: 0%;
-    width: 60px;
-    height: 60px;
+    margin-top: 2%;
+    width: 34px;
+    height: 34px;
+     margin-left: 0%;
  }
  #profilepic{
     display: inline;
@@ -1670,9 +1669,7 @@ body{
     width: 100%;
     margin-left: 0px;
  }
-  div.col-2{
-      display: none;
-  }
+
   div.dashboard-card{
       padding: 10% 10% 10% 5%;
   }
@@ -1769,7 +1766,6 @@ body{
 
 #main {
     transition: margin-left .5s;
-    padding: 16px;
 }
 body{
     transition: background-color .5s;
@@ -1789,6 +1785,29 @@ ul.upload-list{
     display: flex;
     flex-direction: column;
 }
+.thumb-wrapper{
+    height: 172px;
+    overflow: hidden;
+    position: relative;
+}
 
+.video-feed{
+    width: 100%;
+    height: auto
+}
+
+.thumb-wrapper li{
+    margin-top: 0px;
+}
+.video-info{
+    margin-left: 3%;
+    margin-top: 3%;
+
+}
+.inner-info{
+    display: flex;
+    flex-direction: column;
+
+}
 }
 

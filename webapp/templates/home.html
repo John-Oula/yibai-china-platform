@@ -181,38 +181,45 @@
 </div>
 
  <div id="main">
- <div class="uploads">
+ <div class="">
 <ul class="upload-list">
 
 
 {% for  upload in uploads.items%}
-    <card class="card upload-card" >
-    <card class="card-body">
-        <li><a href="{{ url_for('video',upload_ref=upload.upload_ref,id=upload.id) }}"><video width="250" height="200" type="video/mp4" src="../static/videos/{{ upload.upload_ref }}" alt=""></video></a></li></li>
-        <h6>{{ upload.title}}</h6>
+    <div class="upload-card" >
+    <div class="">
+    <div class="thumb-wrapper">
+                <li><a href="{{ url_for('video',upload_ref=upload.upload_ref,id=upload.id) }}"><video class="video-feed" width="250" height="200" type="video/mp4" src="../static/videos/{{ upload.upload_ref }}" alt=""></video></a></li></li>
+
+    </div>
+    <div class="video-info">
+
+    <div class="row">
+    <div class="col-2 col-sm-2 col-md-2">
+        <div class="profile-pic-wrapper">
+            <span><img id="profilepic" src="../static/profile_pics/{{ upload.uploader.image_file }}" alt=""></span>
+        </div>
+        </div>
+    <div class="col">
+    <div class="inner-info">
+            <h6>{{ upload.title}}</h6>
+
         <span class="upload-username">Uploaded by {{ upload.uploader.username}}</span>
         <span class="upload-username">{{ upload.category }}</span>
-<div class="icon-list">
-                       {% if upload.upload_ref %}
-                       <img class="video-thumb-icon" src="../static/play.svg" form="video" alt="">
-                       {% endif %}
-                       {% if upload.transcript_ref  %}
-                        <img class="video-thumb-icon" src="../static/file.svg" form="transcript" alt="">
-                       {% endif %}
-                       {% if upload.audio_ref %}
-                       <img class="video-thumb-icon" src="../static/volume-down.svg" form="audio" alt="">
-                    {% endif %}
-</div>
+
         {% if upload.price == None %}
         <p>Free</p>
         {% else %}
         <p> ¥ {{ upload.price }}</p>
         {% endif %}
+</div>
+</div>
 
 
-
-    </card>
-    </card>
+    </div>
+    </div>
+    </div>
+    </div>
 
 
 

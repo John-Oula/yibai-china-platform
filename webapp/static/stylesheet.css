@@ -1268,7 +1268,7 @@ img.corner-design{
 }
 
 #unlike-icon{
-    margin-left: 510px;
+
     margin-right: 7px;
 }
 .like-wrapper{
@@ -1332,6 +1332,7 @@ p.likes{
 body{
     margin: 0 0 55px 0;
 }
+
 
 .bot-nav{
     position: fixed;
@@ -1786,7 +1787,7 @@ ul.upload-list{
     flex-direction: column;
 }
 .thumb-wrapper{
-    height: 172px;
+    height: 200px;
     overflow: hidden;
     position: relative;
 }
@@ -1809,5 +1810,30 @@ ul.upload-list{
     flex-direction: column;
 
 }
+#unlike-icon {
+
+    margin-right: 7px;
+
+}
+
+.likes{
+    float: right;
+    color: #707070;
+}
+.row{
+    margin: 0px;
+    padding: 0px;
+
+}
+
+.col-2{
+    margin: 0px;
+    padding: 0px;
+}
+.col{
+        margin: 0px;
+    padding: 0px;
+}
+
 }
 

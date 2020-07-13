@@ -544,8 +544,10 @@ class Reset_password(FlaskForm):
 
 @app.route('/')
 def home():
+    page = request.args.get('page', type=int)
+    uploads = Upload.query.order_by(Upload.timestamp.desc()).paginate(per_page=4,error_out=False,page=page)
 
-    return render_template('home.html')
+    return render_template('home.html',uploads=uploads,page=page)
 
 @app.route('/sent')
 def sent():

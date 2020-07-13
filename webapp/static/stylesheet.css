@@ -1784,5 +1784,11 @@ body{
 .mobile-navigation{
     display: block;
 }
+
+ul.upload-list{
+    display: flex;
+    flex-direction: column;
+}
+
 }
 

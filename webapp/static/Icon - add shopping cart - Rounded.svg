@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24" height="24" viewBox="0 0 24 24">
+  <defs>
+    <style>
+      .cls-1 {
+        fill: none;
+      }
+
+      .cls-2 {
+        opacity: 0.5;
+        clip-path: url(#clip-path);
+      }
+    </style>
+    <clipPath id="clip-path">
+      <rect class="cls-1" width="24" height="24"/>
+    </clipPath>
+  </defs>
+  <g id="Icon_add_shopping_cart_Rounded" data-name="Icon / add shopping cart / Rounded" class="cls-2">
+    <rect id="Box" class="cls-1" width="24" height="24"/>
+    <path id="Path_2051" data-name="Path 2051" d="M7.1,59.5h7.5a2.1,2.1,0,0,0,1.8-1l3.4-6.1a1.03,1.03,0,1,0-1.8-1l-3.4,6.1h-7l-4-8.4a1.149,1.149,0,0,0-.9-.6H1a1,1,0,0,0,0,2H2l3.6,7.6L4.3,60.5a2.04,2.04,0,0,0,1.8,3h11a1,1,0,0,0,0-2H6Zm8.9,5a2,2,0,1,0,2,2A2.006,2.006,0,0,0,16,64.5Zm-10,0a2,2,0,1,0,2,2A2.006,2.006,0,0,0,6,64.5Zm5-9a1,1,0,0,0,1-1v-2h2a1,1,0,0,0,0-2H12v-2a1,1,0,0,0-1-1,1.075,1.075,0,0,0-1,1v2H8a1,1,0,0,0,0,2h2v2A1.075,1.075,0,0,0,11,55.5Z" transform="translate(2 -46)"/>
+  </g>
+</svg>

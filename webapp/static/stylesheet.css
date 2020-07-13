@@ -1779,6 +1779,11 @@ body{
     width: 55px;
 
 }
+
+.navbar-brand {
+    margin-left: auto;
+    margin-right: auto;
+}
 .mobile-navigation{
     display: block;
 }

@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24" height="24" viewBox="0 0 24 24">
+  <defs>
+    <style>
+      .cls-1 {
+        fill: none;
+      }
+
+      .cls-2 {
+        opacity: 0.5;
+        clip-path: url(#clip-path);
+      }
+    </style>
+    <clipPath id="clip-path">
+      <rect class="cls-1" width="24" height="24"/>
+    </clipPath>
+  </defs>
+  <g id="Icon_Share_Rounded" data-name="Icon / Share / Rounded" class="cls-2">
+    <rect id="Box" class="cls-1" width="24" height="24"/>
+    <path id="Path_2020" data-name="Path 2020" d="M1023.9,18a1,1,0,1,1,1-1A1,1,0,0,1,1023.9,18Zm-12-7a1.075,1.075,0,0,1-1-1,1,1,0,0,1,2,0A1,1,0,0,1,1011.9,11Zm12-9a.945.945,0,0,1,1,1,1,1,0,0,1-2,0A1,1,0,0,1,1023.9,2Zm0,12.1a2.973,2.973,0,0,0-2,.8l-7.1-4.1a1.7,1.7,0,0,0,.1-.7,1.7,1.7,0,0,0-.1-.7l7.1-4.1a2.792,2.792,0,0,0,2,.8,2.946,2.946,0,0,0,3-3,3,3,0,0,0-6,0,1.7,1.7,0,0,0,.1.7l-7.1,4.1a2.792,2.792,0,0,0-2-.8,2.946,2.946,0,0,0-3,3,2.946,2.946,0,0,0,3,3,2.792,2.792,0,0,0,2-.8l7.1,4.2c0,.2-.1.4-.1.7a2.9,2.9,0,0,0,5.8,0A3,3,0,0,0,1023.9,14.1Z" transform="translate(-1006 2)"/>
+  </g>
+</svg>

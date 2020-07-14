@@ -1819,6 +1819,8 @@ ul.upload-list{
 .likes{
     float: right;
     color: #707070;
+        position: relative;
+    right: 5px;
 }
 .row{
     margin: 0px;

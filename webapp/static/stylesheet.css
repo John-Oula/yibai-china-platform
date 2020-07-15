@@ -1244,8 +1244,6 @@ img.corner-design{
 }
 
 .active, .collapsible:hover {
-  background-color: rgba(255, 75, 38, 0.92);
-  color: white;
 }
 
 .content {
@@ -1324,13 +1322,18 @@ p.likes{
 }
 
 
-
+#main{
+    display: none;
+}
 
 
 @media screen and (max-width: 600px){
 
 body{
     margin: 0 0 55px 0;
+}
+#main{
+    display: block;
 }
 
 
@@ -1837,6 +1840,27 @@ ul.upload-list{
         margin: 0px;
     padding: 0px;
 }
+.video-details{
+    display: none;
+}
 
+#video-nav{
+        position: fixed;
+    bottom: 55px;
+    width: 100%;
+    height: 55px;
+    background-color: white;
+    display: flex;
+    overflow-x: auto;
+
+}
+
+.common-btn{
+    border-radius: 4px;
+    background-color: #5bb75b;
+    padding: 10px;
+    width: fit-content;
+    border-style: none;
+}
 }
 

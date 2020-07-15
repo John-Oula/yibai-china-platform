@@ -143,13 +143,6 @@ $(document).ready(function(){
   });
 
 
-
-
-
-
-
-
-
 function updateText(word,verb){
   word.text(verb)
 }
@@ -210,7 +203,6 @@ $('#unfollow').click(function(e){
 })
 
   });
-
 
 $(document).ready(function(){
 $('#book').click(function(e){
@@ -382,10 +374,6 @@ $('#session-content').css('display','none');
 
 
 
-
-
-
-
 function openNav() {
     document.getElementById("mySidenav").style.width = "250px";
     document.getElementById("main").style.marginLeft = "250px";
@@ -399,3 +387,39 @@ function closeNav() {
 }
 
 
+$(document).ready(function(){
+  $('.thumb-wrapper').click(function(e){
+  e.preventDefault();
+    var url = $(this).attr("data-href");
+    var videoSrc = "../static/videos/";
+    var userImgSrc = "../static/profile_pics/";
+    var currency = "￥"
+
+  req = $.ajax({
+    url:url,
+    type:'GET',
+    data:{},
+    success:function (data) {
+      console.log(data)
+    },error:function (error) {
+      console.log(error)
+      console.log("error")
+
+    }
+
+  });
+  req.done(function(data){
+        $('.upload-list').css('display','none');
+        $('.video-details').css('display','block');
+        $('.video-feed').attr("src",videoSrc + data.videoRef);
+        $('.video-feed').attr("video-id",data.id);
+        $('#video-title').html(data.title);
+        $('#video-author').html(data.author);
+        $('#video-description').html(data.description);
+        $('#video-price').html(currency + data.price);
+        $('#video-price').css("fontSize","17px");
+        $('img#profilepic').attr("src",userImgSrc + data.authorImage);
+
+});
+});
+});

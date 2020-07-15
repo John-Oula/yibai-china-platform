@@ -1067,28 +1067,13 @@ def  post(id):
     post = Post.query.get_or404(id)
     return redirect(url_for('login'))
 
-@app.route('/videos/<int:id>video<upload_ref>' , methods=['POST','GET'])
-@login_required
+@app.route('/videos' , methods=['POST','GET'])
+def video():
+    video = request.args.get('video', type=str)
+    videoId= request.args.get('videoId', type=str)
+    video = Upload.query.filter_by(id=videoId).first()
 
-def video(upload_ref,id):
-    form = Comment_form()
-    video = Upload.query.filter_by(upload_ref=upload_ref).first()
-    uploads  = Upload.query.all()
-    user = User.query.all()
-    comments = Comment.query.all()
-    seriesId = Series.query.all()
-    videoId=id
-    videoRef=upload_ref
-    for seriesId in seriesId:
-        seriesIdNum = int(seriesId.id) + 1
-    if request.method == 'POST':
-        comment = Comment(content = form.content.data,user_id=current_user.id,upload_id=video.id)
-        db.session.add(comment)
-        db.session.commit()
-        return redirect(url_for('video',upload_ref=video.upload_ref))
-
-
-    return render_template('VIDEO.html',videoRef=videoRef,videoId=videoId,seriesIdNum=seriesIdNum,comments = comments,video=video,uploads=uploads,user=user,form=form)
+    return jsonify({"id":video.id,"title":video.title,"authorImage":video.uploader.image_file,"category":video.category,"author":video.uploader.username,"videoRef":video.upload_ref,"price":video.price,"description":video.description})
 
 @app.route('/series/<int:seriesid>Id<int:id>video<upload_ref>' , methods=['POST','GET'])
 @login_required

@@ -313,15 +313,7 @@ function Event(new_event){
   return new_event
 }
 
-$(window).scroll(function() {
-    $('video').each(function() {
-        if ($(this).visible(true)) {
-            $(this)[0].play();
-        } else {
-            $(this)[0].pause();
-        }
-    })
-});
+
 
 $(document).ready(function(){
   $('#sessions-btn').click(function(e){

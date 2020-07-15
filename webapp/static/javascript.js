@@ -388,8 +388,9 @@ $('.thumb-wrapper').on('touchstart', function() {
 $('.thumb-wrapper').on('touchmove', function() {
     detectTap = false; // Excludes the scroll events from touch events
 });
-$('.thumb-wrapper').on('click touchend', function(event) {
-    if (event.type == "click") detectTap = true; // Detects click events
+$('.thumb-wrapper').on('click touchend', function(e) {
+    e.preventDefault();
+    if (e.type == "click") detectTap = true; // Detects click events
        if (detectTap){
           // Here you can write the function or codes you want to execute on tap
     var url = $(this).attr("data-href");

@@ -380,21 +380,22 @@ function closeNav() {
 
 
 $(document).ready(function(){
+
+
+$('.thumb-wrapper').on('touchstart', function() {
+    detectTap = true; // Detects all touch events
+});
+$('.thumb-wrapper').on('touchmove', function() {
+    detectTap = false; // Excludes the scroll events from touch events
+});
+$('.thumb-wrapper').on('click touchend', function(event) {
+    if (event.type == "click") detectTap = true; // Detects click events
+       if (detectTap){
+          // Here you can write the function or codes you want to execute on tap
     var url = $(this).attr("data-href");
     var videoSrc = "../static/videos/";
     var userImgSrc = "../static/profile_pics/";
     var currency = "￥"
-
-$(document).on('touchstart', function() {
-    detectTap = true; // Detects all touch events
-});
-$(document).on('touchmove', function() {
-    detectTap = false; // Excludes the scroll events from touch events
-});
-$(document).on('click touchend', function(event) {
-    if (event.type == "click") detectTap = true; // Detects click events
-       if (detectTap){
-          // Here you can write the function or codes you want to execute on tap
           req = $.ajax({
     url:url,
     type:'GET',

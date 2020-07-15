@@ -388,7 +388,7 @@ function closeNav() {
 
 
 $(document).ready(function(){
-  $('.thumb-wrapper').click(function(e){
+  $('.video').click(function(e){
   e.preventDefault();
     var url = $(this).attr("data-href");
     var videoSrc = "../static/videos/";

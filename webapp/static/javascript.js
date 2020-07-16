@@ -379,16 +379,24 @@ function closeNav() {
 }
 
 
-$(document).ready(function(){
-  $('a.video').on("click",function(e){
-  e.preventDefault();
-    var url = $(this).attr("data-href");
+
+document.getElementById("frame").onload = function() {getRequest()};
+
+function getRequest() {
+
+var url_string = window.location.href; //window.location.href
+var url = new URL(url_string);
+var videoRef = url.searchParams.get("video");
+var videoId = url.searchParams.get("videoId");
+console.log(videoRef);
+console.log(videoId);
+
     var videoSrc = "../static/videos/";
     var userImgSrc = "../static/profile_pics/";
     var currency = "￥"
 
   req = $.ajax({
-    url:url,
+    url:"/videos?video="+videoRef+"&"+"videoId="+videoId,
     type:'GET',
     data:{},
     success:function (data) {
@@ -401,8 +409,6 @@ $(document).ready(function(){
 
   });
   req.done(function(data){
-        $('.upload-list').css('display','none');
-        $('.video-details').css('display','block');
         $('.video-feed').attr("src",videoSrc + data.videoRef);
         $('.video-feed').attr("video-id",data.id);
         $('#video-title').html(data.title);
@@ -412,12 +418,6 @@ $(document).ready(function(){
         $('#video-price').css("fontSize","17px");
         $('img#profilepic').attr("src",userImgSrc + data.authorImage);
 
-});
-});
-});
 
-document.getElementById("frame").onload = function() {getRequest()};
-
-function getRequest() {
-  document.getElementById("demo").innerHTML = "Iframe is loaded.";
+});
 }

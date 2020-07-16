@@ -1777,7 +1777,7 @@ body{
 }
 
 .navbar-brand img{
-    width:50%;
+    width:55%;
 
 }
 
@@ -1897,7 +1897,7 @@ a.video{
 }
 
 .left-icons{
-        right: 0;
+        right: 12px;
     position: absolute;
 }
 }

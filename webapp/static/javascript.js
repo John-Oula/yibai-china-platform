@@ -380,24 +380,14 @@ function closeNav() {
 
 
 $(document).ready(function(){
-
-
-$('.video').on('touchstart', function() {
-    detectTap = true; // Detects all touch events
-});
-$('.video').on('touchmove', function() {
-    detectTap = false; // Excludes the scroll events from touch events
-});
-$('.video').on('click touchend', function(e) {
-    e.preventDefault();
-    if (e.type == "click") detectTap = true; // Detects click events
-       if (detectTap){
-          // Here you can write the function or codes you want to execute on tap
+  $('.video').on("click",function(e){
+  e.preventDefault();
     var url = $(this).attr("data-href");
     var videoSrc = "../static/videos/";
     var userImgSrc = "../static/profile_pics/";
     var currency = "￥"
-          req = $.ajax({
+
+  req = $.ajax({
     url:url,
     type:'GET',
     data:{},
@@ -410,7 +400,7 @@ $('.video').on('click touchend', function(e) {
     }
 
   });
-          req.done(function(data){
+  req.done(function(data){
         $('.upload-list').css('display','none');
         $('.video-details').css('display','block');
         $('.video-feed').attr("src",videoSrc + data.videoRef);
@@ -423,10 +413,8 @@ $('.video').on('click touchend', function(e) {
         $('img#profilepic').attr("src",userImgSrc + data.authorImage);
 
 });
-       }
- });
 });
-
+});
 
 document.getElementById("frame").onload = function() {getRequest()};
 

@@ -1777,7 +1777,7 @@ body{
 }
 
 .navbar-brand img{
-    width: 55px;
+    width:50%;
 
 }
 
@@ -1878,6 +1878,27 @@ a.video{
 
 #video-description{
     font-size: small;
+}
+
+.navbar-brand{
+    display: inline-block;
+    /* padding-top: .3125rem; */
+    /* padding-bottom: .3125rem; */
+    /* margin-right: 1rem; */
+    font-size: 1.25rem;
+    line-height: inherit;
+    white-space: nowrap;
+    z-index: 100;
+    left: 40%;
+    position: absolute;
+    right: 40%;
+    width: 20%;
+    margin-left: 0px;
+}
+
+.left-icons{
+        right: 0;
+    position: absolute;
 }
 }
 

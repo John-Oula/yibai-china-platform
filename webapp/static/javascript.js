@@ -382,13 +382,13 @@ function closeNav() {
 $(document).ready(function(){
 
 
-$('.thumb-wrapper').on('touchstart', function() {
+$('.video').on('touchstart', function() {
     detectTap = true; // Detects all touch events
 });
-$('.thumb-wrapper').on('touchmove', function() {
+$('.video').on('touchmove', function() {
     detectTap = false; // Excludes the scroll events from touch events
 });
-$('.thumb-wrapper').on('click touchend', function(e) {
+$('.video').on('click touchend', function(e) {
     e.preventDefault();
     if (e.type == "click") detectTap = true; // Detects click events
        if (detectTap){
@@ -426,3 +426,10 @@ $('.thumb-wrapper').on('click touchend', function(e) {
        }
  });
 });
+
+
+document.getElementById("frame").onload = function() {getRequest()};
+
+function getRequest() {
+  document.getElementById("demo").innerHTML = "Iframe is loaded.";
+}

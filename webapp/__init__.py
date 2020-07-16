@@ -1072,8 +1072,15 @@ def video():
     video = request.args.get('video', type=str)
     videoId= request.args.get('videoId', type=str)
     video = Upload.query.filter_by(id=videoId).first()
+    data = jsonify({"id":video.id,"title":video.title,"authorImage":video.uploader.image_file,"category":video.category,"author":video.uploader.username,"videoRef":video.upload_ref,"price":video.price,"description":video.description})
+    return data
 
-    return jsonify({"id":video.id,"title":video.title,"authorImage":video.uploader.image_file,"category":video.category,"author":video.uploader.username,"videoRef":video.upload_ref,"price":video.price,"description":video.description})
+@app.route('/videoInfo' , methods=['POST','GET'])
+def videoInfo():
+    video = request.args.get('video', type=str)
+    videoId= request.args.get('videoId', type=str)
+    video = Upload.query.filter_by(id=videoId).first()
+    return render_template('video info.html',video=video,videoId=videoId)
 
 @app.route('/series/<int:seriesid>Id<int:id>video<upload_ref>' , methods=['POST','GET'])
 @login_required

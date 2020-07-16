@@ -1867,5 +1867,10 @@ button{
     border-style: none;
     padding: 0px;
 }
+a.video{
+    display: block;
+    height: 200px;
+
+}
 }
 

@@ -1810,8 +1810,7 @@ ul.upload-list{
 
 }
 .inner-info{
-    display: flex;
-    flex-direction: column;
+    display: block;
 
 }
 #unlike-icon {

@@ -380,7 +380,7 @@ function closeNav() {
 
 
 $(document).ready(function(){
-  $('.video').on("click",function(e){
+  $('a.video').on("click",function(e){
   e.preventDefault();
     var url = $(this).attr("data-href");
     var videoSrc = "../static/videos/";

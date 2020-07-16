@@ -192,9 +192,9 @@
     <div class="thumb-wrapper" url="{{ url_for('video',video=upload.upload_ref,videoId=upload.id) }}"  >
 
                         <a class="video" ref="{{upload.upload_ref}}"  video-id="{{ upload.id }}" href="{{ url_for('videoInfo',video=upload.upload_ref,videoId=upload.id) }}">
-                                <video class="video-feed"  type="video/mp4" src="../static/videos/{{ upload.upload_ref }}" alt="">
+                                <img class="video-feed"   src="../static/profile_pics/{{ upload.uploader.image_file}}" alt="">
 
-                                </video>
+
                         </a>
 
     </div>

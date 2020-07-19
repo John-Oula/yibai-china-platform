@@ -314,7 +314,7 @@ class Upload(db.Model):
     id = db.Column('id', db.Integer, primary_key=True)
     title = db.Column('title', db.String(30))
     category = db.Column('category', db.String(30))
-    description = db.Column('description', db.String(600))
+    description = db.Column('description', db.VARCHAR)
     price = db.Column('price', db.Integer)
     upload_ref = db.Column('upload_ref', db.VARCHAR)
     transcript_ref = db.Column('transcript_ref', db.VARCHAR)
@@ -548,8 +548,15 @@ def home():
     uploads = Upload.query.order_by(Upload.timestamp.desc()).paginate(per_page=4,error_out=False,page=page)
     user = User.query.all()
 
-
     return render_template('home.html',uploads=uploads,page=page,user=user)
+
+@app.route('/userDetails')
+def userDetails():
+    user_id = request.args.get('user_id', type=int)
+    user = User.query.filter_by(id=user_id).first_or_404()
+    data =jsonify({"id":user.id,"username":user.username,"followers":user.followers.count(),"userImage":user.image_file,"videos":len(user.uploads),"liveSessions":len(user.posts),"introduction":user.introduction})
+    print(data)
+    return data
 
 @app.route('/sent')
 def sent():

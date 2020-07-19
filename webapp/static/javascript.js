@@ -262,14 +262,7 @@ $('#unbook').click(function(e){
 
   });
 
-function update() {
-  $.getJSON("/updateFeed", function(data) {
-    console.log(data)
-//    $("#feed-content").html(data);
-    window.setTimeout(update, 10000);
-  });
-}
-update()
+
 function openCity(evt, cityName) {
   // Declare all variables
   var i, tabcontent, tablinks;
@@ -414,4 +407,42 @@ $(document).ready(function(){
 
 });
 });
+
+
+});
+
+$(document).ready(function(){
+      $('.profile-pic-wrapper').on("click",function(e){
+  e.preventDefault();
+    var url = $(this).attr("data-href");
+    var videoSrc = "../static/videos/";
+    var userImgSrc = "../static/profile_pics/";
+    var currency = "￥"
+
+  req = $.ajax({
+    url:url,
+    type:'GET',
+    data:{},
+    success:function (data) {
+      console.log(data)
+    },error:function (error) {
+      console.log(error)
+      console.log("error")
+
+    }
+
+  });
+  req.done(function(data){
+        $('.upload-list').css('display','none');
+        $('.profile').css('display','block');
+        $('#user-username').html(data.username);
+        $('#user-videos').html(data.videos);
+        $('#user-followers').html(data.followers);
+        $('#user-live-sessions').html(data.liveSessions);
+        $('#user-introduction').html(data.description);
+        $('img#profilepic').attr("src",userImgSrc + data.userImage);
+
+});
+});
+
 });

@@ -189,15 +189,15 @@
     <div class="" >
     <div class="">
     <div class="thumb-wrapper" data-href="{{ url_for('video',video=upload.upload_ref,videoId=upload.id) }}">
-                <li><a  class="video"   video-id="{{ upload.id }}" href="#"><img class="video-feed" src="../static/profile_pics/{{ upload.uploader.image_file }}" alt=""></a></li></li>
+                <li><a  class="video"   video-id="{{ upload.id }}" href="#"><img class="video-feed" src="../static/profile_pics/{{ upload.uploader.image_file }}" alt=""></a></li>
 
     </div>
     <div class="video-info">
 
     <div class="row no-gutters">
     <div class="col-2 col-sm-2 col-md-2 no-gutters">
-        <div class="profile-pic-wrapper">
-            <span><img id="profilepic" src="../static/profile_pics/{{ upload.uploader.image_file }}" alt=""></span>
+        <div class="profile-pic-wrapper"  data-href="{{ url_for('userDetails',user_id = upload.uploader.id) }}">
+            <span><a  class="user-profile-pic"   user-id="{{ upload.uploader.id }}" href="#"><img id="profilepic"  src="../static/profile_pics/{{ upload.uploader.image_file }}" alt=""></a></span>
         </div>
         </div>
 
@@ -325,7 +325,90 @@
              </nav>
          </div>
      </div>
+ <div class="profile">
+
+     <div class="row user-profile-info no-gutters">
+                  <div class="col-2 no-gutters">
+
+                  <div class="user-profile-pic-wrapper">
+            <span><img id="profilepic" src="" alt=""></span>
+        </div>
+        </div>
+         <div class="col-3 no-gutters text-center">
+     <div id="user-followers"></div>
+
+         <span>Followers</span>
+             </div>
+         <div class="col-3 no-gutters text-center">
+     <div id="user-videos"></div>
+                      <span>Videos</span>
+
+         </div>
+             <div class="col-3 no-gutters text-center">
+     <div id="user-live-sessions">
+         </div>
+                     <span>Live Sessions</span>
+
+     </div>
+
+ </div>
+     <div id="">
+     <div id="user-username"></div>
+
+     </div>
+
+     <div class="profile-btn text-center">
+      <span>
+{% if current_user.is_authenticated %}
+        {% if user == current_user %}
+        {% elif not current_user.is_following(user) %}
+
+           <a id="follow" data-href="{{ url_for('follow', username=user.username) }}"> <button type="button" id="follow-btn" class="fixed-btn" >Follow</button></a>
+           <a style="display: none" id="unfollow" data-href="{{ url_for('unfollow', username=user.username) }}"><button type="button" id="unfollow-btn" class="fixed-btn" >Unfollow</button></a>
+        {% else %}
+                       <a style="display: none" id="follow" data-href="{{ url_for('follow', username=user.username) }}"><button type="button" id="follow-btn" class="fixed-btn" >Follow</button></a>
+                       <a id="unfollow" data-href="{{ url_for('unfollow', username=user.username) }}" ><button type="button" id="unfollow-btn" class="fixed-btn" >Unfollow</button></a>
+
+        {% endif %}
+      {% else %}
+                 <a id="follow" data-href="{{ url_for('follow', username=user.username) }}"> <button type="button" id="follow-btn" class="fixed-btn" >Follow</button></a>
+{% endif %}
+      </span>
+     <span>
+
+
+
+           <a id="book" data-href="{{ url_for('follow', username=user.username) }}"> <button type="button" id="follow-btn" class="fixed-btn" >Book Schedule</button></a>
+
+     </span>
+
+     </div>
+         <ul class="nav nav-tabs nav-fill" id="myTab" role="tablist">
+             <li class="nav-item">
+                 <a class="nav-link active" id="bio-tab" data-toggle="tab" href="#bio" role="tab" aria-controls="bio" aria-selected="true">BIO</a>
+             </li>
+             <li class="nav-item">
+                 <a class="nav-link" id="contents-tab" data-toggle="tab" href="#contents" role="tab" aria-controls="contents" aria-selected="false">CONTENTS</a>
+             </li>
+             <li class="nav-item">
+                 <a class="nav-link" id="reviews-tab" data-toggle="tab" href="#reviews" role="tab" aria-controls="reviews" aria-selected="false">REVIEWS</a>
+             </li>
+             <li class="nav-item">
+                 <a class="nav-link" id="stats-tab" data-toggle="tab" href="#stats" role="tab" aria-controls="stats" aria-selected="false">STATS</a>
+             </li>
+         </ul>
+         <div class="tab-content" id="myTabContent">
+             <div class="tab-pane fade show active p-3" id="bio" role="tabpanel" aria-labelledby="bio-tab">
+                 <p>Introduction</p>
+                 <p id="video-description"></p>
+             </div>
+             <div class="tab-pane fade" id="contents" role="tabpanel" aria-labelledby="contents-tab"></div>
+             <div class="tab-pane fade" id="reviews" role="tabpanel" aria-labelledby="reviews-tab"></div>
+             <div class="tab-pane fade" id="stats" role="tabpanel" aria-labelledby="stats-tab"></div>
+         </div>
 </div>
+     </div>
+ </div>
 
     </body>
 {% endblock %}

@@ -1908,6 +1908,7 @@ a.video{
     font-size: 14px;
     margin-top: 10%;
     color: #707070;
+    align-items: center;
 }
 #user-username{
     font-size: 15px;
@@ -1919,8 +1920,8 @@ a.video{
 
 .user-profile-pic-wrapper{
         margin-top: 0%;
-    width: 50px;
-    height: 50px;
+    width: 60px;
+    height: 60px;
      margin-left: 10%;
         border-radius: 50%;
     position: relative;

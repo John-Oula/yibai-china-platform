@@ -101,7 +101,7 @@
 {% endblock %}
 {% block bottomNav %}
 
-<nav class="bot-nav shadow-sm" >
+<nav class="bot-nav shadow-lg" >
 {% if current_user.is_authenticated %}
     <a class="navLink" href="{{ url_for('home', username = current_user.username) }}"><img class="mobile-icon" src="../static/home.svg" alt=""><span class="nav_text">Home</span></a>
     <a class="navlink navLink-center"  href="{{ url_for('discover', username = current_user.username ) }}"><img class="mobile-icon" src="../static/live.svg" alt=""><span class="nav_text">Live</span></a>

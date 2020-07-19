@@ -135,6 +135,10 @@ available = db.Table('available',
     db.Column('date_id', db.Integer, db.ForeignKey('availableStatus.id'))
 )
 
+cart = db.Table('cart',
+                db.Column('user_id', db.Integer, db.ForeignKey('user.id')),
+                db.Column('course_id', db.Integer, db.ForeignKey('upload.id')))
+
 class User(db.Model, UserMixin):
     __tablename__ = 'user'
     id = db.Column('id', db.Integer, primary_key=True)
@@ -175,6 +179,8 @@ class User(db.Model, UserMixin):
 
     book = db.relationship('Post', secondary=book,backref=db.backref('bookers', lazy='dynamic'))
     likes = db.relationship('Upload', secondary=likes,backref=db.backref('liked', lazy='dynamic'))
+    cart = db.relationship('Upload', secondary=cart,backref='user_cart', lazy='dynamic')
+
 
 
     def get_reset_token(self,expires_sec=1800):
@@ -263,6 +269,8 @@ class Available(db.Model):
     date_available = db.Column(db.String())
     timestamp = db.Column(db.DateTime, default=datetime.datetime.utcnow)
 
+
+
 class Post(db.Model):
     __tablename__ = 'post'
     id = db.Column('id', db.Integer, primary_key=True)
@@ -317,18 +325,20 @@ class Upload(db.Model):
     description = db.Column('description', db.VARCHAR)
     price = db.Column('price', db.Integer)
     upload_ref = db.Column('upload_ref', db.VARCHAR)
+    coverImage = db.Column('coverImage', db.VARCHAR)
     transcript_ref = db.Column('transcript_ref', db.VARCHAR)
     auido_ref = db.Column('auido_ref', db.VARCHAR)
     timestamp = db.Column(db.DateTime, default=datetime.datetime.utcnow)
     user_id = db.Column('user_id', db.Integer, db.ForeignKey('user.id'), nullable=True)
     comments = db.relationship('Comment', backref='upload', lazy='dynamic')
 
-    def __repr__(self, id, title, category, description, price, upload_ref,transcript_ref,auido_ref, user_id):
+    def __repr__(self, id, title, category, description, price, upload_ref,coverImage,transcript_ref,auido_ref, user_id):
         self.id = id
         self.title = title
         self.category = category
         self.description = description
         self.price = price
+        self.coverImage = coverImage
         self.upload_ref = upload_ref
         self.transcript_ref = transcript_ref
         self.auido_ref = auido_ref
@@ -555,6 +565,16 @@ def userDetails():
     user_id = request.args.get('user_id', type=int)
     user = User.query.filter_by(id=user_id).first_or_404()
     data =jsonify({"id":user.id,"username":user.username,"followers":user.followers.count(),"userImage":user.image_file,"videos":len(user.uploads),"liveSessions":len(user.posts),"introduction":user.introduction})
+    print(data)
+    return data
+
+@app.route('/addCart')
+
+@login_required
+def addCart():
+    upload_id = request.args.get('upload_id', type=int)
+    course = Upload.query.filter_by(id=upload_id).first_or_404()
+    data =jsonify({"id":course.id,"title":course.title,"coverImage":course.coverImage,"price":course.price})
     print(data)
     return data
 

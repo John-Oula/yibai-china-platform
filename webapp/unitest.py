@@ -153,6 +153,9 @@ class UserModelCase(unittest.TestCase):
         p2.bookers.append(u3)
         p4.bookers.append(u1)
         p3.bookers.append(u2)
+        up1.user_cart.append(u1)
+        up1.user_cart.append(u2)
+        up2.user_cart.append(u2)
         db.session.commit()
 
 

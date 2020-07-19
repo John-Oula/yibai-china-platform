@@ -396,6 +396,7 @@ $(document).ready(function(){
   req.done(function(data){
         $('.upload-list').css('display','none');
         $('.video-details').css('display','block');
+        $('.cart').attr('data-href','/addCart?upload_id='+data.id);
         $('.video-feed').attr("src",videoSrc + data.videoRef);
         $('.video-feed').attr("video-id",data.id);
         $('#video-title').html(data.title);
@@ -441,6 +442,36 @@ $(document).ready(function(){
         $('#user-live-sessions').html(data.liveSessions);
         $('#user-introduction').html(data.description);
         $('img#profilepic').attr("src",userImgSrc + data.userImage);
+
+});
+});
+
+});
+
+
+$(document).ready(function(){
+      $('.cart').on("click",function(e){
+  e.preventDefault();
+    var url = $(this).attr("data-href");
+    var videoSrc = "../static/videos/";
+    var userImgSrc = "../static/profile_pics/";
+    var currency = "￥"
+
+  req = $.ajax({
+    url:url,
+    type:'GET',
+    data:{},
+    success:function (data) {
+      console.log(data)
+    },error:function (error) {
+      console.log(error)
+      console.log("error")
+
+    }
+
+  });
+  req.done(function(data){
+
 
 });
 });

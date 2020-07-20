@@ -1767,7 +1767,13 @@ body{
     font-size: 36px;
     margin-left: 50px;
 }
-
+a.closebtn{
+        position: absolute;
+    top: 0;
+    right: 25px;
+    font-size: 36px;
+    margin-left: 50px;
+}
 #main {
     transition: margin-left .5s;
 }
@@ -1939,6 +1945,18 @@ a.video{
     margin-bottom: 4%;
 }
 
+.left-sidenav{
+    height: 100%;
+    width: 0;
+    position: fixed;
+    z-index: 1;
+    top: 0;
+    right: 0;
+    background-color: white;
+    overflow-x: hidden;
+    transition: 0.5s;
+    padding-top: 60px;
+    display: block;}
 
 }
 

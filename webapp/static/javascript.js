@@ -372,6 +372,18 @@ function closeNav() {
 }
 
 
+function openLeftNav() {
+    document.getElementById("leftSidenav").style.width = "80%";
+    document.getElementById("main").style.marginLeft = "250px";
+    document.body.style.backgroundColor = "rgba(0,0,0,0.4)";
+}
+
+function closeLeftNav() {
+    document.getElementById("leftSidenav").style.width = "0";
+    document.getElementById("main").style.marginLeft= "0";
+    document.body.style.backgroundColor = "white";
+}
+
 $(document).ready(function(){
   $('.thumb-wrapper').on("click",function(e){
   e.preventDefault();

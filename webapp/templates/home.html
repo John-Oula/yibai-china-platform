@@ -319,7 +319,7 @@
          <div>
              <nav id="video-nav" class="shadow-lg" >
                  <h3 id="video-price" class="navLink" href="{{ url_for('home', username = current_user.username) }}"></h3>
-                 <a class="navLink cart" data-href=""><img class="mobile-icon" src="../static/addCart.svg" alt=""></a>
+                 <a class="navLink cart" data-href=""><img onclick="openNav()" class="mobile-icon" src="../static/addCart.svg" alt=""></a>
                  <a class="navLink" href="{{ url_for('settings', username = current_user.username) }}"><img class="mobile-icon" src="../static/share.svg" alt=""></a>
                  <a class="navLink" href="{{ url_for('settings', username = current_user.username) }}"><button class="common-btn">BUY NOW</button></a>
              </nav>

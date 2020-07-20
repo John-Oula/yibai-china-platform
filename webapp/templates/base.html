@@ -84,7 +84,7 @@
     <div class="left-icons">
         <img src="../static/search-icon.svg" alt="">
         <img src="../static/filter.svg" alt="">
-        <img src="../static/cart.svg" alt="">
+        <img src="../static/cart.svg" onclick="openLeftNav()" alt="">
     </div>
     </div>
 
@@ -93,7 +93,15 @@
   <a href="{{ url_for('login') }}">Login</a>
   <a href="{{ url_for('signup') }}">Sign up</a>
 </div>
+
+       <div id="leftSidenav" class="left-sidenav">
+  <a class="closebtn" onclick="closeLeftNav()">&times;</a>
+
 </div>
+</div>
+
+
+
 {% endblock %}
 
 {% block body %}

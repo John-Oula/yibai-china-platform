@@ -556,28 +556,78 @@ class Reset_password(FlaskForm):
 def home():
     page = request.args.get('page', type=int)
     uploads = Upload.query.order_by(Upload.timestamp.desc()).paginate(per_page=4,error_out=False,page=page)
-    user = User.query.all()
 
-    return render_template('home.html',uploads=uploads,page=page,user=user)
+
+    return render_template('home.html',uploads=uploads,page=page)
+
+
+
+@app.route('/liveSession')
+def liveSession():
+
+    videos = Post.query.order_by(Post.timestamp.desc()).all()
+    i = 0
+    l = []
+    for v in range(len(videos)):
+        data ={'id':videos[i].id,'title':videos[i].title,'host':videos[i].author.username,'userImg':videos[i].author.image_file,'category':videos[i].category,'startTime':videos[i].start_time,'endTime':videos[i].end_time,'date':videos[i].date,'meetingCode':videos[i].meetingCode}
+        l.append(data)
+
+        i+=1
+    v
+#    title=[]
+#    for v in videos:
+#
+#        title.append(v.title)
+#        print(title)
+#    data = [{"title":ti} for ti in zip(title)]
+#    title
+ #   print(json.dumps(data))
+    print(l)
+    return jsonify({'result':l})
 
 @app.route('/userDetails')
 def userDetails():
     user_id = request.args.get('user_id', type=int)
     user = User.query.filter_by(id=user_id).first_or_404()
-    data =jsonify({"id":user.id,"username":user.username,"followers":user.followers.count(),"userImage":user.image_file,"videos":len(user.uploads),"liveSessions":len(user.posts),"introduction":user.introduction})
-    print(data)
-    return data
+    if current_user:
+        if current_user.is_following(user):
+            return jsonify({"id":user.id,"username":user.username,"followers":user.followers.count(),"userImage":user.image_file,"videos":len(user.uploads),"liveSessions":len(user.posts),"introduction":user.introduction,"Isfollowing":True})
+
+        else:
+            return jsonify({"id":user.id,"username":user.username,"followers":user.followers.count(),"userImage":user.image_file,"videos":len(user.uploads),"liveSessions":len(user.posts),"introduction":user.introduction,"Isfollowing":False})
+
+    else:
+        return jsonify({"id":user.id,"username":user.username,"followers":user.followers.count(),"userImage":user.image_file,"videos":len(user.uploads),"liveSessions":len(user.posts),"introduction":user.introduction,"Isfollowing":False})
+
 
 @app.route('/addCart')
-
 @login_required
 def addCart():
     upload_id = request.args.get('upload_id', type=int)
+
     course = Upload.query.filter_by(id=upload_id).first_or_404()
+    course.user_cart.append(current_user)
+    db.session.commit()
+
     data =jsonify({"id":course.id,"title":course.title,"coverImage":course.coverImage,"price":course.price})
     print(data)
     return data
 
+@app.route('/cart')
+@login_required
+def cart():
+    user_id = request.args.get('user_id', type=int)
+
+
+
+#    try:
+    userCart = db.session.query(Upload).join(Upload , User.cart).all()
+    for userCart in user:
+        data = jsonify({"id": userCart.id, "title": userCart.title, "coverImage": userCart.coverImage, "price": userCart.price})
+    data
+    #    except:
+ #       return jsonify({'result': 'You have no Items in your cart'})
+    return data
 @app.route('/sent')
 def sent():
     msg = Message("Testing",sender=authentication,recipients=["johnoula@icloud.com"])

@@ -211,7 +211,11 @@
         {% if upload.price == None %}
         <span>
         <p class="likes"  class="text-justify text-left " data-likes="{{ upload.liked.count()  }}">
+            <span>{{ upload.liked.count()  }}</span>
             <img  type="button" id="unlike-icon"  src="../static/heart.png" alt="" width="16">
+            <span>{{ upload.comments.count()  }}</span>
+                        <img  src="../static/comment.svg" alt="" width="16">
+
         </p>
         </span>
         {% else %}
@@ -319,7 +323,7 @@
          <div>
              <nav id="video-nav" class="shadow-lg" >
                  <h3 id="video-price" class="navLink" href="{{ url_for('home', username = current_user.username) }}"></h3>
-                 <a class="navLink cart" data-href=""><img onclick="openNav()" class="mobile-icon" src="../static/addCart.svg" alt=""></a>
+                 <a class="navLink addCart" data-href=""><img  class="mobile-icon" src="../static/addCart.svg" alt=""></a>
                  <a class="navLink" href="{{ url_for('settings', username = current_user.username) }}"><img class="mobile-icon" src="../static/share.svg" alt=""></a>
                  <a class="navLink" href="{{ url_for('settings', username = current_user.username) }}"><button class="common-btn">BUY NOW</button></a>
              </nav>
@@ -359,26 +363,15 @@
 
      <div class="profile-btn text-center">
       <span>
-{% if current_user.is_authenticated %}
-        {% if user == current_user %}
-        {% elif not current_user.is_following(user) %}
+           <a id="follow" data-href=""> <button type="button" id="follow-btn" class="fixed-btn" >Follow</button></a>
+           <a id="unfollow" data-href="" ><button type="button" id="unfollow-btn" class="fixed-btn" >Unfollow</button></a>
 
-           <a id="follow" data-href="{{ url_for('follow', username=user.username) }}"> <button type="button" id="follow-btn" class="fixed-btn" >Follow</button></a>
-           <a style="display: none" id="unfollow" data-href="{{ url_for('unfollow', username=user.username) }}"><button type="button" id="unfollow-btn" class="fixed-btn" >Unfollow</button></a>
-        {% else %}
-                       <a style="display: none" id="follow" data-href="{{ url_for('follow', username=user.username) }}"><button type="button" id="follow-btn" class="fixed-btn" >Follow</button></a>
-                       <a id="unfollow" data-href="{{ url_for('unfollow', username=user.username) }}" ><button type="button" id="unfollow-btn" class="fixed-btn" >Unfollow</button></a>
-
-        {% endif %}
-      {% else %}
-                 <a id="follow" data-href="{{ url_for('follow', username=user.username) }}"> <button type="button" id="follow-btn" class="fixed-btn" >Follow</button></a>
-{% endif %}
       </span>
      <span>
 
 
 
-           <a id="book" data-href="{{ url_for('follow', username=user.username) }}"> <button type="button" id="follow-btn" class="fixed-btn" >Book Schedule</button></a>
+           <a id="book" data-href=""> <button type="button" id="follow-btn" class="fixed-btn" >Book Schedule</button></a>
 
      </span>
 
@@ -407,8 +400,69 @@
              <div class="tab-pane fade" id="stats" role="tabpanel" aria-labelledby="stats-tab"></div>
          </div>
 </div>
+
+
+ <div id="live">
+<div class="live-list">
+
+</div>
+
+     <div class="live-details">
+            <div class="live-details-img-wrapper">
+                <img class="live-img" src="../static/shanghai_china%20100cg.jpg" alt="">
+
+            </div>
+
+        <div class="live-profile-pic-wrapper"  data-href="">
+            <span><a  class="user-profile-pic border-light" href="#"><img id="profilepic"  src="../static/profile_pics/default.jpg" alt=""></a></span>
+        </div>
+
+                     <div class="p-2 row no-gutters">
+                <span>Mandarin in China</span>
+                <span class="live-info col-8 flex-content flex-column no-gutters">
+                    <span class="">Time: </span>
+                    <span class="">Date: </span>
+                </span>
+                <span class="live-info col-4 flex-content flex-column no-gutters">
+
+                    <button class="fixed-btn">Profile</button>
+                </span>
+            </div>
+                  <ul class="nav nav-tabs nav-fill" id="myTab" role="tablist">
+             <li class="nav-item">
+                 <a class="nav-link active" id="description-tab" data-toggle="tab" href="#description" role="tab" aria-controls="description" aria-selected="true">DESCRIPTION</a>
+             </li>
+             <li class="nav-item">
+                 <a class="nav-link" id="host-tab" data-toggle="tab" href="#host" role="tab" aria-controls="host" aria-selected="false">HOST</a>
+             </li>
+             <li class="nav-item">
+                 <a class="nav-link" id="schedule-tab" data-toggle="tab" href="#schedule" role="tab" aria-controls="schedule" aria-selected="false">SCHEDULE</a>
+             </li>
+         </ul>
+         <div class="tab-content" id="myTabContent">
+             <div class="tab-pane fade show active p-3" id="description" role="tabpanel" aria-labelledby="description-tab">
+                 <p>Description</p>
+                 <p id="video-description"></p>
+             </div>
+             <div class="tab-pane fade" id="host" role="tabpanel" aria-labelledby="host-tab"></div>
+             <div class="tab-pane fade" id="schedule" role="tabpanel" aria-labelledby="schedule-tab"></div>
+         </div>
+
+<div class="p-3">
+    <h6>Host videos</h6>
+</div>
+                  <div>
+             <nav id="video-nav" class="shadow-lg" >
+                 <h3 id="video-price" class="navLink" href=""></h3>
+                 <a class="navLink" href=""><img class="mobile-icon" src="../static/share.svg" alt=""></a>
+                 <a class="navLink" href=""><button class="common-btn">BOOK A SEAT</button></a>
+             </nav>
+         </div>
      </div>
- </div>
+     </div>
+
+</div>
+     </div>
 
     </body>
 {% endblock %}

@@ -1957,6 +1957,73 @@ a.video{
     transition: 0.5s;
     padding-top: 60px;
     display: block;}
+#follow{
+    display: none;
 
+}
+#unfollow{
+    display: none;
+}
+#live{
+    display: none;
+}
+#live-card{
+    height: fit-content;
+    margin-left: 4%;
+    margin-right: 4%;
+    margin-bottom: 3%;
+            border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+
+}
+.live-img-wrapper{
+        padding-left: 0px;
+    overflow: hidden;
+    height: 62px;
+    position: relative;
+        border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+
+}
+
+.live-details-img-wrapper{
+        padding-left: 0px;
+    overflow: hidden;
+    height: 62px;
+    position: relative;
+
+
+}
+
+.live-img{
+    height: auto;
+    width: 100%;
+}
+
+.live-profile-pic-wrapper{
+    width: 42px;
+    height: 42px;
+    bottom: 20px;
+    float: right;
+    position: relative;
+    right: 15px;
+    border-radius: 50%;
+    overflow: hidden;
+
+}
+.live-info{
+    font-size: 12px;
+}
+
+.live-details{
+    display: none;
+}
+
+
+#live-title{
+
+    font-size: 15px;
+    font-weight: 600;
+}
 }
 

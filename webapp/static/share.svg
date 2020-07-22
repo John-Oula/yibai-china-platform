@@ -3,10 +3,10 @@
     <style>
       .cls-1 {
         fill: none;
+        border: #1492E6;
       }
 
       .cls-2 {
-        opacity: 0.5;
         clip-path: url(#clip-path);
       }
     </style>

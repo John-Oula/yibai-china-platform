@@ -146,63 +146,7 @@ $(document).ready(function(){
 function updateText(word,verb){
   word.text(verb)
 }
-$(document).ready(function(){
-$('#follow').click(function(e){
-  e.preventDefault();
 
-  var followURL = $(this).attr("data-href");
-
-
-  req = $.ajax({
-    url:followURL,
-    type:'GET',
-    data:{},
-    success:function (data) {
-      console.log(data)
-    },error:function (error) {
-      console.log(error)
-      console.log("error")
-
-    }
-
-  });
-  req.done(function(data){
-    $('#followers-count').text(data.followers);
-    $('#follow').css("display","none");
-    $('#unfollow').css("display","block");
-  })
-
-
-})
-$('#unfollow').click(function(e){
-  e.preventDefault();
-
-  var unfollowURL = $(this).attr("data-href");
-
-
-  req = $.ajax({
-    url:unfollowURL,
-    type:'GET',
-    data:{},
-    success:function (data) {
-      console.log(data)
-    },error:function (error) {
-      console.log(error)
-      console.log("error")
-
-    }
-
-  });
-  req.done(function(data){
-    $('#followers-count').text(data.followers);
-    $('#follow').css("display","block");
-    $('#unfollow').css("display","none");
-  })
-
-
-})
-
-  });
 
 $(document).ready(function(){
 $('#book').click(function(e){
@@ -357,6 +301,153 @@ $('#session-content').css('display','none');
   });
   });
 
+$(document).ready(function(){
+  $('#live-card').click(function(e){
+  e.preventDefault();
+    var liveUrl = $(this).attr("data-href");
+
+  req = $.ajax({
+    url:liveUrl,
+    type:'GET',
+    data:{},
+    success:function (data) {
+      console.log(data)
+    },error:function (error) {
+      console.log(error)
+      console.log("error")
+
+    }
+
+  });
+  req.done(function(data){
+    $('.live-list').css('display','none');
+$('.live-details').css('display','block');
+});
+
+
+});
+$('#posts-btn').click(function(e){
+  e.preventDefault();
+      var postsURL = $(this).attr("data-href");
+
+  req = $.ajax({
+    url:postsURL,
+    type:'GET',
+    data:{},
+    success:function (data) {
+      console.log(data)
+    },error:function (error) {
+      console.log(error)
+      console.log("error")
+
+    }
+
+  });
+  req.done(function(data){
+$('#feed-content').css('display','block');
+$('#session-content').css('display','none');
+});
+  });
+  });
+
+$(document).ready(function(){
+  $('.live').click(function(e){
+  e.preventDefault();
+
+  req = $.ajax({
+    url:'/liveSession',
+    type:'GET',
+    data:{},
+    success:function (data) {
+      console.log(data)
+    },error:function (error) {
+      console.log(error)
+      console.log("error")
+
+    }
+
+  });
+  req.done(function(data){
+    var obj = data.result;
+    $.each(obj, function(key,value) {
+
+
+      $('.live-list').append('<card class="card shadow-sm" id="live-card"> <card > <div class="live-img-wrapper"><img class="live-img" src="../static/shanghai_china%20100cg.jpg" alt=""></div> <div class="live-profile-pic-wrapper"  data-href=""><span><a  class="user-profile-pic border-light" href="#"><img id="profilepic"  src="../static/profile_pics/'+ value.userImg +'" alt=""></a></span> </div><div class="p-2 row no-gutters"><span class="live-info col-8 flex-content flex-column no-gutters"><span id="live-title">'+ value.title +'</span><span class="">Hosted by:'+ value.host +' </span><span class="">Category:'+ value.category +'</span><span class=""> </span></span>  <span class="live-info col-4 flex-content flex-column no-gutters">           <span class="text-right">'+ value.startTime + '-'+ value.endTime +'</span><span class="text-right">'+ value.date +'</span>  <div class="text-right mt-3 rounded-circle shadow-sm"> <img class="rounded-circle" src="../static/share.svg" alt=""> </div> </span> </div> </card> </card>');
+
+});
+$('#live').css('display','block');
+$('.live-list').css('display','block');
+$('.profile').css('display','none');
+$('.video-details').css('display','none');
+$('.upload-list').css('display','none');
+  });
+
+
+
+});
+
+$('#posts-btn').click(function(e){
+  e.preventDefault();
+      var postsURL = $(this).attr("data-href");
+
+  req = $.ajax({
+    url:postsURL,
+    type:'GET',
+    data:{},
+    success:function (data) {
+      console.log(data)
+    },error:function (error) {
+      console.log(error)
+      console.log("error")
+
+    }
+
+  });
+  req.done(function(data){
+$('#feed-content').css('display','block');
+$('#session-content').css('display','none');
+});
+  });
+  });
+$(document).ready(function(){
+  $('.home').click(function(e){
+  e.preventDefault();
+
+  req = $.ajax({
+    url:'/videos',
+    type:'GET',
+    data:{},
+    success:function (data) {
+      console.log(data)
+    },error:function (error) {
+      console.log(error)
+      console.log("error")
+
+    }
+
+  });
+  req.done(function(data){
+    var obj = data.result;
+    $.each(obj, function(key,value) {
+
+
+      $('.live-list').append('<card class="card shadow-sm" id="live-card"> <card > <div class="live-img-wrapper"><img class="live-img" src="../static/shanghai_china%20100cg.jpg" alt=""></div> <div class="live-profile-pic-wrapper"  data-href=""><span><a  class="user-profile-pic border-light" href="#"><img id="profilepic"  src="../static/profile_pics/'+ value.userImg +'" alt=""></a></span> </div><div class="p-2 row no-gutters"><span class="live-info col-8 flex-content flex-column no-gutters"><span id="live-title">'+ value.title +'</span><span class="">Hosted by:'+ value.host +' </span><span class="">Category:'+ value.category +'</span><span class=""> </span></span>  <span class="live-info col-4 flex-content flex-column no-gutters">           <span class="text-right">'+ value.startTime + '-'+ value.endTime +'</span><span class="text-right">'+ value.date +'</span>  <div class="text-right mt-3 rounded-circle shadow-sm"> <img class="rounded-circle" src="../static/share.svg" alt=""> </div> </span> </div> </card> </card>');
+
+});
+$('#live').css('display','block');
+$('.live-list').css('display','block');
+$('.profile').css('display','none');
+$('.video-details').css('display','none');
+$('.upload-list').css('display','none');
+  });
+
+
+
+});
+
+
+  });
+
 
 
 function openNav() {
@@ -408,7 +499,7 @@ $(document).ready(function(){
   req.done(function(data){
         $('.upload-list').css('display','none');
         $('.video-details').css('display','block');
-        $('.cart').attr('data-href','/addCart?upload_id='+data.id);
+        $('.addCart').attr('data-href','/addCart?upload_id='+data.id);
         $('.video-feed').attr("src",videoSrc + data.videoRef);
         $('.video-feed').attr("video-id",data.id);
         $('#video-title').html(data.title);
@@ -430,6 +521,116 @@ $(document).ready(function(){
     var url = $(this).attr("data-href");
     var videoSrc = "../static/videos/";
     var userImgSrc = "../static/profile_pics/";
+    var currency = "￥";
+    var followUrl = "/follow";
+    var unfollowUrl = "/unfollow";
+
+  req = $.ajax({
+    url:url,
+    type:'GET',
+    data:{},
+    success:function (data) {
+      console.log(data)
+    },error:function (error) {
+      console.log(error)
+      console.log("error")
+
+    }
+
+  });
+  req.done(function(data){
+            $('#follow').click(function(e){
+  e.preventDefault();
+
+  var followURL = followUrl+"/"+data.username;
+
+
+  req = $.ajax({
+    url:followURL,
+    type:'GET',
+    data:{},
+    success:function (data) {
+      console.log(data)
+    },error:function (error) {
+      console.log(error)
+      console.log("error")
+
+    }
+
+  });
+  req.done(function(data){
+    $('#user-followers').text(data.followers);
+    $('#follow').css("display","none");
+    $('#unfollow').css("display","block");
+  })
+
+
+})
+        $('#unfollow').click(function(e){
+  e.preventDefault();
+
+  var unfollowURL = unfollowUrl+"/"+data.username;
+
+
+  req = $.ajax({
+    url:unfollowURL,
+    type:'GET',
+    data:{},
+    success:function (data) {
+      console.log(data)
+    },error:function (error) {
+      console.log(error)
+      console.log("error")
+
+    }
+
+  });
+  req.done(function(data){
+    $('#user-followers').text(data.followers);
+    $('#follow').css("display","block");
+    $('#unfollow').css("display","none");
+  })
+
+
+})
+        $('.upload-list').css('display','none');
+        $('.profile').css('display','block');
+        if (data.Isfollowing === true){
+                  $('#unfollow').attr('data-href',unfollowUrl+"/"+data.username);
+                          $('#unfollow').css('display','block');
+
+
+        }
+
+
+        else{
+                  $('#follow').attr('data-href',followUrl+"/"+data.username);
+
+                  $('#follow').css('display','block');
+
+
+        }
+
+
+        $('#user-username').html(data.username);
+        $('#user-videos').html(data.videos);
+        $('#user-followers').html(data.followers);
+        $('#user-live-sessions').html(data.liveSessions);
+        $('#user-introduction').html(data.description);
+        $('img#profilepic').attr("src",userImgSrc + data.userImage);
+
+});
+});
+
+});
+
+
+$(document).ready(function(){
+      $('.addCart').on("click",function(e){
+  e.preventDefault();
+    var url = $(this).attr("data-href");
+    var videoSrc = "../static/videos/";
+    var userImgSrc = "../static/profile_pics/";
     var currency = "￥"
 
   req = $.ajax({
@@ -446,21 +647,12 @@ $(document).ready(function(){
 
   });
   req.done(function(data){
-        $('.upload-list').css('display','none');
-        $('.profile').css('display','block');
-        $('#user-username').html(data.username);
-        $('#user-videos').html(data.videos);
-        $('#user-followers').html(data.followers);
-        $('#user-live-sessions').html(data.liveSessions);
-        $('#user-introduction').html(data.description);
-        $('img#profilepic').attr("src",userImgSrc + data.userImage);
+
 
 });
 });
 
 });
-
-
 $(document).ready(function(){
       $('.cart').on("click",function(e){
   e.preventDefault();
@@ -483,7 +675,9 @@ $(document).ready(function(){
 
   });
   req.done(function(data){
-
+        $('#cart-coverImg').html(data.coverImage);
+        $('#cart-title').html(data.title);
+        $('#card-price').html(currency+data.price);
 
 });
 });

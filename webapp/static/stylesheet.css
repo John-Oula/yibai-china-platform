@@ -2020,10 +2020,16 @@ a.video{
 }
 
 
-#live-title{
+.live-title{
 
     font-size: 15px;
     font-weight: 600;
+}
+
+.circle-icon{
+        border-radius: 50%;
+    height: fit-content;
+    width: fit-content;
 }
 }
 

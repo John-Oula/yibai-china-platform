@@ -277,6 +277,7 @@ class Post(db.Model):
     meetingCode = db.Column('MeetingCode', db.BigInteger, nullable=True)
     verified = db.Column('verified', db.Integer, default=0, nullable=True)
     title = db.Column('title', db.String(70), nullable=True)
+    coverImage = db.Column('coverImage',db.String,nullable=True,default='default.jpg')
     category = db.Column('category', db.String(10), nullable=True)
     description = db.Column('description', db.String(100), nullable=True)
     files = db.Column('file', db.String)
@@ -287,12 +288,13 @@ class Post(db.Model):
     end_time = db.Column('End time', db.String, nullable=True)
     lesson = db.relationship('Lesson', backref=db.backref('lessons'))
 
-    def __repr__(self, id,meetingCode, verified, title, category, description, files, timestamp ,date, user_id, start_time,
+    def __repr__(self, id,meetingCode, verified, title,coverImage, category, description, files, timestamp ,date, user_id, start_time,
                  end_time):
         self.id = id
         self.meetingCode = meetingCode
         self.verified = verified
         self.title = title
+        self.coverImage = coverImage
         self.category = category
         self.files = files
         self.description = description
@@ -569,27 +571,19 @@ def liveSession():
     i = 0
     l = []
     for v in range(len(videos)):
-        data ={'id':videos[i].id,'title':videos[i].title,'host':videos[i].author.username,'userImg':videos[i].author.image_file,'category':videos[i].category,'startTime':videos[i].start_time,'endTime':videos[i].end_time,'date':videos[i].date,'meetingCode':videos[i].meetingCode}
+        data ={'id':videos[i].id,'title':videos[i].title,'host':videos[i].author.username,'coverImg': videos[i].coverImage,'userImg':videos[i].author.image_file,'category':videos[i].category,'startTime':videos[i].start_time,'endTime':videos[i].end_time,'date':videos[i].date,'meetingCode':videos[i].meetingCode}
         l.append(data)
 
         i+=1
-    v
-#    title=[]
-#    for v in videos:
-#
-#        title.append(v.title)
-#        print(title)
-#    data = [{"title":ti} for ti in zip(title)]
-#    title
- #   print(json.dumps(data))
+
     print(l)
     return jsonify({'result':l})
 
 @app.route('/userDetails')
 def userDetails():
-    user_id = request.args.get('user_id', type=int)
-    user = User.query.filter_by(id=user_id).first_or_404()
-    if current_user:
+    username = request.args.get('username', type=str)
+    user = User.query.filter_by(username=username).first_or_404()
+    if current_user.is_authenticated:
         if current_user.is_following(user):
             return jsonify({"id":user.id,"username":user.username,"followers":user.followers.count(),"userImage":user.image_file,"videos":len(user.uploads),"liveSessions":len(user.posts),"introduction":user.introduction,"Isfollowing":True})
 
@@ -1146,15 +1140,43 @@ def  post(id):
 
 @app.route('/videos' , methods=['POST','GET'])
 def video():
-    video = request.args.get('video', type=str)
-    videoId= request.args.get('videoId', type=str)
-    video = Upload.query.filter_by(id=videoId).first()
+#    video = request.args.get('video', type=str)
+#    videoId= request.args.get('videoId', type=str)
+ #   video = Upload.query.filter_by(id=videoId).first()
 
-    return jsonify({"id":video.id,"title":video.title,"authorImage":video.uploader.image_file,"category":video.category,"author":video.uploader.username,"videoRef":video.upload_ref,"price":video.price,"description":video.description})
+    videos = Upload.query.order_by(Upload.timestamp.desc()).all()
+    i = 0
+    l = []
+    for v in range(len(videos)):
+        data = {'id': videos[i].id, 'title': videos[i].title, 'username': videos[i].uploader.username,
+                'userImg': videos[i].uploader.image_file, 'category': videos[i].category,'likes':videos[i].liked.count(),'comments':videos[i].comments.count()}
+        l.append(data)
+
+        i += 1
+
+    print(l)
+    return jsonify({'result': l})
+
+@app.route('/videoDetails' , methods=['POST','GET'])
+def videoDetails():
+#    video = request.args.get('video', type=str)
+    videoId= request.args.get('videoId', type=int)
+    videos = Upload.query.filter_by(id=videoId).first()
+
+
+    return jsonify({'id': videos.id, 'title': videos.title,'videoRef':videos.upload_ref,'description':videos.description,'price':videos.price,'userId':videos.uploader.id,'username': videos.uploader.username,'userImg': videos.uploader.image_file, 'category': videos.category,'likes':videos.liked.count(),'comments':videos.comments.count()})
+
+@app.route('/liveDetails' , methods=['POST','GET'])
+def liveDetails():
+    liveId= request.args.get('liveId', type=int)
+    live = Post.query.filter_by(id=liveId).first()
+
+
+    return jsonify({'id': live.id, 'title': live.title,'startTime': live.start_time,'endTime': live.end_time,'date': live.date,'coverImage': live.coverImage,'description':live.description,'userId':live.author.id,'username': live.author.username,'userImg': live.author.image_file, 'category': live.category,'meetingCode':live.meetingCode})
+
 
 @app.route('/series/<int:seriesid>Id<int:id>video<upload_ref>' , methods=['POST','GET'])
 @login_required
-
 def series(upload_ref,id,seriesid):
     form = Comment_form()
     video = Episode.query.filter_by(upload_ref=upload_ref).first()

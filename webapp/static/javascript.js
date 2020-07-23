@@ -302,9 +302,11 @@ $('#session-content').css('display','none');
   });
 
 $(document).ready(function(){
-  $('#live-card').click(function(e){
+  $('.live-list').on('click','#live-card',function(e){
   e.preventDefault();
     var liveUrl = $(this).attr("data-href");
+    var userImgUrl = '../static/profile_pics/';
+    var coverImgUrl = '../static/coverImages/';
 
   req = $.ajax({
     url:liveUrl,
@@ -322,6 +324,14 @@ $(document).ready(function(){
   req.done(function(data){
     $('.live-list').css('display','none');
 $('.live-details').css('display','block');
+$('.live-title').html(data.title);
+$('#live-startTime').html(data.startTime);
+$('#live-endTime').html(data.endTime);
+$('#live-date').html(data.date);
+$('#live-description').html(data.description);
+$('img.live-img').attr('src',coverImgUrl+data.coverImage);
+$('img#profilepic').attr('src',userImgUrl+data.userImg);
+$('#live-username').html(data.host);
 });
 
 
@@ -353,6 +363,7 @@ $('#session-content').css('display','none');
 $(document).ready(function(){
   $('.live').click(function(e){
   e.preventDefault();
+  var liveUrl= '/liveDetails?liveId='
 
   req = $.ajax({
     url:'/liveSession',
@@ -372,11 +383,12 @@ $(document).ready(function(){
     $.each(obj, function(key,value) {
 
 
-      $('.live-list').append('<card class="card shadow-sm" id="live-card"> <card > <div class="live-img-wrapper"><img class="live-img" src="../static/shanghai_china%20100cg.jpg" alt=""></div> <div class="live-profile-pic-wrapper"  data-href=""><span><a  class="user-profile-pic border-light" href="#"><img id="profilepic"  src="../static/profile_pics/'+ value.userImg +'" alt=""></a></span> </div><div class="p-2 row no-gutters"><span class="live-info col-8 flex-content flex-column no-gutters"><span id="live-title">'+ value.title +'</span><span class="">Hosted by:'+ value.host +' </span><span class="">Category:'+ value.category +'</span><span class=""> </span></span>  <span class="live-info col-4 flex-content flex-column no-gutters">           <span class="text-right">'+ value.startTime + '-'+ value.endTime +'</span><span class="text-right">'+ value.date +'</span>  <div class="text-right mt-3 rounded-circle shadow-sm"> <img class="rounded-circle" src="../static/share.svg" alt=""> </div> </span> </div> </card> </card>');
+      $('.live-list').append('<card class="card shadow-sm" id="live-card" data-href="'+liveUrl+value.id+'"> <card > <div class="live-img-wrapper"><img class="live-img" src="../static/coverImages/'+value.coverImg+'" alt=""></div> <div class="live-profile-pic-wrapper"  data-href=""><span><a  class="user-profile-pic border-light" href="#"><img id="profilepic"  src="../static/profile_pics/'+ value.userImg +'" alt=""></a></span> </div><div class="p-2 row no-gutters"><span class="live-info col-8 flex-content flex-column no-gutters"><span class="live-title">'+ value.title +'</span><span class="">Hosted by:'+ value.host +' </span><span class="">Category:'+ value.category +'</span><span class=""> </span></span>  <span class="live-info col-4 flex-content flex-column no-gutters">           <span class="text-right">'+ value.startTime + '-'+ value.endTime +'</span><span class="text-right">'+ value.date +'</span>  <div class="class="circle-icon text-right text-center mt-2  p-2 shadow-sm"> <img class="rounded-circle" src="../static/share.svg" alt=""> </div> </span> </div> </card> </card>');
 
 });
 $('#live').css('display','block');
 $('.live-list').css('display','block');
+$('.live-details').css('display','none');
 $('.profile').css('display','none');
 $('.video-details').css('display','none');
 $('.upload-list').css('display','none');
@@ -409,9 +421,14 @@ $('#session-content').css('display','none');
 });
   });
   });
+
+
 $(document).ready(function(){
-  $('.home').click(function(e){
+  $('.home-icon').click(function(e){
   e.preventDefault();
+  var arg = 'videoId=';
+  var videoUrl = '/videoDetails?'+arg;
+  var userUrl = '/userDetails?username='
 
   req = $.ajax({
     url:'/videos',
@@ -431,16 +448,15 @@ $(document).ready(function(){
     $.each(obj, function(key,value) {
 
 
-      $('.live-list').append('<card class="card shadow-sm" id="live-card"> <card > <div class="live-img-wrapper"><img class="live-img" src="../static/shanghai_china%20100cg.jpg" alt=""></div> <div class="live-profile-pic-wrapper"  data-href=""><span><a  class="user-profile-pic border-light" href="#"><img id="profilepic"  src="../static/profile_pics/'+ value.userImg +'" alt=""></a></span> </div><div class="p-2 row no-gutters"><span class="live-info col-8 flex-content flex-column no-gutters"><span id="live-title">'+ value.title +'</span><span class="">Hosted by:'+ value.host +' </span><span class="">Category:'+ value.category +'</span><span class=""> </span></span>  <span class="live-info col-4 flex-content flex-column no-gutters">           <span class="text-right">'+ value.startTime + '-'+ value.endTime +'</span><span class="text-right">'+ value.date +'</span>  <div class="text-right mt-3 rounded-circle shadow-sm"> <img class="rounded-circle" src="../static/share.svg" alt=""> </div> </span> </div> </card> </card>');
+      $('.upload-list').append('<div class="thumb-wrapper" data-href="'+videoUrl+ value.id +'"><li><a  class="video"   video-id="'+ value.id +'" href="#"><img class="video-feed" src="../static/profile_pics/'+ value.userImg +'" alt=""></a></li></div><div class="video-info"><div class="row no-gutters"><div class="col-2 col-sm-2 col-md-2 no-gutters">     <div class="profile-pic-wrapper"  data-href=" '+userUrl+ value.username +'">     <span><a  class="user-profile-pic"   user-id="" href="#"><img id="profilepic"  src="../static/profile_pics/'+ value.userImg +'" alt=""></a></span> </div> </div><div class="col no-gutters"><div class="inner-info">     <h6>'+ value.title +'</h6>     <span class="upload-username">'+ value.username +'</span>     <span class="upload-username">'+ value.category +'</span>     <span>     <p class="likes"  class="text-justify text-left " data-likes="">     <span>'+ value.likes +'</span>     <img  type="button" id="unlike-icon"  src="../static/heart.png" alt="" width="16">     <span>'+ value.comments +'</span>     <img  src="../static/comment.svg" alt="" width="16"> </p> </span>       </div> </div></div></div>');
 
 });
-$('#live').css('display','block');
-$('.live-list').css('display','block');
+$('#live').css('display','none');
+$('.live-list').css('display','none');
 $('.profile').css('display','none');
 $('.video-details').css('display','none');
-$('.upload-list').css('display','none');
+$('.upload-list').css('display','block');
   });
-
 
 
 });
@@ -475,8 +491,10 @@ function closeLeftNav() {
     document.body.style.backgroundColor = "white";
 }
 
+
+
 $(document).ready(function(){
-  $('.thumb-wrapper').on("click",function(e){
+        $('.upload-list').on("click",'.thumb-wrapper',function(e){
   e.preventDefault();
     var url = $(this).attr("data-href");
     var videoSrc = "../static/videos/";
@@ -503,20 +521,18 @@ $(document).ready(function(){
         $('.video-feed').attr("src",videoSrc + data.videoRef);
         $('.video-feed').attr("video-id",data.id);
         $('#video-title').html(data.title);
-        $('#video-author').html(data.author);
+        $('#video-author').html(data.username);
+        $('#video-likes').html(data.likes);
+        $('#video-comments').html(data.comments);
         $('#video-description').html(data.description);
         $('#video-price').html(currency + data.price);
         $('#video-price').css("fontSize","17px");
-        $('img#profilepic').attr("src",userImgSrc + data.authorImage);
+        $('img#profilepic').attr("src",userImgSrc + data.userImg);
 
 });
 });
 
-
-});
-
-$(document).ready(function(){
-      $('.profile-pic-wrapper').on("click",function(e){
+      $('.upload-list').on("click",".profile-pic-wrapper",function(e){
   e.preventDefault();
     var url = $(this).attr("data-href");
     var videoSrc = "../static/videos/";
@@ -561,7 +577,7 @@ $(document).ready(function(){
   req.done(function(data){
     $('#user-followers').text(data.followers);
     $('#follow').css("display","none");
-    $('#unfollow').css("display","block");
+    $('#unfollow').css("display","inlineBlock");
   })
 
 
@@ -587,7 +603,7 @@ $(document).ready(function(){
   });
   req.done(function(data){
     $('#user-followers').text(data.followers);
-    $('#follow').css("display","block");
+    $('#follow').css("display","inline-block");
     $('#unfollow').css("display","none");
   })
 
@@ -597,7 +613,7 @@ $(document).ready(function(){
         $('.profile').css('display','block');
         if (data.Isfollowing === true){
                   $('#unfollow').attr('data-href',unfollowUrl+"/"+data.username);
-                          $('#unfollow').css('display','block');
+                          $('#unfollow').css('display','inline-block');
 
 
         }
@@ -606,7 +622,7 @@ $(document).ready(function(){
         else{
                   $('#follow').attr('data-href',followUrl+"/"+data.username);
 
-                  $('#follow').css('display','block');
+                  $('#follow').css('display','inline-block');
 
 
         }
@@ -682,4 +698,39 @@ $(document).ready(function(){
 });
 });
 
+});
+
+
+$('#main').ready(function(){
+      var arg = 'videoId=';
+  var videoUrl = '/videoDetails?'+arg;
+  var userUrl = '/userDetails?username='
+
+  req = $.ajax({
+    url:'/videos',
+    type:'GET',
+    data:{},
+    success:function (data) {
+      console.log(data)
+    },error:function (error) {
+      console.log(error)
+      console.log("error")
+
+    }
+
+  });
+  req.done(function(data){
+    var obj = data.result;
+    $.each(obj, function(key,value) {
+
+
+      $('.upload-list').append('<div class="thumb-wrapper" data-href="'+videoUrl+ value.id +'"><li><a  class="video"   video-id="'+ value.id +'" href="#"><img class="video-feed" src="../static/profile_pics/'+ value.userImg +'" alt=""></a></li></div><div class="video-info"><div class="row no-gutters"><div class="col-2 col-sm-2 col-md-2 no-gutters">     <div class="profile-pic-wrapper"  data-href=" '+userUrl+ value.username +'">     <span><a  class="user-profile-pic"   user-id="" href="#"><img id="profilepic"  src="../static/profile_pics/'+ value.userImg +'" alt=""></a></span> </div> </div><div class="col no-gutters"><div class="inner-info">     <h6>'+ value.title +'</h6>     <span class="upload-username">'+ value.username +'</span>     <span class="upload-username">'+ value.category +'</span>     <span>     <p class="likes"  class="text-justify text-left " data-likes="">     <span>'+ value.likes +'</span>     <img  type="button" id="unlike-icon"  src="../static/heart.png" alt="" width="16">     <span>'+ value.comments +'</span>     <img  src="../static/comment.svg" alt="" width="16"> </p> </span>       </div> </div></div></div>');
+
+});
+$('#live').css('display','none');
+$('.live-list').css('display','none');
+$('.profile').css('display','none');
+$('.video-details').css('display','none');
+$('.upload-list').css('display','block');
+  });
 });

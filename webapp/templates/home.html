@@ -185,77 +185,9 @@
 <ul class="upload-list">
 
 
-{% for  upload in uploads.items%}
-    <div class="" >
-    <div class="">
-    <div class="thumb-wrapper" data-href="{{ url_for('video',video=upload.upload_ref,videoId=upload.id) }}">
-                <li><a  class="video"   video-id="{{ upload.id }}" href="#"><img class="video-feed" src="../static/profile_pics/{{ upload.uploader.image_file }}" alt=""></a></li>
-
-    </div>
-    <div class="video-info">
-
-    <div class="row no-gutters">
-    <div class="col-2 col-sm-2 col-md-2 no-gutters">
-        <div class="profile-pic-wrapper"  data-href="{{ url_for('userDetails',user_id = upload.uploader.id) }}">
-            <span><a  class="user-profile-pic"   user-id="{{ upload.uploader.id }}" href="#"><img id="profilepic"  src="../static/profile_pics/{{ upload.uploader.image_file }}" alt=""></a></span>
-        </div>
-        </div>
-
-    <div class="col no-gutters">
-    <div class="inner-info">
-            <h6>{{ upload.title}}</h6>
-
-        <span class="upload-username">{{ upload.uploader.username}}</span>
-        <span class="upload-username">{{ upload.category }}</span>
-
-        {% if upload.price == None %}
-        <span>
-        <p class="likes"  class="text-justify text-left " data-likes="{{ upload.liked.count()  }}">
-            <span>{{ upload.liked.count()  }}</span>
-            <img  type="button" id="unlike-icon"  src="../static/heart.png" alt="" width="16">
-            <span>{{ upload.comments.count()  }}</span>
-                        <img  src="../static/comment.svg" alt="" width="16">
-
-        </p>
-        </span>
-        {% else %}
-        <p> ¥ {{ upload.price }}
-
-
-        <span class="likes"  class="text-justify text-left " data-likes="{{ upload.liked.count()  }}"><span>{{ upload.liked.count()  }}</span>
-            <img   src="../static/heart.png" alt="" width="16">
-            <span>{{ upload.comments.count()  }}</span>
-            <img  src="../static/comment.svg" alt="" width="16">
-        </span>
-
-        </p>
-        {% endif %}
 
 
 
-
-
-
-                </div>
-</div>
-</div>
-
-
-    </div>
-    </div>
-    </div>
-
-
-
-
-    {% endfor %}
-    {% for page in uploads.iter_pages() %}
-        {% if page %}
-
-        {% else %}
-
-        {% endif %}
-    {% endfor %}
 
 </ul>
 
@@ -282,9 +214,9 @@
         <span id="video-author"></span>
         <span ></span>
 
-        <span class="likes"  class="text-justify text-left " ><span></span>
+        <span class="likes"  class="text-justify text-left " ><span id="video-likes"></span>
             <img   src="../static/heart.png" alt="" width="16">
-            <span></span>
+            <span id="video-comments"></span>
             <img  src="../static/comment.svg" alt="" width="16">
         </span>
 
@@ -409,19 +341,20 @@
 
      <div class="live-details">
             <div class="live-details-img-wrapper">
-                <img class="live-img" src="../static/shanghai_china%20100cg.jpg" alt="">
+                <img class="live-img" src="" alt="">
 
             </div>
 
         <div class="live-profile-pic-wrapper"  data-href="">
-            <span><a  class="user-profile-pic border-light" href="#"><img id="profilepic"  src="../static/profile_pics/default.jpg" alt=""></a></span>
+            <span><a  class="user-profile-pic border-light" href="#"><img id="profilepic"  src="" alt=""></a></span>
         </div>
 
                      <div class="p-2 row no-gutters">
-                <span>Mandarin in China</span>
                 <span class="live-info col-8 flex-content flex-column no-gutters">
-                    <span class="">Time: </span>
-                    <span class="">Date: </span>
+                                    <span class="live-title"></span>
+
+                    <span class="">Time: <span id="live-startTime"></span> - <span id="live-endTime"></span></span>
+                    <span class="">Date: <span id="live-date"></span> </span>
                 </span>
                 <span class="live-info col-4 flex-content flex-column no-gutters">
 
@@ -442,7 +375,7 @@
          <div class="tab-content" id="myTabContent">
              <div class="tab-pane fade show active p-3" id="description" role="tabpanel" aria-labelledby="description-tab">
                  <p>Description</p>
-                 <p id="video-description"></p>
+                 <p id="live-description"></p>
              </div>
              <div class="tab-pane fade" id="host" role="tabpanel" aria-labelledby="host-tab"></div>
              <div class="tab-pane fade" id="schedule" role="tabpanel" aria-labelledby="schedule-tab"></div>

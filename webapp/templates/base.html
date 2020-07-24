@@ -15,7 +15,11 @@
     <link rel="icon" type="image/png" sizes="32x32" href="../static/favicon-32x32.png">
     <link rel="icon" type="image/png" sizes="16x16" href="../static/favicon-16x16.png">
     <link rel="manifest" href="/site.webmanifest">
-
+    <link href='../static/packages/core/main.css' rel='stylesheet' />
+    <link href='../static/packages/daygrid/main.css' rel='stylesheet' />
+    <link href='../static/packages/timegrid/main.css' rel='stylesheet' />
+    <link href='../static/packages/interaction/main.js' rel='script' />
+    <link href='../static/packages/bootstrap/main.css' rel='stylesheet' />
 
 
     <title>{% block title %}100CHINAGUIDE{% endblock %}</title>
@@ -95,24 +99,46 @@
 
 <div id="mySidenav" class="sidenav">
   <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
-  <a href="{{ url_for('login') }}">Login</a>
-  <a href="{{ url_for('signup') }}">Sign up</a>
+  {% if current_user.is_authenticated %}
+      <button id="courses" class="dropdown-btn">Courses
+          <i class="fa fa-caret-down"></i>
+      </button>
+      <div class="dropdown-container">
+          <a href="#">Create course</a>
+          <a href="#">Update/Edit course</a>
+          <a href="#">Stats</a>
+      </div>
+            <button id="schedule" class="dropdown-btn">Schedule
+          <i class="fa fa-caret-down"></i>
+      </button>
+      <div class="dropdown-container">
+          <a id="schedule-create" href="">Create availability</a>
+          <a href="#">Update/Edit availability</a>
+          <a href="#">Booked schedule </a>
+          <a href="#">Stats</a>
+      </div>
+            <button id="liveSession" class="dropdown-btn">Live Sessions
+          <i class="fa fa-caret-down"></i>
+      </button>
+      <div class="dropdown-container">
+          <a href="#">Create live Session</a>
+          <a href="#">Update/Edit live Session</a>
+          <a href="#">Booked live Session</a>
+          <a href="#">Stats</a>
+      </div>
+            <button id="logout" class="dropdown-btn">Logout </button>
+
+  {% else %}id
+    <a href="#}">Login</a>
+  <a href="#">Sign up</a>
+    {% endif %}
 </div>
 
        <div id="leftSidenav" class="left-sidenav">
   <a class="closebtn" onclick="closeLeftNav()">&times;</a>
-           <div>
-            <img id="cart-coverImg" src="" alt="">
-            <span id="cart-title"></span>
-            <span id="cart-price"></span>
-
-           </div>
 
 </div>
 </div>
-
-
-
 {% endblock %}
 
 {% block body %}

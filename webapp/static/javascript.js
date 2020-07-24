@@ -13,6 +13,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     },
     dateClick: function(info){},
+    longPressDelay:'1000',
     defaultTimedEventDuration: '01:45:00',
     forceEventDuration: true,
     themeSystem: 'bootstrap',
@@ -21,7 +22,7 @@ document.addEventListener('DOMContentLoaded', function() {
     navLinks: true,
     selectable: true,
     selectMirror: true,
-    unselectAuto: false,
+    unselectAuto: true,
     nowIndicator: true,
     editable: true,
     eventBackgroundColor: '#E74525',
@@ -380,6 +381,7 @@ $(document).ready(function(){
   });
   req.done(function(data){
     var obj = data.result;
+    $('.live-list').empty();
     $.each(obj, function(key,value) {
 
 
@@ -445,10 +447,11 @@ $(document).ready(function(){
   });
   req.done(function(data){
     var obj = data.result;
+    $('.upload-list').empty();
     $.each(obj, function(key,value) {
 
 
-      $('.upload-list').append('<div class="thumb-wrapper" data-href="'+videoUrl+ value.id +'"><li><a  class="video"   video-id="'+ value.id +'" href="#"><img class="video-feed" src="../static/profile_pics/'+ value.userImg +'" alt=""></a></li></div><div class="video-info"><div class="row no-gutters"><div class="col-2 col-sm-2 col-md-2 no-gutters">     <div class="profile-pic-wrapper"  data-href=" '+userUrl+ value.username +'">     <span><a  class="user-profile-pic"   user-id="" href="#"><img id="profilepic"  src="../static/profile_pics/'+ value.userImg +'" alt=""></a></span> </div> </div><div class="col no-gutters"><div class="inner-info">     <h6>'+ value.title +'</h6>     <span class="upload-username">'+ value.username +'</span>     <span class="upload-username">'+ value.category +'</span>     <span>     <p class="likes"  class="text-justify text-left " data-likes="">     <span>'+ value.likes +'</span>     <img  type="button"   src="../static/heart.png" alt="" width="16">     <span>'+ value.comments +'</span>     <img  src="../static/comment.svg" alt="" width="16"> </p> </span>       </div> </div></div></div>');
+      $('.upload-list').append('<div class="thumb-wrapper" data-href="'+videoUrl+ value.id +'"><li><a  class="video"   video-id="'+ value.id +'" href="#"><img class="video-feed" src="../static/profile_pics/'+ value.userImg +'" alt=""></a></li></div><div class="video-info"><div class="row no-gutters"><div class="col-2 col-sm-2 col-md-2 no-gutters">     <div class="profile-pic-wrapper"  data-href=" '+userUrl+ value.username +'">     <span><a  class="user-profile-pic"   user-id="" href="#"><img id="profilepic"  src="../static/profile_pics/'+ value.userImg +'" alt=""></a></span> </div> </div><div class="col no-gutters"><div class="inner-info">     <h6>'+ value.title +'</h6>     <span class="upload-username">'+ value.username +'</span>     <span class="upload-username">'+ value.category +'</span>     <span>     <p class="likes"  class="text-justify text-left " data-likes="">     <span>'+ value.likes +'</span>     <img  type="button" id="unlike-icon"  src="../static/heart.png" alt="" width="16">     <span>'+ value.comments +'</span>     <img  src="../static/comment.svg" alt="" width="16"> </p> </span>       </div> </div></div></div>');
 
 });
 $('#live').css('display','none');
@@ -468,14 +471,20 @@ $('.upload-list').css('display','block');
 
 function openNav() {
     document.getElementById("mySidenav").style.width = "250px";
-    document.getElementById("main").style.marginLeft = "250px";
+    document.getElementById("main").style.marginRight = "250px";
+    $('#main').css('display','none');
+    $('.navbar-brand').css('display','none');
     document.body.style.backgroundColor = "rgba(0,0,0,0.4)";
 }
 
 function closeNav() {
     document.getElementById("mySidenav").style.width = "0";
-    document.getElementById("main").style.marginLeft= "0";
+    document.getElementById("main").style.marginRight= "0";
     document.body.style.backgroundColor = "white";
+    $('#main').css('display','block');
+        $('.navbar-brand').css('display','block');
+
+
 }
 
 
@@ -483,12 +492,17 @@ function openLeftNav() {
     document.getElementById("leftSidenav").style.width = "80%";
     document.getElementById("main").style.marginLeft = "250px";
     document.body.style.backgroundColor = "rgba(0,0,0,0.4)";
+    $('#main').css('display','none');
+    $('.navbar-brand').css('display','none');
 }
 
 function closeLeftNav() {
     document.getElementById("leftSidenav").style.width = "0";
     document.getElementById("main").style.marginLeft= "0";
     document.body.style.backgroundColor = "white";
+        $('#main').css('display','block');
+        $('.navbar-brand').css('display','block');
+
 }
 
 
@@ -637,7 +651,18 @@ $(document).ready(function(){
 
 });
 });
+      $('#schedule-create').on("click",function(e){
+  e.preventDefault();
+  closeNav()
+$('#calendar').css('display','block');
+$('#live').css('display','none');
+$('.live-list').css('display','none');
+$('.profile').css('display','none');
+$('.video-details').css('display','none');
+$('.upload-list').css('display','none');
 
+
+});
 });
 
 
@@ -691,9 +716,12 @@ $(document).ready(function(){
 
   });
   req.done(function(data){
-        $('#cart-coverImg').html(data.coverImage);
-        $('#cart-title').html(data.title);
-        $('#card-price').html(currency+data.price);
+        $.each(data.result, function(key,value) {
+
+
+      $('.left-sidenav').append('<div><img id="cart-coverImg" src="" alt=""><p id="cart-title">'+value.title+'</p><span id="cart-price">'+value.price+'</span></div>');
+
+});
 
 });
 });
@@ -734,3 +762,19 @@ $('.video-details').css('display','none');
 $('.upload-list').css('display','block');
   });
 });
+
+
+var dropdown = document.getElementsByClassName("dropdown-btn");
+var i;
+
+for (i = 0; i < dropdown.length; i++) {
+  dropdown[i].addEventListener("click", function() {
+    this.classList.toggle("active");
+    var dropdownContent = this.nextElementSibling;
+    if (dropdownContent.style.display === "block") {
+      dropdownContent.style.display = "none";
+    } else {
+      dropdownContent.style.display = "block";
+    }
+  });
+}

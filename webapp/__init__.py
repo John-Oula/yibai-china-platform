@@ -611,17 +611,20 @@ def addCart():
 @login_required
 def cart():
     user_id = request.args.get('user_id', type=int)
+    user = User.query.filter_by(id=user_id).first_or_404()
+
+    i = 0
+    l = []
 
 
-
-#    try:
     userCart = db.session.query(Upload).join(Upload , User.cart).all()
-    for userCart in user:
-        data = jsonify({"id": userCart.id, "title": userCart.title, "coverImage": userCart.coverImage, "price": userCart.price})
-    data
-    #    except:
- #       return jsonify({'result': 'You have no Items in your cart'})
-    return data
+    for cart in user.cart:
+        data = {"id": cart.id, "title": cart.title, "coverImage": cart.coverImage, "price": cart.price}
+        l.append(data)
+        i+=1
+    print(l)
+
+    return jsonify({'result':l})
 @app.route('/sent')
 def sent():
     msg = Message("Testing",sender=authentication,recipients=["johnoula@icloud.com"])

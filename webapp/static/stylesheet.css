@@ -1195,7 +1195,6 @@ ul.upload-list{
 }
 .upload-username{
     font-size: 10px;
-    flex-direction: row;
 }
 
 p.login-text{
@@ -2061,6 +2060,11 @@ a.video{
   float: right;
   padding-right: 8px;
 }
-
+.flex-fill{
+    margin-left: 0px;
+}
+.flex-column{
+    margin-left: 0px;
+}
 }
 

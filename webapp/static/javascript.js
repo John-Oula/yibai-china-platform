@@ -651,6 +651,8 @@ $(document).ready(function(){
 
 });
 });
+
+
       $('#schedule-create').on("click",function(e){
   e.preventDefault();
   closeNav()
@@ -716,10 +718,11 @@ $(document).ready(function(){
 
   });
   req.done(function(data){
+    $('.cart-list').empty();
         $.each(data.result, function(key,value) {
 
 
-      $('.left-sidenav').append('<div><img id="cart-coverImg" src="" alt=""><p id="cart-title">'+value.title+'</p><span id="cart-price">'+value.price+'</span></div>');
+      $('.cart-list').append('<div><img id="cart-coverImg" src="" alt=""><p id="cart-title">'+value.title+'</p><span id="cart-price">'+value.price+'</span></div>');
 
 });
 

@@ -1575,6 +1575,27 @@ def fileRefServer(name):
 
     return f
 
+def token_bytes(nbytes):
+    """Return a random byte string containing *nbytes* bytes.
+    If *nbytes* is ``None`` or not supplied, a reasonable
+    default is used
+    >>> token_bytes(16)  #doctest:+SKIP.
+
+    b'\\xebr\\x17D*t\\xae\\xd4\\xe3S\\xb6\\xe2\\xebP1\\x8b'
+    """
+    return os.urandom(nbytes)
+
+def token_hex(nbytes):
+    """Return a random text string, in hexadecimal.
+    The string has *nbytes* random bytes, each byte converted to two
+    hex digits.  If *nbytes* is ``None`` or not supplied, a reasonable
+    default is used
+    >>> token_hex(16)  #doctest:+SKIP.
+
+    'f9bf78b9a18ce6d46a0cd2b0b86df9da'
+    """
+    return binascii.hexlify(token_bytes(nbytes)).decode('ascii')
+
 @app.route('/quickuploads/<username>',methods=['POST','GET'])
 @login_required
 def quickupload(username):
@@ -1592,16 +1613,15 @@ def quickupload(username):
             audioFile = request.files['audio-file']
             transcriptFile = request.files['transcript-file']
 
-            if videoFile is not None:
-                videoPath = fileRef(videoFile)
+            file_hex = token_hex(8)
+            _, f_ext = os.path.splitext(videoFile.filename)
+            file_fn = file_hex + f_ext
 
-            if audioFile is not None:
-                audioPath = fileRef(audioFile)
 
-            if transcriptFile is not None :
-                transcriptPath = fileRef(transcriptFile)
+            videoFile.save(os.path.join(app.root_path, 'static/videos', file_fn))
+            path = os.path.join(file_fn)
 
-            upload = Upload(title=form.title.data,description=form.description.data,category=form.category.data,price= form.price.data,upload_ref=videoPath,transcript_ref= transcriptPath,auido_ref=audioPath,uploader=current_user)
+            upload = Upload(title=form.title.data,description=form.description.data,category=form.category.data,price= form.price.data,upload_ref=path,uploader=current_user)
             db.session.add(upload)
             db.session.commit()
 
@@ -1615,15 +1635,13 @@ def quickupload(username):
             audioFile = request.files['audio-file']
             transcriptFile = request.files['transcript-file']
 
-            if videoFile is not None:
-                videoPath = fileRefServer(videoFile)
 
-            if audioFile is not None:
-                audioPath = fileRefServer(audioFile)
-
-            if transcriptFile is not None :
-                transcriptPath = fileRefServer(transcriptFile)
-            upload = Upload(title=form.title.data,description=form.description.data,category=form.category.data,price= form.price.data,upload_ref=videoPath,transcript_ref= transcriptPath,auido_ref=audioPath,uploader=current_user)
+            file_hex = token_hex(8)
+            _, f_ext = os.path.splitext(videoFile.filename)
+            file_fn = file_hex + f_ext
+            videoFile.save(os.path.join(app.root_path, 'static/videos', file_fn))
+            path = os.path.join(file_fn)
+            upload = Upload(title=form.title.data,description=form.description.data,category=form.category.data,price= form.price.data,upload_ref=path,uploader=current_user)
             db.session.add(upload)
 
             db.session.commit()

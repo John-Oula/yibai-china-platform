@@ -22,7 +22,6 @@ from wtforms import *
 from wtforms.validators import Required
 from flask_wtf.file import FileField
 import binascii
-from flask_wtf.csrf import CSRFProtect
 
 
 ### Tencent live video imports ###
@@ -52,7 +51,7 @@ import socket
 app = Flask(__name__)
 
 authentication= 'authentication@100chinaguide.com'
-csrf = CSRFProtect(app)
+
 # IP address
 def get_Host_name_IP(hostname):
     try:
@@ -77,7 +76,6 @@ app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 app.config['SECRET_KEY'] = 'Adawug;irwugw79536870635785ty0875y03davvavavdey'
 appID=200000164
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-app.config['WTF_CSRF_ENABLED'] = True
 if get_Host_name_IP('CJAY') == True:
     app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:@qwerty1234!@localhost/postgres'
 else:

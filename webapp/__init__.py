@@ -10,6 +10,7 @@ import json
 import random
 import os
 import re
+import secrets
 from os import urandom
 from PIL import Image
 from flask import Flask, render_template, url_for, flash, redirect, session, request, send_from_directory, jsonify
@@ -1570,11 +1571,11 @@ def fileRefServer(name):
 
 
     _, f_ext = os.path.splitext(request.files[name].filename)
-    file_hex = binascii.hexlify(os.urandom(8))
+    file_hex =secrets.token_hex(8)
     file_fn = file_hex + f_ext
-    request.files[name].save(os.path.join(app.root_path, 'static/videos', file_fn))
+    f = request.files[name].save(os.path.join(app.root_path, 'static/videos', file_fn))
 
-    return os.path.join(file_fn)
+    return f
 
 @app.route('/quickuploads/<username>',methods=['POST','GET'])
 @login_required

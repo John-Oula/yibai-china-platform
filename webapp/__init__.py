@@ -1603,7 +1603,7 @@ def quickupload(username):
             if transcriptFile is not None :
                 transcriptPath = fileRef(transcriptFile)
 
-            upload = Upload(title=request.form['title'],description=request.form['description'],category=request.form['category'],price= request.form['price'],upload_ref=videoPath,transcript_ref= transcriptPath,auido_ref=audioPath,uploader=current_user)
+            upload = Upload(title=form.title.data,description=form.description.data,category=form.category.data,price= form.price.data,upload_ref=videoPath,transcript_ref= transcriptPath,auido_ref=audioPath,uploader=current_user)
             db.session.add(upload)
             db.session.commit()
 

@@ -1560,7 +1560,7 @@ def available(username):
 
 def fileRef(name):
     _, f_ext = os.path.splitext(name.filename)
-    file_hex =secrets.token_hex(8)
+    file_hex =binascii.b2a_hex(os.urandom(15))
     file_fn = file_hex + f_ext
     f = name.save(os.path.join(app.root_path, 'static/videos', file_fn))
 
@@ -1569,7 +1569,7 @@ def fileRef(name):
 def fileRefServer(name):
 
     _, f_ext = os.path.splitext(name.filename)
-    file_hex =secrets.token_hex(8)
+    file_hex =binascii.b2a_hex(os.urandom(8))
     file_fn = file_hex + f_ext
     f = name.save(os.path.join(app.root_path, 'static/videos', file_fn))
 

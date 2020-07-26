@@ -1804,7 +1804,7 @@ ul.upload-list{
 
 .video-feed{
     width: 100%;
-    height: auto;
+    height: 200px;
 }
 
 .thumb-wrapper li{

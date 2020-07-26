@@ -22,6 +22,7 @@ from wtforms import *
 from wtforms.validators import Required
 from flask_wtf.file import FileField
 import binascii
+from flask_wtf.csrf import CSRFProtect
 
 
 ### Tencent live video imports ###
@@ -51,7 +52,7 @@ import socket
 app = Flask(__name__)
 
 authentication= 'authentication@100chinaguide.com'
-
+csrf = CSRFProtect(app)
 # IP address
 def get_Host_name_IP(hostname):
     try:
@@ -76,6 +77,7 @@ app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 app.config['SECRET_KEY'] = 'Adawug;irwugw79536870635785ty0875y03davvavavdey'
 appID=200000164
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+app.config['WTF_CSRF_ENABLED'] = True
 if get_Host_name_IP('CJAY') == True:
     app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:@qwerty1234!@localhost/postgres'
 else:
@@ -1556,22 +1558,20 @@ def available(username):
     return render_template('available.html',seriesIdNum=seriesIdNum,user=user,user_role = user_role,form=form,verify_form=verify_form,image_file=image_file)
 
 
-def fileRef(file):
-    random_hex = urandom(8).hex()
+def fileRef(name):
+    _, f_ext = os.path.splitext(name.filename)
+    file_hex =secrets.token_hex(8)
+    file_fn = file_hex + f_ext
+    f = name.save(os.path.join(app.root_path, 'static/videos', file_fn))
 
-    _, f_ext = os.path.splitext(file.filename)
-    file_hex = random_hex
-    file_fn = random_hex + f_ext
-    file.save(os.path.join(app.root_path, 'static/videos', file_fn))
-    return os.path.join(file_fn)
+    return f
 
 def fileRefServer(name):
 
-
-    _, f_ext = os.path.splitext(request.files[name].filename)
+    _, f_ext = os.path.splitext(name.filename)
     file_hex =secrets.token_hex(8)
     file_fn = file_hex + f_ext
-    f = request.files[name].save(os.path.join(app.root_path, 'static/videos', file_fn))
+    f = name.save(os.path.join(app.root_path, 'static/videos', file_fn))
 
     return f
 

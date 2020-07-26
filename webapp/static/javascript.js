@@ -511,7 +511,7 @@ $(document).ready(function(){
         $('.upload-list').on("click",'.thumb-wrapper',function(e){
   e.preventDefault();
     var url = $(this).attr("data-href");
-    var videoSrc = "../static/videos/";
+    var videoSrc = "https://www.100chinaguide.com/static/videos/";
     var userImgSrc = "../static/profile_pics/";
     var currency = "￥"
 

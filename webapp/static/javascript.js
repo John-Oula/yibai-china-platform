@@ -532,7 +532,8 @@ $(document).ready(function(){
         $('.upload-list').css('display','none');
         $('.video-details').css('display','block');
         $('.addCart').attr('data-href','/addCart?upload_id='+data.id);
-        $('.video-feed').attr("src",videoSrc + data.videoRef);
+        $('video').attr("src",videoSrc + data.videoRef);
+        $('.video-js').attr("src",videoSrc + data.videoRef);
         $('.video-feed').attr("video-id",data.id);
         $('#video-title').html(data.title);
         $('#video-author').html(data.username);

@@ -18,7 +18,6 @@ import socket
 import requests
 from PIL import Image
 from flask import Flask, render_template, url_for, flash, redirect, session, request, jsonify
-from flaskext.markdown import Markdown
 from flask_login import login_user, login_required, current_user, logout_user, UserMixin, LoginManager
 from flask_mail import Mail, Message
 from flask_migrate import Migrate
@@ -74,7 +73,7 @@ wechatAppSecret = '47fb2c78fa7c63609d12150c986d1875'
 wechatAppId = 'wx67fc65e96be93d6d'
 
 #### MODELS ####
-Markdown(app)
+
 db = SQLAlchemy(app)
 db.init_app(app)
 

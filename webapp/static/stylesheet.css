@@ -1226,11 +1226,10 @@ img.corner-design{
 .form-upload{
     border: black;
     border-width: medium;
-    padding: 30px;
     width: 100%;
 }
 
-.collapsible {
+.collapsible , .subtitle {
   background-color: #E74525;
   color: white;
   cursor: pointer;
@@ -1277,8 +1276,6 @@ p.likes{
     color:gray;
 }
 .add-btn{
-    position: absolute;
-    margin-left: 15px;
     border-style: solid;
     border-color: #E74525;
 
@@ -1488,7 +1485,6 @@ body{
   }
   #calendar{
       width: 100%;
-      display: none;
   }
   .session-container{
       margin-top: 70px;
@@ -1499,7 +1495,7 @@ body{
 
   }
   .description-field{
-      width: 250%;
+      width: 100%;
   }
   #create_card form{
       width: 100%;
@@ -2066,6 +2062,29 @@ a.video{
 }
 .flex-column{
     margin-left: 0px;
+}
+
+#editor{
+    height: 200px;
+}
+
+.fc-toolbar h2{
+    font-size: small;
+}
+#cover-img{
+    width: 100%;
+    height: auto;
+}
+
+.cover-wrapper{
+    position: relative;
+    overflow: hidden;
+    width:80px;
+    height:80px;
+}
+
+#user-profile{
+    display: none;
 }
 }
 

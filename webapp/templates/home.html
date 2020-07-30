@@ -196,7 +196,7 @@
      <div class="video-details">
          <div>
          <div class="thumb-wrapper">
-             <li> <video class="video-feed video-js vjs-big-play-centered" data-setup='{}'  preload="none" video-id=""  controls   type="video/mp4" src="" alt=""></video></li>
+             <li> <video class="video-feed "   preload="none" video-id=""  controls=""   type="video/mp4" src="" alt=""></video></li>
          </div>
     <div class="video-info">
  <h6 id="video-title"></h6>
@@ -393,10 +393,162 @@
          </div>
      </div>
      </div>
+     <div></div>
+<div class="schedule p-3">
 
- <div id="calendar"></div>
 </div>
+
+ <div class="d-none" id="create-course">
+
+     <div class="p-3" id="course-upload">
+         <form  class="form-upload text-center" id="course" action="" method="POST" enctype="multipart/form-data">
+    <fieldset>
+        {{ form.hidden_tag() }}
+
+         {{ form.title.label }} <br>
+        {{ form.title(class = "input-box-border border border-top-0 border-left-0 border-right-0") }}
+
+    <br>
+         {{ form.description.label }} <br>
+        {{ form.description(class = "description-field input-box-border border border-top-0 border-left-0 border-right-0") }}
+    <br>
+
+         {{ form.price.label }} <br>
+        {{ form.price(class = "input-box-border border border-top-0 border-left-0 border-right-0") }}
+    <br>
+
+             {{ form.category.label }} <br>
+        {{ form.category(class = "input-box-border border border-top-0 border-left-0 border-right-0") }}
+    <br>
+     <br>
+        <input class="about" name="about" type="hidden">
+<div id="editor"></div>
+
+
+<div class="" >
+{{form.fileName.label}}
+        {{form.fileName()}}<br><br>
+    {{form.coverImage.label}}
+        {{form.coverImage()}}<br>
+
+</div>
+    <br>
+  {{ form.submit(class="fixed-btn text-light") }}
+    </fieldset>
+</form>
+
+</div>
+
+     <div class="p-3" id="create-series">
+         <card class="card shadow-lg" id="create_card" >
+    <card class="">
+        <form  id="series-course" class="form-upload text-left" action="" method="POST" enctype="multipart/form-data">
+    <fieldset>
+         {{ seriesForm.hidden_tag() }}
+
+    <div class="series-div">
+         {{ seriesForm.title.label }}
+        {{ seriesForm.title(class = "input-box-border border border-top-0 border-left-0 border-right-0") }}
+        {{ seriesForm.category.label }}
+        {{ seriesForm.category(class = "input-box-border border border-top-0 border-left-0 border-right-0") }}
+<div class="wrapper">
+<button  type="button" class="subtitle">
+    {{ episodeForm.subtitle.label }}
+
+    {{ episodeForm.subtitle(class = "input-box-border border border-top-0 border-left-0 border-right-0") }}
+</button>
+<div class="content" >
+
+        {{ episodeForm.fileName.label }}<br>
+         {{ episodeForm.fileName() }}<br>
+
+            {{ seriesForm.coverImage.label }}<br>
+         {{ seriesForm.coverImage() }}<br>
+
+        {{ episodeForm.description(class = "description-field input-box-border border border-top-0 border-left-0 border-right-0",placeholder="Description") }}
+
+</div>
+
+</div>
+
+
+    </div>
+
+
+         {{ seriesForm.price.label }} <br>
+        {{ seriesForm.price(class = "input-box-border border border-top-0 border-left-0 border-right-0") }}
+    <br>
+
+
+
+     <br>
+    {{ seriesForm.submit }}
+        </fieldset>
+</form>
+
+    </card>
+</card>
+
+
+</div>
+
+     <div class="p-3" id="create-live">
+         <card class="card shadow-lg"  >
+
+             <card class="">
+
+                 <form action="" class=" text-center session-form" method="POST">
+      <fieldset>
+        {{ sessionForm.hidden_tag() }}
+
+         {{ sessionForm.title.label }} <br>
+        {{ sessionForm.title(class = "input-box-border border border-top-0 border-left-0 border-right-0") }}
+
+    <br>
+         {{ sessionForm.description.label }} <br>
+        {{ sessionForm.description(class = "description-field input-box-border border border-top-0 border-left-0 border-right-0") }}
+    <br>
+
+             {{ sessionForm.category.label }} <br>
+        {{ sessionForm.category(class = "input-box-border border border-top-0 border-left-0 border-right-0") }}
+    <br>
+     <br>
+
+<div class="append-calendar"></div>
+        <div class="calendar-source">
+            <input id="start-time" type="text" name="date-time" value="" class="time-input">
+            <input id="end-time" type="text" name="end-time" value="" class="time-input">
+            <div id="calendar"></div>
+        </div>
+        <br>
+        <br>
+
+  {{ sessionForm.submit(class="fixed-btn text-light") }}
+    </fieldset>
+
+            </form>
+
+    </card>
+</card>
      </div>
+ </div>
+
+
+ <div  id="course-update" class="p-2">
+
+
+ </div>
+
+ <div id="live-update" class="p-2 d-none">
+
+</div>
+<div id="user-profile">
+     <div class="mx-auto d-block text-center" id="login_container"></div>
+
+
+</div>
+</div>
+
 
     </body>
 {% endblock %}
@@ -404,3 +556,5 @@
 {% block bottomNav %}
     {{ super() }}
 {% endblock %}
+
+

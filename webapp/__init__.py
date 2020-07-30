@@ -3,51 +3,34 @@
 # -*- coding: utf-8 -*-
 
 
-
-
-from hashlib import sha256
-import json
-import random
-import os
-import re
-import secrets
-from os import urandom
-from PIL import Image
-from flask import Flask, render_template, url_for, flash, redirect, session, request, send_from_directory, jsonify
-from flask_migrate import Migrate
-from flask_login import login_user, login_required, current_user, logout_user,UserMixin, LoginManager
-from flask_mail import Mail,Message
-from flask_wtf import FlaskForm
-from wtforms import *
-from wtforms.validators import Required
-from flask_wtf.file import FileField
-import binascii
-from flask_wtf.csrf import CSRFProtect
-
-
-### Tencent live video imports ###
-
-import requests
-import datetime
-import hashlib
-from hashlib import sha1
-import hmac
 import base64
-import  urllib
-import urllib3
-
-
-#### FORMS IMPORTS ####
-
-
+import binascii
 #### MODELS IMPORTS ####
 import datetime
-import time
-from flask_sqlalchemy import SQLAlchemy
-from itsdangerous import TimedJSONWebSignatureSerializer as Serializer
-import psycopg2
-import base64
+import hashlib
+import hmac
+import json
+import os
+import random
+import re
 import socket
+
+import requests
+from PIL import Image
+from flask import Flask, render_template, url_for, flash, redirect, session, request, jsonify
+from flaskext.markdown import Markdown
+from flask_login import login_user, login_required, current_user, logout_user, UserMixin, LoginManager
+from flask_mail import Mail, Message
+from flask_migrate import Migrate
+from flask_sqlalchemy import SQLAlchemy
+from flask_wtf import FlaskForm
+from flask_wtf.csrf import CSRFProtect
+from flask_wtf.file import FileField, FileRequired
+from itsdangerous import TimedJSONWebSignatureSerializer as Serializer
+from werkzeug.utils import secure_filename
+from wtforms import *
+from wtforms.validators import Required
+
 
 app = Flask(__name__)
 
@@ -87,7 +70,11 @@ SecretId = 'JIRMZ6O3Qm5KDwCHsgYnlxatGeXq7dfFcjEk'
 SecretKey ='wZn5NeGCqxg4r8XaDum2EMzRhIvWHtcU'
 
 
+wechatAppSecret = '47fb2c78fa7c63609d12150c986d1875'
+wechatAppId = 'wx67fc65e96be93d6d'
+
 #### MODELS ####
+Markdown(app)
 db = SQLAlchemy(app)
 db.init_app(app)
 
@@ -354,6 +341,8 @@ class Series(db.Model):
     id = db.Column('id', db.Integer, primary_key=True)
     title = db.Column('title', db.String(30))
     category = db.Column('category', db.String(30))
+    coverImage = db.Column('coverImage', db.VARCHAR)
+
     description = db.Column('description', db.String(600))
     price = db.Column('price', db.Integer)
     timestamp = db.Column(db.DateTime, default=datetime.datetime.utcnow)
@@ -362,10 +351,11 @@ class Series(db.Model):
     episode = db.relationship('Episode', backref='sub', lazy=True)
 
 
-    def __repr__(self, id, title, category, description, price, upload_ref, user_id):
+    def __repr__(self, id, title,coverImage, category, description, price, upload_ref, user_id):
         self.id = id
         self.title = title
         self.category = category
+        self.coverImage = coverImage
         self.description = description
         self.price = price
         self.upload_ref = upload_ref
@@ -502,20 +492,41 @@ class Session_form(FlaskForm):
     description = TextAreaField('DESCRIPTION',[validators.DataRequired()])
     category = SelectField('CATEGORY', choices=[('MANDARIN','MANDARIN'), ('LEGAL', 'LEGAL'), ('CAREER', 'CAREER'), ('BUSINESS', 'BUSINESS'), ('LIVING', 'LIVING')],widget=None)
     date = DateTimeField("DATE",[validators.DataRequired()])
+    submit = SubmitField('Submit')
+
+class updateSession_form(FlaskForm):
+    title = StringField('TITLE',[validators.DataRequired()])
+    description = TextAreaField('DESCRIPTION',[validators.DataRequired()])
+    category = SelectField('CATEGORY', choices=[('MANDARIN','MANDARIN'), ('LEGAL', 'LEGAL'), ('CAREER', 'CAREER'), ('BUSINESS', 'BUSINESS'), ('LIVING', 'LIVING')],widget=None)
+    date = DateTimeField("DATE",[validators.DataRequired()])
+    submit = SubmitField('Submit')
+
 class Upload_form(FlaskForm):
     title = StringField('Title')
     category = SelectField('Category', choices=[('Mandarin','Mandarin'), ('Communication skills', 'Communication skills'), ('Academics', 'Academics'), ('Visa', 'Visa'), ('Living', 'Living'), ('Talent policy', 'Talent policy'), ('Finance & Law', 'Finance & Law'), ('Entrepreneur', 'Entrepreneur'), ('Others', 'Others')],widget=None)
     description = TextAreaField('Description')
     price = StringField('Price')
-    upload = FileField('Upload')
+    fileName = FileField('Upload File',validators=[FileRequired()])
+    coverImage = FileField('Cover Image')
     transcript = FileField('Upload')
     audio = FileField('Upload')
+    submit = SubmitField('Submit')
+
+
+class updateUpload_form(FlaskForm):
+    title = StringField('Title')
+    category = SelectField('Category', choices=[('Mandarin','Mandarin'), ('Communication skills', 'Communication skills'), ('Academics', 'Academics'), ('Visa', 'Visa'), ('Living', 'Living'), ('Talent policy', 'Talent policy'), ('Finance & Law', 'Finance & Law'), ('Entrepreneur', 'Entrepreneur'), ('Others', 'Others')],widget=None)
+    description = TextAreaField('Description')
+    price = StringField('Price')
+    coverImage = FileField('Cover Image')
     submit = SubmitField('Submit')
 
 class Series_form(FlaskForm):
     title = StringField('Title')
     category = SelectField('Category', choices=[('Mandarin','Mandarin'), ('Communication skills', 'Communication skills'), ('Academics', 'Academics'), ('Visa', 'Visa'), ('Living', 'Living'), ('Talent policy', 'Talent policy'), ('Finance & Law', 'Finance & Law'), ('Entrepreneur', 'Entrepreneur'), ('Others', 'Others')],widget=None)
     description = TextAreaField('Description')
+    coverImage = FileField('Cover Image')
+
     price = StringField('Price')
     submit = SubmitField('Submit')
 
@@ -524,9 +535,23 @@ class Series_form(FlaskForm):
 class Episode_form(FlaskForm):
     subtitle = StringField('Subtitle')
     description = TextAreaField('Description')
-    upload = FileField('Upload')
-    transcript = FileField('Upload')
-    audio = FileField('Upload')
+    fileName = FileField('Upload File',validators=[FileRequired()])
+    coverImage = FileField('Cover Image')
+class updateEpisode_form(FlaskForm):
+    subtitle = StringField('Subtitle')
+    description = TextAreaField('Description')
+    fileName = FileField('Upload File',validators=[FileRequired()])
+    coverImage = FileField('Cover Image')
+    submit = SubmitField('Submit')
+
+class updateSeries_form(FlaskForm):
+    title = StringField('Title')
+    category = SelectField('Category', choices=[('Mandarin','Mandarin'), ('Communication skills', 'Communication skills'), ('Academics', 'Academics'), ('Visa', 'Visa'), ('Living', 'Living'), ('Talent policy', 'Talent policy'), ('Finance & Law', 'Finance & Law'), ('Entrepreneur', 'Entrepreneur'), ('Others', 'Others')],widget=None)
+    description = TextAreaField('Description')
+    coverImage = FileField('Cover Image')
+
+    price = StringField('Price')
+    submit = SubmitField('Submit')
 
 class Lesson_form(FlaskForm):
     title = StringField()
@@ -559,9 +584,12 @@ class Reset_password(FlaskForm):
 def home():
     page = request.args.get('page', type=int)
     uploads = Upload.query.order_by(Upload.timestamp.desc()).paginate(per_page=4,error_out=False,page=page)
+    form = Upload_form()
+    seriesForm = Series_form()
+    episodeForm = Episode_form()
+    sessionForm = Session_form()
 
-
-    return render_template('home.html',uploads=uploads,page=page)
+    return render_template('home.html',sessionForm=sessionForm,uploads=uploads,form=form,page=page,seriesForm=seriesForm,episodeForm=episodeForm)
 
 
 
@@ -1648,6 +1676,302 @@ def quickupload(username):
             redirect(url_for('discover', username = current_user.username))
         return render_template('quickUpload.html',user=user,seriesIdNum=seriesIdNum,user_role=user_role,form =form,image_file=image_file)
 
+def saveFile(fileData):
+    file = secure_filename(fileData.filename)
+
+    file_hex = token_hex(8)
+    _, f_ext = os.path.splitext(file)
+    file_fn = file_hex + f_ext
+    fileData.save(os.path.join(app.root_path, 'static/videos', file_fn))
+    path = os.path.join(file_fn)
+    return path
+
+
+
+@app.route('/createcourse',methods=['POST','GET'])
+@login_required
+def createCourse():
+
+    form = Upload_form()
+
+    if request.method == 'POST':
+
+
+
+            upload = Upload(title=form.title.data,coverImage=saveFile(form.coverImage.data), description=form.description.data,category=form.category.data,price= form.price.data,upload_ref=saveFile(form.fileName.data),uploader=current_user)
+            db.session.add(upload)
+
+            db.session.commit()
+            msg = 'uploaded succsesfully'
+        
+    return jsonify({'result': msg})
+
+
+@app.route('/checkId', methods=['POST', 'GET'])
+@login_required
+def checkId():
+    seriesId = request.args.get('seriesId', type=str)
+    lastSeries = Series.query.order_by(Series.id.desc()).first()
+    return jsonify({'id':lastSeries.id})
+
+@app.route('/getSeries', methods=['POST', 'GET'])
+@login_required
+def getSeries():
+    series = Series.query.order_by(Series.timestamp.desc()).all()
+    i = 0
+    l = []
+
+    for v in range(len(series)):
+        data ={'id':series[i].id,'title':series[i].title,'host':series[i].user_series.username,'coverImg': series[i].coverImage,'userImg':series[i].user_series.image_file,'category':series[i].category}
+        ep = []
+        for e in series[i].episode:
+            episode = {'episodeId':e.id,'seriesId':e.sub.id,'subtitle':e.subtitle}
+            ep.append(episode)
+
+        data.update({'episode':ep})
+        l.append(data)
+        print(data)
+
+
+        i+=1
+
+
+    return jsonify({'result':l})
+
+
+@app.route('/getUserSeries', methods=['POST', 'GET'])
+@login_required
+def getUserSeries():
+    user_id = request.args.get('user_id', type=int)
+
+    series = Series.query.filter_by(user_id = user_id).order_by(Series.timestamp.desc()).all()
+    update_form = updateSeries_form()
+
+
+
+    if request.method == 'GET':
+        i = 0
+        l = []
+
+        for v in range(len(series)):
+            data = {'id': series[i].id, 'title': series[i].title, 'price': series[i].price,
+                    'host': series[i].user_series.username, 'coverImg': series[i].coverImage,
+                    'userImg': series[i].user_series.image_file, 'category': series[i].category,
+                    'totalEpisodes': len(series[i].episode)}
+            ep = []
+            for e in series[i].episode:
+                episode = {'episodeId': e.id, 'seriesId': e.sub.id, 'subtitle': e.subtitle, 'video': e.upload_ref}
+                ep.append(episode)
+
+            data.update({'episode': ep})
+            l.append(data)
+            print(data)
+
+            i += 1
+
+    elif request.method == 'POST':
+        series.title = update_form.title.data
+        series.category = update_form.category.data
+        series.description = update_form.description.data
+
+    elif request.method == 'DELETE':
+        series
+
+
+    return jsonify({'result':l})
+
+@app.route('/editSeries', methods=['POST', 'GET','DELETE'])
+@csrf.exempt
+def editSeries():
+    series_id = request.args.get('series_id', type=int)
+    series = Series.query.filter_by(id = series_id)
+    update_form = updateSeries_form()
+    i = 0
+    l = []
+    if request.method == 'GET':
+
+
+        for s in series:
+            data = {'id': s.id, 'title': s.title, 'price': s.price,
+                    'host': s.user_series.username, 'coverImg': s.coverImage,
+                    'userImg': s.user_series.image_file, 'category': s.category,
+                    'totalEpisodes': len(s.episode)}
+            ep = []
+            for e in series[i].episode:
+                episode = {'episodeId': e.id, 'seriesId': e.sub.id, 'subtitle': e.subtitle, 'video': e.upload_ref}
+                ep.append(episode)
+
+            data.update({'episode': ep})
+            l.append(data)
+            print(data)
+
+            i += 1
+        return jsonify({'result': l})
+    elif request.method == 'POST':
+        series.title = update_form.title.data
+        series.category = update_form.category.data
+        series.description = update_form.description.data
+        return jsonify({'result': 'updated'})
+
+    elif request.method == 'DELETE':
+        for e in series[i].episode:
+            db.session.delete(e)
+            i += 1
+        series.delete()
+        db.session.commit()
+
+        return jsonify({'result': 'deleted'})
+
+
+    return jsonify({'result':l})
+
+@app.route('/editSchedule', methods=['POST', 'GET','DELETE'])
+@csrf.exempt
+def editSchedule():
+    schedule_id = request.args.get('schedule_id', type=int)
+    user_id = request.args.get('user_id', type=int)
+    schedule = Available.query.filter_by(id = schedule_id).first()
+
+    user = User.query.filter_by(id = user_id).first()
+    update_form = updateSeries_form()
+    i = 0
+    l = []
+    if request.method == 'GET':
+
+
+        for s in schedule:
+            data = {'id': s.id,'date': s.date_available,'time': s.timestamp}
+
+
+            l.append(data)
+            print(data)
+
+        return jsonify({'result': l})
+    elif request.method == 'POST':
+        schedule.title = update_form.title.data
+
+        return jsonify({'result': 'updated'})
+
+    elif request.method == 'DELETE':
+        schedule.user.remove(user)
+
+        db.session.commit()
+
+        return jsonify({'result': 'deleted'})
+
+
+    return jsonify({'result':l})
+
+@app.route('/editLive', methods=['POST', 'GET','DELETE'])
+@csrf.exempt
+def editLive():
+    live_id = request.args.get('live_id', type=int)
+    live = Post.query.filter_by(id = live_id).first()
+    update_form = updateSeries_form()
+
+    if request.method == 'GET':
+
+        data = {'id': live.id, 'title': live.title, 'host': live.author.username,
+                'coverImg': live.coverImage, 'userImg': live.author.image_file,
+                'category': live.category, 'startTime': live.start_time, 'endTime': live.end_time,
+                'date': live.date, 'meetingCode': live.meetingCode}
+        return jsonify({'result': data})
+    elif request.method == 'POST':
+        series.title = update_form.title.data
+        series.category = update_form.category.data
+        series.description = update_form.description.data
+        return jsonify({'result': 'updated'})
+
+    elif request.method == 'DELETE':
+        meeting = inquire(live.meetingCode,current_user.username,1)
+        meeting_info = meeting["meeting_info_list"]
+        for item in meeting_info:
+            meeting_id = item['meeting_id']
+
+        cancelMeeting(meeting_id, current_user.username, 1)
+        db.session.delete(live)
+        db.session.commit()
+
+
+        return jsonify({'result': 'deleted'})
+
+
+    return jsonify({'result':'done'})
+
+@app.route('/editVideo', methods=['POST', 'GET','DELETE'])
+@csrf.exempt
+def editVideo():
+    video_id = request.args.get('video_id', type=int)
+    videos = Upload.query.filter_by(id = video_id).first()
+    update_form = updateSeries_form()
+
+    if request.method == 'GET':
+        data = {'id': videos.id, 'title': videos.title, 'videoRef': videos.upload_ref, 'description': videos.description,
+             'price': videos.price, 'userId': videos.uploader.id, 'username': videos.uploader.username,
+             'userImg': videos.uploader.image_file, 'category': videos.category, 'likes': videos.liked.count(),
+             'comments': videos.comments.count()}
+
+        return jsonify({'result': data})
+    elif request.method == 'POST':
+        video.title = update_form.title.data
+        video.category = update_form.category.data
+        video.description = update_form.description.data
+        return jsonify({'result': 'updated'})
+
+    elif request.method == 'DELETE':
+        db.session.delete(videos)
+        db.session.commit()
+
+
+
+        return jsonify({'result': 'deleted'})
+
+
+    return jsonify({'result':'done'})
+
+
+@app.route('/getUserLive', methods=['POST', 'GET','PUT'])
+@login_required
+def getUserLive():
+    user_id = request.args.get('user_id', type=int)
+
+
+    series = Post.query.filter_by(user_id = user_id).order_by(Post.timestamp.desc()).all()
+    i = 0
+    l = []
+    for v in range(len(series)):
+        data ={'id':series[i].id,'title':series[i].title,'host':series[i].author.username,'coverImg': series[i].coverImage,'userImg':series[i].author.image_file,'category':series[i].category,'startTime':series[i].start_time,'endTime':series[i].end_time,'date':series[i].date,'meetingCode':series[i].meetingCode}
+        l.append(data)
+
+        i+=1
+
+    print(l)
+    return jsonify({'result':l})
+
+@app.route('/seriesCourse', methods=['POST', 'GET'])
+@login_required
+def seriesCourse():
+ #   id = request.args.get('id', type=int)
+
+    seriesForm = Series_form()
+    episodeForm = Episode_form()
+
+    if request.method == 'POST':
+        series = Series(title=seriesForm.title.data, description=seriesForm.description.data,
+                        coverImage= saveFile(seriesForm.coverImage.data),category=seriesForm.category.data, price=seriesForm.price.data, user_series=current_user)
+        db.session.add(series)
+        db.session.flush()
+
+        episode = Episode(subtitle=episodeForm.subtitle.data, description=episodeForm.description.data,
+                          upload_ref=saveFile(episodeForm.fileName.data),
+                          user_episode=current_user,sub=series,series_id=series.id)
+
+        db.session.add(episode)
+
+        db.session.commit()
+        msg = 'uploaded succsesfully'
+
+    return jsonify({'result': msg})
 
 @app.route('/uploads/<username>',methods=['POST','GET'])
 @login_required

@@ -124,10 +124,13 @@ class UserModelCase(unittest.TestCase):
         db.session.add(date3)
         db.session.add(date4)
 
+
+
         date1.user.append(u1)
         date2.user.append(u3)
         date3.user.append(u1)
         date4.user.append(u2)
+        date1.user.remove(u1)
         for date in u1.available and u2.available:
             print("User ",u1.id," is available on",date.date_available)
         db.session.commit()

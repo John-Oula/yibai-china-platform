@@ -1,3 +1,10 @@
+var start_time;
+var end_time;
+ var coverImgSrc = '../static/coverImages/';
+ var userImgSrc = '../static/profile_pics/';
+ var videoSrc = '../static/videos/';
+
+
 
 document.addEventListener('DOMContentLoaded', function() {
   var calendarEl = document.getElementById('calendar');
@@ -6,9 +13,9 @@ document.addEventListener('DOMContentLoaded', function() {
     plugins: [ 'interaction', 'dayGrid', 'timeGrid','bootstrap' ,'interactionPlugin'],
 
     select: function( selectionInfo ){
-      let start_time = selectionInfo.startStr;
+       start_time = selectionInfo.startStr;
       document.getElementById('start-time').value = new Date(start_time).valueOf();
-      let end_time = selectionInfo.endStr;
+       end_time = selectionInfo.endStr;
       document.getElementById('end-time').value = new Date(end_time).valueOf();
 
     },
@@ -53,6 +60,9 @@ document.addEventListener('DOMContentLoaded', function() {
   calendar.render();
 
 });
+
+
+
 
 $(function(){
 
@@ -424,6 +434,51 @@ $('#session-content').css('display','none');
   });
   });
 
+$(document).ready(function(){
+  $('.profile-nav').click(function(e){
+  e.preventDefault();
+  $('#user-profile').css('display','block');
+  $('.upload-list').css('display','none');
+  $('#live').css('display','none');
+$('.live-list').css('display','none');
+$('.live-details').css('display','none');
+$('.profile').css('display','none');
+$('.video-details').css('display','none');
+$('#create-course').css('display','none');
+$('#course-update').css('display','none');
+$('#live-update').css('display','none');
+
+
+
+
+
+
+});
+
+$('#posts-btn').click(function(e){
+  e.preventDefault();
+      var postsURL = $(this).attr("data-href");
+
+  req = $.ajax({
+    url:postsURL,
+    type:'GET',
+    data:{},
+    success:function (data) {
+      console.log(data)
+    },error:function (error) {
+      console.log(error)
+      console.log("error")
+
+    }
+
+  });
+  req.done(function(data){
+$('#feed-content').css('display','block');
+$('#session-content').css('display','none');
+});
+  });
+  });
+
 
 $(document).ready(function(){
   $('.home-icon').click(function(e){
@@ -655,14 +710,146 @@ $(document).ready(function(){
 
 
       $('#schedule-create').on("click",function(e){
-  e.preventDefault();
-  closeNav()
-$('#calendar').css('display','block');
-$('#live').css('display','none');
-$('.live-list').css('display','none');
-$('.profile').css('display','none');
-$('.video-details').css('display','none');
-$('.upload-list').css('display','none');
+        e.preventDefault();
+        closeNav()
+            $('.schedule').css('display','block');
+        $(".calendar-source").detach().appendTo(".schedule");
+
+
+        $('#calendar').css('display','block');
+        $('#live').css('display','none');
+        $('.live-list').css('display','none');
+        $('.profile').css('display','none');
+        $('#create-course').css('display','none');
+        $('.video-details').css('display','none');
+        $('.upload-list').css('display','none');
+
+
+});
+
+      $('#course-create').on("click",function(e){
+        e.preventDefault();
+        closeNav()
+        $('#live').css('display','none');
+        $('.live-list').css('display','none');
+        $('#create-live').css('display','none');
+        $('.schedule').css('display','none');
+        $('#course-upload').css('display','block');
+        $('#create-series').css('display','none');
+        $('.profile').css('display','none');
+        $('#create-course').css('display','block');
+        $('.video-details').css('display','none');
+        $('.upload-list').css('display','none');
+
+});
+
+      $('#live-create').on("click",function(e){
+        e.preventDefault();
+        closeNav()
+        $(".calendar-source").detach().appendTo(".append-calendar");
+        $('#live').css('display','none');
+        $('.live-list').css('display','none');
+        $('#create-live').css('display','block');
+        $('.schedule').css('display','none');
+        $('#course-upload').css('display','none');
+        $('#create-series').css('display','none');
+        $('.profile').css('display','none');
+        $('#create-course').css('display','block');
+        $('.video-details').css('display','none');
+        $('.upload-list').css('display','none');
+
+});
+
+      $('#update-course').on("click",function(e){
+        e.preventDefault();
+        closeNav()
+        seriesUrl = '/manageSeries?seriesId='
+          req = $.ajax({
+    url:$(this).attr('data-href'),
+    type:'GET',
+    data:{},
+    success:function (data) {
+      console.log(data)
+    },error:function (error) {
+      console.log(error)
+      console.log("error")
+
+    }
+
+  });
+        $('#course-update').empty();
+        req.done(function(data){
+
+
+                  $.each(data.result, function(key,value) {
+
+
+      $('#course-update').append('<card class="mt-2 mb-2 flex-fill flex-row shadow-lg row no-gutters user-course card"><div class="col-3 no-gutters cover-wrapper"><img id="course-img" src="../static/coverImages/'+value.coverImg+'" alt=""></div><div class="col-8 p-2 flex-fill flex-column no-gutters "><h6 id="course-title">'+value.title+'</h6><div id="total-episodes">Episodes : '+value.totalEpisodes+'</div><span id="course-price">Price : '+value.price+'</span><div class=""><div class=""><a data-href="'+seriesUrl +value.id+'" href=""><img src="../static/add.svg" alt=""><span>Add</span></div><div class=""><a href=""><img src="../static/delete.svg" alt=""></a><span>Delete</span></div><div class=""><a href=""><img src="../static/edit.svg" alt=""></a><span>Edit</span></div></div></div></card></div>');
+
+});
+          $('#course-update').css('display','block');
+
+        $('#live').css('display','none');
+        $('.live-list').css('display','none');
+        $('#create-live').css('display','none');
+        $('#live-update').css('display','none');
+        $('.schedule').css('display','none');
+        $('#course-upload').css('display','none');
+        $('#create-series').css('display','none');
+        $('.profile').css('display','none');
+        $('#create-course').css('display','block');
+        $('.video-details').css('display','none');
+        $('.upload-list').css('display','none');
+
+
+});
+
+
+});
+
+
+      $('#update-live').on("click",function(e){
+        e.preventDefault();
+        closeNav()
+        liveUrl = '/manageLive?liveId='
+          req = $.ajax({
+    url:$(this).attr('data-href'),
+    type:'GET',
+    data:{},
+    success:function (data) {
+      console.log(data)
+    },error:function (error) {
+      console.log(error)
+      console.log("error")
+
+    }
+
+  });
+        req.done(function(data){
+
+          $('#live-update').empty();
+                  $.each(data.result, function(key,value) {
+
+
+      $('#live-update').append('<a data-href="'+liveUrl +value.id+'" href=""><card class="mt-2 mb-2 flex-fill flex-row shadow-lg row no-gutters user-course card"><div class="col-3 no-gutters cover-wrapper"><img id="course-img" src="../static/coverImages/'+value.coverImg+'" alt=""></div><div class="col-8 p-2 flex-fill flex-column no-gutters "><h6 id="course-title">'+value.title+'</h6><div id="live-date">Date : '+value.date+'</div><span id="live-time">Time : '+value.startTime +'-'+value.endTime +'</span></div></card></div></a>');
+
+});
+          $('#live-update').css('display','block');
+          $('#course-update').css('display','none');
+
+        $('#live').css('display','none');
+        $('.live-list').css('display','none');
+        $('#create-live').css('display','none');
+        $('.schedule').css('display','none');
+        $('#course-upload').css('display','none');
+        $('#create-series').css('display','none');
+        $('.profile').css('display','none');
+        $('#create-course').css('display','block');
+        $('.video-details').css('display','none');
+        $('.upload-list').css('display','none');
+
+
+});
 
 
 });
@@ -767,6 +954,17 @@ $('.upload-list').css('display','block');
   });
 });
 
+$("form#series-course").on('click','.subtitle',function () {
+
+    $header = $(this);
+    //getting the next element
+    $content = $header.next();
+    //open up the content needed - toggle the slide- if visible, slide up, if not slidedown.
+    $content.slideToggle(500, function () {
+        //execute this after slideToggle is done
+    });
+
+});
 
 var dropdown = document.getElementsByClassName("dropdown-btn");
 var i;
@@ -782,3 +980,62 @@ for (i = 0; i < dropdown.length; i++) {
     }
   });
 }
+
+
+$(document).ready(function() {
+
+	$('form#course').on('submit', function(event) {
+ var csrf_token = $('#csrf_token').attr('value');
+   // Populate hidden form on submit
+  var about = $('input.about').attr('name');
+  about.value = $('.ql-editor').html();
+
+
+		$.ajax({
+        beforeSend: function(xhr, settings) {
+            if (!/^(GET|HEAD|OPTIONS|TRACE)$/i.test(settings.type) && !this.crossDomain) {
+                xhr.setRequestHeader("X-CSRFToken", csrf_token);
+            }
+        },  enctype: 'multipart/form-data',
+			data : new FormData(this),
+			type : 'POST',
+			url : '/createcourse',
+            processData: false,
+            contentType: false,
+
+		})
+		.done(function(data) {
+
+        console.log('done')
+
+		});
+
+		event.preventDefault();
+
+	});
+	$('form#series-course').on('submit', function(event) {
+ var csrf_token = $('#csrf_token').attr('value');
+		$.ajax({
+        beforeSend: function(xhr, settings) {
+            if (!/^(GET|HEAD|OPTIONS|TRACE)$/i.test(settings.type) && !this.crossDomain) {
+                xhr.setRequestHeader("X-CSRFToken", csrf_token);
+            }
+        },  enctype: 'multipart/form-data',
+			data : new FormData(this),
+			type : 'POST',
+			url : '/seriesCourse',
+            processData: false,
+            contentType: false,
+
+		})
+		.done(function(data) {
+
+        console.log('done')
+
+		});
+
+		event.preventDefault();
+
+	});
+
+});

@@ -1030,11 +1030,11 @@ font-style: normal;
 }
 
 div.modal{
-    width: 400px;
+    width: 100%;
     height: 500px;
     background-color: transparent;
-    margin-top: 65px;
-    margin-left: 520px;
+    margin-top: 40%;
+
     padding: 0px;
     border-style: none;
 
@@ -2084,6 +2084,38 @@ a.video{
 }
 
 #user-profile{
+    display: none;
+}
+
+div.modal , #episode-modal , #series-modal{
+    width: 100%;
+    height: fit-content;
+    background-color: transparent;
+    margin-top: 10%;
+    overflow-y: auto;
+    padding: 0px;
+    border-style: none;
+
+}
+
+
+#create-course{
+    display: none;
+}
+
+.editor-source{
+    display: none;
+}
+
+#live-update{
+    display: none;
+}
+
+#calendar{
+    display: none;
+}
+
+#edit-live{
     display: none;
 }
 }

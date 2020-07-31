@@ -1,10 +1,3 @@
-!function(a,b,c){
-  function d(a){
-    var c="default";
-    a.self_redirect===!0?c="true":a.self_redirect===!1&&(c="false");
-    var d=b.createElement("iframe"),e="https://open.weixin.qq.com/connect/qrconnect?appid="+a.appid+"&scope="+a.scope+"&redirect_uri="+a.redirect_uri+"&state="+a.state+"&login_type=jssdk&self_redirect="+c
-  }a.WxLogin=d}(window,document);
-
 
 var start_time;
 var end_time;
@@ -721,11 +714,30 @@ $(document).ready(function(){
         e.preventDefault();
         closeNav()
             $('.schedule').css('display','block');
-        $(".calendar-source").detach().appendTo(".schedule");
+        $(".calendar-source").detach().appendTo(".calendar-container");
 
 
         $('#calendar').css('display','block');
         $('#live').css('display','none');
+        $('.live-list').css('display','none');
+        $('.profile').css('display','none');
+        $('#create-course').css('display','none');
+        $('.video-details').css('display','none');
+        $('.upload-list').css('display','none');
+
+
+});
+      $('#live-update').on("click",".edit-live",function(e){
+        e.preventDefault();
+        closeNav()
+            $('.schedule').css('display','none');
+        $(".calendar-source").detach().appendTo(".append-edit-calendar");
+
+
+        $('#calendar').css('display','block');
+        $('#edit-live').css('display','block');
+        $('#live').css('display','none');
+        $('#live-update').css('display','none');
         $('.live-list').css('display','none');
         $('.profile').css('display','none');
         $('#create-course').css('display','none');
@@ -758,6 +770,7 @@ $(document).ready(function(){
         $('#live').css('display','none');
         $('.live-list').css('display','none');
         $('#create-live').css('display','block');
+        $('#calendar').css('display','block');
         $('.schedule').css('display','none');
         $('#course-upload').css('display','none');
         $('#create-series').css('display','none');
@@ -771,7 +784,7 @@ $(document).ready(function(){
       $('#update-course').on("click",function(e){
         e.preventDefault();
         closeNav()
-        seriesUrl = '/manageSeries?seriesId='
+        seriesUrl = '/editSeries?series_id='
           req = $.ajax({
     url:$(this).attr('data-href'),
     type:'GET',
@@ -792,7 +805,7 @@ $(document).ready(function(){
                   $.each(data.result, function(key,value) {
 
 
-      $('#course-update').append('<card class="mt-2 mb-2 flex-fill flex-row shadow-lg row no-gutters user-course card"><div class="col-3 no-gutters cover-wrapper"><img id="course-img" src="../static/coverImages/'+value.coverImg+'" alt=""></div><div class="col-8 p-2 flex-fill flex-column no-gutters "><h6 id="course-title">'+value.title+'</h6><div id="total-episodes">Episodes : '+value.totalEpisodes+'</div><span id="course-price">Price : '+value.price+'</span><div class=""><div class=""><a data-href="'+seriesUrl +value.id+'" href=""><img src="../static/add.svg" alt=""><span>Add</span></div><div class=""><a href=""><img src="../static/delete.svg" alt=""></a><span>Delete</span></div><div class=""><a href=""><img src="../static/edit.svg" alt=""></a><span>Edit</span></div></div></div></card></div>');
+      $('#course-update').append('<card class="mt-2 mb-2 flex-fill flex-row shadow-lg row no-gutters user-course card"><div class="col-3 no-gutters cover-wrapper"><img id="course-img" src="../static/coverImages/'+value.coverImg+'" alt=""></div><div class="col-8 p-2 flex-fill flex-column no-gutters "><h6 id="course-title">'+value.title+'</h6><div id="total-episodes">Episodes : '+value.totalEpisodes+'</div><span id="course-price">Price : '+value.price+'</span><div class=""><div class=""><a type="button"   data-toggle="modal" data-target="#episode-modal" href=""><img src="../static/add.svg" alt=""><span>Add</span></div><div class=""><a type="button"  data-toggle="modal" data-target="#myModal" href=""><img src="../static/delete.svg" alt=""></a><span>Delete</span></div><div class=""><a type="button"  data-href="'+seriesUrl +value.id+'"class="edit-series" data-toggle="modal" data-target="#series-modal" href=""><img src="../static/edit.svg" alt=""></a><span>Edit</span></div></div></div></card></div>');
 
 });
           $('#course-update').css('display','block');
@@ -814,12 +827,36 @@ $(document).ready(function(){
 
 
 });
+      $('#course-update').on("click",".edit-series",function(e) {
+        e.preventDefault();
+                  req = $.ajax({
+    url:$(this).attr('data-href'),
+    type:'GET',
+    data:{},
+    success:function (data) {
+      console.log(data)
+    },error:function (error) {
+      console.log(error)
+      console.log("error")
 
+    }
+
+  });
+        req.done(function(data){
+        var object = data.result;
+          $(".editor-source").detach().appendTo(".update-series-editor");
+        $('.editor-source').css('display','block')
+          $('[name="update_title"]').attr('value',object.title)
+
+
+});
+
+      });
 
       $('#update-live').on("click",function(e){
         e.preventDefault();
         closeNav()
-        liveUrl = '/manageLive?liveId='
+        liveUrl = '/editLive?live_id='
           req = $.ajax({
     url:$(this).attr('data-href'),
     type:'GET',
@@ -839,7 +876,7 @@ $(document).ready(function(){
                   $.each(data.result, function(key,value) {
 
 
-      $('#live-update').append('<a data-href="'+liveUrl +value.id+'" href=""><card class="mt-2 mb-2 flex-fill flex-row shadow-lg row no-gutters user-course card"><div class="col-3 no-gutters cover-wrapper"><img id="course-img" src="../static/coverImages/'+value.coverImg+'" alt=""></div><div class="col-8 p-2 flex-fill flex-column no-gutters "><h6 id="course-title">'+value.title+'</h6><div id="live-date">Date : '+value.date+'</div><span id="live-time">Time : '+value.startTime +'-'+value.endTime +'</span></div></card></div></a>');
+      $('#live-update').append('<card class="mt-2 mb-2 flex-fill flex-row shadow-lg row no-gutters user-course card"><div class="col-3 no-gutters cover-wrapper"><img id="course-img" src="'+coverImgSrc+value.coverImg+'" alt=""></div><div class="col-8 p-2 flex-fill flex-column no-gutters "><a data-href="'+liveUrl +value.id+'" href=""><h6 id="course-title">'+value.title+'</h6><div id="live-date">Date : '+value.date+'</div><div id="live-time">Time : '+value.startTime +'-'+value.endTime +'</div><a type="button" data-href="" class="edit-live" data-toggle="" data-target="" href=""><img src="../static/edit.svg" alt=""></a><span>Edit</span></div></card>');
 
 });
           $('#live-update').css('display','block');

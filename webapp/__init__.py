@@ -30,7 +30,7 @@ from werkzeug.utils import secure_filename
 from wtforms import *
 from wtforms.validators import Required
 
-from wechat import WeChatService
+
 
 app = Flask(__name__)
 
@@ -78,7 +78,6 @@ wechatAppId = 'wx67fc65e96be93d6d'
 db = SQLAlchemy(app)
 db.init_app(app)
 
-wechat = WeChatService(appid=wechatAppId, secret=wechatAppSecret)
 
 migrate = Migrate(app,db)
 
@@ -495,12 +494,12 @@ class Session_form(FlaskForm):
     date = DateTimeField("DATE",[validators.DataRequired()])
     submit = SubmitField('Submit')
 
-class updateSession_form(FlaskForm):
-    title = StringField('TITLE',[validators.DataRequired()])
-    description = TextAreaField('DESCRIPTION',[validators.DataRequired()])
-    category = SelectField('CATEGORY', choices=[('MANDARIN','MANDARIN'), ('LEGAL', 'LEGAL'), ('CAREER', 'CAREER'), ('BUSINESS', 'BUSINESS'), ('LIVING', 'LIVING')],widget=None)
-    date = DateTimeField("DATE",[validators.DataRequired()])
-    submit = SubmitField('Submit')
+class UpdateSession_form(FlaskForm):
+    update_session_title = StringField('TITLE',[validators.DataRequired()])
+    update_session_description = TextAreaField('DESCRIPTION',[validators.DataRequired()])
+    update_session_category = SelectField('CATEGORY', choices=[('MANDARIN','MANDARIN'), ('LEGAL', 'LEGAL'), ('CAREER', 'CAREER'), ('BUSINESS', 'BUSINESS'), ('LIVING', 'LIVING')],widget=None)
+    update_session_date = DateTimeField("DATE",[validators.DataRequired()])
+    update_session_submit = SubmitField('Update')
 
 class Upload_form(FlaskForm):
     title = StringField('Title')
@@ -514,13 +513,13 @@ class Upload_form(FlaskForm):
     submit = SubmitField('Submit')
 
 
-class updateUpload_form(FlaskForm):
-    title = StringField('Title')
-    category = SelectField('Category', choices=[('Mandarin','Mandarin'), ('Communication skills', 'Communication skills'), ('Academics', 'Academics'), ('Visa', 'Visa'), ('Living', 'Living'), ('Talent policy', 'Talent policy'), ('Finance & Law', 'Finance & Law'), ('Entrepreneur', 'Entrepreneur'), ('Others', 'Others')],widget=None)
-    description = TextAreaField('Description')
-    price = StringField('Price')
-    coverImage = FileField('Cover Image')
-    submit = SubmitField('Submit')
+class UpdateUploads_form(FlaskForm):
+    update_title = StringField('Title')
+    update_category = SelectField('Category', choices=[('Mandarin','Mandarin'), ('Communication skills', 'Communication skills'), ('Academics', 'Academics'), ('Visa', 'Visa'), ('Living', 'Living'), ('Talent policy', 'Talent policy'), ('Finance & Law', 'Finance & Law'), ('Entrepreneur', 'Entrepreneur'), ('Others', 'Others')],widget=None)
+    update_description = TextAreaField('Description')
+    update_price = StringField('Price')
+    update_coverImage = FileField('Cover Image')
+    update_submit = SubmitField('Update')
 
 class Series_form(FlaskForm):
     title = StringField('Title')
@@ -538,21 +537,21 @@ class Episode_form(FlaskForm):
     description = TextAreaField('Description')
     fileName = FileField('Upload File',validators=[FileRequired()])
     coverImage = FileField('Cover Image')
-class updateEpisode_form(FlaskForm):
-    subtitle = StringField('Subtitle')
-    description = TextAreaField('Description')
-    fileName = FileField('Upload File',validators=[FileRequired()])
-    coverImage = FileField('Cover Image')
-    submit = SubmitField('Submit')
+class UpdateEpisode_form(FlaskForm):
+    update_subtitle = StringField('Subtitle')
+    update_description = TextAreaField('Description')
+    update_fileName = FileField('Upload File',validators=[FileRequired()])
+    update_coverImage = FileField('Cover Image')
+    update_submit = SubmitField('Update')
 
-class updateSeries_form(FlaskForm):
-    title = StringField('Title')
-    category = SelectField('Category', choices=[('Mandarin','Mandarin'), ('Communication skills', 'Communication skills'), ('Academics', 'Academics'), ('Visa', 'Visa'), ('Living', 'Living'), ('Talent policy', 'Talent policy'), ('Finance & Law', 'Finance & Law'), ('Entrepreneur', 'Entrepreneur'), ('Others', 'Others')],widget=None)
-    description = TextAreaField('Description')
-    coverImage = FileField('Cover Image')
+class UpdateSeries_form(FlaskForm):
+    update_series_title = StringField('Title')
+    update_series_category = SelectField('Category', choices=[('Mandarin','Mandarin'), ('Communication skills', 'Communication skills'), ('Academics', 'Academics'), ('Visa', 'Visa'), ('Living', 'Living'), ('Talent policy', 'Talent policy'), ('Finance & Law', 'Finance & Law'), ('Entrepreneur', 'Entrepreneur'), ('Others', 'Others')],widget=None)
+    update_series_description = TextAreaField('Description')
+    update_series_coverImage = FileField('Cover Image')
 
-    price = StringField('Price')
-    submit = SubmitField('Submit')
+    update_series_price = StringField('Price')
+    update_series_submit = SubmitField('Update')
 
 class Lesson_form(FlaskForm):
     title = StringField()
@@ -589,31 +588,14 @@ def home():
     seriesForm = Series_form()
     episodeForm = Episode_form()
     sessionForm = Session_form()
+    UpdateEpisode = UpdateEpisode_form()
+    UpdateSeries = UpdateSeries_form()
+    UpdateUploads = UpdateUploads_form()
+    UpdateSession = UpdateSession_form()
 
-    return render_template('home.html',sessionForm=sessionForm,uploads=uploads,form=form,page=page,seriesForm=seriesForm,episodeForm=episodeForm)
-
-@app.route('/wechat/api')
-def api():
-    redirect_uri = "https://www.100chinaguide.com/"
-    params = {'redirect_uri': redirect_uri, 'scope': 'snsapi_base'}
-    return redirect(wechat.get_authorize_url(**params))
+    return render_template('home.html',UpdateSession=UpdateSession,UpdateUploads=UpdateUploads,UpdateSeries=UpdateSeries,UpdateEpisode=UpdateEpisode,sessionForm=sessionForm,uploads=uploads,form=form,page=page,seriesForm=seriesForm,episodeForm=episodeForm)
 
 
-@app.route('/wechat/authorized')
-def authorized():
-    # check to make sure the user authorized the request
-    if 'code' not in request.args:
-        flash('You did not authorize the request')
-        return redirect(url_for('home'))
-
-    # make a request for the access token credentials using code
-    session = wechat.get_auth_session(request.args['code'])
-
-    # the "me" response
-    me = session.get('userinfo').json()
-
-    flash('Logged in as ' + me['nickname'])
-    return redirect(url_for('home'))
 @app.route('/liveSession')
 def liveSession():
 
@@ -1766,7 +1748,7 @@ def getUserSeries():
     user_id = request.args.get('user_id', type=int)
 
     series = Series.query.filter_by(user_id = user_id).order_by(Series.timestamp.desc()).all()
-    update_form = updateSeries_form()
+    update_form = UpdateSeries_form()
 
 
 
@@ -1806,7 +1788,7 @@ def getUserSeries():
 def editSeries():
     series_id = request.args.get('series_id', type=int)
     series = Series.query.filter_by(id = series_id)
-    update_form = updateSeries_form()
+    update_form = UpdateSeries_form()
     i = 0
     l = []
     if request.method == 'GET':
@@ -1888,7 +1870,7 @@ def editSchedule():
 def editLive():
     live_id = request.args.get('live_id', type=int)
     live = Post.query.filter_by(id = live_id).first()
-    update_form = updateSeries_form()
+    update_form = UpdateSession_form()
 
     if request.method == 'GET':
 

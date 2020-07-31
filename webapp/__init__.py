@@ -30,7 +30,7 @@ from werkzeug.utils import secure_filename
 from wtforms import *
 from wtforms.validators import Required
 
-from wechat.wechat_oauth2 import WeChatService
+from wechat import WeChatService
 
 app = Flask(__name__)
 

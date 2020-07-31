@@ -605,7 +605,6 @@ $(document).ready(function(){
         $('#video-price').html(currency + data.price);
         $('#video-price').css("fontSize","17px");
         $('img#profilepic').attr("src",userImgSrc + data.userImg);
-        $('.profile').css('display','none');
         $('#user-profile').css('display','none');
 
 

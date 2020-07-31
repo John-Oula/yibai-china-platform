@@ -2118,5 +2118,9 @@ div.modal , #episode-modal , #series-modal{
 #edit-live{
     display: none;
 }
+
+#create-live{
+    display: none;
+}
 }
 

@@ -2122,5 +2122,8 @@ div.modal , #episode-modal , #series-modal{
 #create-live{
     display: none;
 }
+.schedule-btn{
+    display: none;
+}
 }
 

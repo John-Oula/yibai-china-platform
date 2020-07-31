@@ -602,6 +602,7 @@ $(document).ready(function(){
         $('#video-price').html(currency + data.price);
         $('#video-price').css("fontSize","17px");
         $('img#profilepic').attr("src",userImgSrc + data.userImg);
+        $('.profile').css('display','none');
 
 });
 });
@@ -708,6 +709,7 @@ $(document).ready(function(){
         $('#user-live-sessions').html(data.liveSessions);
         $('#user-introduction').html(data.description);
         $('img#profilepic').attr("src",userImgSrc + data.userImage);
+        $('.profile').css('display','none');
 
 });
 });
@@ -721,6 +723,7 @@ $(document).ready(function(){
 
 
         $('#calendar').css('display','block');
+        $('.schedule-btn').css('display','block');
         $('#live').css('display','none');
         $('.live-list').css('display','none');
         $('.profile').css('display','none');
@@ -746,6 +749,7 @@ $(document).ready(function(){
         $('#create-course').css('display','none');
         $('.video-details').css('display','none');
         $('.upload-list').css('display','none');
+        $('.profile').css('display','none');
 
 
 });

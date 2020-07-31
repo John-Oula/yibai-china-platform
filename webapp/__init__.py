@@ -29,7 +29,8 @@ from itsdangerous import TimedJSONWebSignatureSerializer as Serializer
 from werkzeug.utils import secure_filename
 from wtforms import *
 from wtforms.validators import Required
-
+from flask_wx_oauth import WXOAuth
+from wechat.wechat_oauth2 import WeChatService
 
 app = Flask(__name__)
 
@@ -77,6 +78,7 @@ wechatAppId = 'wx67fc65e96be93d6d'
 db = SQLAlchemy(app)
 db.init_app(app)
 
+wechat = WeChatService(appid=wechatAppId, secret=wechatAppSecret)
 
 migrate = Migrate(app,db)
 
@@ -590,8 +592,28 @@ def home():
 
     return render_template('home.html',sessionForm=sessionForm,uploads=uploads,form=form,page=page,seriesForm=seriesForm,episodeForm=episodeForm)
 
+@app.route('/wechat/api')
+def api():
+    redirect_uri = url_for('authorized', _external=True)
+    params = {'redirect_uri': redirect_uri, 'scope': 'snsapi_base'}
+    return redirect(wechat.get_authorize_url(**params))
 
 
+@app.route('/wechat/authorized')
+def authorized():
+    # check to make sure the user authorized the request
+    if 'code' not in request.args:
+        flash('You did not authorize the request')
+        return redirect(url_for('home'))
+
+    # make a request for the access token credentials using code
+    session = wechat.get_auth_session(request.args['code'])
+
+    # the "me" response
+    me = session.get('userinfo').json()
+
+    flash('Logged in as ' + me['nickname'])
+    return redirect(url_for('home'))
 @app.route('/liveSession')
 def liveSession():
 

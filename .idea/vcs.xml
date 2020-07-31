@@ -2,5 +2,8 @@
 <project version="4">
   <component name="VcsDirectoryMappings">
     <mapping directory="$PROJECT_DIR$" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/WeChat-OAuth2" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/webapp/WeChat-OAuth2" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/wechat" vcs="Git" />
   </component>
 </project>

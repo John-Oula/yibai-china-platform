@@ -344,6 +344,7 @@ $('#live-description').html(data.description);
 $('img.live-img').attr('src',coverImgUrl+data.coverImage);
 $('img#profilepic').attr('src',userImgUrl+data.userImg);
 $('#live-username').html(data.host);
+$('.profile').css('display','none');
 });
 
 
@@ -405,6 +406,7 @@ $('.live-details').css('display','none');
 $('.profile').css('display','none');
 $('.video-details').css('display','none');
 $('.upload-list').css('display','none');
+$('.profile').css('display','none');
   });
 
 
@@ -515,6 +517,7 @@ $('.live-list').css('display','none');
 $('.profile').css('display','none');
 $('.video-details').css('display','none');
 $('.upload-list').css('display','block');
+$('.profile').css('display','none');
   });
 
 
@@ -714,7 +717,7 @@ $(document).ready(function(){
         e.preventDefault();
         closeNav()
             $('.schedule').css('display','block');
-        $(".calendar-source").detach().appendTo(".calendar-container");
+        $(".calendar-source").detach().prependTo(".calendar-container");
 
 
         $('#calendar').css('display','block');

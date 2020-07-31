@@ -406,7 +406,7 @@ $('.live-details').css('display','none');
 $('.profile').css('display','none');
 $('.video-details').css('display','none');
 $('.upload-list').css('display','none');
-$('.profile').css('display','none');
+
   });
 
 
@@ -517,7 +517,7 @@ $('.live-list').css('display','none');
 $('.profile').css('display','none');
 $('.video-details').css('display','none');
 $('.upload-list').css('display','block');
-$('.profile').css('display','none');
+
   });
 
 

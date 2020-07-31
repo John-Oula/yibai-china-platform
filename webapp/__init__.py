@@ -594,7 +594,7 @@ def home():
 
 @app.route('/wechat/api')
 def api():
-    redirect_uri = url_for('authorized', _external=True)
+    redirect_uri = "https://www.100chinaguide.com/"
     params = {'redirect_uri': redirect_uri, 'scope': 'snsapi_base'}
     return redirect(wechat.get_authorize_url(**params))
 

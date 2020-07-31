@@ -29,7 +29,7 @@ from itsdangerous import TimedJSONWebSignatureSerializer as Serializer
 from werkzeug.utils import secure_filename
 from wtforms import *
 from wtforms.validators import Required
-from flask_wx_oauth import WXOAuth
+
 from wechat.wechat_oauth2 import WeChatService
 
 app = Flask(__name__)

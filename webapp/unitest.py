@@ -83,8 +83,10 @@ class UserModelCase(unittest.TestCase):
         db.session.add(c4)
         db.session.commit()
 
-        s1 = Series(user_id=1, title='tech', description='this is a test ', category='MANDARIN', timestamp='2019-12-4')
+        s1 = Series(user_id=1, title='tech', description='this is a test ', category='MANDARIN',status='single', timestamp='2019-12-4')
+        s2 = Series(user_id=1, title='tech', description='this is a test ', category='MANDARIN',status='series', timestamp='2019-12-4')
         db.session.add(s1)
+        db.session.add(s2)
         db.session.commit()
 
         e1 = Episode(user_id=1, subtitle='subtitle=tech', description='this is a test ',upload_ref='c66bc66048db6fb0.mp4' , series_id=1,timestamp='2019-12-4')
@@ -130,6 +132,7 @@ class UserModelCase(unittest.TestCase):
         date2.user.append(u3)
         date3.user.append(u1)
         date4.user.append(u2)
+
         date1.user.remove(u1)
         for date in u1.available and u2.available:
             print("User ",u1.id," is available on",date.date_available)
@@ -156,6 +159,8 @@ class UserModelCase(unittest.TestCase):
         p2.bookers.append(u3)
         p4.bookers.append(u1)
         p3.bookers.append(u2)
+        for u in u1.bookSchedule:
+            print(u.username)
         up1.user_cart.append(u1)
         up1.user_cart.append(u2)
         up2.user_cart.append(u2)
@@ -170,6 +175,7 @@ class UserModelCase(unittest.TestCase):
         u3.followed.append(u1)
         db.session.commit()
         u2.followers.count()
+        print(u1.is_following(u5))
         assert u2.followers.count() == 1
         count = 0
         for followers in u1.followed:

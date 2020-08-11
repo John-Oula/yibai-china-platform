@@ -197,12 +197,18 @@
          <div>
          <div class="thumb-wrapper">
              <li> <video class="video-feed "   preload="none" video-id=""  controls=""   type="video/mp4" src="" alt=""></video></li>
+             <li> <img class="course-img" src="" alt=""></li>
+             <li>
+                 <audio class="audio mx-auto" controls>
+                   <source src="" type="audio/mpeg">
+             </audio>
+             </li>
          </div>
     <div class="video-info">
  <h6 id="video-title"></h6>
     <div class="row no-gutters">
     <div class="col-2 col-sm-2 col-md-2 no-gutters">
-        <div class="profile-pic-wrapper">
+        <div data-href="" class="profile-pic-wrapper click-pro-pic">
             <span><img id="profilepic" alt=""></span>
         </div>
         </div>
@@ -234,7 +240,7 @@
                  <a class="nav-link active" id="home-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home" aria-selected="true">ABOUT</a>
              </li>
              <li class="nav-item">
-                 <a class="nav-link" id="profile-tab" data-toggle="tab" href="#profile" role="tab" aria-controls="profile" aria-selected="false">CONTENTS</a>
+                 <a class="nav-link" video-id="" id="episode-tab" data-toggle="tab" href="#episode" role="tab" aria-controls="episode" aria-selected="false">CONTENTS</a>
              </li>
              <li class="nav-item">
                  <a class="nav-link" id="contact-tab" data-toggle="tab" href="#contact" role="tab" aria-controls="contact" aria-selected="false">REVIEWS</a>
@@ -245,7 +251,11 @@
                  <p>Description</p>
                  <p id="video-description"></p>
              </div>
-             <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab"></div>
+             <div class="tab-pane fade" id="episode" role="tabpanel" aria-labelledby="episode-tab">
+
+
+
+             </div>
              <div class="tab-pane fade" id="contact" role="tabpanel" aria-labelledby="contact-tab"></div>
          </div>
          <div class="p-3">
@@ -254,10 +264,10 @@
 
          <div>
              <nav id="video-nav" class="shadow-lg" >
-                 <h3 id="video-price" class="navLink" href="{{ url_for('home', username = current_user.username) }}"></h3>
+                 <h3 id="video-price" class="navLink"></h3>
                  <a class="navLink addCart" data-href=""><img  class="mobile-icon" src="../static/addCart.svg" alt=""></a>
-                 <a class="navLink" href="{{ url_for('settings', username = current_user.username) }}"><img class="mobile-icon" src="../static/share.svg" alt=""></a>
-                 <a class="navLink" href="{{ url_for('settings', username = current_user.username) }}"><button class="common-btn">BUY NOW</button></a>
+                 <a class="navLink"><img class="mobile-icon" src="../static/share.svg" alt=""></a>
+                 <a class="navLink" id="buy" data-href="" user-id="{{ current_user.id }}"><button class="common-btn">BUY NOW</button></a>
              </nav>
          </div>
      </div>
@@ -266,7 +276,7 @@
      <div class="row user-profile-info no-gutters">
                   <div class="col-2 no-gutters">
 
-                  <div class="user-profile-pic-wrapper">
+                  <div data-href="" class="click-pro-pic user-profile-pic-wrapper">
             <span><img id="profilepic" src="" alt=""></span>
         </div>
         </div>
@@ -303,7 +313,7 @@
 
 
 
-           <a id="book" data-href=""> <button type="button" id="follow-btn" class="fixed-btn" >Book Schedule</button></a>
+           <a id="" data-href=""> <button type="button" data-href="" id="book-schedule-btn" class="fixed-btn" >Book Schedule</button></a>
 
      </span>
 
@@ -345,7 +355,7 @@
 
             </div>
 
-        <div class="live-profile-pic-wrapper"  data-href="">
+        <div class="live-profile-pic-wrapper click-pro-pic"  data-href="">
             <span><a  class="user-profile-pic border-light" href="#"><img id="profilepic"  src="" alt=""></a></span>
         </div>
 
@@ -358,7 +368,7 @@
                 </span>
                 <span class="live-info col-4 flex-content flex-column no-gutters">
 
-                    <button id="profile-btn" class="fixed-btn">Profile</button>
+                    <button data-href="" id="profile-btn" class="fixed-btn click-pro-pic">Profile</button>
                 </span>
             </div>
                   <ul class="nav nav-tabs nav-fill" id="myTab" role="tablist">
@@ -388,15 +398,27 @@
              <nav id="video-nav" class="shadow-lg" >
                  <h3 id="video-price" class="navLink" href=""></h3>
                  <a class="navLink" href=""><img class="mobile-icon" src="../static/share.svg" alt=""></a>
-                 <a class="navLink" href=""><button class="common-btn">BOOK A SEAT</button></a>
+                 <a id="book" class="navLink click-book" data-href="" href=""><button class="common-btn">BOOK A SEAT</button></a>
+                 <a id="unbook" class="navLink click-unbook" data-href="" href=""><button class="common-btn">UNBOOK</button></a>
              </nav>
          </div>
      </div>
      </div>
      <div></div>
 <div class="schedule p-3 text-center">
-    <div class="calendar-container">
-<input type="submit" class="fixed-btn schedule-btn text-light">
+    <div class="calendar-container text-center">
+        <form  method="POST" data-href="{{ url_for('getUserSchedule',user_id = current_user.id) }}" id="schedule-form" action="">
+            <input id="csrf-token" type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+            <input type="submit" class="fixed-btn schedule-btn text-light">
+        </form>
+
+    </div>
+
+</div>
+
+<div class="update-schedule p-3 text-center">
+    <div class="update-calendar-container">
+<input type="submit" class="fixed-btn update-schedule-btn text-light">
     </div>
 
 </div>
@@ -408,37 +430,38 @@
     <fieldset>
         {{ form.hidden_tag() }}
 
-         {{ form.title.label }} <br>
-        {{ form.title(class = "input-box-border border border-top-0 border-left-0 border-right-0") }}
+         {{ form.upload_title.label }} <br>
+        {{ form.upload_title(class = "input-box-border border border-top-0 border-left-0 border-right-0") }}
 
     <br>
-         {{ form.description.label }} <br>
-        {{ form.description(class = "description-field input-box-border border border-top-0 border-left-0 border-right-0") }}
+
+         {{ form.upload_price.label }} <br>
+        {{ form.upload_price(class = "input-box-border border border-top-0 border-left-0 border-right-0") }}
     <br>
 
-         {{ form.price.label }} <br>
-        {{ form.price(class = "input-box-border border border-top-0 border-left-0 border-right-0") }}
-    <br>
-
-             {{ form.category.label }} <br>
-        {{ form.category(class = "input-box-border border border-top-0 border-left-0 border-right-0") }}
+             {{ form.upload_category.label }} <br>
+        {{ form.upload_category(class = "input-box-border border border-top-0 border-left-0 border-right-0") }}
     <br>
      <br>
-        <input class="about" name="about" type="hidden">
+
+                 {{ form.upload_description.label }} <br>
+        {{ form.upload_description(class = "description-field input-box-border border border-top-0 border-left-0 border-right-0") }}
+    <br>
+
 <div class="form-editor">
 
 </div>
 
 
 <div class="" >
-{{form.fileName.label}}
-        {{form.fileName()}}<br><br>
-    {{form.coverImage.label}}
-        {{form.coverImage()}}<br>
+{{form.upload_fileName.label}}
+        {{form.upload_fileName()}}<br><br>
+    {{form.upload_coverImage.label}}
+        {{form.upload_coverImage()}}<br>
 
 </div>
     <br>
-  {{ form.submit(class="fixed-btn text-light") }}
+  {{ form.upload_submit(class="fixed-btn text-light") }}
     </fieldset>
 </form>
 
@@ -452,10 +475,10 @@
          {{ seriesForm.hidden_tag() }}
 
     <div class="series-div">
-         {{ seriesForm.title.label }}
-        {{ seriesForm.title(class = "input-box-border border border-top-0 border-left-0 border-right-0") }}
-        {{ seriesForm.category.label }}
-        {{ seriesForm.category(class = "input-box-border border border-top-0 border-left-0 border-right-0") }}
+         {{ seriesForm.series_title.label }}
+        {{ seriesForm.series_title(class = "input-box-border border border-top-0 border-left-0 border-right-0") }}
+        {{ seriesForm.series_category.label }}
+        {{ seriesForm.series_category(class = "input-box-border border border-top-0 border-left-0 border-right-0") }}
 <div class="wrapper">
 <button  type="button" class="subtitle">
     {{ episodeForm.subtitle.label }}
@@ -467,8 +490,8 @@
         {{ episodeForm.fileName.label }}<br>
          {{ episodeForm.fileName() }}<br>
 
-            {{ seriesForm.coverImage.label }}<br>
-         {{ seriesForm.coverImage() }}<br>
+            {{ seriesForm.series_coverImage.label }}<br>
+         {{ seriesForm.series_coverImage() }}<br>
 
         {{ episodeForm.description(class = "description-field input-box-border border border-top-0 border-left-0 border-right-0",placeholder="Description") }}
 
@@ -480,14 +503,14 @@
     </div>
 
 
-         {{ seriesForm.price.label }} <br>
-        {{ seriesForm.price(class = "input-box-border border border-top-0 border-left-0 border-right-0") }}
+         {{ seriesForm.series_price.label }} <br>
+        {{ seriesForm.series_price(class = "input-box-border border border-top-0 border-left-0 border-right-0") }}
     <br>
 
 
 
      <br>
-    {{ seriesForm.submit }}
+    {{ seriesForm.series_submit }}
         </fieldset>
 </form>
 
@@ -502,7 +525,7 @@
 
              <card class="">
 
-                 <form action="" class=" text-center session-form" method="POST">
+                 <form data-href="{{ url_for('getUserLive',user_id = current_user.id) }}" action="" class=" text-center session-form" method="POST">
       <fieldset>
         {{ sessionForm.hidden_tag() }}
 
@@ -533,6 +556,21 @@
 </card>
      </div>
  </div>
+<div class="p-3 upload-option">
+         <div class="card big-card shadow-lg" id="single-click">
+             <div class="card-body text-center">
+                 <h6>Single Upload</h6>
+                 <h1>&#10010</h1>
+             </div>
+         </div>
+         <div class="mt-4 card big-card shadow-lg" id="series-click">
+             <div class="card-body text-center">
+                 <h6>Series Upload</h6>
+                 <h1>&#10010</h1>
+             </div>
+         </div>
+
+</div>
 
 
  <div  id="course-update" class="p-2">
@@ -577,7 +615,11 @@
 
             </form>
      </div>
+<div id="update-schedule">
+         <div class="row append-edit-schedule no-gutters">
 
+     </div>
+</div>
  <!-- Trigger the modal with a button -->
 
 <!-- Modal -->
@@ -593,9 +635,26 @@
         <p>Are you sure you want to delete?.</p>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-default" data-dismiss="modal">Yes</button>
+        <button type="button" class="btn btn-default yes-btn" data-dismiss="modal">Yes</button>
         <button type="button" class="btn btn-default" data-dismiss="modal">No</button>
       </div>
+    </div>
+
+  </div>
+</div>
+
+<div id="book-schedule" class="modal fade" role="dialog">
+  <div class="modal-dialog">
+
+    <!-- Modal content-->
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+      </div>
+      <div class="modal-body append-schedule row">
+
+      </div>
+
     </div>
 
   </div>
@@ -670,7 +729,6 @@
     <br>
      <br>
 
-        <input class="about" name="about" type="hidden">
 <div class="update-series-editor">
 
 </div>
@@ -698,6 +756,48 @@
 
 
         </div>
+
+ <div class="schedule-container">
+     <div class="row append-schedule no-gutters">
+
+     </div>
+ </div>
+
+
+<div class="checkout">
+
+     <div class="checkout-img-wrapper">
+         <img class="live-img" src="../static/coverImages/default.jpg" alt="">
+
+     </div>
+     <div class="p-2">
+              <h5 id="checkout-title"></h5>
+     <h6 class="orangeColor mt-4 mb-4">Payment summary</h6>
+     <h6>Payment method</h6>
+     <p>Alipay</p>
+     <h6 class="mt-3">Total Price</h6>
+     <div class="mt-3">
+         <span>Original price</span>
+         <span class="float-right" id="original-price"></span>
+     </div>
+         <hr/>
+          <div class="mt-4">
+         <span>Total</span>
+         <span class="float-right" id="total-price"></span>
+     </div>
+     <div class="mt-5" style="
+    font-size: 11px;
+">By completing your purchase you agree to these our Terms of Service</div>
+     </div>
+
+
+     <nav id="video-nav" class="shadow-lg">
+                 <h1 id="total-price" class="navLink">99</h1>
+
+                 <a  class="navLink click-pay" data-href="" href=""><button class="common-btn">COMPLETE PAYMENT</button></a>
+             </nav>
+
+ </div>
 </div>
 
 
@@ -707,5 +807,4 @@
 {% block bottomNav %}
     {{ super() }}
 {% endblock %}
-
 

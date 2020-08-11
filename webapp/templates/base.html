@@ -22,6 +22,8 @@
     <link href='../static/packages/bootstrap/main.css' rel='stylesheet' />
     <link href="//cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
 <link href="//cdn.quilljs.com/1.3.6/quill.bubble.css" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.css" rel="stylesheet">
+
 
 
 
@@ -117,14 +119,15 @@
       <div class="dropdown-container">
           <a id="course-create" href="">Create course</a>
           <a id="update-course" data-href="{{ url_for('getUserSeries',user_id = current_user.id) }}" href="#">Update/Edit course</a>
+          <a href="#">Bought Courses</a>
           <a href="#">Stats</a>
       </div>
             <button id="schedule" class="dropdown-btn">Schedule
           <i class="fa fa-caret-down"></i>
       </button>
       <div class="dropdown-container">
-          <a id="schedule-create" href="">Create availability</a>
-          <a href="#">Update/Edit availability</a>
+          <a id="schedule-create" data-href="{{ url_for('getUserSchedule',user_id = current_user.id) }}" href="">Create availability</a>
+          <a id="edit-schedule" data-href="{{ url_for('getUserSchedule',user_id = current_user.id) }}" href="#">Update/Edit availability</a>
           <a href="#">Booked schedule </a>
           <a href="#">Stats</a>
       </div>
@@ -186,6 +189,7 @@
 <script src="../static/javascript.js" type="text/javascript"></script>
 <script src="//cdn.quilljs.com/1.3.6/quill.js"></script>
 <script src="//cdn.quilljs.com/1.3.6/quill.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.js"></script>
 <script src="https://res.wx.qq.com/connect/zh_CN/htmledition/js/wxLogin.js"></script>
     <script>
     var options = {
@@ -211,7 +215,42 @@
 
   theme: 'snow'
 };
-var editor = new Quill('#editor', options);
+var quill = new Quill('#editor', options);
+
+
+
+	$('form#course').on('submit', function(event) {
+ var csrf_token = $('#csrf_token').attr('value');
+   // Populate hidden form on submit
+    var html = quill.root.innerHTML;
+    $('#upload_description').val( html );
+
+
+		$.ajax({
+        beforeSend: function(xhr, settings) {
+            if (!/^(GET|HEAD|OPTIONS|TRACE)$/i.test(settings.type) && !this.crossDomain) {
+                xhr.setRequestHeader("X-CSRFToken", csrf_token);
+            }
+        },  enctype: 'multipart/form-data',
+			data : new FormData(this),
+			type : 'POST',
+			url : '/createcourse',
+            processData: false,
+            contentType: false,
+
+		})
+		.done(function(data) {
+
+        console.log('done')
+
+		});
+
+		event.preventDefault();
+
+	});
+
+$('#quill-html').val( html );
+
     </script>
 
     <script>
@@ -226,6 +265,23 @@ var editor = new Quill('#editor', options);
  href: ""
  });
 
+    </script>
+
+    <script>
+      $('#summernote').summernote({
+        placeholder: 'Hello Bootstrap 4',
+        tabsize: 2,
+        height: 100
+      });
+    </script>
+
+    <script>
+    $('#summernote').summernote({
+  height: 200,                 // set editor height
+  minHeight: null,             // set minimum height of editor
+  maxHeight: null,             // set maximum height of editor
+  focus: true                  // set focus to editable area after initializing summernote
+});
     </script>
 {% endblock %}
 </body>

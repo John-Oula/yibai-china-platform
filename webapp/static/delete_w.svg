@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+  <defs>
+    <style>
+      .cls-1 {
+        fill: none;
+      }
+
+      .cls-2 {
+        fill: white;
+        fill-rule: evenodd;
+      }
+    </style>
+  </defs>
+  <g id="Group_2" data-name="Group 2" transform="translate(-428 -2268)">
+    <rect id="Box" class="cls-1" width="24" height="24" transform="translate(428 2268)"/>
+    <path id="Icon_Cancel_Dark" data-name="Icon / Cancel / Dark" class="cls-2" d="M155.889-9.524l-1.413,1.413L150.889-11.7,147.3-8.111l-1.413-1.413,3.588-3.588L145.889-16.7l1.413-1.413,3.587,3.588,3.587-3.588,1.413,1.413L152.3-13.111Zm-5-13.588a10,10,0,0,0-10,10,10,10,0,0,0,10,10,10,10,0,0,0,10-10,10,10,0,0,0-10-10Z" transform="translate(289.111 2293.111)"/>
+  </g>
+</svg>

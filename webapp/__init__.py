@@ -29,6 +29,9 @@ from itsdangerous import TimedJSONWebSignatureSerializer as Serializer
 from werkzeug.utils import secure_filename
 from wtforms import *
 from wtforms.validators import Required
+from alipay import AliPay, ISVAliPay , DCAliPay
+import filetype
+
 
 
 
@@ -51,6 +54,42 @@ def get_Host_name_IP(hostname):
         print("Unable to get Hostname and IP")
 
     # Driver code
+
+
+#alipay setup
+
+app_private_key_string = open("/Users/ASUS/Desktop/webApp/keys/appPrivateKey.txt").read()
+alipay_public_key_string = open("/Users/ASUS/Desktop/webApp/keys/alipayPublicKey.txt").read()
+app_public_key_cert_string = open("/Users/ASUS/Desktop/webApp/certs/appCertPublicKey_2021001182663949.crt").read()
+alipay_root_cert_string = open("/Users/ASUS/Desktop/webApp/certs/alipayRootCert.crt").read()
+alipay_public_key_cert_string = open("/Users/ASUS/Desktop/webApp/certs/alipayCertPublicKey_RSA2.pem").read()
+
+
+
+
+alipay = AliPay(
+    appid="2021001182663949",
+    app_notify_url=None,  # the default notify path
+    app_private_key_string=app_private_key_string,
+    # alipay public key, do not use your own public key!
+    alipay_public_key_string=alipay_public_key_string,
+    sign_type="RSA2", # RSA or RSA2
+    debug=True  # False by default
+)
+
+
+
+dc_alipay = DCAliPay(
+    appid="2021001182663949",
+    app_notify_url="https://100chinaguide.com/",
+    app_private_key_string=app_private_key_string,
+    app_public_key_cert_string=app_public_key_cert_string,
+    alipay_public_key_cert_string=alipay_public_key_cert_string,
+    alipay_root_cert_string=alipay_root_cert_string
+)
+
+
+
 
 
 
@@ -104,9 +143,14 @@ book = db.Table('book',
                 db.Column('user_id', db.Integer, db.ForeignKey('user.id')),
                 db.Column('post_id', db.Integer, db.ForeignKey('post.id')))
 
+bookSchedule = db.Table('bookSchedule',
+                db.Column('user_id', db.Integer, db.ForeignKey('user.id')),
+                db.Column('date_id', db.Integer, db.ForeignKey('availableStatus.id')))
+
 likes = db.Table('likes',
                 db.Column('user_id', db.Integer, db.ForeignKey('user.id')),
-                db.Column('upload_id', db.Integer, db.ForeignKey('upload.id')))
+                db.Column('series_id', db.Integer, db.ForeignKey('series.id')))
+
 
 skills = db.Table('skills',
     db.Column('user_id', db.Integer, db.ForeignKey('user.id')),
@@ -166,7 +210,8 @@ class User(db.Model, UserMixin):
 #                               backref=db.backref('user', lazy='dynamic'), lazy='dynamic')
 
     book = db.relationship('Post', secondary=book,backref=db.backref('bookers', lazy='dynamic'))
-    likes = db.relationship('Upload', secondary=likes,backref=db.backref('liked', lazy='dynamic'))
+    bookSchedule = db.relationship('Available', secondary=bookSchedule,backref=db.backref('userSchedule', lazy='dynamic'))
+    likes = db.relationship('Series', secondary=likes,backref=db.backref('liked', lazy='dynamic'))
     cart = db.relationship('Upload', secondary=cart,backref='user_cart', lazy='dynamic')
 
 
@@ -200,8 +245,9 @@ class User(db.Model, UserMixin):
             self.followed.remove(user)
 
     def is_following(self, user):
-        return self.followed.filter(
-            followers.c.followed_id == user.id).count() > 0
+        return self.followed.filter(followers.c.followed_id == user.id).count() > 0
+
+
 
     # is_admin = db.Column(db.Boolean,default=False)
 
@@ -255,6 +301,8 @@ class Available(db.Model):
     __tablename__ = 'availableStatus'
     id = db.Column('id', db.Integer, primary_key=True)
     date_available = db.Column(db.String())
+    start_time = db.Column("Start Time", db.String, nullable=True)
+    end_time = db.Column('End time', db.String, nullable=True)
     timestamp = db.Column(db.DateTime, default=datetime.datetime.utcnow)
 
 
@@ -268,6 +316,7 @@ class Post(db.Model):
     coverImage = db.Column('coverImage',db.String,nullable=True,default='default.jpg')
     category = db.Column('category', db.String(10), nullable=True)
     description = db.Column('description', db.String(100), nullable=True)
+    meetingUrl = db.Column('meetingUrl', db.VARCHAR)
     files = db.Column('file', db.String)
     timestamp = db.Column(db.DateTime, default=datetime.datetime.utcnow)
     date = db.Column('Date', db.String, nullable=True)
@@ -276,10 +325,11 @@ class Post(db.Model):
     end_time = db.Column('End time', db.String, nullable=True)
     lesson = db.relationship('Lesson', backref=db.backref('lessons'))
 
-    def __repr__(self, id,meetingCode, verified, title,coverImage, category, description, files, timestamp ,date, user_id, start_time,
+    def __repr__(self, id,meetingCode,meetingUrl, verified, title,coverImage, category, description, files, timestamp ,date, user_id, start_time,
                  end_time):
         self.id = id
         self.meetingCode = meetingCode
+        self.meetingUrl = meetingUrl
         self.verified = verified
         self.title = title
         self.coverImage = coverImage
@@ -340,18 +390,20 @@ class Series(db.Model):
     __tablename__ = 'series'
     id = db.Column('id', db.Integer, primary_key=True)
     title = db.Column('title', db.String(30))
+    status = db.Column('status', db.String(7))
     category = db.Column('category', db.String(30))
     coverImage = db.Column('coverImage', db.VARCHAR)
-
+    upload_ref = db.Column('upload_ref', db.VARCHAR)
     description = db.Column('description', db.String(600))
     price = db.Column('price', db.Integer)
     timestamp = db.Column(db.DateTime, default=datetime.datetime.utcnow)
     user_id = db.Column('user_id', db.Integer, db.ForeignKey('user.id'), nullable=False)
+    payment = db.relationship('Payment', backref='userPayment', lazy='dynamic')
     comments = db.relationship('Comment', backref='series', lazy='dynamic')
     episode = db.relationship('Episode', backref='sub', lazy=True)
 
 
-    def __repr__(self, id, title,coverImage, category, description, price, upload_ref, user_id):
+    def __repr__(self, id, title,coverImage, category,user_id,payment_id,status, description, price, upload_ref):
         self.id = id
         self.title = title
         self.category = category
@@ -360,6 +412,25 @@ class Series(db.Model):
         self.price = price
         self.upload_ref = upload_ref
         self.user_id = user_id
+        self.status = status
+
+    def is_series(self):
+        if self.status == 'single':
+            return False
+        elif self.status == 'series':
+            return True
+        else:
+            pass
+
+    def fileType(self):
+        if self.upload_ref:
+            file_path = os.path.abspath('webapp/static/videos/'+self.upload_ref)
+            if filetype.guess(file_path).mime.split('/')[0] == 'video':
+                return 'video'
+            elif filetype.guess(file_path).mime.split('/')[0] == 'audio':
+                return 'audio'
+        else:
+            return 'Error loading content'
 
 class Episode(db.Model):
     __tablename__ = 'episode'
@@ -372,7 +443,7 @@ class Episode(db.Model):
     user_id = db.Column('user_id', db.Integer, db.ForeignKey('user.id'), nullable=True)
     series_id = db.Column(db.Integer,db.ForeignKey('series.id'))
     comments = db.relationship('Comment', backref='episode', lazy='dynamic')
-    upload_ref = db.Column('upload_ref', db.VARCHAR)
+
     transcript_ref = db.Column('transcript_ref', db.VARCHAR)
     auido_ref = db.Column('auido_ref', db.VARCHAR)
 
@@ -386,7 +457,36 @@ class Episode(db.Model):
         self.auido_ref = auido_ref
         self.user_id = user_id
         self.series_id = series_id
-#
+
+    def fileType(self):
+        if self.upload_ref:
+            file_path = os.path.abspath('webapp/static/videos/'+self.upload_ref)
+            if filetype.guess(file_path).mime.split('/')[0] == 'video':
+                return 'video'
+            elif filetype.guess(file_path).mime.split('/')[0] == 'audio':
+                return 'audio'
+        else:
+            return 'Error loading content'
+
+class Payment(db.Model):
+    __tablename__ = 'payment'
+    id = db.Column('id', db.Integer, primary_key=True)
+    order_number = db.Column('order_number', db.String(30))
+    amount = db.Column('amount', db.INT)
+    price = db.Column('price', db.INT)
+    user_id = db.Column('user_id', db.Integer, db.ForeignKey('user.id'), nullable=False)
+    series_id = db.Column('series_id', db.Integer, db.ForeignKey('series.id'), nullable=False)
+
+
+    def __repr__(self, id,order_number, amount, price,user_id,series_id):
+        self.id = id
+        self.order_number = order_number
+        self.amount = amount
+        self.price = price
+        self.user_id = user_id
+        self.series_id = series_id
+
+
 
 class Follow(db.Model):
     __tablename__ = 'follows'
@@ -404,7 +504,22 @@ class Comment(db.Model):
    series_id = db.Column(db.Integer, db.ForeignKey('series.id'))
    episode_id = db.Column(db.Integer, db.ForeignKey('episode.id'))
 
+class Comments(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    text = db.Column(db.String(140))
+    author = db.Column(db.String(32))
+    path = db.Column(db.Text, index=True)
+    timestamp = db.Column(db.DateTime, default=datetime.datetime.utcnow)
 
+    def save(self):
+        db.session.add(self)
+        db.session.commit()
+        prefix = self.parent.path + '.' if self.parent else ''
+        self.path = prefix + '{:0{}d}'.format(self.id, self._N)
+        db.session.commit()
+
+    def level(self):
+        return len(self.path) // self._N - 1
 
 
 ### FORMS ###
@@ -502,15 +617,15 @@ class UpdateSession_form(FlaskForm):
     update_session_submit = SubmitField('Update')
 
 class Upload_form(FlaskForm):
-    title = StringField('Title')
-    category = SelectField('Category', choices=[('Mandarin','Mandarin'), ('Communication skills', 'Communication skills'), ('Academics', 'Academics'), ('Visa', 'Visa'), ('Living', 'Living'), ('Talent policy', 'Talent policy'), ('Finance & Law', 'Finance & Law'), ('Entrepreneur', 'Entrepreneur'), ('Others', 'Others')],widget=None)
-    description = TextAreaField('Description')
-    price = StringField('Price')
-    fileName = FileField('Upload File',validators=[FileRequired()])
-    coverImage = FileField('Cover Image')
-    transcript = FileField('Upload')
-    audio = FileField('Upload')
-    submit = SubmitField('Submit')
+    upload_title = StringField('Title')
+    upload_category = SelectField('Category', choices=[('Mandarin','Mandarin'), ('Communication skills', 'Communication skills'), ('Academics', 'Academics'), ('Visa', 'Visa'), ('Living', 'Living'), ('Talent policy', 'Talent policy'), ('Finance & Law', 'Finance & Law'), ('Entrepreneur', 'Entrepreneur'), ('Others', 'Others')],widget=None)
+    upload_description = HiddenField('Description')
+    upload_price = StringField('Price')
+    upload_fileName = FileField('Upload File',validators=[FileRequired()])
+    upload_coverImage = FileField('Cover Image')
+    upload_transcript = FileField('Upload')
+    upload_audio = FileField('Upload')
+    upload_submit = SubmitField('Submit')
 
 
 class UpdateUploads_form(FlaskForm):
@@ -522,13 +637,13 @@ class UpdateUploads_form(FlaskForm):
     update_submit = SubmitField('Update')
 
 class Series_form(FlaskForm):
-    title = StringField('Title')
-    category = SelectField('Category', choices=[('Mandarin','Mandarin'), ('Communication skills', 'Communication skills'), ('Academics', 'Academics'), ('Visa', 'Visa'), ('Living', 'Living'), ('Talent policy', 'Talent policy'), ('Finance & Law', 'Finance & Law'), ('Entrepreneur', 'Entrepreneur'), ('Others', 'Others')],widget=None)
-    description = TextAreaField('Description')
-    coverImage = FileField('Cover Image')
-
-    price = StringField('Price')
-    submit = SubmitField('Submit')
+    series_title = StringField('Title')
+    series_category = SelectField('Category', choices=[('Mandarin','Mandarin'), ('Communication skills', 'Communication skills'), ('Academics', 'Academics'), ('Visa', 'Visa'), ('Living', 'Living'), ('Talent policy', 'Talent policy'), ('Finance & Law', 'Finance & Law'), ('Entrepreneur', 'Entrepreneur'), ('Others', 'Others')],widget=None)
+    series_description = TextAreaField('Description')
+    series_fileName = FileField('Upload File',validators=[FileRequired()])
+    series_coverImage = FileField('Cover Image')
+    series_price = StringField('Price')
+    series_submit = SubmitField('Submit')
 
 
 
@@ -593,6 +708,7 @@ def home():
     UpdateUploads = UpdateUploads_form()
     UpdateSession = UpdateSession_form()
 
+
     return render_template('home.html',UpdateSession=UpdateSession,UpdateUploads=UpdateUploads,UpdateSeries=UpdateSeries,UpdateEpisode=UpdateEpisode,sessionForm=sessionForm,uploads=uploads,form=form,page=page,seriesForm=seriesForm,episodeForm=episodeForm)
 
 
@@ -612,18 +728,55 @@ def liveSession():
     return jsonify({'result':l})
 
 @app.route('/userDetails')
+@csrf.exempt
 def userDetails():
+
     username = request.args.get('username', type=str)
     user = User.query.filter_by(username=username).first_or_404()
-    if current_user.is_authenticated:
-        if current_user.is_following(user):
-            return jsonify({"id":user.id,"username":user.username,"followers":user.followers.count(),"userImage":user.image_file,"videos":len(user.uploads),"liveSessions":len(user.posts),"introduction":user.introduction,"Isfollowing":True})
-
-        else:
-            return jsonify({"id":user.id,"username":user.username,"followers":user.followers.count(),"userImage":user.image_file,"videos":len(user.uploads),"liveSessions":len(user.posts),"introduction":user.introduction,"Isfollowing":False})
-
+    if current_user.is_anonymous :
+        data = {"id":user.id,"username":user.username,"followers":user.followers.count(),"userImage":user.image_file,"videos":len(user.series),"liveSessions":len(user.posts),"introduction":user.introduction,"Isfollowing":False}
     else:
-        return jsonify({"id":user.id,"username":user.username,"followers":user.followers.count(),"userImage":user.image_file,"videos":len(user.uploads),"liveSessions":len(user.posts),"introduction":user.introduction,"Isfollowing":False})
+        data = {"id":user.id,"username":user.username,"followers":user.followers.count(),"userImage":user.image_file,"videos":len(user.series),"liveSessions":len(user.posts),"introduction":user.introduction,"Isfollowing":current_user.is_following(user)}
+
+    l=[]
+    i = 0
+    for v in user.series:
+        userSeries = {'id':v.id, 'title': v.title, 'price': v.price,
+                'uploader': v.user_series.username, 'coverImg': v.coverImage,
+                'userImg': v.user_series.image_file, 'category': v.category,
+                'totalEpisodes': len(v.episode)}
+        ep = []
+        episodeList = user.series
+        for e in v.episode:
+            episode = {'episodeId': e.id, 'seriesId': e.sub.id, 'subtitle': e.subtitle, 'video': e.upload_ref}
+            ep.append(episode)
+        userSeries.update({'episode': ep})
+        series = l.append(userSeries)
+        i += 1
+    data.update({'series': l})
+    liveList = []
+    for live in user.posts:
+        userLive = {'id':live.id, 'title': live.title,
+                'host': live.author.username, 'coverImg': live.coverImage,
+                'userImg': live.author.image_file, 'category': live.category}
+        liveList.append(userLive)
+    data.update({'live': liveList})
+    scheduleList = []
+    for schedule in user.available:
+        userschedule = {'id': schedule.id,'date': schedule.date_available,'time': schedule.timestamp,'startTime':schedule.start_time,'endTime':schedule.end_time}
+        scheduleList.append(userschedule)
+        bookersList = []
+        for users in schedule.userSchedule:
+            bookers = {'id': users.id, 'username': users.username}
+            bookersList.append(bookers)
+        userschedule.update({'bookers': bookersList})
+
+    data.update({'schedule': scheduleList})
+
+
+
+    return data
+
 
 
 @app.route('/addCart')
@@ -680,7 +833,6 @@ def profile():
 
 
 @app.route('/discover_h')
-
 def discover_h():
 
     uploads = Upload.query.all()
@@ -846,6 +998,45 @@ def time():
         x = re.split(r'([T+])', start)
 
 
+
+@app.route('/checkout')
+@csrf.exempt
+def checkout():
+    price = request.args.get('price', type=int)
+    subject = request.args.get('subject', type=str)
+    course_id = request.args.get('course_id', type=int)
+    user = request.args.get('user', type=int)
+    token = binascii.hexlify(os.urandom(32))
+
+    # Pay via WAP, open this url in your browser: https://openapi.alipay.com/gateway.do? + order_string
+    order_string = alipay.api_alipay_trade_wap_pay(
+        out_trade_no=course_id,
+        total_amount=price,
+        subject=subject,
+        return_url="https://www.100chinaguide.com/verify_payment/"+ str(token) + '?'+'id='+'user'+'subject_id='+'course_id',
+        #    notify_url="https://example.com/notify" # this is optional
+    )
+    alipayUrl = 'https://openapi.alipay.com/gateway.do?'
+
+    data = alipayUrl + order_string
+    return data
+
+@app.route('/verify_payment/<int:token>')
+@login_required
+def verify_payment(token):
+    course_id = request.args.get('course_id', type=int)
+    user = request.args.get('user', type=str)
+    order_number = request.args.get('user', type=int)
+    amount = request.args.get('amount', type=int)
+    price = request.args.get('price', type=int)
+    user_id = request.args.get('user_id', type=int)
+
+    course = Series.query.filter_by(id = course_id).first()
+    payment = Payment(order_number=order_number,amount=amount,price=price,user_id=user_id)
+    db.session.add(payment)
+    db.session.commit()
+
+    return redirect(url_for('home'))
 
 
 
@@ -1152,18 +1343,39 @@ def discover(username):
 @app.route('/book/<int:id>')
 @login_required
 def book(id):
-    post=Post.query.filter_by(id=id).first()
-    post.bookers.append(current_user)
-    db.session.commit()
+    type = request.args.get('type', type=str)
+
+    if type == 'schedule':
+        schedule = Available.query.filter_by(id=id).first()
+        schedule.userSchedule.append(current_user)
+        db.session.add(schedule)
+
+        db.session.commit()
+    elif type == 'live':
+        post=Post.query.filter_by(id=id).first()
+        post.bookers.append(current_user)
+        db.session.commit()
 
     return jsonify({'result':'success'})
 
 @app.route('/unbook/<int:id>')
 @login_required
 def unbook(id):
-    post=Post.query.filter_by(id=id).first()
-    post.bookers.remove(current_user)
-    db.session.commit()
+    type = request.args.get('type', type=str)
+    username = request.args.get('username', type=str)
+    user = User.query.filter_by(username=username).first()
+
+    if type == 'schedule':
+        schedule = Available.query.filter_by(id=id).first()
+        schedule.userSchedule.remove(current_user)
+
+
+        db.session.commit()
+    elif type == 'live':
+        post = Post.query.filter_by(id=id).first()
+        post.bookers.remove(current_user)
+        db.session.commit()
+
     return jsonify({'result': 'success'})
 
 
@@ -1173,18 +1385,21 @@ def  post(id):
     post = Post.query.get_or404(id)
     return redirect(url_for('login'))
 
+
+
+
 @app.route('/videos' , methods=['POST','GET'])
 def video():
 #    video = request.args.get('video', type=str)
 #    videoId= request.args.get('videoId', type=str)
  #   video = Upload.query.filter_by(id=videoId).first()
 
-    videos = Upload.query.order_by(Upload.timestamp.desc()).all()
+    videos = Series.query.order_by(Series.timestamp.desc()).all()
     i = 0
     l = []
     for v in range(len(videos)):
-        data = {'id': videos[i].id, 'title': videos[i].title, 'username': videos[i].uploader.username,
-                'userImg': videos[i].uploader.image_file, 'category': videos[i].category,'likes':videos[i].liked.count(),'comments':videos[i].comments.count()}
+        data = {'id': videos[i].id, 'title': videos[i].title, 'username': videos[i].user_series.username,
+                'userImg': videos[i].user_series.image_file, 'category': videos[i].category,'likes':videos[i].liked.count(),'comments':videos[i].comments.count(),'isSeries':videos[i].is_series()}
         l.append(data)
 
         i += 1
@@ -1196,10 +1411,32 @@ def video():
 def videoDetails():
 #    video = request.args.get('video', type=str)
     videoId= request.args.get('videoId', type=int)
-    videos = Upload.query.filter_by(id=videoId).first()
+    videos = Series.query.filter_by(id=videoId).first()
+
+    if videos.is_series() == True:
+        i = 0
+        l = []
 
 
-    return jsonify({'id': videos.id, 'title': videos.title,'videoRef':videos.upload_ref,'description':videos.description,'price':videos.price,'userId':videos.uploader.id,'username': videos.uploader.username,'userImg': videos.uploader.image_file, 'category': videos.category,'likes':videos.liked.count(),'comments':videos.comments.count()})
+        data ={'id': videos.id,'coverImg':videos.coverImage, 'title': videos.title,'isSeries':videos.is_series(),'videoRef':videos.upload_ref,'type':videos.fileType(),'description':videos.description,'price':videos.price,'userId':videos.user_series.id,'username': videos.user_series.username,'userImg': videos.user_series.image_file, 'category': videos.category,'likes':videos.liked.count(),'comments':videos.comments.count()}
+        ep = []
+        for e in videos.episode:
+            episode = {'episodeId':e.id,'seriesId':e.sub.id,'subtitle':e.subtitle}
+            ep.append(episode)
+
+        data.update({'episode':ep})
+#        l.append(data)
+
+
+        return jsonify({'result':data})
+
+    elif videos.is_series() == False:
+
+        data = {'id': videos.id, 'title': videos.title,'isSeries':videos.is_series(),'videoRef':videos.upload_ref,'type':videos.fileType(),'description':videos.description,'price':videos.price,'userId':videos.user_series.id,'username': videos.user_series.username,'userImg': videos.user_series.image_file, 'category': videos.category,'likes':videos.liked.count(),'comments':videos.comments.count()}
+
+        return jsonify({'result':data})
+    else:
+        pass
 
 @app.route('/liveDetails' , methods=['POST','GET'])
 def liveDetails():
@@ -1207,7 +1444,7 @@ def liveDetails():
     live = Post.query.filter_by(id=liveId).first()
 
 
-    return jsonify({'id': live.id, 'title': live.title,'startTime': live.start_time,'endTime': live.end_time,'date': live.date,'coverImage': live.coverImage,'description':live.description,'userId':live.author.id,'username': live.author.username,'userImg': live.author.image_file, 'category': live.category,'meetingCode':live.meetingCode})
+    return jsonify({'id': live.id, 'title': live.title,'startTime': live.start_time,'endTime': live.end_time,'date': live.date,'coverImage': live.coverImage,'description':live.description,'userId':live.author.id,'host': live.author.username,'userImg': live.author.image_file, 'category': live.category,'meetingCode':live.meetingCode,'url':live.meetingUrl})
 
 
 @app.route('/series/<int:seriesid>Id<int:id>video<upload_ref>' , methods=['POST','GET'])
@@ -1323,7 +1560,6 @@ def inquire(meetingcode,username,instanceid):
     stringToSign = stringToSign.encode('utf-8')
 
     signature = hmac.new(your_secretkey, stringToSign, digestmod=hashlib.sha256).hexdigest()
-    print(signature)
 
     signature = base64.b64encode(signature.encode("utf-8"))
     params={
@@ -1336,8 +1572,7 @@ def inquire(meetingcode,username,instanceid):
     headers = {'Content-Type': 'application/json', 'X-TC-Key': SecretId, 'X-TC-Timestamp': str(stamp),
                'X-TC-Nonce': str(num), 'AppId': '200000164', 'X-TC-Signature': signature, 'X-TC-Registered': '0'}
     r = requests.get("https://api.meeting.qq.com/v1/meetings?meeting_code="+str(meetingcode)+"&userid="+username+"&instanceid="+str(instanceid), headers=headers)
-    print(r.ok)
-    print(r.text)
+
 
     return r.json()
 
@@ -1696,18 +1931,40 @@ def saveFile(fileData):
 def createCourse():
 
     form = Upload_form()
+    status = request.args.get('status', type=str)
+    seriesForm = Series_form()
+    episodeForm = Episode_form()
 
-    if request.method == 'POST':
+    if request.method == 'POST' and status == 'single':
 
 
+        upload = Series(title=form.upload_title.data,coverImage=saveFile(form.upload_coverImage.data), description=form.upload_description.data,category=form.upload_category.data,status=status,price= form.upload_price.data,upload_ref=saveFile(form.upload_fileName.data),user_series=current_user)
+        db.session.add(upload)
 
-            upload = Upload(title=form.title.data,coverImage=saveFile(form.coverImage.data), description=form.description.data,category=form.category.data,price= form.price.data,upload_ref=saveFile(form.fileName.data),uploader=current_user)
-            db.session.add(upload)
-
-            db.session.commit()
-            msg = 'uploaded succsesfully'
+        db.session.commit()
+        msg = 'uploaded succsesfully'
         
-    return jsonify({'result': msg})
+        return jsonify({'result': msg})
+
+    elif request.method == 'POST' and status == 'series':
+        series = Series(title=seriesForm.series_title.data, description=seriesForm.series_description.data,
+                        coverImage=saveFile(seriesForm.series_coverImage.data), category=seriesForm.series_category.data,
+                        price=seriesForm.series_price.data,status=status, user_series=current_user)
+        db.session.add(series)
+        db.session.flush()
+
+        episode = Episode(subtitle=episodeForm.subtitle.data, description=episodeForm.description.data,
+                          upload_ref=saveFile(episodeForm.fileName.data),
+                          user_episode=current_user, sub=series, series_id=series.id)
+
+        db.session.add(episode)
+
+        db.session.commit()
+        msg = 'uploaded succsesfully'
+        return jsonify({'result': msg})
+    else:
+        pass
+
 
 
 @app.route('/checkId', methods=['POST', 'GET'])
@@ -1741,6 +1998,23 @@ def getSeries():
 
     return jsonify({'result':l})
 
+@app.route('/getUploads', methods=['POST', 'GET'])
+@login_required
+def getUploads():
+    video = Upload.query.order_by(Upload.timestamp.desc()).all()
+    i = 0
+    l = []
+
+    for v in range(len(video)):
+        data ={'id':video[i].id,'title':video[i].title,'host':video[i].user_series.username,'coverImg': video[i].coverImage,'userImg':video[i].user_series.image_file,'category':video[i].category}
+        l.append(data)
+        print(data)
+
+
+        i+=1
+
+
+    return jsonify({'result':l})
 
 @app.route('/getUserSeries', methods=['POST', 'GET'])
 @login_required
@@ -1783,6 +2057,16 @@ def getUserSeries():
 
     return jsonify({'result':l})
 
+@app.route('/getEpisode', methods=['POST', 'GET','PUT'])
+@csrf.exempt
+def getEpisode():
+    episode_id = request.args.get('episode_id', type=int)
+    episode = Episode.query.filter_by(id = episode_id).first()
+    data = {'episodeId': episode.id, 'seriesId': episode.sub.id,'type':episode.fileType(), 'subtitle': episode.subtitle, 'video': episode.upload_ref,'description': episode.description}
+
+
+    return jsonify({'result':data})
+
 @app.route('/editSeries', methods=['POST', 'GET','DELETE'])
 @csrf.exempt
 def editSeries():
@@ -1809,7 +2093,7 @@ def editSeries():
             print(data)
 
             i += 1
-        return jsonify({'result': l})
+        return data
     elif request.method == 'POST':
         series.title = update_form.title.data
         series.category = update_form.category.data
@@ -1836,27 +2120,20 @@ def editSchedule():
     schedule = Available.query.filter_by(id = schedule_id).first()
 
     user = User.query.filter_by(id = user_id).first()
-    update_form = updateSeries_form()
     i = 0
     l = []
     if request.method == 'GET':
 
-
-        for s in schedule:
-            data = {'id': s.id,'date': s.date_available,'time': s.timestamp}
+        data = {'id': schedule.id,'date': schedule.date_available,'time': schedule.timestamp}
 
 
-            l.append(data)
-            print(data)
-
-        return jsonify({'result': l})
+        return jsonify({'result': data})
     elif request.method == 'POST':
-        schedule.title = update_form.title.data
 
         return jsonify({'result': 'updated'})
 
     elif request.method == 'DELETE':
-        schedule.user.remove(user)
+        schedule.user.remove(current_user)
 
         db.session.commit()
 
@@ -1874,7 +2151,7 @@ def editLive():
 
     if request.method == 'GET':
 
-        data = {'id': live.id, 'title': live.title, 'host': live.author.username,
+        data = {'id': live.id, 'title': live.title,'description': live.description, 'host': live.author.username,
                 'coverImg': live.coverImage, 'userImg': live.author.image_file,
                 'category': live.category, 'startTime': live.start_time, 'endTime': live.end_time,
                 'date': live.date, 'meetingCode': live.meetingCode}
@@ -1906,7 +2183,7 @@ def editLive():
 def editVideo():
     video_id = request.args.get('video_id', type=int)
     videos = Upload.query.filter_by(id = video_id).first()
-    update_form = updateSeries_form()
+    update_form = UpdateSeries_form()
 
     if request.method == 'GET':
         data = {'id': videos.id, 'title': videos.title, 'videoRef': videos.upload_ref, 'description': videos.description,
@@ -1938,43 +2215,90 @@ def editVideo():
 def getUserLive():
     user_id = request.args.get('user_id', type=int)
 
-
+    form = Session_form()
     series = Post.query.filter_by(user_id = user_id).order_by(Post.timestamp.desc()).all()
     i = 0
     l = []
     for v in range(len(series)):
-        data ={'id':series[i].id,'title':series[i].title,'host':series[i].author.username,'coverImg': series[i].coverImage,'userImg':series[i].author.image_file,'category':series[i].category,'startTime':series[i].start_time,'endTime':series[i].end_time,'date':series[i].date,'meetingCode':series[i].meetingCode}
+        data ={'id':series[i].id,'title':series[i].title,'description':series[i].description,'host':series[i].author.username,'coverImg': series[i].coverImage,'userImg':series[i].author.image_file,'category':series[i].category,'startTime':series[i].start_time,'endTime':series[i].end_time,'date':series[i].date,'meetingCode':series[i].meetingCode}
         l.append(data)
 
         i+=1
 
     print(l)
+    if request.method == 'POST':
+        fulltime = request.form['date-time']
+        fullDate = datetime.fromtimestamp(int(fulltime) / 1000).strftime('%Y-%m-%d')
+        startTime = datetime.fromtimestamp(int(fulltime) / 1000).strftime('%H:%M')
+        end_time = request.form['end-time']
+        endTime = datetime.fromtimestamp(int(end_time) / 1000).strftime('%H:%M')
+
+
+        meeting = createMeeting(form.title.data, fulltime, end_time)
+
+        meeting_info = meeting["meeting_info_list"]
+        for item in meeting_info:
+            meetingCode = item['meeting_code']
+            meetingUrl = item['join_url']
+
+
+        post = Post(title=form.title.data, category=form.category.data, description=form.description.data,
+                    date=fullDate,meetingUrl = meetingUrl , start_time=startTime, end_time=endTime, author=current_user, meetingCode=meetingCode)
+
+        db.session.add(post)
+        db.session.commit()
+
     return jsonify({'result':l})
 
-@app.route('/seriesCourse', methods=['POST', 'GET'])
-@login_required
-def seriesCourse():
- #   id = request.args.get('id', type=int)
+@app.route('/getUserSchedule', methods=['POST', 'GET','PUT'])
+@csrf.exempt
+def getUserSchedule():
+    user_id = request.args.get('user_id', type=int)
+    user = User.query.filter_by(id = user_id).first()
 
-    seriesForm = Series_form()
-    episodeForm = Episode_form()
+    i = 0
+    l = []
+    for date in user.available:
+        data ={'id':date.id,'date':date.date_available,'start_time':date.start_time,'end_time':date.end_time,'timestamp':date.timestamp}
+        l.append(data)
 
+        i+=1
+
+    print(l)
     if request.method == 'POST':
-        series = Series(title=seriesForm.title.data, description=seriesForm.description.data,
-                        coverImage= saveFile(seriesForm.coverImage.data),category=seriesForm.category.data, price=seriesForm.price.data, user_series=current_user)
-        db.session.add(series)
-        db.session.flush()
+        fulltime = request.form['date-time']
+        fullDate = datetime.fromtimestamp(int(fulltime) / 1000).strftime('%Y-%m-%d')
+        startTime = datetime.fromtimestamp(int(fulltime) / 1000).strftime('%H:%M')
+        end_time = request.form['end-time']
+        endTime = datetime.fromtimestamp(int(end_time) / 1000).strftime('%H:%M')
 
-        episode = Episode(subtitle=episodeForm.subtitle.data, description=episodeForm.description.data,
-                          upload_ref=saveFile(episodeForm.fileName.data),
-                          user_episode=current_user,sub=series,series_id=series.id)
-
-        db.session.add(episode)
+        schedule = Available(start_time = startTime,end_time=endTime,date_available=fullDate)
+        schedule.user.append(current_user)
+        db.session.add(schedule)
 
         db.session.commit()
-        msg = 'uploaded succsesfully'
 
-    return jsonify({'result': msg})
+        return jsonify({'result':"Created successfully"})
+    return jsonify({'result':l})
+
+
+@app.route('/addEpisode', methods=['POST', 'GET','PUT'])
+@csrf.exempt
+def addEpisode():
+    series_id = request.args.get('series_id', type=int)
+    series = Series.query.filter_by(id = series_id).first()
+
+    episodeForm = UpdateEpisode_form()
+    episode = Episode(subtitle=episodeForm.update_subtitle.data, description=episodeForm.update_description.data,
+                      upload_ref=saveFile(episodeForm.update_fileName.data),
+                      user_episode=current_user, sub=series, series_id=series.id)
+    db.session.add(episode)
+    db.session.commit()
+    return jsonify({'result':'Uploaded successfully'})
+
+
+
+
 
 @app.route('/uploads/<username>',methods=['POST','GET'])
 @login_required

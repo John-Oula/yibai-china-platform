@@ -2,6 +2,9 @@ webapp/migrations
 webapp/unitest.py
 webapp/static/videos
 extra
+alipay-sdk-python-3.3.398
+certs
+wechat
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]

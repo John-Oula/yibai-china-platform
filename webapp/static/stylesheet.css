@@ -597,6 +597,10 @@ input#signup-long-btn{
     color: white;
 }
 
+.orangeColor{
+    color: #E74525;
+}
+
 .session-card-left{
     padding-right: 8px;
 }
@@ -1720,7 +1724,7 @@ body{
       min-width: 400px;
 }
   .home-wrapper{
-      display: none;
+
   }
   .home{
       background-color: white;
@@ -1801,6 +1805,11 @@ ul.upload-list{
 .video-feed{
     width: 100%;
     height: 200px;
+
+}
+
+video{
+    display: none;
 }
 
 .thumb-wrapper li{
@@ -1994,7 +2003,7 @@ a.video{
 }
 
 .live-img{
-    height: auto;
+    height: 100%;
     width: 100%;
 }
 
@@ -2075,6 +2084,12 @@ a.video{
     width: 100%;
     height: auto;
 }
+.course-img{
+    width: auto;
+    height: 100%;
+
+    position: absolute;
+}
 
 .cover-wrapper{
     position: relative;
@@ -2125,5 +2140,65 @@ div.modal , #episode-modal , #series-modal{
 .schedule-btn{
     display: none;
 }
+
+.schedule-box{
+        height: fit-content;
+    width: auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    flex-grow: 1;
+    min-width: 50px;
+    overflow: hidden;
+    white-space: nowrap;
 }
+
+.note-modal{
+    width: 100%;
+}
+.big-card{
+    height: 200px;
+}
+
+.upload-option{
+    display: none;
+}
+
+#episode-tab{
+    display: block;
+}
+#unbook{
+    display: none;
+}
+
+.update-schedule{
+    display: none;
+}
+
+
+.click-unbook{
+    display: none;
+}
+
+
+.audio{
+    display: block;
+    position: relative;
+
+    top: 125px;
+
+}
+
+.checkout-img-wrapper{
+    height: 172px;
+    width: 100%;
+}
+
+.checkout{
+    display: none;
+}
+
+}
+
 

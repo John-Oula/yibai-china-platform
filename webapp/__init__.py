@@ -58,11 +58,11 @@ def get_Host_name_IP(hostname):
 
 #alipay setup
 
-app_private_key_string = open("/var/www/App/webapp/keys/appPrivateKey.txt").read()
-alipay_public_key_string = open('/var/www/App/webapp/keys/alipayPublicKey.txt').read()
-app_public_key_cert_string = open("/var/www/App/webapp/certs/appCertPublicKey_2021001182663949.crt").read()
-alipay_root_cert_string = open("/var/www/App/webapp/certs/alipayRootCert.crt").read()
-alipay_public_key_cert_string = open("/var/www/App/webapp/certs/alipayCertPublicKey_RSA2.pem").read()
+app_private_key_string = open("/var/www/App/keys/appPrivateKey.txt").read()
+alipay_public_key_string = open('/var/www/App/keys/alipayPublicKey.txt').read()
+app_public_key_cert_string = open("/var/www/App/certs/appCertPublicKey_2021001182663949.crt").read()
+alipay_root_cert_string = open("/var/www/App/certs/alipayRootCert.crt").read()
+alipay_public_key_cert_string = open("/var/www/App/certs/alipayCertPublicKey_RSA2.pem").read()
 
 
 

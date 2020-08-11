@@ -15,7 +15,7 @@ import random
 import re
 import socket
 
-import requests
+
 from PIL import Image
 from flask import Flask, render_template, url_for, flash, redirect, session, request, jsonify
 from flask_login import login_user, login_required, current_user, logout_user, UserMixin, LoginManager
@@ -29,12 +29,27 @@ from itsdangerous import TimedJSONWebSignatureSerializer as Serializer
 from werkzeug.utils import secure_filename
 from wtforms import *
 from wtforms.validators import Required
-from alipay import AliPay, ISVAliPay , DCAliPay
+
 import filetype
+import logging
+import traceback
 
-
-
-
+from alipaySDK.alipay.aop.api.AlipayClientConfig import AlipayClientConfig
+from alipaySDK.alipay.aop.api.DefaultAlipayClient import DefaultAlipayClient
+from alipaySDK.alipay.aop.api.FileItem import FileItem
+from alipaySDK.alipay.aop.api.domain.AlipayTradeWapPayModel import AlipayTradeWapPayModel
+from alipaySDK.alipay.aop.api.domain.AlipayTradePagePayModel import AlipayTradePagePayModel
+from alipaySDK.alipay.aop.api.domain.AlipayTradePayModel import AlipayTradePayModel
+from alipaySDK.alipay.aop.api.domain.GoodsDetail import GoodsDetail
+from alipaySDK.alipay.aop.api.domain.SettleDetailInfo import SettleDetailInfo
+from alipaySDK.alipay.aop.api.domain.SettleInfo import SettleInfo
+from alipaySDK.alipay.aop.api.domain.SubMerchant import SubMerchant
+from alipaySDK.alipay.aop.api.request.AlipayOfflineMaterialImageUploadRequest import AlipayOfflineMaterialImageUploadRequest
+from alipaySDK.alipay.aop.api.request.AlipayTradeWapPayRequest import AlipayTradeWapPayRequest
+from alipaySDK.alipay.aop.api.request.AlipayTradePagePayRequest import AlipayTradePagePayRequest
+from alipaySDK.alipay.aop.api.request.AlipayTradePayRequest import AlipayTradePayRequest
+from alipaySDK.alipay.aop.api.response.AlipayOfflineMaterialImageUploadResponse import AlipayOfflineMaterialImageUploadResponse
+from alipaySDK.alipay.aop.api.response.AlipayTradeWapPayResponse import AlipayTradeWapPayResponse
 app = Flask(__name__)
 
 authentication= 'authentication@100chinaguide.com'
@@ -55,38 +70,39 @@ def get_Host_name_IP(hostname):
 
     # Driver code
 
-
+import requests
 #alipay setup
 
-app_private_key_string = open("/var/www/App/keys/appPrivateKey.txt").read()
-alipay_public_key_string = open('/var/www/App/keys/alipayPublicKey.txt').read()
-app_public_key_cert_string = open("/var/www/App/certs/appCertPublicKey_2021001182663949.crt").read()
-alipay_root_cert_string = open("/var/www/App/certs/alipayRootCert.crt").read()
-alipay_public_key_cert_string = open("/var/www/App/certs/alipayCertPublicKey_RSA2.crt").read()
+logging.basicConfig(
+    level=logging.INFO,
+    format='%(asctime)s %(levelname)s %(message)s',
+    filemode='a', )
+logger = logging.getLogger('')
 
 
+if get_Host_name_IP('CJAY') == True:
+    app_private_key_string = open("/Users/ASUS/Desktop/webApp/keys/appPrivateKey.txt").read()
+    alipay_public_key_string = open("/Users/ASUS/Desktop/webApp/keys/alipayPublicKey.txt").read()
+    app_public_key_cert_string = open("/Users/ASUS/Desktop/webApp/certs/appCertPublicKey_2021001182663949.crt").read()
+    alipay_root_cert_string = open("/Users/ASUS/Desktop/webApp/certs/alipayRootCert.crt").read()
+    alipay_public_key_cert_string = open("/Users/ASUS/Desktop/webApp/certs/alipayCertPublicKey_RSA2.pem").read()
 
 
-alipay = AliPay(
-    appid="2021001182663949",
-    app_notify_url=None,  # the default notify path
-    app_private_key_string=app_private_key_string,
-    # alipay public key, do not use your own public key!
-    alipay_public_key_string=alipay_public_key_string,
-    sign_type="RSA2", # RSA or RSA2
-    debug=True  # False by default
-)
+else:
+    app_private_key_string = open("/var/www/App/keys/appPrivateKey.txt").read()
+    alipay_public_key_string = open('/var/www/App/keys/alipayPublicKey.txt').read()
+    app_public_key_cert_string = open("/var/www/App/certs/appCertPublicKey_2021001182663949.crt").read()
+    alipay_root_cert_string = open("/var/www/App/certs/alipayRootCert.crt").read()
+    alipay_public_key_cert_string = open("/var/www/App/certs/alipayCertPublicKey_RSA2.crt").read()
 
+alipay_client_config = AlipayClientConfig()
+alipay_client_config.server_url = 'https://openapi.alipay.com/gateway.do'
+alipay_client_config.app_id ='2021001182663949'
+alipay_client_config.app_private_key = app_private_key_string
+alipay_client_config.alipay_public_key = alipay_public_key_string
 
+client = DefaultAlipayClient(alipay_client_config=alipay_client_config, logger=logger)
 
-dc_alipay = DCAliPay(
-    appid="2021001182663949",
-    app_notify_url="https://100chinaguide.com/",
-    app_private_key_string=app_private_key_string,
-    app_public_key_cert_string=app_public_key_cert_string,
-    alipay_public_key_cert_string=alipay_public_key_cert_string,
-    alipay_root_cert_string=alipay_root_cert_string
-)
 
 
 
@@ -1008,17 +1024,22 @@ def checkout():
     user = request.args.get('user', type=int)
     token = binascii.hexlify(os.urandom(32))
 
-    # Pay via WAP, open this url in your browser: https://openapi.alipay.com/gateway.do? + order_string
-    order_string = alipay.api_alipay_trade_wap_pay(
-        out_trade_no=course_id,
-        total_amount=price,
-        subject=subject,
-        return_url="https://www.100chinaguide.com/verify_payment/"+ str(token) + '?'+'id='+'user'+'subject_id='+'course_id',
-        #    notify_url="https://example.com/notify" # this is optional
-    )
+    model = AlipayTradeWapPayModel()
+
+    model.total_amount = price
+    model.product_code = "QUICK_WAP_WAY"
+
+    model.subject = subject
+    model.out_trade_no = course_id
+    model.quit_url = "https://www.100chinaguide.com"
+    req = AlipayTradeWapPayRequest(biz_model=model)
+    response = client.sdk_execute(req)
+    print("alipay.trade.app.pay response:" + response)
+
+
     alipayUrl = 'https://openapi.alipay.com/gateway.do?'
 
-    data = alipayUrl + order_string
+    data = alipayUrl + response
     return data
 
 @app.route('/verify_payment/<int:token>')

@@ -34,23 +34,22 @@ import filetype
 import logging
 import traceback
 
-
-from alipay.aop.api.AlipayClientConfig import AlipayClientConfig
-from alipay.aop.api.DefaultAlipayClient import DefaultAlipayClient
-from alipay.aop.api.FileItem import FileItem
-from alipay.aop.api.domain.AlipayTradeWapPayModel import AlipayTradeWapPayModel
-from alipay.aop.api.domain.AlipayTradePagePayModel import AlipayTradePagePayModel
-from alipay.aop.api.domain.AlipayTradePayModel import AlipayTradePayModel
-from alipay.aop.api.domain.GoodsDetail import GoodsDetail
-from alipay.aop.api.domain.SettleDetailInfo import SettleDetailInfo
-from alipay.aop.api.domain.SettleInfo import SettleInfo
-from alipay.aop.api.domain.SubMerchant import SubMerchant
-from alipay.aop.api.request.AlipayOfflineMaterialImageUploadRequest import AlipayOfflineMaterialImageUploadRequest
-from alipay.aop.api.request.AlipayTradeWapPayRequest import AlipayTradeWapPayRequest
-from alipay.aop.api.request.AlipayTradePagePayRequest import AlipayTradePagePayRequest
-from alipay.aop.api.request.AlipayTradePayRequest import AlipayTradePayRequest
-from alipay.aop.api.response.AlipayOfflineMaterialImageUploadResponse import AlipayOfflineMaterialImageUploadResponse
-from alipay.aop.api.response.AlipayTradeWapPayResponse import AlipayTradeWapPayResponse
+from alipaySDK.alipay.aop.api.AlipayClientConfig import AlipayClientConfig
+from alipaySDK.alipay.aop.api.DefaultAlipayClient import DefaultAlipayClient
+from alipaySDK.alipay.aop.api.FileItem import FileItem
+from alipaySDK.alipay.aop.api.domain.AlipayTradeWapPayModel import AlipayTradeWapPayModel
+from alipaySDK.alipay.aop.api.domain.AlipayTradePagePayModel import AlipayTradePagePayModel
+from alipaySDK.alipay.aop.api.domain.AlipayTradePayModel import AlipayTradePayModel
+from alipaySDK.alipay.aop.api.domain.GoodsDetail import GoodsDetail
+from alipaySDK.alipay.aop.api.domain.SettleDetailInfo import SettleDetailInfo
+from alipaySDK.alipay.aop.api.domain.SettleInfo import SettleInfo
+from alipaySDK.alipay.aop.api.domain.SubMerchant import SubMerchant
+from alipaySDK.alipay.aop.api.request.AlipayOfflineMaterialImageUploadRequest import AlipayOfflineMaterialImageUploadRequest
+from alipaySDK.alipay.aop.api.request.AlipayTradeWapPayRequest import AlipayTradeWapPayRequest
+from alipaySDK.alipay.aop.api.request.AlipayTradePagePayRequest import AlipayTradePagePayRequest
+from alipaySDK.alipay.aop.api.request.AlipayTradePayRequest import AlipayTradePayRequest
+from alipaySDK.alipay.aop.api.response.AlipayOfflineMaterialImageUploadResponse import AlipayOfflineMaterialImageUploadResponse
+from alipaySDK.alipay.aop.api.response.AlipayTradeWapPayResponse import AlipayTradeWapPayResponse
 app = Flask(__name__)
 
 authentication= 'authentication@100chinaguide.com'

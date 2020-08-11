@@ -8,11 +8,11 @@ Created on 2017-12-20
 import datetime
 import uuid
 
-from alipay.aop.api.constant.ParamConstants import *
-from alipay.aop.api.util.WebUtils import *
-from alipay.aop.api.util.SignatureUtils import *
-from alipay.aop.api.util.CommonUtils import *
-from alipay.aop.api.util.EncryptUtils import *
+from alipaySDK.alipay.aop.api.constant.ParamConstants import *
+from alipaySDK.alipay.aop.api.util.WebUtils import *
+from alipaySDK.alipay.aop.api.util.SignatureUtils import *
+from alipaySDK.alipay.aop.api.util.CommonUtils import *
+from alipaySDK.alipay.aop.api.util.EncryptUtils import *
 
 """
 蚂蚁金服开放平台接入客户端

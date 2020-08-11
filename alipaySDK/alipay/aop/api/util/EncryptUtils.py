@@ -6,8 +6,8 @@ Created on 2017-12-20
 '''
 import base64
 
-from alipay.aop.api.constant.CommonConstants import PYTHON_VERSION_3
-from alipay.aop.api.exception.Exception import RequestException
+from alipaySDK.alipay.aop.api.constant.CommonConstants import PYTHON_VERSION_3
+from alipaySDK.alipay.aop.api.exception.Exception import RequestException
 from Crypto.Cipher import AES
 
 

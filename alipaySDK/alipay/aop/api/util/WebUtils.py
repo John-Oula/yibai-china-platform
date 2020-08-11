@@ -9,8 +9,8 @@ import os
 
 import itertools
 
-from alipay.aop.api.FileItem import FileItem
-from alipay.aop.api.constant.CommonConstants import *
+from alipaySDK.alipay.aop.api.FileItem import FileItem
+from alipaySDK.alipay.aop.api.constant.CommonConstants import *
 
 try:
     import httplib
@@ -26,7 +26,7 @@ except ImportError:
     from urllib import quote_plus
 import mimetypes
 
-from alipay.aop.api.exception.Exception import *
+from alipaySDK.alipay.aop.api.exception.Exception import *
 
 
 class MultiPartForm(object):

@@ -10,12 +10,13 @@ import datetime
 import hashlib
 import hmac
 import json
+import logging
 import os
 import random
 import re
 import socket
 
-
+import filetype
 from PIL import Image
 from flask import Flask, render_template, url_for, flash, redirect, session, request, jsonify
 from flask_login import login_user, login_required, current_user, logout_user, UserMixin, LoginManager
@@ -24,32 +25,17 @@ from flask_migrate import Migrate
 from flask_sqlalchemy import SQLAlchemy
 from flask_wtf import FlaskForm
 from flask_wtf.csrf import CSRFProtect
-from flask_wtf.file import FileField, FileRequired
+from flask_wtf.file import FileRequired
 from itsdangerous import TimedJSONWebSignatureSerializer as Serializer
 from werkzeug.utils import secure_filename
 from wtforms import *
 from wtforms.validators import Required
 
-import filetype
-import logging
-import traceback
-
 from alipaySDK.alipay.aop.api.AlipayClientConfig import AlipayClientConfig
 from alipaySDK.alipay.aop.api.DefaultAlipayClient import DefaultAlipayClient
-from alipaySDK.alipay.aop.api.FileItem import FileItem
 from alipaySDK.alipay.aop.api.domain.AlipayTradeWapPayModel import AlipayTradeWapPayModel
-from alipaySDK.alipay.aop.api.domain.AlipayTradePagePayModel import AlipayTradePagePayModel
-from alipaySDK.alipay.aop.api.domain.AlipayTradePayModel import AlipayTradePayModel
-from alipaySDK.alipay.aop.api.domain.GoodsDetail import GoodsDetail
-from alipaySDK.alipay.aop.api.domain.SettleDetailInfo import SettleDetailInfo
-from alipaySDK.alipay.aop.api.domain.SettleInfo import SettleInfo
-from alipaySDK.alipay.aop.api.domain.SubMerchant import SubMerchant
-from alipaySDK.alipay.aop.api.request.AlipayOfflineMaterialImageUploadRequest import AlipayOfflineMaterialImageUploadRequest
 from alipaySDK.alipay.aop.api.request.AlipayTradeWapPayRequest import AlipayTradeWapPayRequest
-from alipaySDK.alipay.aop.api.request.AlipayTradePagePayRequest import AlipayTradePagePayRequest
-from alipaySDK.alipay.aop.api.request.AlipayTradePayRequest import AlipayTradePayRequest
-from alipaySDK.alipay.aop.api.response.AlipayOfflineMaterialImageUploadResponse import AlipayOfflineMaterialImageUploadResponse
-from alipaySDK.alipay.aop.api.response.AlipayTradeWapPayResponse import AlipayTradeWapPayResponse
+
 app = Flask(__name__)
 
 authentication= 'authentication@100chinaguide.com'

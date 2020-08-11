@@ -127,7 +127,6 @@ PySocks==1.7.1
 python-dateutil==2.6.1
 python-editor==1.0.3
 python-hmac-auth==0.4
-python-secrets==19.12.0
 python-slugify==3.0.6
 pytz==2017.3
 PyYAML==5.3
@@ -139,9 +138,6 @@ requests==2.9.1
 rsa==4.6
 s3transfer==0.3.3
 scikit-learn==0.20.3
-scipy==1.2.1
-scrapy-beautifulsoup==0.0.2
-selenium==3.141.0
 shortuuid==0.5.0
 shutilwhich==1.1.0
 Sijax==0.3.2
@@ -159,7 +155,6 @@ text-unidecode==1.3
 tinycss2==1.0.2
 toml==0.10.0
 tox==3.14.3
-twilio==6.35.5
 update==0.0.1
 urllib3==1.13.1
 verboselogs==1.7

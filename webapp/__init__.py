@@ -62,7 +62,7 @@ app_private_key_string = open("/var/www/App/keys/appPrivateKey.txt").read()
 alipay_public_key_string = open('/var/www/App/keys/alipayPublicKey.txt').read()
 app_public_key_cert_string = open("/var/www/App/certs/appCertPublicKey_2021001182663949.crt").read()
 alipay_root_cert_string = open("/var/www/App/certs/alipayRootCert.crt").read()
-alipay_public_key_cert_string = open("/var/www/App/certs/alipayCertPublicKey_RSA2.pem").read()
+alipay_public_key_cert_string = open("/var/www/App/certs/alipayCertPublicKey_RSA2.crt").read()
 
 
 

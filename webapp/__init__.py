@@ -31,10 +31,10 @@ from werkzeug.utils import secure_filename
 from wtforms import *
 from wtforms.validators import Required
 
-from alipaySDK.alipay.aop.api.AlipayClientConfig import AlipayClientConfig
-from alipaySDK.alipay.aop.api.DefaultAlipayClient import DefaultAlipayClient
-from alipaySDK.alipay.aop.api.domain.AlipayTradeWapPayModel import AlipayTradeWapPayModel
-from alipaySDK.alipay.aop.api.request.AlipayTradeWapPayRequest import AlipayTradeWapPayRequest
+from alipay.aop.api.AlipayClientConfig import AlipayClientConfig
+from alipay.aop.api.DefaultAlipayClient import DefaultAlipayClient
+from alipay.aop.api.domain.AlipayTradeWapPayModel import AlipayTradeWapPayModel
+from alipay.aop.api.request.AlipayTradeWapPayRequest import AlipayTradeWapPayRequest
 
 app = Flask(__name__)
 

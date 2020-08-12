@@ -2,7 +2,7 @@ webapp/migrations
 webapp/unitest.py
 webapp/static/videos
 extra
-alipaySDK
+alipaySDK/
 certs
 wechat
 # Byte-compiled / optimized / DLL files

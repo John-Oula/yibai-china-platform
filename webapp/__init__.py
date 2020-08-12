@@ -1398,9 +1398,6 @@ def  post(id):
 
 @app.route('/videos' , methods=['POST','GET'])
 def video():
-#    video = request.args.get('video', type=str)
-#    videoId= request.args.get('videoId', type=str)
- #   video = Upload.query.filter_by(id=videoId).first()
 
     videos = Series.query.order_by(Series.timestamp.desc()).all()
     i = 0

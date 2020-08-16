@@ -1427,6 +1427,7 @@ def videoDetails():
         return jsonify({'result':data})
     else:
         pass
+    pass
 
 @app.route('/liveDetails' , methods=['POST','GET'])
 def liveDetails():

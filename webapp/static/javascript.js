@@ -706,14 +706,14 @@ $(document).ready(function(){
                   $('video').attr("src",videoSrc + obj.videoRef);
                   $('video').css('display','block');
         $('.video-js').attr("src",videoSrc + obj.videoRef);
-          $('.audio').css('display','none');
+          $('.controls').css('display','none');
           $('video').css('display','block');
           $('.course-img').css('display','none');
         }
         else if (obj.type == 'audio'){
 
-          $('source').attr("audiofile",obj.videoRef);
-          $('.audio').css('display','block');
+          $('#audiofile').attr("audioFile",obj.videoRef);
+          $('.controls').css('display','block');
           $('video').css('display','none');
           $('.course-img').css('display','block');
           $('.course-img').attr("src",coverImgUrl+ obj.coverImg);
@@ -721,7 +721,7 @@ $(document).ready(function(){
         }
         else if (obj.videoRef == null){
           $('.course-img').attr("src",coverImgUrl+ obj.coverImg);
-          $('.audio').css('display','none');
+          $('.controls').css('display','none');
           $('.course-img').css('display','block');
           $('video').css('display','none');
         }

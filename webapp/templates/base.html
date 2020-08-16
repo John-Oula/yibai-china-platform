@@ -298,13 +298,14 @@ var sound = null;
     })
     </script>
     <script>
+    var audioSrc = $('source').attr('audio-file')
     var wavesurfer = WaveSurfer.create({
     container: '#waveform',
     waveColor: 'violet',
     progressColor: 'purple',
     scrollParent: true
     });
-    wavesurfer.load('/static/videos/7ad5a4b99fc5275e.mp3');
+    wavesurfer.load('/static/videos/'+audioSrc+'');
 
     </script>
 {% endblock %}

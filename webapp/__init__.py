@@ -59,35 +59,35 @@ def get_Host_name_IP(hostname):
 import requests
 #alipay setup
 
-logging.basicConfig(
-    level=logging.INFO,
-    format='%(asctime)s %(levelname)s %(message)s',
-    filemode='a', )
-logger = logging.getLogger('')
+#logging.basicConfig(
+#    level=logging.INFO,
+#    format='%(asctime)s %(levelname)s %(message)s',
+#    filemode='a', )
+#logger = logging.getLogger('')
 
 
-if get_Host_name_IP('CJAY') == True:
-    app_private_key_string = open("/Users/ASUS/Desktop/webApp/keys/appPrivateKey.txt").read()
-    alipay_public_key_string = open("/Users/ASUS/Desktop/webApp/keys/alipayPublicKey.txt").read()
-    app_public_key_cert_string = open("/Users/ASUS/Desktop/webApp/certs/appCertPublicKey_2021001182663949.crt").read()
-    alipay_root_cert_string = open("/Users/ASUS/Desktop/webApp/certs/alipayRootCert.crt").read()
-    alipay_public_key_cert_string = open("/Users/ASUS/Desktop/webApp/certs/alipayCertPublicKey_RSA2.pem").read()
-
-
-else:
-    app_private_key_string = open("/var/www/App/keys/appPrivateKey.txt").read()
-    alipay_public_key_string = open('/var/www/App/keys/alipayPublicKey.txt').read()
-    app_public_key_cert_string = open("/var/www/App/certs/appCertPublicKey_2021001182663949.crt").read()
-    alipay_root_cert_string = open("/var/www/App/certs/alipayRootCert.crt").read()
-    alipay_public_key_cert_string = open("/var/www/App/certs/alipayCertPublicKey_RSA2.crt").read()
-
-alipay_client_config = AlipayClientConfig()
-alipay_client_config.server_url = 'https://openapi.alipay.com/gateway.do'
-alipay_client_config.app_id ='2021001182663949'
-alipay_client_config.app_private_key = app_private_key_string
-alipay_client_config.alipay_public_key = alipay_public_key_string
-
-client = DefaultAlipayClient(alipay_client_config=alipay_client_config, logger=logger)
+#if get_Host_name_IP('CJAY') == True:
+#    app_private_key_string = open("/Users/ASUS/Desktop/webApp/keys/appPrivateKey.txt").read()
+#    alipay_public_key_string = open("/Users/ASUS/Desktop/webApp/keys/alipayPublicKey.txt").read()
+#    app_public_key_cert_string = open("/Users/ASUS/Desktop/webApp/certs/appCertPublicKey_2021001182663949.crt").read()
+#    alipay_root_cert_string = open("/Users/ASUS/Desktop/webApp/certs/alipayRootCert.crt").read()
+#    alipay_public_key_cert_string = open("/Users/ASUS/Desktop/webApp/certs/alipayCertPublicKey_RSA2.pem").read()
+#
+#
+#else:
+#    app_private_key_string = open("/var/www/App/keys/appPrivateKey.txt").read()
+#    alipay_public_key_string = open('/var/www/App/keys/alipayPublicKey.txt').read()
+#    app_public_key_cert_string = open("/var/www/App/certs/appCertPublicKey_2021001182663949.crt").read()
+#    alipay_root_cert_string = open("/var/www/App/certs/alipayRootCert.crt").read()
+#    alipay_public_key_cert_string = open("/var/www/App/certs/alipayCertPublicKey_RSA2.crt").read()
+#
+#alipay_client_config = AlipayClientConfig()
+#alipay_client_config.server_url = 'https://openapi.alipay.com/gateway.do'
+#alipay_client_config.app_id ='2021001182663949'
+#alipay_client_config.app_private_key = app_private_key_string
+#alipay_client_config.alipay_public_key = alipay_public_key_string
+#
+#client = DefaultAlipayClient(alipay_client_config=alipay_client_config, logger=logger)
 
 
 

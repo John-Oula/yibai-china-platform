@@ -7,7 +7,31 @@ var end_time;
  var userImgSrc = '../static/profile_pics/';
  var videoSrc = '../static/videos/';
 
+function popover(msg,statusType){
+  if (statusType == 'success'){
+    statusType = 'green'
+  }
+  else if (statusType == 'error')
+    statusType = '#e74525'
+  $('.flash-msg').text(msg);
+  $('.flash-msg').css('color',statusType);
 
+  $(".flash-msg").animate({marginTop: "30px"});
+  $('.navbar-brand').css('zIndex','0');
+  $('.flash-msg').slideDown(function() {
+
+    setTimeout(function() {
+
+        $('.flash-msg').slideUp();
+        $(".flash-msg").animate({marginTop: "0px"});
+        $('.navbar-brand').css('zIndex','0');
+        $('.navbar-brand').css('zIndex','100');
+    }, 2000);
+
+
+});
+
+}
 
 document.addEventListener('DOMContentLoaded', function() {
   var calendarEl = document.getElementById('calendar');
@@ -91,7 +115,16 @@ function myFunction() {
   }
 }
 
-
+$('#play-btn').on('click', function () {
+    wavesurfer.play();
+    $('#pause-btn').css('display','flex')
+    $('#play-btn').css('display','none')
+    });
+$('#pause-btn').on('click', function () {
+    wavesurfer.pause();
+    $('#play-btn').css('display','flex')
+    $('#pause-btn').css('display','none')
+    });
 
 $(document).ready(function(){
 $('.like-btn').click(function(e){
@@ -109,14 +142,16 @@ $('.like-btn').click(function(e){
     },error:function (error) {
       console.log(error)
       console.log("error")
+      popover('Log in to Like the video','error')
 
     }
 
   });
   req.done(function(data){
     $('.likes').text(data.likes);
+    $('#video-likes').text(data.likes);
     $('.like-btn').css("display","none");
-    $('#unlike-btn').css("display","block");
+    $('#unlike-btn').css("display","flex");
   })
 
 
@@ -147,7 +182,8 @@ $(document).ready(function(){
   });
   req.done(function(data){
     $('.likes').text(data.likes);
-    $('.like-btn').css("display","block");
+    $('#video-likes').text(data.likes);
+    $('.like-btn').css("display","flex");
     $('#unlike-btn').css("display","none");
 
   })
@@ -178,11 +214,13 @@ $('#main').on('click','.click-book',function(e){
     },error:function (error) {
       console.log(error)
       console.log("error")
+      popover('Login to Book a seat','error')
 
     }
 
   });
   req.done(function(data){
+    popover('Booked successfully','green')
     $('.click-book').css("display","none");
     $('.click-unbook').css("display","flex");
   })
@@ -269,6 +307,7 @@ $('#follow').click(function(e){
   e.preventDefault();
 
   var followURL = $(this).attr("data-href");
+  var username = $('#user-username').text()
 
 
   req = $.ajax({
@@ -278,6 +317,8 @@ $('#follow').click(function(e){
     success:function (data) {
       console.log(data)
     },error:function (error) {
+      popover('Log in to follow '+username+'','red');
+
       console.log(error)
       console.log("error")
 
@@ -285,8 +326,10 @@ $('#follow').click(function(e){
 
   });
   req.done(function(data){
+    popover('You are now following '+username+'','green');
     $('#followers-count').text(data.followers);
     $('#user-followers').text(data.followers);
+    popover('You are now following '+username+'');
     $('#follow').css("display","none");
     $('#unfollow').css("display","inline-block");
   })
@@ -561,7 +604,7 @@ $(document).ready(function(){
     $.each(obj, function(key,value) {
 
 
-      $('.upload-list').append('<div class="thumb-wrapper" data-href="'+videoUrl+ value.id +'"><li><a  class="video"   video-id="'+ value.id +'" href="#"><img class="video-feed" src="../static/profile_pics/'+ value.userImg +'" alt=""></a></li></div><div class="video-info"><div class="row no-gutters"><div class="col-2 col-sm-2 col-md-2 no-gutters">     <div class="profile-pic-wrapper click-pro-pic"  data-href=" '+userUrl+ value.username +'">     <span><a  class="user-profile-pic"   user-id="" href="#"><img id="profilepic"  src="../static/profile_pics/'+ value.userImg +'" alt=""></a></span> </div> </div><div class="col no-gutters"><div class="inner-info"> <div class="flex-fill flex-column">    <h6>'+ value.title +'</h6>     <div class="upload-username">'+ value.username +'</div>     <span class="upload-username">'+ value.category +'</span> <span>     <p class="likes"  class="text-justify text-left " data-likes="">     <span>'+ value.likes +'</span>     <img     src="../static/heart.png" alt="" width="16">     <span>'+ value.comments +'</span>     <img  src="../static/comment.svg" alt="" width="16"> </p> </span></div>          </div> </div></div></div>');
+      $('.upload-list').append('<div class="thumb-wrapper" data-href="'+videoUrl+ value.id +'"><li><a  class="video"   video-id="'+ value.id +'" href="#"><img class="video-feed" src="../static/profile_pics/'+ value.userImg +'" alt=""></a></li></div><div class="video-info"><div class="row no-gutters"><div class="col-2 col-sm-2 col-md-2 no-gutters">     <div class="profile-pic-wrapper click-pro-pic"  data-href=" '+userUrl+ value.username +'">     <span><a  class="user-profile-pic"   user-id="" href="#"><img id="profilepic"  src="../static/profile_pics/'+ value.userImg +'" alt=""></a></span> </div> </div><div class="col no-gutters"><div class="inner-info"> <div class="flex-fill flex-column">    <h6>'+ value.title +'</h6>     <div class="upload-username">'+ value.username +'</div>     <span class="upload-username">'+ value.category +'</span> <span>     <p class="likes-comments"  class="text-justify text-left " data-likes="">     <span>'+ value.likes +'</span>     <img     src="../static/heart.png" alt="" width="16">     <span>'+ value.comments +'</span>     <img  src="../static/comment.svg" alt="" width="16"> </p> </span></div>          </div> </div></div></div>');
 
 });
 $('#live').css('display','none');
@@ -668,10 +711,12 @@ $(document).ready(function(){
           $('.course-img').css('display','none');
         }
         else if (obj.type == 'audio'){
-          $('source').attr("src",videoSrc + obj.videoRef);
+
+          $('source').attr("audiofile",obj.videoRef);
           $('.audio').css('display','block');
           $('video').css('display','none');
           $('.course-img').css('display','block');
+          $('.course-img').attr("src",coverImgUrl+ obj.coverImg);
 
         }
         else if (obj.videoRef == null){
@@ -680,9 +725,31 @@ $(document).ready(function(){
           $('.course-img').css('display','block');
           $('video').css('display','none');
         }
+
+        if (obj.price == null){
+          $('#video-price').css('display','none');
+          $('.addCart').css('display','none');
+          $('#buy').css('display','none');
+        }
+
         $('.upload-list').css('display','none');
         $('.video-details').css('display','block');
         $('.addCart').attr('data-href','/addCart?upload_id='+obj.id);
+        $('.like-btn').attr('data-href','/like/video'+obj.id);
+        $('#unlike-btn').attr('data-href','/unlike/video'+obj.id);
+
+        if (obj.hasLiked == true){
+          $('#unlike-btn').css('display','flex');
+
+          $('.like-btn').css('display','none');
+        }
+        else if (obj.hasLiked == false){
+          $('.like-btn').css('display','flex');
+
+          $('#unlike-btn').css('display','none');
+        }
+
+
 
         $('.profile-pic-wrapper').attr("data-href",userUrl+obj.username);
         $('#buy').attr("data-href",courseUrl+obj.id);
@@ -691,6 +758,7 @@ $(document).ready(function(){
         $('#video-likes').html(obj.likes);
         $('#video-comments').html(obj.comments);
         $('#video-description').html(obj.description);
+        $('#video-description img').css('width','100%');
         $('#video-price').html(currency + obj.price);
         $('#video-price').css("fontSize","17px");
         $('img#profilepic').attr("src",userImgSrc + obj.userImg);
@@ -1349,12 +1417,13 @@ $(document).ready(function(){
     },error:function (error) {
       console.log(error)
       console.log("error")
+      popover('Log in to add to cart','error')
 
     }
 
   });
   req.done(function(data){
-
+  popover('Added to cart','green')
 
 });
 });
@@ -1377,6 +1446,7 @@ $(document).ready(function(){
     },error:function (error) {
       console.log(error)
       console.log("error")
+
 
     }
 
@@ -1441,6 +1511,11 @@ $(document).ready(function(){
 
 });
 });
+
+            $('.click-pay-login').on("click",function(e) {
+              e.preventDefault();
+              popover('Login to complete Payment','error')
+            });
       $('.click-pay').on("click",function(e){
   e.preventDefault();
     var url = $(this).attr("data-href");
@@ -1497,7 +1572,7 @@ $('#main').ready(function(){
     $.each(obj, function(key,value) {
 
 
-      $('.upload-list').append('<div class="thumb-wrapper" data-href="'+videoUrl+ value.id +'"><li><a  class="video"   video-id="'+ value.id +'" href="#"><img class="video-feed" src="../static/profile_pics/'+ value.userImg +'" alt=""></a></li></div><div class="video-info"><div class="row no-gutters"><div class="col-2 col-sm-2 col-md-2 no-gutters">     <div class="profile-pic-wrapper click-pro-pic"  data-href=" '+userUrl+ value.username +'">     <span><a  class="user-profile-pic"   user-id="" href="#"><img id="profilepic"  src="../static/profile_pics/'+ value.userImg +'" alt=""></a></span> </div> </div><div class="col no-gutters"><div class="inner-info"> <div class="flex-fill flex-column">    <h6>'+ value.title +'</h6>     <div class="upload-username">'+ value.username +'</div>     <span class="upload-username">'+ value.category +'</span> <span>     <p class="likes"  class="text-justify text-left " data-likes="">     <span>'+ value.likes +'</span>     <img     src="../static/heart.png" alt="" width="16">     <span>'+ value.comments +'</span>     <img  src="../static/comment.svg" alt="" width="16"> </p> </span></div>          </div> </div></div></div>');
+      $('.upload-list').append('<div class="thumb-wrapper" data-href="'+videoUrl+ value.id +'"><li><a  class="video"   video-id="'+ value.id +'" href="#"><img class="video-feed" src="../static/profile_pics/'+ value.userImg +'" alt=""></a></li></div><div class="video-info"><div class="row no-gutters"><div class="col-2 col-sm-2 col-md-2 no-gutters">     <div class="profile-pic-wrapper click-pro-pic"  data-href=" '+userUrl+ value.username +'">     <span><a  class="user-profile-pic"   user-id="" href="#"><img id="profilepic"  src="../static/profile_pics/'+ value.userImg +'" alt=""></a></span> </div> </div><div class="col no-gutters"><div class="inner-info"> <div class="flex-fill flex-column">    <h6>'+ value.title +'</h6>     <div class="upload-username">'+ value.username +'</div>     <span class="upload-username">'+ value.category +'</span> <span>     <p class="likes-comments"  class="text-justify text-left " data-likes="">     <span>'+ value.likes +'</span>     <img     src="../static/heart.png" alt="" width="16">     <span>'+ value.comments +'</span>     <img  src="../static/comment.svg" alt="" width="16"> </p> </span></div>          </div> </div></div></div>');
 
 });
 $('#live').css('display','none');
@@ -1537,15 +1612,30 @@ for (i = 0; i < dropdown.length; i++) {
 }
 
 
+function progress() {
+    var pbar = $('#progressBar'), currentProgress = 0;
+    function trackUploadProgress(e)
+    {
+        if(e.lengthComputable)
+        {
+            currentProgress = (e.loaded / e.total) * 100; // Amount uploaded in percent
+            $(pbar).width(currentProgress+'%');
+
+            if( currentProgress == 100 )
+            console.log('Progress : 100%');
+        }
+    }
+    }
+
 $(document).ready(function() {
 
 	$('form#course').on('submit', function(event) {
- var csrf_token = $('#csrf_token').attr('value');
+      var csrf_token = $('#csrf_token').attr('value');
 
 
 
 		$.ajax({
-        beforeSend: function(xhr, settings) {
+          beforeSend: function(xhr, settings) {
             if (!/^(GET|HEAD|OPTIONS|TRACE)$/i.test(settings.type) && !this.crossDomain) {
                 xhr.setRequestHeader("X-CSRFToken", csrf_token);
             }
@@ -1555,11 +1645,39 @@ $(document).ready(function() {
 			url : '/createcourse?status=single',
             processData: false,
             contentType: false,
+          xhr: function()
+            {
+                // Custom XMLHttpRequest
+                var appXhr = $.ajaxSettings.xhr();
 
-		})
-		.done(function(data) {
+                // Check if upload property exists, if "yes" then upload progress can be tracked otherwise "not"
+                if(appXhr.upload)
+                {
+                    // Attach a function to handle the progress of the upload
+                    appXhr.upload.addEventListener('progress',progress, false);
+                }
+                return appXhr;
+            },
 
-        console.log('done')
+
+          success: function(response){
+          if(response){
+            var responseObj = jQuery.parseJSON(response);
+
+            if(responseObj.ResponseData)
+              popover('Uploaded successfully','success');
+
+          }
+          },
+          error: function (error) {
+          popover('Error uploading your File','error')
+
+          },
+
+
+		}).done(function(data) {
+
+        popover(data.msg,'success')
 
 		});
 

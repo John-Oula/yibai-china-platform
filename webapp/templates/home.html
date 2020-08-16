@@ -181,6 +181,7 @@
 </div>
 
  <div id="main" >
+
  <div class="">
 <ul class="upload-list">
 
@@ -199,9 +200,15 @@
              <li> <video class="video-feed "   preload="none" video-id=""  controls=""   type="video/mp4" src="" alt=""></video></li>
              <li> <img class="course-img" src="" alt=""></li>
              <li>
-                 <audio class="audio mx-auto" controls>
-                   <source src="" type="audio/mpeg">
-             </audio>
+                 <div id="waveform"></div>
+<nav class="btn-row controls" >
+    <a class="navLink "  data-href=""><img class="mobile-icon" src="../static/step-backward.svg" alt=""></a>
+    <a class="navLink " id="play-btn" ><img class="mobile-icon" src="../static/play.svg" alt=""></a>
+    <a class="navLink " id="pause-btn" ><img class="mobile-icon" src="../static/pause.svg" alt=""></a>
+    <a class="navLink " href=""><img class="mobile-icon" src="../static/step-forward.svg" alt=""></a>
+
+</nav>
+
              </li>
          </div>
     <div class="video-info">
@@ -220,7 +227,7 @@
         <span id="video-author"></span>
         <span ></span>
 
-        <span class="likes"  class="text-justify text-left " ><span id="video-likes"></span>
+        <span class="likes-comments"  class="text-justify text-left " ><span id="video-likes"></span>
             <img   src="../static/heart.png" alt="" width="16">
             <span id="video-comments"></span>
             <img  src="../static/comment.svg" alt="" width="16">
@@ -234,6 +241,13 @@
          <p video-title="" id="video-title"></p>
          <span  id="video-author"></span>
      </div>
+         
+<nav class="btn-row" >
+    <a class="navLink  like-btn" data-href=""><img class="mobile-icon" src="../static/unlike.svg" alt=""><span class="nav_text">Like</span></a>
+    <a class="navLink " data-href="" id="unlike-btn"><img class="mobile-icon" src="../static/like.svg" alt=""><span class="nav_text">Unlike</span></a>
+    <a class="navLink live"  ><img class="mobile-icon" src="../static/commentGrey.svg" height="20" alt=""><span class="nav_text">Comment</span></a>
+
+</nav>
 
          <ul class="nav nav-tabs nav-fill" id="myTab" role="tablist">
              <li class="nav-item">
@@ -265,6 +279,7 @@
          <div>
              <nav id="video-nav" class="shadow-lg" >
                  <h3 id="video-price" class="navLink"></h3>
+
                  <a class="navLink addCart" data-href=""><img  class="mobile-icon" src="../static/addCart.svg" alt=""></a>
                  <a class="navLink"><img class="mobile-icon" src="../static/share.svg" alt=""></a>
                  <a class="navLink" id="buy" data-href="" user-id="{{ current_user.id }}"><button class="common-btn">BUY NOW</button></a>
@@ -426,6 +441,7 @@
  <div id="create-course">
 
      <div class="p-3" id="course-upload">
+         <div id="progressBar"></div>
          <form  class="form-upload text-center" id="course" action="" method="POST" enctype="multipart/form-data">
     <fieldset>
         {{ form.hidden_tag() }}
@@ -767,7 +783,7 @@
 <div class="checkout">
 
      <div class="checkout-img-wrapper">
-         <img class="live-img" src="../static/coverImages/default.jpg" alt="">
+         <img class="live-img" src="" alt="">
 
      </div>
      <div class="p-2">
@@ -793,9 +809,13 @@
 
      <nav id="video-nav" class="shadow-lg">
                  <h1 id="total-price" class="navLink">99</h1>
-
+                {% if current_user.is_authenticated %}
                  <a  class="navLink click-pay" data-href="" href=""><button class="common-btn">COMPLETE PAYMENT</button></a>
-             </nav>
+             {% else %}
+             <a  class="navLink click-pay-login"><button class="common-btn">COMPLETE PAYMENT</button></a>
+         {% endif %}
+
+     </nav>
 
  </div>
 </div>

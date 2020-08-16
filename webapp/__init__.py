@@ -19,7 +19,7 @@ import socket
 import filetype
 from PIL import Image
 from flask import Flask, render_template, url_for, flash, redirect, session, request, jsonify
-from flask_login import login_user, login_required, current_user, logout_user, UserMixin, LoginManager
+from flask_login import login_user, login_required, current_user, logout_user,AnonymousUserMixin, UserMixin, LoginManager
 from flask_mail import Mail, Message
 from flask_migrate import Migrate
 from flask_sqlalchemy import SQLAlchemy
@@ -31,10 +31,10 @@ from werkzeug.utils import secure_filename
 from wtforms import *
 from wtforms.validators import Required
 
-from alipaySDK.alipay.aop.api.AlipayClientConfig import AlipayClientConfig
-from alipaySDK.alipay.aop.api.DefaultAlipayClient import DefaultAlipayClient
-from alipaySDK.alipay.aop.api.domain.AlipayTradeWapPayModel import AlipayTradeWapPayModel
-from alipaySDK.alipay.aop.api.request.AlipayTradeWapPayRequest import AlipayTradeWapPayRequest
+#from alipaySDK.alipay.aop.api.AlipayClientConfig import AlipayClientConfig
+#from alipaySDK.alipay.aop.api.DefaultAlipayClient import DefaultAlipayClient
+#from alipaySDK.alipay.aop.api.domain.AlipayTradeWapPayModel import AlipayTradeWapPayModel
+#from alipaySDK.alipay.aop.api.request.AlipayTradeWapPayRequest import AlipayTradeWapPayRequest
 
 app = Flask(__name__)
 
@@ -171,9 +171,9 @@ available = db.Table('available',
 
 cart = db.Table('cart',
                 db.Column('user_id', db.Integer, db.ForeignKey('user.id')),
-                db.Column('course_id', db.Integer, db.ForeignKey('upload.id')))
+                db.Column('course_id', db.Integer, db.ForeignKey('series.id')))
 
-class User(db.Model, UserMixin):
+class User(db.Model, UserMixin,AnonymousUserMixin):
     __tablename__ = 'user'
     id = db.Column('id', db.Integer, primary_key=True)
     role = db.Column('role', db.Integer, default=0)
@@ -214,7 +214,7 @@ class User(db.Model, UserMixin):
     book = db.relationship('Post', secondary=book,backref=db.backref('bookers', lazy='dynamic'))
     bookSchedule = db.relationship('Available', secondary=bookSchedule,backref=db.backref('userSchedule', lazy='dynamic'))
     likes = db.relationship('Series', secondary=likes,backref=db.backref('liked', lazy='dynamic'))
-    cart = db.relationship('Upload', secondary=cart,backref='user_cart', lazy='dynamic')
+    cart = db.relationship('Series', secondary=cart,backref='user_cart', lazy='dynamic')
 
 
 
@@ -248,6 +248,11 @@ class User(db.Model, UserMixin):
 
     def is_following(self, user):
         return self.followed.filter(followers.c.followed_id == user.id).count() > 0
+    def has_liked(self, video):
+        if current_user in video.liked:
+            return True
+        else:
+            return False
 
 
 
@@ -396,7 +401,7 @@ class Series(db.Model):
     category = db.Column('category', db.String(30))
     coverImage = db.Column('coverImage', db.VARCHAR)
     upload_ref = db.Column('upload_ref', db.VARCHAR)
-    description = db.Column('description', db.String(600))
+    description = db.Column('description', db.VARCHAR)
     price = db.Column('price', db.Integer)
     timestamp = db.Column(db.DateTime, default=datetime.datetime.utcnow)
     user_id = db.Column('user_id', db.Integer, db.ForeignKey('user.id'), nullable=False)
@@ -439,7 +444,7 @@ class Episode(db.Model):
     id = db.Column('id', db.Integer, primary_key=True)
     subtitle = db.Column('subtitle', db.String(30))
 
-    description = db.Column('description', db.String(600))
+    description = db.Column('description', db.VARCHAR)
     timestamp = db.Column(db.DateTime, default=datetime.datetime.utcnow)
     upload_ref = db.Column('upload_ref', db.VARCHAR)
     user_id = db.Column('user_id', db.Integer, db.ForeignKey('user.id'), nullable=True)
@@ -786,7 +791,7 @@ def userDetails():
 def addCart():
     upload_id = request.args.get('upload_id', type=int)
 
-    course = Upload.query.filter_by(id=upload_id).first_or_404()
+    course = Series.query.filter_by(id=upload_id).first_or_404()
     course.user_cart.append(current_user)
     db.session.commit()
 
@@ -1002,32 +1007,7 @@ def time():
 
 
 
-@app.route('/checkout')
-@csrf.exempt
-def checkout():
-    price = request.args.get('price', type=int)
-    subject = request.args.get('subject', type=str)
-    course_id = request.args.get('course_id', type=int)
-    user = request.args.get('user', type=int)
-    token = binascii.hexlify(os.urandom(32))
 
-    model = AlipayTradeWapPayModel()
-
-    model.total_amount = price
-    model.product_code = "QUICK_WAP_WAY"
-
-    model.subject = subject
-    model.out_trade_no = course_id
-    model.quit_url = "https://www.100chinaguide.com"
-    req = AlipayTradeWapPayRequest(biz_model=model)
-    response = client.sdk_execute(req)
-    print("alipay.trade.app.pay response:" + response)
-
-
-    alipayUrl = 'https://openapi.alipay.com/gateway.do?'
-
-    data = alipayUrl + response
-    return data
 
 @app.route('/verify_payment/<int:token>')
 @login_required
@@ -1432,12 +1412,17 @@ def videoDetails():
         data.update({'episode':ep})
 #        l.append(data)
 
+        if current_user.is_authenticated:
+            data.update({'hasLiked': current_user.has_liked(videos)})
 
         return jsonify({'result':data})
 
     elif videos.is_series() == False:
 
         data = {'id': videos.id, 'title': videos.title,'isSeries':videos.is_series(),'videoRef':videos.upload_ref,'type':videos.fileType(),'description':videos.description,'price':videos.price,'userId':videos.user_series.id,'username': videos.user_series.username,'userImg': videos.user_series.image_file, 'category': videos.category,'likes':videos.liked.count(),'comments':videos.comments.count()}
+
+        if current_user.is_authenticated:
+            data.update({'hasLiked':current_user.has_liked(videos)})
 
         return jsonify({'result':data})
     else:
@@ -1479,21 +1464,21 @@ def series(upload_ref,id,seriesid):
 @app.route('/like/video<int:id>')
 @login_required
 def like(id):
-    video = Upload.query.filter_by(id=id).first()
+    video = Series.query.filter_by(id=id).first()
     video.liked.append(current_user)
     db.session.commit()
     likes= video.liked.count()
     return jsonify({'result':'success','likes':likes})
 
 def unlike():
-    video = Upload.query.filter_by(id=id).first()
+    video = Series.query.filter_by(id=id).first()
     video.liked.remove(current_user)
     db.session.commit()
 
 @app.route('/unlike/video<int:id>')
 @login_required
 def unlike(id):
-    video = Upload.query.filter_by(id=id).first()
+    video = Series.query.filter_by(id=id).first()
     video.liked.remove(current_user)
     db.session.commit()
     likes= video.liked.count()
@@ -1919,13 +1904,14 @@ def quickupload(username):
             redirect(url_for('discover', username = current_user.username))
         return render_template('quickUpload.html',user=user,seriesIdNum=seriesIdNum,user_role=user_role,form =form,image_file=image_file)
 
-def saveFile(fileData):
+def saveFile(fileData,location):
     file = secure_filename(fileData.filename)
 
     file_hex = token_hex(8)
     _, f_ext = os.path.splitext(file)
     file_fn = file_hex + f_ext
-    fileData.save(os.path.join(app.root_path, 'static/videos', file_fn))
+
+    fileData.save(os.path.join(app.root_path, 'static/'+location, file_fn))
     path = os.path.join(file_fn)
     return path
 
@@ -1943,23 +1929,23 @@ def createCourse():
     if request.method == 'POST' and status == 'single':
 
 
-        upload = Series(title=form.upload_title.data,coverImage=saveFile(form.upload_coverImage.data), description=form.upload_description.data,category=form.upload_category.data,status=status,price= form.upload_price.data,upload_ref=saveFile(form.upload_fileName.data),user_series=current_user)
+        upload = Series(title=form.upload_title.data,coverImage=saveFile(form.upload_coverImage.data,'coverImages'), description=form.upload_description.data,category=form.upload_category.data,status=status,price= form.upload_price.data,upload_ref=saveFile(form.upload_fileName.data,'videos'),user_series=current_user)
         db.session.add(upload)
 
         db.session.commit()
         msg = 'uploaded succsesfully'
         
-        return jsonify({'result': msg})
+        return  msg
 
     elif request.method == 'POST' and status == 'series':
         series = Series(title=seriesForm.series_title.data, description=seriesForm.series_description.data,
-                        coverImage=saveFile(seriesForm.series_coverImage.data), category=seriesForm.series_category.data,
+                        coverImage=saveFile(seriesForm.series_coverImage.data,'coverImages'), category=seriesForm.series_category.data,
                         price=seriesForm.series_price.data,status=status, user_series=current_user)
         db.session.add(series)
         db.session.flush()
 
         episode = Episode(subtitle=episodeForm.subtitle.data, description=episodeForm.description.data,
-                          upload_ref=saveFile(episodeForm.fileName.data),
+                          upload_ref=saveFile(episodeForm.fileName.data,'videos'),
                           user_episode=current_user, sub=series, series_id=series.id)
 
         db.session.add(episode)
@@ -1968,7 +1954,9 @@ def createCourse():
         msg = 'uploaded succsesfully'
         return jsonify({'result': msg})
     else:
-        pass
+
+        return 'error'
+    pass
 
 
 
@@ -2293,11 +2281,14 @@ def addEpisode():
     series_id = request.args.get('series_id', type=int)
     series = Series.query.filter_by(id = series_id).first()
 
+
+
     episodeForm = UpdateEpisode_form()
     episode = Episode(subtitle=episodeForm.update_subtitle.data, description=episodeForm.update_description.data,
-                      upload_ref=saveFile(episodeForm.update_fileName.data),
+                      upload_ref=saveFile(episodeForm.update_fileName.data,'videos'),
                       user_episode=current_user, sub=series, series_id=series.id)
     db.session.add(episode)
+    series.status = 'series'
     db.session.commit()
     return jsonify({'result':'Uploaded successfully'})
 

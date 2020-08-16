@@ -161,9 +161,9 @@ class UserModelCase(unittest.TestCase):
         p3.bookers.append(u2)
         for u in u1.bookSchedule:
             print(u.username)
-        up1.user_cart.append(u1)
-        up1.user_cart.append(u2)
-        up2.user_cart.append(u2)
+#        up1.user_cart.append(u1)
+#        up1.user_cart.append(u2)
+#        up2.user_cart.append(u2)
         db.session.commit()
 
 

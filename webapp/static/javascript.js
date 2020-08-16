@@ -604,7 +604,7 @@ $(document).ready(function(){
     $.each(obj, function(key,value) {
 
 
-      $('.upload-list').append('<div class="thumb-wrapper" data-href="'+videoUrl+ value.id +'"><li><a  class="video"   video-id="'+ value.id +'" href="#"><img class="video-feed" src="../static/profile_pics/'+ value.userImg +'" alt=""></a></li></div><div class="video-info"><div class="row no-gutters"><div class="col-2 col-sm-2 col-md-2 no-gutters">     <div class="profile-pic-wrapper click-pro-pic"  data-href=" '+userUrl+ value.username +'">     <span><a  class="user-profile-pic"   user-id="" href="#"><img id="profilepic"  src="../static/profile_pics/'+ value.userImg +'" alt=""></a></span> </div> </div><div class="col no-gutters"><div class="inner-info"> <div class="flex-fill flex-column">    <h6>'+ value.title +'</h6>     <div class="upload-username">'+ value.username +'</div>     <span class="upload-username">'+ value.category +'</span> <span>     <p class="likes-comments"  class="text-justify text-left " data-likes="">     <span>'+ value.likes +'</span>     <img     src="../static/heart.png" alt="" width="16">     <span>'+ value.comments +'</span>     <img  src="../static/comment.svg" alt="" width="16"> </p> </span></div>          </div> </div></div></div>');
+      $('.upload-list').append('<div class="thumb-wrapper" data-href="'+videoUrl+ value.id +'"><li><a  class="video"   video-id="'+ value.id +'" href="#"><img class="video-feed" src="../static/coverImages/'+ value.coverImages +'" alt=""></a></li></div><div class="video-info"><div class="row no-gutters"><div class="col-2 col-sm-2 col-md-2 no-gutters">     <div class="profile-pic-wrapper click-pro-pic"  data-href=" '+userUrl+ value.username +'">     <span><a  class="user-profile-pic"   user-id="" href="#"><img id="profilepic"  src="../static/profile_pics/'+ value.userImg +'" alt=""></a></span> </div> </div><div class="col no-gutters"><div class="inner-info"> <div class="flex-fill flex-column">    <h6>'+ value.title +'</h6>     <div class="upload-username">'+ value.username +'</div>     <span class="upload-username">'+ value.category +'</span> <span>     <p class="likes-comments"  class="text-justify text-left " data-likes="">     <span>'+ value.likes +'</span>     <img     src="../static/heart.png" alt="" width="16">     <span>'+ value.comments +'</span>     <img  src="../static/comment.svg" alt="" width="16"> </p> </span></div>          </div> </div></div></div>');
 
 });
 $('#live').css('display','none');
@@ -713,7 +713,7 @@ $(document).ready(function(){
         else if (obj.type == 'audio'){
 
           $('#audiofile').attr("audioFile",obj.videoRef);
-          $('.controls').css('display','block');
+          $('.controls').css('display','flex');
           $('video').css('display','none');
           $('.course-img').css('display','block');
           $('.course-img').attr("src",coverImgUrl+ obj.coverImg);
@@ -916,6 +916,7 @@ $(document).ready(function(){
 
 
 });
+
 
       $('#live-update').on("click",".edit-live",function(e){
         e.preventDefault();
@@ -1572,7 +1573,7 @@ $('#main').ready(function(){
     $.each(obj, function(key,value) {
 
 
-      $('.upload-list').append('<div class="thumb-wrapper" data-href="'+videoUrl+ value.id +'"><li><a  class="video"   video-id="'+ value.id +'" href="#"><img class="video-feed" src="../static/profile_pics/'+ value.userImg +'" alt=""></a></li></div><div class="video-info"><div class="row no-gutters"><div class="col-2 col-sm-2 col-md-2 no-gutters">     <div class="profile-pic-wrapper click-pro-pic"  data-href=" '+userUrl+ value.username +'">     <span><a  class="user-profile-pic"   user-id="" href="#"><img id="profilepic"  src="../static/profile_pics/'+ value.userImg +'" alt=""></a></span> </div> </div><div class="col no-gutters"><div class="inner-info"> <div class="flex-fill flex-column">    <h6>'+ value.title +'</h6>     <div class="upload-username">'+ value.username +'</div>     <span class="upload-username">'+ value.category +'</span> <span>     <p class="likes-comments"  class="text-justify text-left " data-likes="">     <span>'+ value.likes +'</span>     <img     src="../static/heart.png" alt="" width="16">     <span>'+ value.comments +'</span>     <img  src="../static/comment.svg" alt="" width="16"> </p> </span></div>          </div> </div></div></div>');
+      $('.upload-list').append('<div class="thumb-wrapper" data-href="'+videoUrl+ value.id +'"><li><a  class="video"   video-id="'+ value.id +'" href="#"><img class="video-feed" src="../static/coverImages/'+ value.coverImage +'" alt=""></a></li></div><div class="video-info"><div class="row no-gutters"><div class="col-2 col-sm-2 col-md-2 no-gutters">     <div class="profile-pic-wrapper click-pro-pic"  data-href=" '+userUrl+ value.username +'">     <span><a  class="user-profile-pic"   user-id="" href="#"><img id="profilepic"  src="../static/profile_pics/'+ value.userImg +'" alt=""></a></span> </div> </div><div class="col no-gutters"><div class="inner-info"> <div class="flex-fill flex-column">    <h6>'+ value.title +'</h6>     <div class="upload-username">'+ value.username +'</div>     <span class="upload-username">'+ value.category +'</span> <span>     <p class="likes-comments"  class="text-justify text-left " data-likes="">     <span>'+ value.likes +'</span>     <img     src="../static/heart.png" alt="" width="16">     <span>'+ value.comments +'</span>     <img  src="../static/comment.svg" alt="" width="16"> </p> </span></div>          </div> </div></div></div>');
 
 });
 $('#live').css('display','none');
@@ -1732,6 +1733,7 @@ $(document).ready(function() {
 		event.preventDefault();
 
 	});
+
 	$('form#schedule-form').on('submit', function(event) {
  var csrf_token = $('#csrf-token').attr('value');
 		$.ajax({

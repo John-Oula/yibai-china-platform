@@ -702,7 +702,10 @@ class Reset_password(FlaskForm):
 
 
 
-@app.route('/')
+
+
+
+@app.route('/' ,methods=['POST','GET'])
 def home():
     page = request.args.get('page', type=int)
     uploads = Upload.query.order_by(Upload.timestamp.desc()).paginate(per_page=4,error_out=False,page=page)
@@ -714,9 +717,36 @@ def home():
     UpdateSeries = UpdateSeries_form()
     UpdateUploads = UpdateUploads_form()
     UpdateSession = UpdateSession_form()
+    signupForm = Signup_form()
 
 
-    return render_template('home.html',UpdateSession=UpdateSession,UpdateUploads=UpdateUploads,UpdateSeries=UpdateSeries,UpdateEpisode=UpdateEpisode,sessionForm=sessionForm,uploads=uploads,form=form,page=page,seriesForm=seriesForm,episodeForm=episodeForm)
+
+    loginForm = Login_form()
+    if loginForm.validate_on_submit()  and request.method == 'POST':
+        user = User.query.filter_by(username=loginForm.username.data).first()
+        if user and verify_password(user.password, loginForm.password.data) == True:
+            login_user(user)
+            session['known'] = True
+            session['known'] = loginForm.username.data
+            display_name = User.query.filter_by(username=loginForm.username.data).first()
+            session['known'] = display_name.id
+            if current_user.role == 1 and current_user.sub_role == 0:
+                return redirect(url_for('session_admin', id=current_user.id))
+            elif current_user.role == 1 and current_user.sub_role == 1:
+                return redirect(url_for('video_admin', id=current_user.id))
+            elif current_user.role == 1 and current_user.sub_role == 2:
+                return redirect(url_for('info_admin', id=current_user.id))
+            elif current_user.role == 1 and current_user.sub_role == 3:
+                return redirect(url_for('payment_admin', id=current_user.id))
+            elif current_user.role == 1 and current_user.sub_role == 4:
+                return redirect(url_for('badge_admin', id=current_user.id))
+            else:
+                return redirect(url_for('home'))
+        else:
+            pass
+
+
+    return render_template('home.html',loginForm = loginForm,signupForm=signupForm,UpdateSession=UpdateSession,UpdateUploads=UpdateUploads,UpdateSeries=UpdateSeries,UpdateEpisode=UpdateEpisode,sessionForm=sessionForm,uploads=uploads,form=form,page=page,seriesForm=seriesForm,episodeForm=episodeForm)
 
 
 @app.route('/liveSession')
@@ -902,9 +932,27 @@ def signup():
         db.session.commit()
 
         return redirect(url_for('login'))
+    
+        
 
 
     return render_template('signup.html', form=form)
+
+
+@app.route('/register', methods=['POST', 'GET'])
+def register():
+    signupForm = Signup_form(request.form)
+    if signupForm.validate_on_submit() and request.method == "POST":
+        hashed_password = hash_password(signupForm.password.data)
+        user = User(email=signupForm.email.data,
+                    username=signupForm.username.data,
+                    password=hashed_password)
+        db.session.add(user)
+        db.session.commit()
+
+        return redirect(url_for('home'))
+
+    return render_template('register.html', signupForm=signupForm)
 
 
 @app.route('/login',methods=['POST','GET'])
@@ -935,7 +983,32 @@ def login():
         return render_template('LOGIN.html', form=form)
 
 
-
+@app.route('/signIn',methods=['POST','GET'])
+def signIn():
+        loginForm = Login_form()
+        if loginForm.validate_on_submit() and request.method == 'POST':
+            user = User.query.filter_by(username = loginForm.username.data).first()
+            if user and verify_password(user.password,loginForm.password.data) == True:
+                login_user(user)
+                session['known'] = True
+                session['known'] = loginForm.username.data
+                display_name = User.query.filter_by(username = loginForm.username.data).first()
+                session['known'] = display_name.id
+                if current_user.role == 1 and current_user.sub_role == 0:
+                    return redirect(url_for('session_admin',id = current_user.id))
+                elif current_user.role == 1 and current_user.sub_role == 1:
+                        return redirect(url_for('video_admin',id = current_user.id))
+                elif current_user.role == 1 and current_user.sub_role == 2:
+                    return redirect(url_for('info_admin',id = current_user.id))
+                elif current_user.role == 1 and current_user.sub_role == 3:
+                    return redirect(url_for('payment_admin',id = current_user.id))
+                elif current_user.role == 1 and current_user.sub_role == 4:
+                    return redirect(url_for('badge_admin',id = current_user.id))
+                else:
+                    return redirect(url_for('home'))
+            else:
+                pass
+        return render_template('signIn.html',loginForm=loginForm)
 
 
 #PROFILE FUNCTIONS
@@ -1384,7 +1457,7 @@ def video():
     l = []
     for v in range(len(videos)):
         data = {'id': videos[i].id, 'title': videos[i].title, 'username': videos[i].user_series.username,
-                'userImg': videos[i].user_series.image_file, 'category': videos[i].category,'likes':videos[i].liked.count(),'comments':videos[i].comments.count(),'isSeries':videos[i].is_series()}
+                'userImg': videos[i].user_series.image_file, 'category': videos[i].category, 'coverImage': videos[i].coverImage,'likes':videos[i].liked.count(),'comments':videos[i].comments.count(),'isSeries':videos[i].is_series()}
         l.append(data)
 
         i += 1

@@ -1,6 +1,7 @@
 webapp/migrations
 webapp/unitest.py
 webapp/static/videos
+webapp/static/coverImages
 extra
 alipaySDK/
 certs

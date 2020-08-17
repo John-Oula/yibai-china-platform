@@ -91,11 +91,6 @@ import requests
 
 
 
-
-
-
-
-
 UPLOAD_FOLDER = "/videos"
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 app.config['SECRET_KEY'] = 'Adawug;irwugw79536870635785ty0875y03davvavavdey'
@@ -669,7 +664,7 @@ class UpdateEpisode_form(FlaskForm):
 class UpdateSeries_form(FlaskForm):
     update_series_title = StringField('Title')
     update_series_category = SelectField('Category', choices=[('Mandarin','Mandarin'), ('Communication skills', 'Communication skills'), ('Academics', 'Academics'), ('Visa', 'Visa'), ('Living', 'Living'), ('Talent policy', 'Talent policy'), ('Finance & Law', 'Finance & Law'), ('Entrepreneur', 'Entrepreneur'), ('Others', 'Others')],widget=None)
-    update_series_description = TextAreaField('Description')
+    update_series_description = HiddenField('Description')
     update_series_coverImage = FileField('Cover Image')
 
     update_series_price = StringField('Price')
@@ -2009,7 +2004,7 @@ def createCourse():
         db.session.commit()
         msg = 'uploaded succsesfully'
         
-        return  jsonify({'result': msg})
+        return  msg
 
     elif request.method == 'POST' and status == 'series':
         series = Series(title=seriesForm.series_title.data, description=seriesForm.series_description.data,
@@ -2026,7 +2021,7 @@ def createCourse():
 
         db.session.commit()
         msg = 'uploaded succsesfully'
-        return jsonify({'result': msg})
+        return  msg
     return '', 204
 
 
@@ -2133,25 +2128,26 @@ def getEpisode():
 
     return jsonify({'result':data})
 
-@app.route('/editSeries', methods=['POST', 'GET','DELETE'])
+@app.route('/editSeries', methods=['POST', 'GET','DELETE','PUT'])
 @csrf.exempt
 def editSeries():
     series_id = request.args.get('series_id', type=int)
-    series = Series.query.filter_by(id = series_id)
+    series = Series.query.filter_by(id = series_id).first()
+    seriesList = Series.query.filter_by(id = series_id)
     update_form = UpdateSeries_form()
     i = 0
     l = []
     if request.method == 'GET':
 
 
-        for s in series:
-            data = {'id': s.id, 'title': s.title, 'price': s.price,
+        for s in seriesList:
+            data = {'id': s.id, 'title': s.title, 'price': s.price,'description':s.description,
                     'host': s.user_series.username, 'coverImg': s.coverImage,
                     'userImg': s.user_series.image_file, 'category': s.category,
                     'totalEpisodes': len(s.episode)}
             ep = []
-            for e in series[i].episode:
-                episode = {'episodeId': e.id, 'seriesId': e.sub.id, 'subtitle': e.subtitle, 'video': e.upload_ref}
+            for e in seriesList[i].episode:
+                episode = {'episodeId': e.id, 'seriesId': e.sub.id,'description':e.description, 'subtitle': e.subtitle, 'video': e.upload_ref}
                 ep.append(episode)
 
             data.update({'episode': ep})
@@ -2160,11 +2156,16 @@ def editSeries():
 
             i += 1
         return data
-    elif request.method == 'POST':
-        series.title = update_form.title.data
-        series.category = update_form.category.data
-        series.description = update_form.description.data
-        return jsonify({'result': 'updated'})
+    elif request.method == 'PUT':
+        series.title = update_form.update_series_title.data
+        series.category = update_form.update_series_category.data
+        series.description = update_form.update_series_description.data
+        series.price = update_form.update_series_price.data
+        db.session.commit()
+
+        msg = 'Updated successfully'
+        return msg
+
 
     elif request.method == 'DELETE':
         for e in series[i].episode:
@@ -2173,7 +2174,9 @@ def editSeries():
         series.delete()
         db.session.commit()
 
-        return jsonify({'result': 'deleted'})
+        msg = 'Deleted Successfully'
+
+        return msg
 
 
     return jsonify({'result':l})
@@ -2343,8 +2346,8 @@ def getUserSchedule():
         db.session.add(schedule)
 
         db.session.commit()
-
-        return jsonify({'result':"Created successfully"})
+        msg = "Created successfully"
+        return  msg
     return jsonify({'result':l})
 
 
@@ -2363,7 +2366,8 @@ def addEpisode():
     db.session.add(episode)
     series.status = 'series'
     db.session.commit()
-    return jsonify({'result':'Uploaded successfully'})
+    msg = 'Uploaded successfully'
+    return msg
 
 
 

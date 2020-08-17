@@ -604,7 +604,7 @@ $(document).ready(function(){
     $.each(obj, function(key,value) {
 
 
-      $('.upload-list').append('<div class="thumb-wrapper" data-href="'+videoUrl+ value.id +'"><li><a  class="video"   video-id="'+ value.id +'" href="#"><img class="video-feed" src="../static/coverImages/'+ value.coverImages +'" alt=""></a></li></div><div class="video-info"><div class="row no-gutters"><div class="col-2 col-sm-2 col-md-2 no-gutters">     <div class="profile-pic-wrapper click-pro-pic"  data-href=" '+userUrl+ value.username +'">     <span><a  class="user-profile-pic"   user-id="" href="#"><img id="profilepic"  src="../static/profile_pics/'+ value.userImg +'" alt=""></a></span> </div> </div><div class="col no-gutters"><div class="inner-info"> <div class="flex-fill flex-column">    <h6>'+ value.title +'</h6>     <div class="upload-username">'+ value.username +'</div>     <span class="upload-username">'+ value.category +'</span> <span>     <p class="likes-comments"  class="text-justify text-left " data-likes="">     <span>'+ value.likes +'</span>     <img     src="../static/heart.png" alt="" width="16">     <span>'+ value.comments +'</span>     <img  src="../static/comment.svg" alt="" width="16"> </p> </span></div>          </div> </div></div></div>');
+      $('.upload-list').append('<div class="thumb-wrapper" data-href="'+videoUrl+ value.id +'"><li><a  class="video"   video-id="'+ value.id +'" href="#"><img class="video-feed" src="../static/coverImages/'+ value.coverImage +'" alt=""></a></li></div><div class="video-info"><div class="row no-gutters"><div class="col-2 col-sm-2 col-md-2 no-gutters">     <div class="profile-pic-wrapper click-pro-pic"  data-href=" '+userUrl+ value.username +'">     <span><a  class="user-profile-pic"   user-id="" href="#"><img id="profilepic"  src="../static/profile_pics/'+ value.userImg +'" alt=""></a></span> </div> </div><div class="col no-gutters"><div class="inner-info"> <div class="flex-fill flex-column">    <h6>'+ value.title +'</h6>     <div class="upload-username">'+ value.username +'</div>     <span class="upload-username">'+ value.category +'</span> <span>     <p class="likes-comments"  class="text-justify text-left " data-likes="">     <span>'+ value.likes +'</span>     <img     src="../static/heart.png" alt="" width="16">     <span>'+ value.comments +'</span>     <img  src="../static/comment.svg" alt="" width="16"> </p> </span></div>          </div> </div></div></div>');
 
 });
 $('#live').css('display','none');
@@ -913,6 +913,7 @@ $(document).ready(function(){
         $('#live-update').css('display','none');
         $('.schedule-container').css('display','none');
         $('.checkout').css('display','none')
+        $('.fc-toolbar h2').css('display','none')
 
 
 });
@@ -942,6 +943,7 @@ $(document).ready(function(){
 
             $('.schedule').css('display','none');
         $(".calendar-source").detach().appendTo(".append-edit-calendar");
+        $('.fc-toolbar h2').css('display','none')
 
 
         $('#calendar').css('display','block');
@@ -1082,6 +1084,7 @@ $(document).ready(function(){
         $('#user-profile').css('display','none');
         $('.schedule-container').css('display','none');
         $('#live-update').css('display','none');
+        $('.fc-toolbar h2').css('display','none')
 
 });
       $('#single-click').on("click",function(e){
@@ -1246,7 +1249,8 @@ $(document).ready(function(){
     data:{},
     success:function (data) {
       console.log(data)
-    },error:function (error) {
+    },
+            error:function (error) {
       console.log(error)
       console.log("error")
 
@@ -1258,11 +1262,7 @@ $('.append-schedule').empty();
 
 
       $.each(data.result, function(key,value) {
-                    $('.append-schedule').append('<div class=" text-center p-2 bg-dark text-light schedule-box"><h4>'+value.date +'</h4><span>'+value.start_time+' - '+ value.end_time+'</span><a type="button" data-href="'+scheduleUrl +value.id+'" class="edit-schedule" data-toggle="" data-target="" href=""><img src="../static/edit_w.svg" alt=""></a><span>Edit</span><a type="button" data-href="'+scheduleUrl +value.id+'" class="delete-schedule" data-toggle="" data-target="" href=""><img src="../static/delete_w.svg" alt=""></a><span>Delete</span></div>');
-
-
-
-});
+                    $('.append-schedule').append('<div class=" text-center p-2 bg-dark text-light schedule-box"><h4>'+value.date +'</h4><span>'+value.start_time+' - '+ value.end_time+'</span><nav class="btn-row" ><a type="button" data-href="'+scheduleUrl +value.id+'" class="edit-schedule text-light navLink" data-toggle="" data-target="" href=""><img src="../static/edit_w.svg" alt=""><span class="nav_text">Edit</span></a><a type="button" data-href="'+scheduleUrl +value.id+'" class="delete-schedule navLink text-light" data-toggle="" data-target="" href="" ><img src="../static/delete_w.svg"  alt=""><span class="nav_text">Delete</span></a></nav></div>');});
             $('.update-schedule').css('display','block');
 
 
@@ -1300,10 +1300,13 @@ $('.append-schedule').empty();
 
   });
         req.done(function(data){
-        var object = data.result;
           $(".editor-source").detach().appendTo(".update-series-editor");
         $('.editor-source').css('display','block')
-          $('[name="update_title"]').attr('value',object.title)
+        $('#update_series_title').val(data.title);
+        $('.ql-editor').html(data.description);
+        $('#update_series_price').val(data.price);
+        $('#update_series_category').val(data.category);
+        $('#series-update').attr('course-id',data.id);
 
 
 });
@@ -1366,17 +1369,18 @@ $('.append-schedule').empty();
     type:'DELETE',
     data:{},
     success:function (data) {
-      console.log(data)
+      popover(data,'success')
     },error:function (error) {
       console.log(error)
-      console.log("error")
+      popover(error,'error')
 
     }
 
   });
         req.done(function(data){});
+
           $('#live-update').css('display','block');
-          $('#course-update').css('display','none');
+          $('#course-update').css('display','block');
 
         $('#live').css('display','none');
         $('.live-list').css('display','none');
@@ -1617,54 +1621,13 @@ for (i = 0; i < dropdown.length; i++) {
 
 $(document).ready(function() {
 
-	$('form#course').on('submit', function(event) {
-      var csrf_token = $('#csrf_token').attr('value');
-
-
-
-		$.ajax({
-          beforeSend: function(xhr, settings) {
-            if (!/^(GET|HEAD|OPTIONS|TRACE)$/i.test(settings.type) && !this.crossDomain) {
-                xhr.setRequestHeader("X-CSRFToken", csrf_token);
-            }
-            $('.loader').css('display','block')
-        },
-            enctype: 'multipart/form-data',
-			data : new FormData(this),
-			type : 'POST',
-			url : '/createcourse?status=single',
-            processData: false,
-            contentType: false,
-
-
-          success: function(response){
-          },
-          error: function (error) {
-          popover('Error uploading your File','error')
-
-          },
-          complete: function () {
-            $('.loader').css('display','none')
-
-          },
-
-
-		}).done(function(data) {
-		  $('.loader').css('display','none')
-
-        popover(data.result.msg,'success')
-
-		});
-
-		event.preventDefault();
-
-	});
 	$('form#series-course').on('submit', function(event) {
- var csrf_token = $('#csrf_token').attr('value');
+        var csrf_token = $('#csrf_token').attr('value');
 		$.ajax({
         beforeSend: function(xhr, settings) {
             if (!/^(GET|HEAD|OPTIONS|TRACE)$/i.test(settings.type) && !this.crossDomain) {
                 xhr.setRequestHeader("X-CSRFToken", csrf_token);
+                $('.loader').css('display','block')
             }
         },  enctype: 'multipart/form-data',
 			data : new FormData(this),
@@ -1673,10 +1636,19 @@ $(document).ready(function() {
             processData: false,
             contentType: false,
 
+          error: function(error){
+
+          popover(error,'success')
+          },
+          complete: function () {
+            $('.loader').css('display','none')
+
+          }
+
 		})
 		.done(function(data) {
 
-        console.log('done')
+        popover(data,'success')
 
 		});
 
@@ -1689,6 +1661,7 @@ $(document).ready(function() {
         beforeSend: function(xhr, settings) {
             if (!/^(GET|HEAD|OPTIONS|TRACE)$/i.test(settings.type) && !this.crossDomain) {
                 xhr.setRequestHeader("X-CSRFToken", csrf_token);
+                $('.loader').css('display','block')
             }
         },  enctype: 'multipart/form-data',
 			data : new FormData(this),
@@ -1696,11 +1669,19 @@ $(document).ready(function() {
 			url : $('.add-ep-btn').attr('data-href'),
             processData: false,
             contentType: false,
+          error: function(error){
+
+          popover(error,'success')
+          },
+          complete: function () {
+            $('.loader').css('display','none')
+
+          }
 
 		})
 		.done(function(data) {
 
-        console.log('done')
+        popover(data,'success')
 
 		});
 
@@ -1715,17 +1696,22 @@ $(document).ready(function() {
             if (!/^(GET|HEAD|OPTIONS|TRACE)$/i.test(settings.type) && !this.crossDomain) {
                 xhr.setRequestHeader("X-CSRFToken", csrf_token);
             }
+            $('.loader').css('display','block')
         },
 			data : new FormData(this),
 			type : 'POST',
 			url : $('#schedule-form').attr('data-href'),
             processData: false,
             contentType: false,
+          complete: function () {
+            $('.loader').css('display','none')
+
+          }
 
 		})
 		.done(function(data) {
 
-        console.log('done')
+        popover(data,'success')
 
 		});
 
@@ -1733,7 +1719,7 @@ $(document).ready(function() {
 
 	});
 	$('form.session-form').on('submit', function(event) {
- var csrf_token = $('#csrf_token').attr('value');
+        var csrf_token = $('#csrf_token').attr('value');
 		$.ajax({
         beforeSend: function(xhr, settings) {
             if (!/^(GET|HEAD|OPTIONS|TRACE)$/i.test(settings.type) && !this.crossDomain) {

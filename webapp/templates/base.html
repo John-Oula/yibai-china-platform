@@ -188,7 +188,7 @@
 <script src="https://res.wx.qq.com/connect/zh_CN/htmledition/js/wxLogin.js"></script>
     <script>
     var options = {
-  debug: 'info',
+
   modules: {
     toolbar: [
       [{ header: [1, 2, false] }],
@@ -237,6 +237,49 @@ var quill = new Quill('#editor', options);
 		.done(function(data) {
 
         console.log('done')
+
+		});
+
+		event.preventDefault();
+
+	});
+		$('form#series-update').on('submit', function(event) {
+      var csrf_token = $('#csrf_token').attr('value');
+    var html = quill.root.innerHTML;
+    $('#update_series_description').val( html );
+
+
+		$.ajax({
+          beforeSend: function(xhr, settings) {
+            if (!/^(GET|HEAD|OPTIONS|TRACE)$/i.test(settings.type) && !this.crossDomain) {
+                xhr.setRequestHeader("X-CSRFToken", csrf_token);
+            }
+            $('.loader').css('display','block')
+        },
+            enctype: 'multipart/form-data',
+			data : new FormData(this),
+			type : 'PUT',
+			url : '/editSeries?series_id='+$(this).attr('course-id'),
+            processData: false,
+            contentType: false,
+
+
+          success: function(response){
+          },
+          error: function (error) {
+          popover('Error uploading your File','error')
+
+          },
+          complete: function () {
+            $('.loader').css('display','none')
+
+          },
+
+
+		}).done(function(data) {
+		  $('.loader').css('display','none')
+
+        popover(data.result.msg,'success')
 
 		});
 

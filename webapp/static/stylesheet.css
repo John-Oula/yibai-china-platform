@@ -2084,7 +2084,7 @@ a.video{
     width: 100%;
     height: auto;
 }
-.course-img{
+#course-img{
     width: auto;
     height: 100%;
 
@@ -2095,7 +2095,7 @@ a.video{
     position: relative;
     overflow: hidden;
     width:80px;
-    height:80px;
+    height:130px;
 }
 
 #user-profile{
@@ -2223,13 +2223,7 @@ div.modal , #episode-modal , #series-modal{
 }
 #progressBar
 {
-    width:0px;
-    height:5px;
-    background-color:#F44336;
-    position:fixed;
-    top:0px;
-    left:0px;
-    display:none;
+
 }
 
 #progressBar.active
@@ -2256,7 +2250,21 @@ div.modal , #episode-modal , #series-modal{
 #pause-btn{
     display: none;
 }
+.loader{
+    width: 84px;
+    height: fit-content;
+    border-radius: 10px;
+    z-index: 100;
+    position: absolute;
+    top: 280px;
+    display: none;
+    left: 0;
+    right: 0;
+    /* top: 0; */
+    background-color: white;
+    bottom: 0;
 
+}
 
 }
 

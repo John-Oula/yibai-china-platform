@@ -181,7 +181,12 @@
 </div>
 
  <div id="main" >
+<div class="loader p-2 text-center mx-auto shadow-lg center ">
 
+    <img src="../static/loader.svg" width="60" alt="">
+    <small>Uploading...</small>
+
+</div>
  <div class="">
 <ul class="upload-list">
 
@@ -442,9 +447,9 @@
  <div id="create-course">
 
      <div class="p-3" id="course-upload">
-         <div id="progressBar"></div>
          <form  class="form-upload text-center" id="course" action="" method="POST" enctype="multipart/form-data">
-    <fieldset>
+
+             <fieldset>
         {{ form.hidden_tag() }}
 
          {{ form.upload_title.label }} <br>
@@ -821,10 +826,11 @@
      </nav>
 
  </div>
-</div>
+
 
 
     </body>
+
 {% endblock %}
 
 {% block bottomNav %}

@@ -1157,7 +1157,7 @@ $(document).ready(function(){
              $.each(data.result, function(key,value) {
 
 
-      $('#course-update').append('<card class="mt-2 mb-2 flex-fill flex-row shadow-lg row no-gutters user-course card"><div class="col-3 no-gutters cover-wrapper"><img id="course-img" src="../static/coverImages/'+value.coverImg+'" alt=""></div><div class="col-8 p-2 flex-fill flex-column no-gutters "><h6 id="course-title">'+value.title+'</h6><div id="total-episodes">Episodes : '+value.totalEpisodes+'</div><span id="course-price">Price : '+value.price+'</span><div class=""><div class=""><a type="button" class="add-ep-btn" data-href="/addEpisode?series_id='+value.id+'"  data-toggle="modal" data-target="#episode-modal" href=""><img src="../static/add.svg"  alt=""><span>Add</span></div><div class=""><a type="button"  data-toggle="modal" data-target="#myModal" href=""><img src="../static/delete.svg" alt=""></a><span>Delete</span></div><div class=""><a type="button"  data-href="'+seriesUrl +value.id+'"class="edit-series" data-toggle="modal" data-target="#series-modal" href=""><img src="../static/edit.svg" alt=""></a><span>Edit</span></div></div></div></card></div>');
+      $('#course-update').append('<card class="mt-2 mb-2 flex-fill flex-row shadow-lg row no-gutters user-course card"><div class="col-3 no-gutters cover-wrapper"><img id="course-img" src="../static/coverImages/'+value.coverImg+'" alt=""></div><div class="col-8 p-2 flex-fill flex-column no-gutters "><h6 id="course-title">'+value.title+'</h6><div id="total-episodes">Episodes : '+value.totalEpisodes+'</div><span id="course-price">Price : '+value.price+'</span><nav class="btn-row" ><a  type="button" class="add-ep-btn navLink" data-href="addEpisode?series_id='+value.id+'"  data-toggle="modal" data-target="#episode-modal" href=""><img class="mobile-icon" src="../static/add.svg" alt=""><span class="nav_text">Add</span></a><a class="navLink" type="button"  data-toggle="modal" data-target="#myModal" href="" ><img class="mobile-icon" src="../static/delete.svg" alt="" ><span class="nav_text">Delete</span></a><a type="button"  data-href="'+seriesUrl +value.id+'" class="edit-series navLink" data-toggle="modal" data-target="#series-modal" href=""><img class="mobile-icon" src="../static/edit.svg" alt="" ><span class="nav_text">Edit</span></a></nav></div></card></div>');
 
 });
 
@@ -1613,20 +1613,7 @@ for (i = 0; i < dropdown.length; i++) {
 }
 
 
-function progress() {
-    var pbar = $('#progressBar'), currentProgress = 0;
-    function trackUploadProgress(e)
-    {
-        if(e.lengthComputable)
-        {
-            currentProgress = (e.loaded / e.total) * 100; // Amount uploaded in percent
-            $(pbar).width(currentProgress+'%');
 
-            if( currentProgress == 100 )
-            console.log('Progress : 100%');
-        }
-    }
-    }
 
 $(document).ready(function() {
 
@@ -1640,45 +1627,32 @@ $(document).ready(function() {
             if (!/^(GET|HEAD|OPTIONS|TRACE)$/i.test(settings.type) && !this.crossDomain) {
                 xhr.setRequestHeader("X-CSRFToken", csrf_token);
             }
-        },  enctype: 'multipart/form-data',
+            $('.loader').css('display','block')
+        },
+            enctype: 'multipart/form-data',
 			data : new FormData(this),
 			type : 'POST',
 			url : '/createcourse?status=single',
             processData: false,
             contentType: false,
-          xhr: function()
-            {
-                // Custom XMLHttpRequest
-                var appXhr = $.ajaxSettings.xhr();
-
-                // Check if upload property exists, if "yes" then upload progress can be tracked otherwise "not"
-                if(appXhr.upload)
-                {
-                    // Attach a function to handle the progress of the upload
-                    appXhr.upload.addEventListener('progress',progress, false);
-                }
-                return appXhr;
-            },
 
 
           success: function(response){
-          if(response){
-            var responseObj = jQuery.parseJSON(response);
-
-            if(responseObj.ResponseData)
-              popover('Uploaded successfully','success');
-
-          }
           },
           error: function (error) {
           popover('Error uploading your File','error')
 
           },
+          complete: function () {
+            $('.loader').css('display','none')
+
+          },
 
 
 		}).done(function(data) {
+		  $('.loader').css('display','none')
 
-        popover(data.msg,'success')
+        popover(data.result.msg,'success')
 
 		});
 

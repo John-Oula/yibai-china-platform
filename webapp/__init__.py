@@ -646,7 +646,7 @@ class UpdateUploads_form(FlaskForm):
 class Series_form(FlaskForm):
     series_title = StringField('Title')
     series_category = SelectField('Category', choices=[('Mandarin','Mandarin'), ('Communication skills', 'Communication skills'), ('Academics', 'Academics'), ('Visa', 'Visa'), ('Living', 'Living'), ('Talent policy', 'Talent policy'), ('Finance & Law', 'Finance & Law'), ('Entrepreneur', 'Entrepreneur'), ('Others', 'Others')],widget=None)
-    series_description = TextAreaField('Description')
+    series_description = TextAreaField('Course Summary')
     series_fileName = FileField('Upload File',validators=[FileRequired()])
     series_coverImage = FileField('Cover Image')
     series_price = StringField('Price')
@@ -2009,7 +2009,7 @@ def createCourse():
         db.session.commit()
         msg = 'uploaded succsesfully'
         
-        return  msg
+        return  jsonify({'result': msg})
 
     elif request.method == 'POST' and status == 'series':
         series = Series(title=seriesForm.series_title.data, description=seriesForm.series_description.data,
@@ -2027,10 +2027,9 @@ def createCourse():
         db.session.commit()
         msg = 'uploaded succsesfully'
         return jsonify({'result': msg})
-    else:
+    return '', 204
 
-        return 'error'
-    pass
+
 
 
 
@@ -2616,13 +2615,6 @@ def reset_token(token):
 
 from datetime import datetime
 import time
-
-# current date
-
-
-
-
-
 
 url = 'https://api.meeting.qq.com/v1/meetings'
 def create_sign(key,toSign):

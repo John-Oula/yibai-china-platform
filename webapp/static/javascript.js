@@ -1160,7 +1160,7 @@ $(document).ready(function(){
              $.each(data.result, function(key,value) {
 
 
-      $('#course-update').append('<card class="mt-2 mb-2 flex-fill flex-row shadow-lg row no-gutters user-course card"><div class="col-3 no-gutters cover-wrapper"><img id="course-img" src="../static/coverImages/'+value.coverImg+'" alt=""></div><div class="col-8 p-2 flex-fill flex-column no-gutters "><h6 id="course-title">'+value.title+'</h6><div id="total-episodes">Episodes : '+value.totalEpisodes+'</div><span id="course-price">Price : '+value.price+'</span><nav class="btn-row" ><a  type="button" class="add-ep-btn navLink" data-href="addEpisode?series_id='+value.id+'"  data-toggle="modal" data-target="#episode-modal" href=""><img class="mobile-icon" src="../static/add.svg" alt=""><span class="nav_text">Add</span></a><a class="navLink" type="button"  data-toggle="modal" data-target="#myModal" href="" ><img class="mobile-icon" src="../static/delete.svg" alt="" ><span class="nav_text">Delete</span></a><a type="button"  data-href="'+seriesUrl +value.id+'" class="edit-series navLink" data-toggle="modal" data-target="#series-modal" href=""><img class="mobile-icon" src="../static/edit.svg" alt="" ><span class="nav_text">Edit</span></a></nav></div></card></div>');
+      $('#course-update').append('<card class="mt-2 mb-2 flex-fill flex-row shadow-lg row no-gutters user-course card"><div class="col-3 no-gutters cover-wrapper"><img id="course-img" src="../static/coverImages/'+value.coverImg+'" alt=""></div><div class="col-8 p-2 flex-fill flex-column no-gutters "><h6 id="course-title">'+value.title+'</h6><div id="total-episodes">Episodes : '+value.totalEpisodes+'</div><span id="course-price">Price : '+value.price+'</span><nav class="btn-row" ><a   class="add-ep-btn navLink" data-href="addEpisode?series_id='+value.id+'"  data-toggle="modal" data-target="#episode-modal" href=""><img class="mobile-icon" src="../static/add.svg" alt=""><span class="nav_text">Add</span></a><a class="navLink"   data-toggle="modal" data-target="#myModal" href="" ><img class="mobile-icon" src="../static/delete.svg" alt="" ><span class="nav_text">Delete</span></a><a   data-href="'+seriesUrl +value.id+'" class="edit-series navLink" data-toggle="modal" data-target="#series-modal" href=""><img class="mobile-icon" src="../static/edit.svg" alt="" ><span class="nav_text">Edit</span></a></nav></div></card></div>');
 
 });
 
@@ -1212,7 +1212,7 @@ $(document).ready(function(){
           var details = data.schedule
                 $.each(details, function(key,value) {
                   if (details.includes())
-                    $('.modal-body.append-schedule').append('<div class=" text-center p-2 bg-dark text-light schedule-box"><h4>'+value.date +'</h4><span>'+value.startTime+' - '+ value.endTime+'</span><span class="mt-1"><a  class="click-book" data-href="'+bookUrl+value.id+param+type+'"><button type="button" id="book-btn" class="fixed-btn" >Book</button></a><a  class="click-unbook" data-href="'+unbookUrl+value.id+param+type+'" ><button type="button" id="unbook-btn" class="fixed-btn" >Unbook</button></a></span></div>');
+                    $('.modal-body.append-schedule').append('<div class=" text-center p-2 bg-dark text-light schedule-box"><h4>'+value.date +'</h4><span>'+value.startTime+' - '+ value.endTime+'</span><span class="mt-1"><a  class="click-book" data-href="'+bookUrl+value.id+param+type+'"><button  id="book-btn" class="fixed-btn" >Book</button></a><a  class="click-unbook" data-href="'+unbookUrl+value.id+param+type+'" ><button  id="unbook-btn" class="fixed-btn" >Unbook</button></a></span></div>');
 });
 
 
@@ -1262,7 +1262,7 @@ $('.append-schedule').empty();
 
 
       $.each(data.result, function(key,value) {
-                    $('.append-schedule').append('<div class=" text-center p-2 bg-dark text-light schedule-box"><h4>'+value.date +'</h4><span>'+value.start_time+' - '+ value.end_time+'</span><nav class="btn-row" ><a type="button" data-href="'+scheduleUrl +value.id+'" class="edit-schedule text-light navLink" data-toggle="" data-target="" href=""><img src="../static/edit_w.svg" alt=""><span class="nav_text">Edit</span></a><a type="button" data-href="'+scheduleUrl +value.id+'" class="delete-schedule navLink text-light" data-toggle="" data-target="" href="" ><img src="../static/delete_w.svg"  alt=""><span class="nav_text">Delete</span></a></nav></div>');});
+                    $('.append-schedule').append('<div class=" text-center p-2 bg-dark text-light schedule-box"><h4>'+value.date +'</h4><span>'+value.start_time+' - '+ value.end_time+'</span><nav class="btn-row" ><a  data-href="'+scheduleUrl +value.id+'" class="edit-schedule text-light navLink" data-toggle="" data-target="" href=""><img src="../static/edit_w.svg" alt=""><span class="nav_text">Edit</span></a><a  data-href="'+scheduleUrl +value.id+'" class="delete-schedule navLink text-light" data-toggle="" data-target="" href="" ><img src="../static/delete_w.svg"  alt=""><span class="nav_text">Delete</span></a></nav></div>');});
             $('.update-schedule').css('display','block');
 
 
@@ -1336,7 +1336,7 @@ $('.append-schedule').empty();
                   $.each(data.result, function(key,value) {
 
 
-      $('#live-update').append('<card class="mt-2 mb-2 flex-fill flex-row shadow-lg row no-gutters user-course card live-url" id="'+value.id+'"><div class="col-3 no-gutters cover-wrapper"><img id="course-img" src="'+coverImgSrc+value.coverImg+'" alt=""></div><div class="col-8 p-2 flex-fill flex-column no-gutters "><h6 id="course-title">'+value.title+'</h6><div id="live-date">Date : '+value.date+'</div><div id="live-time">Time : '+value.startTime +'-'+value.endTime +'</div><a type="button" data-href="'+liveUrl +value.id+'" class="edit-live" data-toggle="" data-target="" href=""><img src="../static/edit.svg" alt=""></a><span>Edit</span></div></card>');
+      $('#live-update').append('<card class="mt-2 mb-2 flex-fill flex-row shadow-lg row no-gutters user-course card live-url" id="'+value.id+'"><div class="col-3 no-gutters cover-wrapper"><img id="course-img" src="'+coverImgSrc+value.coverImg+'" alt=""></div><div class="col-8 p-2 flex-fill flex-column no-gutters "><h6 id="course-title">'+value.title+'</h6><div id="live-date">Date : '+value.date+'</div><div id="live-time">Time : '+value.startTime +'-'+value.endTime +'</div><a  data-href="'+liveUrl +value.id+'" class="edit-live" data-toggle="" data-target="" href=""><img src="../static/edit.svg" alt=""></a><span>Edit</span></div></card>');
 
 });
           $('#live-update').css('display','block');

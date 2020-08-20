@@ -242,6 +242,7 @@ var quill = new Quill('#editor', options);
         beforeSend: function(xhr, settings) {
             if (!/^(GET|HEAD|OPTIONS|TRACE)$/i.test(settings.type) && !this.crossDomain) {
                 xhr.setRequestHeader("X-CSRFToken", csrf_token);
+                $('.loader').css('display','block')
             }
         },  enctype: 'multipart/form-data',
 			data : new FormData(this),
@@ -250,10 +251,20 @@ var quill = new Quill('#editor', options);
             processData: false,
             contentType: false,
 
+        error: function (error) {
+          popover('Error uploading your File','error')
+
+          },
+          complete: function () {
+            $('.loader').css('display','none')
+
+          },
+
 		})
 		.done(function(data) {
 
-        console.log('done')
+        $('.loader').css('display','none')
+            popover(data,'success')
 
 		});
 

@@ -781,7 +781,7 @@ def liveSession():
     return jsonify({'result':l})
 
 @app.route('/userDetails')
-@csrf.exempt
+
 def userDetails():
 
     username = request.args.get('username', type=str)

@@ -1337,14 +1337,14 @@ body{
 
 
 .bot-nav{
-    position: fixed;
+    position: absolute;
     bottom: 0;
     width: 100%;
     height: 55px;
     background-color: white;
     display: flex;
     overflow-x: auto;
-    z-index: 100;
+
 }
 .navLink{
     display: flex;
@@ -1555,7 +1555,7 @@ body{
       margin-left: 5%;
 }
   div.col-6{
-      display:none;
+
   }
   div.col-4.left-home-text{
       width: 100%;
@@ -1913,7 +1913,7 @@ a.video{
     position: absolute;
 }
 
-.profile{
+.profile , .my-profile{
     display: none;
 }
 
@@ -2264,6 +2264,36 @@ div.modal , #episode-modal , #series-modal{
     background-color: white;
     bottom: 0;
 
+}
+
+.tab-content{
+        overflow-wrap: break-word;
+}
+
+.share-logos{
+background-color: white;
+    width: 50%;
+    position: relative;
+    border-radius: 7px;
+    bottom: 40px;
+    display: none;
+}
+.fb-share-button{
+    display: none;
+}
+
+.user-form{
+    width: 100%;
+}
+#introduction{
+    width: 100%;
+    height: 250px;
+}
+.start-btn{
+    display: none;
+    height: auto;
+    background-color: #5bb75b;
+    color: white;
 }
 
 }

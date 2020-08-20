@@ -1,6 +1,6 @@
 from datetime import datetime, timedelta
 import unittest
-from webapp import app, Series, Episode, Skill, Available, follow
+from webapp import app, Series, Episode, Skill, Available, follow, Reviews
 from webapp import User, Post, Lesson, db, Comment, likes, Upload
 from flask import jsonify
 import psycopg2
@@ -69,6 +69,9 @@ class UserModelCase(unittest.TestCase):
         c2 = Comment(content = 'This is just a test.This is for the funcionality',user_id=2,upload_id=1)
         c3 = Comment(content = 'This is just a test.This is for the funcionality',user_id=3,upload_id=1)
         c4 = Comment(content = 'This is just a test.This is for the funcionality',user_id=4,upload_id=1)
+        r1 = Reviews(content = 'This is just a test.This is for the funcionality',user_id=u2.id)
+        r2 = Reviews(content = 'This is just a test.This is for the funcionality',user_id=u2.id)
+        r3 = Reviews(content = 'This is just a test.This is for the funcionality',user_id=u2.id)
         db.session.add(up1)
         db.session.add(up2)
         db.session.add(up3)
@@ -81,7 +84,20 @@ class UserModelCase(unittest.TestCase):
         db.session.add(c2)
         db.session.add(c3)
         db.session.add(c4)
+        db.session.add(r1)
+        db.session.add(r2)
+        db.session.add(r3)
+        u1.review.append(r1)
+        u1.review.append(r2)
+
+
+
         db.session.commit()
+
+        for r in u1.review:
+            print(r.content)
+            print(r.user_review.username)
+
 
         s1 = Series(user_id=1, title='tech', description='this is a test ', category='MANDARIN',status='single', timestamp='2019-12-4')
         s2 = Series(user_id=1, title='tech', description='this is a test ', category='MANDARIN',status='series', timestamp='2019-12-4')
@@ -241,6 +257,7 @@ class UserModelCase(unittest.TestCase):
 #        assert f2 == [p4, p2]
 #        assert f3 == [p3, p2]
 #        assert f4 == [p4]
+
 
 
 if __name__ == '__main__':

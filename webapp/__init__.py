@@ -15,6 +15,7 @@ import os
 import random
 import re
 import socket
+from flask_share import Share
 
 import filetype
 from PIL import Image
@@ -114,7 +115,7 @@ wechatAppId = 'wx67fc65e96be93d6d'
 db = SQLAlchemy(app)
 db.init_app(app)
 
-
+share = Share(app)
 migrate = Migrate(app,db)
 
 login_manager = LoginManager()
@@ -139,6 +140,9 @@ followers = db.Table('followers',
 book = db.Table('book',
                 db.Column('user_id', db.Integer, db.ForeignKey('user.id')),
                 db.Column('post_id', db.Integer, db.ForeignKey('post.id')))
+#review = db.Table('review',
+#                db.Column('user_id', db.Integer, db.ForeignKey('user.id')),
+#                db.Column('review_id', db.Integer, db.ForeignKey('reviews.id')))
 
 bookSchedule = db.Table('bookSchedule',
                 db.Column('user_id', db.Integer, db.ForeignKey('user.id')),
@@ -194,6 +198,7 @@ class User(db.Model, UserMixin,AnonymousUserMixin):
     episode = db.relationship('Episode', backref='user_episode', lazy=True)
     lesson = db.relationship('Lesson', backref=db.backref('user_lessons'))
     comments = db.relationship('Comment', backref='author', lazy='dynamic')
+    review = db.relationship('Reviews', backref='user_review', lazy='dynamic')
     skill = db.relationship('Skill',backref='user',secondary=skills,lazy ='dynamic')
     available = db.relationship('Available',backref='user',secondary=available,lazy ='dynamic')
     exp = db.relationship('Experience',backref='user',secondary=experiences,lazy ='dynamic')
@@ -201,11 +206,10 @@ class User(db.Model, UserMixin,AnonymousUserMixin):
                                primaryjoin=(followers.c.follower_id == id),
                                secondaryjoin=(followers.c.followed_id == id),
                                backref=db.backref('followers', lazy='dynamic'), lazy='dynamic')
-#    skill = db.relationship('User', secondary=skills,
-#                               primaryjoin=(skills.c.user_id == id),
-#                               secondaryjoin=(skills.c.skill_id == id),
-#                               backref=db.backref('user', lazy='dynamic'), lazy='dynamic')
-
+#    followed = db.relationship('User', secondary=review,
+#                               primaryjoin=(review.c.reviewer_id == id),
+#                               secondaryjoin=(review.c.reviewed_id == id),
+#                               backref=db.backref('user_review', lazy='dynamic'), lazy='dynamic')
     book = db.relationship('Post', secondary=book,backref=db.backref('bookers', lazy='dynamic'))
     bookSchedule = db.relationship('Available', secondary=bookSchedule,backref=db.backref('userSchedule', lazy='dynamic'))
     likes = db.relationship('Series', secondary=likes,backref=db.backref('liked', lazy='dynamic'))
@@ -505,6 +509,14 @@ class Comment(db.Model):
    upload_id = db.Column(db.Integer, db.ForeignKey('upload.id'))
    series_id = db.Column(db.Integer, db.ForeignKey('series.id'))
    episode_id = db.Column(db.Integer, db.ForeignKey('episode.id'))
+class Reviews(db.Model):
+   __tablename__ = 'reviews'
+   id = db.Column(db.Integer, primary_key=True)
+   content = db.Column(db.Text)
+   timestamp = db.Column(db.DateTime, index=True, default=datetime.datetime.utcnow)
+   user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+
+
 
 class Comments(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -575,6 +587,14 @@ class Verify_form(FlaskForm):
     city = StringField('City', validators=[Required()])
     occupation = StringField('Occupation', validators=[Required()])
     phone = IntegerField('Phone', validators=[Required()])
+class User_form(FlaskForm):
+
+    introduction = TextAreaField('Introduction', validators=[Required()])
+    status = StringField('status', validators=[Required()])
+    introVideo = FileField('Upload an Introduction video')
+    submit = SubmitField('Submit')
+
+
 
 
 class Payment_form(FlaskForm):
@@ -713,6 +733,7 @@ def home():
     UpdateUploads = UpdateUploads_form()
     UpdateSession = UpdateSession_form()
     signupForm = Signup_form()
+    userForm = User_form()
 
 
 
@@ -741,7 +762,7 @@ def home():
             pass
 
 
-    return render_template('home.html',loginForm = loginForm,signupForm=signupForm,UpdateSession=UpdateSession,UpdateUploads=UpdateUploads,UpdateSeries=UpdateSeries,UpdateEpisode=UpdateEpisode,sessionForm=sessionForm,uploads=uploads,form=form,page=page,seriesForm=seriesForm,episodeForm=episodeForm)
+    return render_template('home.html',userForm = userForm,loginForm = loginForm,signupForm=signupForm,UpdateSession=UpdateSession,UpdateUploads=UpdateUploads,UpdateSeries=UpdateSeries,UpdateEpisode=UpdateEpisode,sessionForm=sessionForm,uploads=uploads,form=form,page=page,seriesForm=seriesForm,episodeForm=episodeForm)
 
 
 @app.route('/liveSession')
@@ -793,6 +814,15 @@ def userDetails():
                 'userImg': live.author.image_file, 'category': live.category}
         liveList.append(userLive)
     data.update({'live': liveList})
+    videoList = []
+    for video in user.series:
+        userVideos = {'id': video.id, 'title': video.title, 'price': video.price,'description':video.description,
+                    'host': video.user_series.username, 'coverImg': video.coverImage,
+                    'userImg': video.user_series.image_file, 'category': video.category,
+                    'totalEpisodes': len(video.episode)}
+        videoList.append(userVideos)
+    data.update({'videosList': videoList})
+
     scheduleList = []
     for schedule in user.available:
         userschedule = {'id': schedule.id,'date': schedule.date_available,'time': schedule.timestamp,'startTime':schedule.start_time,'endTime':schedule.end_time}
@@ -804,6 +834,18 @@ def userDetails():
         userschedule.update({'bookers': bookersList})
 
     data.update({'schedule': scheduleList})
+
+    reviewList = []
+    for r in user.review:
+        userReview = {'id': r.id,'review': r.content,'timestamp': r.timestamp,'user-id':r.user_review.id}
+        reviewList.append(userReview)
+        userList = []
+#        for users in r.user_review:
+#            u = {'id': users.id, 'username': users.username}
+#            userList.append(u)
+#        userReview.update({'users': userList})
+
+    data.update({'reviews': reviewList})
 
 
 
@@ -1049,21 +1091,10 @@ def dashboard(username):
         seriesIdNum = int(seriesId.id) + 1
     return render_template('Dashboard.html',seriesIdNum=seriesIdNum,uploads= uploads,user=user,my_posts=my_posts,book_posts=book_posts,total_users=total_users,user_role=user_role,all_users=all_users,user_posts = user_posts,image_file=image_file)
 
-
-
-
 def reverse_admin():
     user = User.query.filter_by(role=1).first()
     user.role = 0
     db.session.commit()
-
-
-
-
-
-
-
-
 
 
 
@@ -1072,10 +1103,6 @@ def time():
     for time in date:
         start = time.start_time
         x = re.split(r'([T+])', start)
-
-
-
-
 
 @app.route('/verify_payment/<int:token>')
 @login_required
@@ -1174,6 +1201,39 @@ def settings(username):
     return render_template('SETTINGS.html',seriesIdNum=seriesIdNum,user=user,all_users = all_users,user_role=user_role,form=form,image_file=image_file)
 
 
+@app.route('/updateInfo',methods=['GET','POST','PUT'])
+@login_required
+def updateInfo():
+#    username = request.args.get('username', type=str)
+#    user = User.query.filter_by(username=username).first_or_404()
+    form = User_form()
+
+    if request.method == 'POST':
+#        if form.pic.data:
+#            pic_file = save_pic(form.pic.data)
+#            current_user.image_file = pic_file
+        current_user.introduction = form.introduction.data
+        if form.introVideo.data == '':
+           current_user.introduction_video = current_user.introduction_video
+
+#        current_user.introduction_video = saveFile(form.introVideo.data, 'videos')
+
+        db.session.commit()
+        msg = 'Saved changes'
+        return msg
+    elif request.method == 'PUT':
+        if form.pic.data:
+            pic_file = save_pic(form.pic.data)
+            current_user.image_file = pic_file
+        current_user.introduction = form.introduction.data
+        current_user.introVideo = saveFile(form.introVideo.data,'videos')
+        db.session.commit()
+        msg = 'Saved changes'
+        return msg
+    elif request.method == 'GET':
+        data = {'introduction': current_user.introduction,'introVideo':current_user.introduction_video}
+        return data
+    return '', 204
 @app.route('/verify/<username>',methods=['POST','GET'])
 @login_required
 def verify(username):
@@ -1465,6 +1525,18 @@ def videoDetails():
 #    video = request.args.get('video', type=str)
     videoId= request.args.get('videoId', type=int)
     videos = Series.query.filter_by(id=videoId).first()
+    relatedVideos = Series.query.filter_by(category=videos.category).all()
+    relatedList = []
+    for r in relatedVideos:
+
+        data = {'id': r.id, 'coverImg': r.coverImage, 'title': r.title, 'isSeries': r.is_series(),
+                'videoRef': r.upload_ref, 'type': r.fileType(), 'description': r.description,
+                'price': r.price, 'userId': r.user_series.id, 'username': r.user_series.username,
+                'userImg': r.user_series.image_file, 'category': r.category, 'likes': r.liked.count(),
+                'comments': r.comments.count()}
+        relatedList.append(data)
+
+
 
     if videos.is_series() == True:
         i = 0
@@ -1478,6 +1550,8 @@ def videoDetails():
             ep.append(episode)
 
         data.update({'episode':ep})
+        data.update({'relatedVideos': relatedList})
+
 #        l.append(data)
 
         if current_user.is_authenticated:
@@ -1488,22 +1562,33 @@ def videoDetails():
     elif videos.is_series() == False:
 
         data = {'id': videos.id, 'title': videos.title,'isSeries':videos.is_series(),'videoRef':videos.upload_ref,'type':videos.fileType(),'description':videos.description,'price':videos.price,'userId':videos.user_series.id,'username': videos.user_series.username,'userImg': videos.user_series.image_file, 'category': videos.category,'likes':videos.liked.count(),'comments':videos.comments.count()}
-
+        data.update({'relatedVideos': relatedList})
         if current_user.is_authenticated:
             data.update({'hasLiked':current_user.has_liked(videos)})
+
 
         return jsonify({'result':data})
     else:
         pass
+
     return '', 204
+
+
 
 @app.route('/liveDetails' , methods=['POST','GET'])
 def liveDetails():
     liveId= request.args.get('liveId', type=int)
     live = Post.query.filter_by(id=liveId).first()
+    scheduleList = []
 
-
-    return jsonify({'id': live.id, 'title': live.title,'startTime': live.start_time,'endTime': live.end_time,'date': live.date,'coverImage': live.coverImage,'description':live.description,'userId':live.author.id,'host': live.author.username,'userImg': live.author.image_file, 'category': live.category,'meetingCode':live.meetingCode,'url':live.meetingUrl})
+    data = {'id': live.id, 'title': live.title,'startTime': live.start_time,'endTime': live.end_time,'date': live.date,'coverImage': live.coverImage,'description':live.description,'category': live.category,'meetingCode':live.meetingCode,'url':live.meetingUrl}
+    host = {'userId':live.author.id,'host': live.author.username,'userImg': live.author.image_file,'introduction':live.author.introduction,'followers':live.author.followers.count()}
+    for s in live.author.available:
+        schedule = {'id': s.id,'date': s.date_available,'time': s.timestamp}
+        scheduleList.append(schedule)
+    data.update({'schedule':scheduleList})
+    data.update({'host':host})
+    return data
 
 
 @app.route('/series/<int:seriesid>Id<int:id>video<upload_ref>' , methods=['POST','GET'])
@@ -1631,6 +1716,37 @@ def inquire(meetingcode,username,instanceid):
     headers = {'Content-Type': 'application/json', 'X-TC-Key': SecretId, 'X-TC-Timestamp': str(stamp),
                'X-TC-Nonce': str(num), 'AppId': '200000164', 'X-TC-Signature': signature, 'X-TC-Registered': '0'}
     r = requests.get("https://api.meeting.qq.com/v1/meetings?meeting_code="+str(meetingcode)+"&userid="+username+"&instanceid="+str(instanceid), headers=headers)
+
+
+    return r.json()
+def participants(meetingId,userId):
+    num = random.randint(0, 999999999)
+    stamp = int(time.time())
+
+    uri = "/v1/meetings/"+str(meetingId)+"/participants?"+"userid="+userId
+
+    headerString = "X-TC-Key=%s&X-TC-Nonce=%s&X-TC-Timestamp=%s" % (SecretId, num, str(stamp))
+    req_body = ""
+
+    stringToSign = "%s\n%s\n%s\n%s" % ('GET', headerString, uri, req_body)
+    print(stringToSign)
+
+    your_secretkey = SecretKey.encode('utf-8')
+    stringToSign = stringToSign.encode('utf-8')
+
+    signature = hmac.new(your_secretkey, stringToSign, digestmod=hashlib.sha256).hexdigest()
+
+    signature = base64.b64encode(signature.encode("utf-8"))
+    params={
+        "meeting_id": str(meetingId),
+        "userid": userId,
+
+    }
+
+
+    headers = {'Content-Type': 'application/json', 'X-TC-Key': SecretId, 'X-TC-Timestamp': str(stamp),
+               'X-TC-Nonce': str(num), 'AppId': '200000164', 'X-TC-Signature': signature, 'X-TC-Registered': '0'}
+    r = requests.get("https://api.meeting.qq.com" + uri, headers=headers)
 
 
     return r.json()
@@ -2211,7 +2327,7 @@ def editSchedule():
 
     return jsonify({'result':l})
 
-@app.route('/editLive', methods=['POST', 'GET','DELETE'])
+@app.route('/editLive', methods=['POST','PUT', 'GET','DELETE'])
 @csrf.exempt
 def editLive():
     live_id = request.args.get('live_id', type=int)
@@ -2225,11 +2341,37 @@ def editLive():
                 'category': live.category, 'startTime': live.start_time, 'endTime': live.end_time,
                 'date': live.date, 'meetingCode': live.meetingCode}
         return jsonify({'result': data})
-    elif request.method == 'POST':
-        series.title = update_form.title.data
-        series.category = update_form.category.data
-        series.description = update_form.description.data
-        return jsonify({'result': 'updated'})
+    elif request.method == 'PUT':
+            meeting = inquire(live.meetingCode, current_user.username, 1)
+            meeting_info = meeting["meeting_info_list"]
+            for item in meeting_info:
+                meeting_id = item['meeting_id']
+            fulltime = request.form['date-time']
+            fullDate = datetime.fromtimestamp(int(fulltime) / 1000).strftime('%Y-%m-%d')
+            startTime = datetime.fromtimestamp(int(fulltime) / 1000).strftime('%H:%M')
+            end_time = request.form['end-time']
+            endTime = datetime.fromtimestamp(int(end_time) / 1000).strftime('%H:%M')
+
+            meeting = modifyMeeting(title=update_form.update_session_title.data,fulltime=fulltime,meetingId=meeting_id, username=current_user.username, end_time=end_time,instanceId=1)
+
+            meeting_info = meeting["meeting_info_list"]
+            for item in meeting_info:
+                meetingCode = item['meeting_code']
+
+
+            live.title=update_form.update_session_title.data
+            live.category=update_form.update_session_category.data
+            live.description=update_form.update_session_description.data
+            live.date=fullDate
+            live.start_time=startTime
+            live.end_time=endTime,
+            live.meetingCode=meetingCode
+
+            msg = 'Updated successfully'
+
+
+            db.session.commit()
+            return msg
 
     elif request.method == 'DELETE':
         meeting = inquire(live.meetingCode,current_user.username,1)
@@ -2289,7 +2431,7 @@ def getUserLive():
     i = 0
     l = []
     for v in range(len(series)):
-        data ={'id':series[i].id,'title':series[i].title,'description':series[i].description,'host':series[i].author.username,'coverImg': series[i].coverImage,'userImg':series[i].author.image_file,'category':series[i].category,'startTime':series[i].start_time,'endTime':series[i].end_time,'date':series[i].date,'meetingCode':series[i].meetingCode}
+        data ={'id':series[i].id,'title':series[i].title,'description':series[i].description,'host':series[i].author.username,'coverImg': series[i].coverImage,'userImg':series[i].author.image_file,'category':series[i].category,'startTime':series[i].start_time,'endTime':series[i].end_time,'date':series[i].date,'meetingCode':series[i].meetingCode,'room':series[i].meetingUrl}
         l.append(data)
 
         i+=1
@@ -2316,6 +2458,7 @@ def getUserLive():
 
         db.session.add(post)
         db.session.commit()
+
 
     return jsonify({'result':l})
 

@@ -28,7 +28,12 @@
 
 
     <title>{% block title %}100CHINAGUIDE{% endblock %}</title>
-
+<meta property="og:url"           content="https://www.100chinaguide.com" />
+<meta property="og:type"          content="website" />
+<meta property="og:title"         content="100ChinaGuide" />
+<meta property="og:description"   content="Your description" />
+<meta property="og:image"         content="https://www.100chinaguide/static/logo.svg" />
+{{ share.load() }}
 </head>
 {% endblock %}
 
@@ -160,13 +165,25 @@
 <nav class="bot-nav shadow-lg" >
     <a class="navLink home-icon" data-href="{{ url_for('home', username = current_user.username) }}"><img class="mobile-icon" src="../static/home.svg" alt=""><span class="nav_text">Home</span></a>
     <a class="navLink live"  ><img class="mobile-icon" src="../static/live.svg" alt=""><span class="nav_text">Live</span></a>
+   {% if current_user.is_authenticated %}
+    <a class="navLink profile-nav" data-href="{{ url_for('userDetails', username = current_user.username) }}" href=""><img class="mobile-icon" src="../static/profile.svg" alt=""><span class="nav_text">Profile</span></a>
+{% else %}
     <a class="navLink profile-nav" href=""><img class="mobile-icon" src="../static/profile.svg" alt=""><span class="nav_text">Profile</span></a>
-
+{% endif %}
 </nav>
 
 {% endblock %}
 
 {% block script %}
+    <div class="share-logos mx-auto text-center p-3  shadow-lg">
+
+                     <div class="fb-share-button"
+                        data-href="https://www.100chinaguide.com"
+                    data-layout="button_count">
+
+    </div>
+    {{ share.create(sites='facebook') }}
+    </div>
 
     <script src='../static/packages/core/main.js'></script>
     <script src='../static/packages/daygrid/main.js'></script>
@@ -351,6 +368,14 @@ var sound = null;
     wavesurfer.load('/static/videos/'+audioSrc+'');
 
     </script>
+    <div id="fb-root"></div>
+<script>(function(d, s, id) {
+var js, fjs = d.getElementsByTagName(s)[0];
+if (d.getElementById(id)) return;
+js = d.createElement(s); js.id = id;
+js.src = "https://connect.facebook.net/en_US/sdk.js#xfbml=1&version=v3.0";
+fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script>
 {% endblock %}
 </body>
 </html>

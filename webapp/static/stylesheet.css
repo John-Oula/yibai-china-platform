@@ -1344,6 +1344,7 @@ body{
     background-color: white;
     display: flex;
     overflow-x: auto;
+    z-index: 100;
 
 }
 .navLink{

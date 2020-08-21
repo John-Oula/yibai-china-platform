@@ -1359,6 +1359,7 @@ body{
     color: #444444;
     font-size: 12px;
     font-family: Josefin Sans, sans-serif;
+    margin-bottom: 0px;
 
 }
 
@@ -2175,6 +2176,16 @@ div.modal , #episode-modal , #series-modal{
 .update-schedule{
     display: none;
 }
+#update-schedule{
+    display: none;
+}
+
+.schedule{
+    display: none;
+}
+#course-update{
+    display: none;
+}
 
 
 .click-unbook{
@@ -2294,6 +2305,10 @@ background-color: white;
     height: auto;
     background-color: #5bb75b;
     color: white;
+}
+
+#course-update{
+    display: none;
 }
 
 }

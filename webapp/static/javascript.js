@@ -1060,6 +1060,8 @@ $(document).ready(function(){
         $('.schedule-container').css('display','none');
         $('.checkout').css('display','none')
         $('.fc-toolbar h2').css('display','none')
+        $('#course-update').css('display','none');
+        $('.upload-option').css('display','none');
 
 
 });
@@ -1201,6 +1203,7 @@ $(document).ready(function(){
         $('#create-live').css('display','none');
         $('.schedule').css('display','none');
         $('#course-upload').css('display','none');
+        $('#course-update').css('display','none');
         $('#create-series').css('display','none');
         $('.profile').css('display','none');
         $('#create-course').css('display','none');
@@ -1323,9 +1326,10 @@ $(document).ready(function(){
         $('#course-upload').css('display','none');
         $('#create-series').css('display','none');
         $('.profile').css('display','none');
-        $('#create-course').css('display','block');
+        $('#create-course').css('display','none');
         $('.video-details').css('display','none');
         $('.upload-list').css('display','none');
+        $('.upload-option').css('display','none');
         $('#user-profile').css('display','none');
 
 
@@ -1421,11 +1425,15 @@ $('.append-schedule').empty();
         $('.live-list').css('display','none');
         $('.profile').css('display','none');
         $('#create-course').css('display','none');
+        $('#course-update').css('display','none');
         $('.video-details').css('display','none');
         $('.upload-list').css('display','none');
         $('#user-profile').css('display','none');
         $('.schedule-container').css('display','block');
         $('#live-update').css('display','none');
+        $('.upload-option').css('display','none');
+        $('.update-schedule').css('display','none');
+        $('.schedule').css('display','none');
 
 });
 
@@ -1497,10 +1505,12 @@ $('.append-schedule').empty();
         $('.schedule').css('display','none');
         $('#course-upload').css('display','none');
         $('#create-series').css('display','none');
+        $('#course-update').css('display','none');
         $('.profile').css('display','none');
         $('#create-course').css('display','block');
         $('.video-details').css('display','none');
         $('.upload-list').css('display','none');
+        $('.upload-option').css('display','none');
         $('#user-profile').css('display','none');
         $('.schedule-container').css('display','none');
 
@@ -1641,8 +1651,10 @@ $(document).ready(function(){
   req.done(function(data){
       var checkoutUrl = "/checkout?price="+data.price+"&subject="+data.title+"&course_id="+data.id+"&user="+userId;
       $('.checkout').css('display','block')
-      $('#total-price').text(currency+data.price)
+      $('.total-price').text(currency+data.price)
+      $('.navLink.total-price').css('font-size','1.5rem')
       $('.click-pay').attr('data-href',checkoutUrl)
+      $('.live-img').attr('src',coverImgSrc+data.coverImg)
       $('#original-price').text(currency+data.price)
       $('#checkout-title').text(data.title)
       $('#live-update').css('display','none');

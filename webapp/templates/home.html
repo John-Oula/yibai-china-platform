@@ -190,11 +190,11 @@
     </div>
 
     <div id="main">
-    {% if current_user.is_authenticated %}
-        <span class="uId" user-Id="{{ current_user.id }}"></span>
-    {% else %}
-    <span></span>
-    {% endif %}
+        {% if current_user.is_authenticated %}
+            <span class="uId" user-Id="{{ current_user.id }}"></span>
+        {% else %}
+            <span></span>
+        {% endif %}
         <!-- Load Facebook SDK for JavaScript -->
         <div id="fb-root"></div>
         <script>(function (d, s, id) {
@@ -208,7 +208,7 @@
 
         <div class="loader p-2 text-center mx-auto shadow-lg center ">
 
-            <img src="../static/loader.svg" width="60" alt="">
+            <img src="../static/loader.gif" width="60" alt="">
             <small>Uploading...</small>
 
         </div>
@@ -486,6 +486,9 @@
                 </form>
 
             </div>
+            <br>
+            <br>
+            <br>
 
         </div>
 
@@ -538,7 +541,9 @@
                         {{ form.upload_submit(class="fixed-btn text-light") }}
                     </fieldset>
                 </form>
-
+                <br>
+                <br>
+                <br>
             </div>
 
             <div class="p-3" id="create-series">
@@ -591,7 +596,9 @@
                     </card>
                 </card>
 
-
+                <br>
+                <br>
+                <br>
             </div>
 
             <div class="p-3" id="create-live">
@@ -624,7 +631,9 @@
 
                 </form>
 
-
+                <br>
+                <br>
+                <br>
             </div>
         </div>
         <div class="p-3 upload-option">
@@ -646,11 +655,15 @@
 
         <div id="course-update" class="p-2">
 
-
+            <br>
+            <br>
+            <br>
         </div>
 
         <div id="live-update" class="p-2">
-
+            <br>
+            <br>
+            <br>
         </div>
         <div id="user-profile">
             {% if current_user.is_authenticated %}
@@ -716,20 +729,22 @@
                         </li>
                     </ul>
                     <div class="tab-content" id="myProfileTab">
-                        <div class="tab-pane fade show active p-3" id="my-bio" role="tabpanel" aria-labelledby="bio-tab">
+                        <div class="tab-pane fade show active p-3" id="my-bio" role="tabpanel"
+                             aria-labelledby="bio-tab">
                             <p>Introduction</p>
                             <div class="user-intro">
-                            <form data-href="{{ url_for('updateInfo') }}" action="" class=" text-center user-form" method="POST" enctype="multipart/form-data">
-                                <fieldset>
-                                    {{ userForm.hidden_tag() }}
-                                    {{ userForm.introduction( placeholder="Write your introduction here",class = "input-box-border border border-top-0 border-left-0 border-right-0") }}
-                                    <br>
-                                    {{ userForm.introVideo.label }} <br>
-                                    {{ userForm.introVideo(class = "description-field input-box-border border border-top-0 border-left-0 border-right-0") }}
-                                    <br>
-                                    {{ userForm.submit(class="fixed-btn text-light") }}
-                                </fieldset>
-                            </form>
+                                <form data-href="{{ url_for('updateInfo') }}" action="" class=" text-center user-form"
+                                      method="POST" enctype="multipart/form-data">
+                                    <fieldset>
+                                        {{ userForm.hidden_tag() }}
+                                        {{ userForm.introduction( placeholder="Write your introduction here",class = "input-box-border border border-top-0 border-left-0 border-right-0") }}
+                                        <br>
+                                        {{ userForm.introVideo.label }} <br>
+                                        {{ userForm.introVideo(class = "description-field input-box-border border border-top-0 border-left-0 border-right-0") }}
+                                        <br>
+                                        {{ userForm.submit(class="fixed-btn text-light") }}
+                                    </fieldset>
+                                </form>
                             </div>
                             <span id="my-introduction"></span>
                             <p id="video-description"></p>
@@ -739,6 +754,9 @@
                         <div class="tab-pane fade" id="my-reviews" role="tabpanel" aria-labelledby="reviews-tab"></div>
                         <div class="tab-pane fade" id="my-stats" role="tabpanel" aria-labelledby="stats-tab"></div>
                     </div>
+                    <br>
+                    <br>
+                    <br>
                 </div>
             {% else %}
                 <div class="mx-auto d-block text-center" id="login_container"></div>
@@ -751,7 +769,7 @@
         <div id="edit-live">
             <form action="" class=" text-center " id="update-session-form" method="POST">
                 <fieldset>
-                                                    <input type="hidden" name="_METHOD" value="PUT"/>
+                    <input type="hidden" name="_METHOD" value="PUT"/>
 
                     {{ UpdateSession.hidden_tag() }}
 
@@ -777,11 +795,17 @@
                 </fieldset>
 
             </form>
+            <br>
+            <br>
+            <br>
         </div>
         <div id="update-schedule">
             <div class="row append-edit-schedule no-gutters">
 
             </div>
+            <br>
+            <br>
+            <br>
         </div>
         <!-- Trigger the modal with a button -->
 
@@ -928,7 +952,6 @@
         </div>
 
 
-
     </div>
 
     <div class="checkout">
@@ -950,17 +973,20 @@
             <hr/>
             <div class="mt-4">
                 <span>Total</span>
-                <span class="float-right" id="total-price"></span>
+                <span class="float-right total-price"></span>
             </div>
-            <div class="mt-5" style="
+            <div class="mt-5 " style="
     font-size: 11px;
 ">By completing your purchase you agree to these our Terms of Service
             </div>
+            <br>
+            <br>
+            <br>
         </div>
 
 
         <nav id="video-nav" class="shadow-lg">
-            <h1 id="total-price" class="navLink">99</h1>
+            <h3  class="navLink total-price"></h3>
             {% if current_user.is_authenticated %}
                 <a class="navLink click-pay" data-href="" href="">
                     <button class="common-btn">COMPLETE PAYMENT</button>

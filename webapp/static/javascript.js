@@ -1570,6 +1570,7 @@ $('.append-schedule').empty();
         $('.upload-list').css('display','none');
         $('.upload-option').css('display','none');
         $('#user-profile').css('display','none');
+        $('#edit-live').css('display','none');
         $('.schedule-container').css('display','none');
 
 

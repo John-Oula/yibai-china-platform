@@ -87,7 +87,7 @@
     <div class="">
  <div class="flash-msg shadow-lg p-5"></div>
      </div>
-    <div class="navbar shadow-sm navbar-expand-md navbar-expand-xl navbar-expand-sm navbar-expand">
+    <div class="navbar sticky-top shadow-sm navbar-expand-md navbar-expand-xl navbar-expand-sm navbar-expand">
         <span style="font-size:30px;cursor:pointer" onclick="openNav()">&#9776; </span>
         <div class="navbar-brand text-center"><img class="" src="../static/logo.svg" alt=""></div>
     <div class="left-icons">
@@ -110,7 +110,7 @@
       </button>
       <div class="dropdown-container">
           <a id="course-create" href="">Create course</a>
-          <a id="update-course" data-href="{{ url_for('getUserSeries',user_id = current_user.id) }}" href="#">Update/Edit course</a>
+          <a id="update-course" data-href="{{ url_for('getUserSeries',user_id = current_user.id) }}" href="#">Manage course</a>
           <a href="#">Bought Courses</a>
           <a href="#">Stats</a>
       </div>
@@ -119,7 +119,7 @@
       </button>
       <div class="dropdown-container">
           <a id="schedule-create" data-href="{{ url_for('getUserSchedule',user_id = current_user.id) }}" href="">Create availability</a>
-          <a id="edit-schedule" data-href="{{ url_for('getUserSchedule',user_id = current_user.id) }}" href="#">Update/Edit availability</a>
+          <a id="edit-schedule" data-href="{{ url_for('getUserSchedule',user_id = current_user.id) }}" href="#">Manage availability</a>
           <a href="#">Booked schedule </a>
           <a href="#">Stats</a>
       </div>
@@ -128,7 +128,7 @@
       </button>
       <div class="dropdown-container">
           <a id="live-create" href="#">Create live Session</a>
-          <a id="update-live" data-href="{{ url_for('getUserLive',user_id = current_user.id) }}" href="">Update/Edit live Session</a>
+          <a id="update-live" data-href="{{ url_for('getUserLive',user_id = current_user.id) }}" href="">Manage live Session</a>
           <a href="#">Booked live Session</a>
           <a href="#">Stats</a>
       </div>

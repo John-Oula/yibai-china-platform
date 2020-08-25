@@ -782,9 +782,15 @@
                     <br>
                 </div>
             {% else %}
-                <div class="mx-auto d-block text-center" id="login_container"></div>
-                <small class=""><a href="{{ url_for('signIn') }}" id="login-text" class="">Log in </a>another
+                <div class="mx-auto d-block text-center" id="login_container">
+
+
+                </div>
+                <div class="text-center">
+                    <small class=""><a href="{{ url_for('signIn') }}" id="login-text" class="">Log in </a>another
                     way</small>
+                </div>
+
 
             {% endif %}
         </div>

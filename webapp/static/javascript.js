@@ -2036,7 +2036,7 @@ $(document).ready(function() {
         },
         error:function (error) {
 
-          popover(error,'error')
+          popover('Login to post a comment','error')
           $('.loader').css('display','none')
 
         },

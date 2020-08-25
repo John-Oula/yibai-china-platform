@@ -680,6 +680,7 @@ $('.checkout').css('display','none')
   e.preventDefault();
 
 
+
   req = $.ajax({
     url:$(this).attr('data-href'),
     type:'GET',
@@ -696,10 +697,18 @@ $('.checkout').css('display','none')
   req.done(function(data){
     var tog = $('.user-form').css('display');
    $('.user-form').css('display','none')
-    if ( tog === 'block')
+    if ( tog === 'block'){
+
       $('.user-form').css('display','none')
-    else if (tog === 'none')
-      $('.user-form').css('display','block')
+      $('#my-introduction').css('display','block')
+
+    }
+    else if (tog === 'none'){
+            $('.user-form').css('display','block')
+      $('#my-introduction').css('display','none')
+    }
+
+
 
 
 
@@ -707,6 +716,7 @@ $('.checkout').css('display','none')
 
         $('#introduction').html(data.introduction);
         $('#introVideo').val(data.introVideo);
+
 
 
 });
@@ -2012,7 +2022,7 @@ $(document).ready(function() {
 		.done(function(data) {
 		  $('.loader').css('display','none')
 
-		  var intro = $('#introduction').text()
+		  var intro = $('#introduction').val()
           $('#my-introduction').html(intro)
           $('.user-form').css('display','none')
           $('#my-introduction').css('display','block')

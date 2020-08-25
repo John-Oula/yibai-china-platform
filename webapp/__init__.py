@@ -430,7 +430,7 @@ class Series(db.Model):
     def fileType(self):
         if self.upload_ref:
 #            file_path = os.path.abspath('webapp/static/videos/'+self.upload_ref)
-            if self.upload_ref.split('.')[1] == 'mp4':
+            if self.upload_ref.split('.')[1] == 'mp4' or self.upload_ref.split('.')[1] == 'MP4':
                 return 'video'
             elif self.upload_ref.split('.')[1] == 'mp3':
                 return 'audio'

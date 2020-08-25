@@ -376,7 +376,6 @@ class Upload(db.Model):
     auido_ref = db.Column('auido_ref', db.VARCHAR)
     timestamp = db.Column(db.DateTime, default=datetime.datetime.utcnow)
     user_id = db.Column('user_id', db.Integer, db.ForeignKey('user.id'), nullable=True)
-    comments = db.relationship('Comment', backref='upload', lazy='dynamic')
 
     def __repr__(self, id, title, category, description, price, upload_ref,coverImage,transcript_ref,auido_ref, user_id):
         self.id = id
@@ -506,7 +505,6 @@ class Comment(db.Model):
    content = db.Column(db.Text)
    timestamp = db.Column(db.DateTime, index=True, default=datetime.datetime.utcnow)
    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
-   upload_id = db.Column(db.Integer, db.ForeignKey('upload.id'))
    series_id = db.Column(db.Integer, db.ForeignKey('series.id'))
    episode_id = db.Column(db.Integer, db.ForeignKey('episode.id'))
 class Reviews(db.Model):
@@ -874,7 +872,7 @@ def comment():
     episode_id = request.args.get('episode_id', type=int)
     if series_id:
         course = Series.query.filter_by(id=series_id).first_or_404()
-        comment = Comment(content=form.content.data, user_id=current_user.id, upload_id=course.id)
+        comment = Comment(content=form.content.data, user_id=current_user.id, series_id=course.id)
         course.comments.append(comment)
         db.session.commit()
 
@@ -882,7 +880,7 @@ def comment():
         return msg
     elif episode_id:
         course = Series.query.filter_by(id=series_id).first_or_404()
-        comment = Comment(content=form.content.data, user_id=current_user.id, upload_id=episode_id)
+        comment = Comment(content=form.content.data, user_id=current_user.id, episode_id=episode_id)
         course.comments.append(comment)
         db.session.commit()
 

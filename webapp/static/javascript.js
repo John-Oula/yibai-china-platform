@@ -1532,7 +1532,7 @@ $('.append-schedule').empty();
           $('#live-update').empty();
                   $.each(data.result, function(key,value) {
 
-        $('.start-btn').css('display',checkTime(value.startTime));
+//        $('.start-btn').css('display',checkTime(value.startTime));
 
       $('#live-update').append('<card class="mt-2 mb-2 flex-fill flex-row shadow-lg row no-gutters user-course card live-url" id="'+value.id+'"><div class="col-3 no-gutters cover-wrapper"><img id="course-img" src="'+coverImgSrc+value.coverImg+'" alt=""></div><div class="col-6 p-2 flex-fill flex-column no-gutters "><h6 id="course-title">'+value.title+'</h6><div id="live-date">Date : '+value.date+'</div><div id="live-time">Time : '+value.startTime +'-'+value.endTime +'</div><a  data-href="'+liveUrl +value.id+'" class="edit-live" data-toggle="" data-target="" href=""><img src="../static/edit.svg" alt=""></a><span>Edit</span></div><a class="start-btn col-3 text-center p-3" href="'+value.room+'"><div class="text-center">START</div></a></card>');
 

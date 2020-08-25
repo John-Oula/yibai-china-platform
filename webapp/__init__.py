@@ -2489,6 +2489,8 @@ def getUserLive():
 
         db.session.add(post)
         db.session.commit()
+        msg='Created successfully'
+        return msg
 
 
     return jsonify({'result':l})

@@ -1985,6 +1985,7 @@ $(document).ready(function() {
             if (!/^(GET|HEAD|OPTIONS|TRACE)$/i.test(settings.type) && !this.crossDomain) {
                 xhr.setRequestHeader("X-CSRFToken", csrf_token);
             }
+             $('.loader').css('display','block')
         },
 			data : new FormData(this),
 			type : 'POST',
@@ -1994,8 +1995,9 @@ $(document).ready(function() {
 
 		})
 		.done(function(data) {
+           $('.loader').css('display','none')
+          popover(data,'success')
 
-        console.log('done')
 
 		});
 

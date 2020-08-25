@@ -2256,7 +2256,7 @@ div.modal , #episode-modal , #series-modal{
 }
 
 .controls{
-    position: relative;
+    position: absolute;
     top: 120px;
 }
 #pause-btn{

@@ -429,11 +429,14 @@ class Series(db.Model):
 
     def fileType(self):
         if self.upload_ref:
-#            file_path = os.path.abspath('webapp/static/videos/'+self.upload_ref)
-            if self.upload_ref.split('.')[1] == 'mp4' or self.upload_ref.split('.')[1] == 'MP4':
-                return 'video'
-            elif self.upload_ref.split('.')[1] == 'mp3':
-                return 'audio'
+            videoList=['mov','mp4','m4a','3gp','3g2','mj2' ,'MOV','MP4']
+            for v in videoList:
+                #                file_path = os.path.abspath('webapp/static/videos/' + self.upload_ref)
+                if self.upload_ref.split('.')[1] == v:
+                    return 'video'
+                elif self.upload_ref.split('.')[1] == 'mp3':
+                    return 'audio'
+
         else:
             return 'Error loading content'
 

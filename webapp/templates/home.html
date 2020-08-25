@@ -22,7 +22,6 @@
 {% endblock %}
 
 {% block body %}
-<div id="currentUser" username="{{ current_user.username }}" propic="{{ current_user.image_file }}" ></div>
     <div class="home-wrapper">
         <p class="text-center title">Why 100ChinaGuide?</p>
         <div class="container">
@@ -190,6 +189,8 @@
     </div>
 
     <div id="main">
+    <div id="currentUser" username="{{ current_user.username }}" propic="{{ current_user.image_file }}" ></div>
+
         {% if current_user.is_authenticated %}
             <span class="uId" user-Id="{{ current_user.id }}"></span>
         {% else %}
@@ -347,6 +348,7 @@
                     </a>
                 </nav>
             </div>
+        </div>
         </div>
         <div class="profile mt-3">
 
@@ -1022,9 +1024,10 @@
 
     </div>
 
+    </div>
 
 
-    </div></body>
+    </body>
 
 
 

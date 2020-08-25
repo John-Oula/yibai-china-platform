@@ -400,7 +400,7 @@ class Series(db.Model):
     coverImage = db.Column('coverImage', db.VARCHAR)
     upload_ref = db.Column('upload_ref', db.VARCHAR)
     description = db.Column('description', db.VARCHAR)
-    price = db.Column('price', db.Integer)
+    price = db.Column('price', db.String(10))
     timestamp = db.Column(db.DateTime, default=datetime.datetime.utcnow)
     user_id = db.Column('user_id', db.Integer, db.ForeignKey('user.id'), nullable=False)
     payment = db.relationship('Payment', backref='userPayment', lazy='dynamic')

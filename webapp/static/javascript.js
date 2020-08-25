@@ -839,6 +839,8 @@ function closeLeftNav() {
 
 $(document).ready(function(){
         $('.upload-list').on("click",'.thumb-wrapper',function(e){
+          $('.upload-list').css('display','none');
+          $('.loader').css('display','block');
   e.preventDefault();
     var url = $(this).attr("data-href");
     var videoSrc = "../static/videos/";
@@ -863,6 +865,7 @@ $(document).ready(function(){
 
   });
   req.done(function(data){
+    $('.loader').css('display','none');
     var obj  = data.result;
     $('#episode').empty();
             if (obj.isSeries === true){
@@ -915,7 +918,7 @@ $(document).ready(function(){
           $('#buy').css('display','none');
         }
 
-        $('.upload-list').css('display','none');
+
         $('.video-details').css('display','block');
         $('.addCart').attr('data-href','/addCart?upload_id='+obj.id);
         $('.like-btn').attr('data-href','/like/video'+obj.id);
@@ -931,6 +934,7 @@ $(document).ready(function(){
 
           $('#unlike-btn').css('display','none');
         }
+        $('#user-reviews').empty();
         $.each(obj.comments, function(key,value) {
 
 
@@ -956,6 +960,9 @@ $(document).ready(function(){
         $('#user-profile').css('display','none');
         $('.checkout').css('display','none')
         $('#comment-nav').css('display','none')
+        $('#course-update').css('display','none')
+        $('#course-create').css('display','none')
+        $('.schedule').css('display','none')
         $('#video-bot-nav').css('display','flex')
 
 

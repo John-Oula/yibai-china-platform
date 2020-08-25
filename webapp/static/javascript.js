@@ -937,7 +937,7 @@ $(document).ready(function(){
         $('#video-title').html(obj.title);
         $('#video-author').html(obj.username);
         $('#video-likes').html(obj.likes);
-        $('#video-comments').html(obj.comments);
+        $('#video-comments').html(obj.totalComments);
         $('#video-description').html(obj.description);
         $('#video-description img').css('width','100%');
         $('#video-price').html(currency + obj.price);
@@ -1602,7 +1602,7 @@ $('.append-schedule').empty();
 
 
 
-          $('#comment-nav').css('display','block');
+          $('#comment-nav').css('display','flex');
           $('#video-bot-nav').toggle();
 
 

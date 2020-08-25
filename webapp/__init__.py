@@ -696,7 +696,7 @@ class Lesson_form(FlaskForm):
 
 class Comment_form(FlaskForm):
     content = StringField()
-    submit = SubmitField('Submit')
+    submit = SubmitField('Post')
 
 
 
@@ -723,7 +723,7 @@ class Reset_password(FlaskForm):
 @app.route('/' ,methods=['POST','GET'])
 def home():
     page = request.args.get('page', type=int)
-    uploads = Upload.query.order_by(Upload.timestamp.desc()).paginate(per_page=4,error_out=False,page=page)
+#    uploads = Upload.query.order_by(Upload.timestamp.desc()).paginate(per_page=4,error_out=False,page=page)
     form = Upload_form()
     seriesForm = Series_form()
     episodeForm = Episode_form()
@@ -734,6 +734,7 @@ def home():
     UpdateSession = UpdateSession_form()
     signupForm = Signup_form()
     userForm = User_form()
+    commentForm = Comment_form()
 
 
 
@@ -762,7 +763,7 @@ def home():
             pass
 
 
-    return render_template('home.html',userForm = userForm,loginForm = loginForm,signupForm=signupForm,UpdateSession=UpdateSession,UpdateUploads=UpdateUploads,UpdateSeries=UpdateSeries,UpdateEpisode=UpdateEpisode,sessionForm=sessionForm,uploads=uploads,form=form,page=page,seriesForm=seriesForm,episodeForm=episodeForm)
+    return render_template('home.html',commentForm=commentForm,userForm = userForm,loginForm = loginForm,signupForm=signupForm,UpdateSession=UpdateSession,UpdateUploads=UpdateUploads,UpdateSeries=UpdateSeries,UpdateEpisode=UpdateEpisode,sessionForm=sessionForm,form=form,page=page,seriesForm=seriesForm,episodeForm=episodeForm)
 
 
 @app.route('/liveSession')
@@ -781,7 +782,6 @@ def liveSession():
     return jsonify({'result':l})
 
 @app.route('/userDetails')
-
 def userDetails():
 
     username = request.args.get('username', type=str)
@@ -865,6 +865,31 @@ def addCart():
     data =jsonify({"id":course.id,"title":course.title,"coverImage":course.coverImage,"price":course.price})
     print(data)
     return data
+
+@app.route('/comment',methods=['POST', 'GET'])
+@login_required
+def comment():
+    form = Comment_form()
+    series_id = request.args.get('series_id', type=int)
+    episode_id = request.args.get('episode_id', type=int)
+    if series_id:
+        course = Series.query.filter_by(id=series_id).first_or_404()
+        comment = Comment(content=form.content.data, user_id=current_user.id, upload_id=course.id)
+        course.comments.append(comment)
+        db.session.commit()
+
+        msg = 'Posted successfully'
+        return msg
+    elif episode_id:
+        course = Series.query.filter_by(id=series_id).first_or_404()
+        comment = Comment(content=form.content.data, user_id=current_user.id, upload_id=episode_id)
+        course.comments.append(comment)
+        db.session.commit()
+
+        msg = 'Posted successfully'
+        return msg
+    return '',204
+
 
 @app.route('/cart')
 @login_required
@@ -1527,6 +1552,7 @@ def videoDetails():
     videos = Series.query.filter_by(id=videoId).first()
     relatedVideos = Series.query.filter_by(category=videos.category).all()
     relatedList = []
+    commentsList = []
     for r in relatedVideos:
 
         data = {'id': r.id, 'coverImg': r.coverImage, 'title': r.title, 'isSeries': r.is_series(),
@@ -1535,6 +1561,12 @@ def videoDetails():
                 'userImg': r.user_series.image_file, 'category': r.category, 'likes': r.liked.count(),
                 'comments': r.comments.count()}
         relatedList.append(data)
+
+    for c in videos.comments:
+        data= {'id':c.id,'content':c.content,'timestamp':c.timestamp,'username':c.author.username,'proPic':c.author.image_file,'userId':c.author.id}
+        commentsList.append(data)
+
+
 
 
 
@@ -1546,7 +1578,7 @@ def videoDetails():
         data ={'id': videos.id,'coverImg':videos.coverImage, 'title': videos.title,'isSeries':videos.is_series(),'videoRef':videos.upload_ref,'type':videos.fileType(),'description':videos.description,'price':videos.price,'userId':videos.user_series.id,'username': videos.user_series.username,'userImg': videos.user_series.image_file, 'category': videos.category,'likes':videos.liked.count(),'comments':videos.comments.count()}
         ep = []
         for e in videos.episode:
-            episode = {'episodeId':e.id,'seriesId':e.sub.id,'subtitle':e.subtitle}
+            episode = {'episodeId':e.id,'seriesId':e.sub.id,'subtitle':e.subtitle,'description':e.description}
             ep.append(episode)
 
         data.update({'episode':ep})
@@ -1563,6 +1595,7 @@ def videoDetails():
 
         data = {'id': videos.id, 'title': videos.title,'isSeries':videos.is_series(),'videoRef':videos.upload_ref,'type':videos.fileType(),'description':videos.description,'price':videos.price,'userId':videos.user_series.id,'username': videos.user_series.username,'userImg': videos.user_series.image_file, 'category': videos.category,'likes':videos.liked.count(),'comments':videos.comments.count()}
         data.update({'relatedVideos': relatedList})
+        data.update({'comments': commentsList})
         if current_user.is_authenticated:
             data.update({'hasLiked':current_user.has_liked(videos)})
 
@@ -2235,11 +2268,11 @@ def getUserSeries():
     return jsonify({'result':l})
 
 @app.route('/getEpisode', methods=['POST', 'GET','PUT'])
-@csrf.exempt
+
 def getEpisode():
     episode_id = request.args.get('episode_id', type=int)
     episode = Episode.query.filter_by(id = episode_id).first()
-    data = {'episodeId': episode.id, 'seriesId': episode.sub.id,'type':episode.fileType(), 'subtitle': episode.subtitle, 'video': episode.upload_ref,'description': episode.description}
+    data = {'id': episode.id, 'seriesId': episode.sub.id,'type':episode.fileType(), 'subtitle': episode.subtitle, 'video': episode.upload_ref,'description': episode.description}
 
 
     return jsonify({'result':data})

@@ -1866,7 +1866,7 @@ video{
     display: none;
 }
 
-#video-nav{
+.video-nav{
         position: fixed;
     bottom: 55px;
     width: 100%;
@@ -2312,6 +2312,26 @@ background-color: white;
     display: none;
 }
 
+.comment-btn{
+    background: none;
+    border: none;
+}
+
+.comment-input{
+    overflow: visible;
+    width: 80%;
+    border-radius: 7px;
+    border-style: solid;
+    border-width: thin;
+
+}
+#comment-nav{
+display: none;
+}
+#user-reviews{
+        overflow-y: scroll;
+    height: 300px;
+}
 }
 
 

@@ -7,6 +7,8 @@ var end_time;
  var userImgSrc = '../static/profile_pics/';
  var videoSrc = '../static/videos/';
  var currentUserId = $('.uId').attr("user-Id")
+ var currentUserUsername = $('#currentUser').attr("username")
+ var currentUserProPic = $('#currentUser').attr("propic")
 
 function popover(msg,statusType){
   if (statusType == 'success'){
@@ -104,7 +106,6 @@ function update() {
 
 }
 
-update()
 
 function calculateTime(now,scheduled) {
 
@@ -816,6 +817,7 @@ $(document).ready(function(){
     var userImgSrc = "../static/profile_pics/";
     var userUrl = "/userDetails?username=";
     var courseUrl = "/editSeries?series_id=";
+    var commentUrl = "/comment?series_id=";
     var currency = "￥";
     var coverImgUrl = '../static/coverImages/';
 
@@ -839,9 +841,12 @@ $(document).ready(function(){
 
               $('#episode-tab').css('display','block');
 
+
                     $.each(obj.episode, function(key,value) {
-            $('#episode').append('<div class="card shadow-sm click-episode" data-href="/getEpisode?episode_id='+value.episodeId +'" ><div class="p-2"><span><img src="../static/play.svg" alt="" width="12"><span id="episode-title" class="mr-2 ml-5">'+value.subtitle+'</span><span id="episode-duration"></span></span></div></div>')
-         });
+
+                      $('#episode').append('<div class="card shadow-sm click-episode" data-href="/getEpisode?episode_id='+value.episodeId +'" ><div class="p-2"><span><img src="../static/play.svg" alt="" width="12"><span id="episode-title" class="mr-2 ml-5">'+value.subtitle+'</span><span id="episode-duration"></span></span></div></div>')
+
+                    });
         }
             else if (obj.isSeries === false){
 
@@ -894,10 +899,18 @@ $(document).ready(function(){
 
           $('#unlike-btn').css('display','none');
         }
+        $.each(obj.comments, function(key,value) {
+
+
+      $('#user-reviews').append('<div><div data-href="" class="profile-pic-wrapper d-inline-flex mr-2 click-pro-pic"><span><img id="profilepic" src="'+ userImgSrc + value.proPic +'" alt=""></span></div><small ><strong>'+ value.username +'</strong></small><div><small id="user-review">'+ value.content +'</small></div></div></div></div>');
+
+});
+
 
 
 
         $('.profile-pic-wrapper').attr("data-href",userUrl+obj.username);
+        $('#comment-form').attr("data-href",commentUrl+obj.id);
         $('#buy').attr("data-href",courseUrl+obj.id);
         $('#video-title').html(obj.title);
         $('#video-author').html(obj.username);
@@ -910,6 +923,9 @@ $(document).ready(function(){
         $('img#profilepic').attr("src",userImgSrc + obj.userImg);
         $('#user-profile').css('display','none');
         $('.checkout').css('display','none')
+        $('#comment-nav').css('display','none')
+        $('#video-bot-nav').css('display','flex')
+
 
 
 
@@ -987,6 +1003,7 @@ $(document).ready(function(){
     var userImgSrc = "../static/profile_pics/";
     var currency = "￥";
     var followUrl = "/follow";
+    var commentUrl = "/comment?episode_id=";
     var unfollowUrl = "/unfollow";
 
   req = $.ajax({
@@ -1030,7 +1047,9 @@ $(document).ready(function(){
         $('.profile').css('display','none');
 
         $('#user-profile').css('display','none');
-        $('#video-description').text(obj.description);
+        $('#episode-description').append('<div><span>Episode Summary</span></div>')
+        $('#episode-description').html(obj.description);
+        $('#comment-form').attr("data-href",commentUrl+obj.id);
         $('.checkout').css('display','none')
 
 });
@@ -1556,6 +1575,17 @@ $('.append-schedule').empty();
 
 
 });
+      $('.comment').on("click",function(e){
+        e.preventDefault();
+
+
+
+          $('#comment-nav').css('display','block');
+          $('#video-bot-nav').toggle();
+
+
+
+});
 
 
 });
@@ -1964,6 +1994,44 @@ $(document).ready(function() {
           $('#my-introduction').html(intro)
           $('.user-form').css('display','none')
           $('#my-introduction').css('display','block')
+
+        popover(data,'success')
+
+		});
+
+		event.preventDefault();
+
+	});
+	$('form#comment-form').on('submit', function(event) {
+        var csrf_token = $('#csrf_token').attr('value');
+		$.ajax({
+        beforeSend: function(xhr, settings) {
+            if (!/^(GET|HEAD|OPTIONS|TRACE)$/i.test(settings.type) && !this.crossDomain) {
+                xhr.setRequestHeader("X-CSRFToken", csrf_token);
+
+            }
+            $('.loader').css('display','block')
+        },
+        error:function (error) {
+
+          popover(error,'error')
+          $('.loader').css('display','none')
+
+        },
+			data : new FormData(this),
+			type : 'POST',
+			url : $(this).attr('data-href'),
+            processData: false,
+            contentType: false,
+
+		})
+		.done(function(data) {
+		  $('.loader').css('display','none')
+
+		  var comment = $('#content').val()
+                $('#user-reviews').append('<div><div data-href="" class="profile-pic-wrapper d-inline-flex mr-2 click-pro-pic"><span><img id="profilepic" src="'+ userImgSrc + currentUserProPic +'" alt=""></span></div><small ><strong>'+ currentUserUsername +'</strong></small><div><small id="user-review">'+ comment +'</small></div></div></div></div>');
+
+
 
         popover(data,'success')
 

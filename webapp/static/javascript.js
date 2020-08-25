@@ -174,17 +174,35 @@ function myFunction() {
     x.style.display = "none";
   }
 }
+$(document).ready(function(){
+  wavesurfer.on('ready', function() {
 
-$('#play-btn').on('click', function () {
+
+
+
+   $('.loader').css('display','none')
+
+
     wavesurfer.play();
     $('#pause-btn').css('display','flex')
     $('#play-btn').css('display','none')
-    });
+
+
+
+
 $('#pause-btn').on('click', function () {
     wavesurfer.pause();
     $('#play-btn').css('display','flex')
     $('#pause-btn').css('display','none')
     });
+$('#play-btn').on('click', function () {
+    wavesurfer.play();
+    $('#play-btn').css('display','none')
+    $('#pause-btn').css('display','flex')
+    });
+    });
+});
+
 
 $(document).ready(function(){
 $('.like-btn').click(function(e){
@@ -863,11 +881,15 @@ $(document).ready(function(){
         }
         else if (obj.type == 'audio'){
 
-          $('#audiofile').attr("audioFile",obj.videoRef);
+          $('#audio-file').attr("audioFile",obj.videoRef);
           $('.controls').css('display','flex');
           $('video').css('display','none');
           $('.course-img').css('display','block');
           $('.course-img').attr("src",coverImgUrl+ obj.coverImg);
+            var audioSrc = '/static/videos/' + $('#audio-file').attr('audioFile')
+
+
+            wavesurfer.load(audioSrc);
 
         }
         else if (obj.videoRef == null){

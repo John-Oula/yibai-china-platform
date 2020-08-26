@@ -622,6 +622,7 @@ input#signup-long-btn{
 .input-box-border{
     background: none;
     border-color: #E74525;
+    margin-bottom:10px;
 }
 
 /*CARDS*/
@@ -1108,12 +1109,17 @@ font-family: Josefin Sans,sans-serif;
 }
 
 
-.modal-body {
 
+
+.modal-body {
+    overflow-y: auto;
+    max-height: calc(100vh - 210px);
     padding: 2px 16px;
 
 }
-
+small{
+    color: #5a6268;
+}
 
 .uploads{
     margin-left: 30px;
@@ -1192,9 +1198,7 @@ ul.upload-list{
 
 }
 .series-div{
-    border-style: solid;
-    border-width: 1px;
-    border-color: #E74525;
+
     padding: 20px;
 }
 .upload-username{

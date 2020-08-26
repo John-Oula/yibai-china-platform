@@ -400,7 +400,7 @@ class Series(db.Model):
     coverImage = db.Column('coverImage', db.VARCHAR)
     upload_ref = db.Column('upload_ref', db.VARCHAR)
     description = db.Column('description', db.VARCHAR)
-    price = db.Column('price', db.String(10))
+    price = db.Column('price', db.Integer,default=0)
     timestamp = db.Column(db.DateTime, default=datetime.datetime.utcnow)
     user_id = db.Column('user_id', db.Integer, db.ForeignKey('user.id'), nullable=False)
     payment = db.relationship('Payment', backref='userPayment', lazy='dynamic')
@@ -662,7 +662,7 @@ class UpdateUploads_form(FlaskForm):
 class Series_form(FlaskForm):
     series_title = StringField('Title')
     series_category = SelectField('Category', choices=[('Mandarin','Mandarin'), ('Communication skills', 'Communication skills'), ('Academics', 'Academics'), ('Visa', 'Visa'), ('Living', 'Living'), ('Talent policy', 'Talent policy'), ('Finance & Law', 'Finance & Law'), ('Entrepreneur', 'Entrepreneur'), ('Others', 'Others')],widget=None)
-    series_description = TextAreaField('Course Summary')
+    series_description = HiddenField('Description')
     series_fileName = FileField('Upload File',validators=[FileRequired()])
     series_coverImage = FileField('Cover Image')
     series_price = StringField('Price')
@@ -672,7 +672,7 @@ class Series_form(FlaskForm):
 
 class Episode_form(FlaskForm):
     subtitle = StringField('Subtitle')
-    description = TextAreaField('Description')
+    description = HiddenField('Description')
     fileName = FileField('Upload File',validators=[FileRequired()])
     coverImage = FileField('Cover Image')
 class UpdateEpisode_form(FlaskForm):

@@ -224,7 +224,7 @@
 
         <div class="video-details">
             <div>
-                <div class="thumb-wrapper sticky-top">
+                <div class="thumb-wrapper ">
                     <li>
                         <video class="video-feed " preload="none" video-id="" controls="" type="video/mp4" src=""
                                alt=""></video>
@@ -538,6 +538,7 @@
 
                         {{ form.upload_price.label }} <br>
                         {{ form.upload_price(class = "input-box-border border border-top-0 border-left-0 border-right-0") }}
+                        <br><small>Price in RMB</small>
                         <br>
 
                         {{ form.upload_category.label }} <br>
@@ -556,7 +557,10 @@
 
                         <div class="">
                             {{ form.upload_fileName.label }}
-                            {{ form.upload_fileName() }}<br><br>
+                            {{ form.upload_fileName() }}<br>
+                            <small>Upload an mp4 or mp3 file</small>
+                            <br><br>
+
                             {{ form.upload_coverImage.label }}
                             {{ form.upload_coverImage() }}<br>
 
@@ -571,7 +575,7 @@
             </div>
 
             <div class="p-3" id="create-series">
-                <card class="card shadow-lg" id="create_card">
+                <card class="card shadow-lg w-100">
                     <card class="">
                         <form id="series-course" class="form-upload text-left" action="" method="POST"
                               enctype="multipart/form-data">
@@ -579,24 +583,33 @@
                                 {{ seriesForm.hidden_tag() }}
 
                                 <div class="series-div">
-                                    {{ seriesForm.series_title.label }}
-                                    {{ seriesForm.series_title(class = "input-box-border border border-top-0 border-left-0 border-right-0") }}
+                                    {{ seriesForm.series_title.label }}<br>
+                                    {{ seriesForm.series_title(class = "input-box-border border border-top-0 border-left-0 border-right-0") }}<br>
                                     {{ seriesForm.series_category.label }}
                                     {{ seriesForm.series_category(class = "input-box-border border border-top-0 border-left-0 border-right-0") }}
+
+                                    <br>
+                                    {{ seriesForm.series_price.label }} <small>Price in RMB</small><br>
+                                {{ seriesForm.series_price(class = "input-box-border border border-top-0 border-left-0 border-right-0") }}
+                                <br>
                                     <div class="wrapper">
                                         <button type="button" class="subtitle">
                                             {{ episodeForm.subtitle.label }}
-
                                             {{ episodeForm.subtitle(class = "input-box-border border border-top-0 border-left-0 border-right-0") }}
+
                                         </button>
                                         <div class="content">
 
                                             {{ episodeForm.fileName.label }}<br>
                                             {{ episodeForm.fileName() }}<br>
+                                            <small>Upload mp4 or mp3 file</small>
+                                            <br>
 
-                                            {{ seriesForm.series_coverImage.label }}<br>
-                                            {{ seriesForm.series_coverImage() }}<br>
+                                            {{ seriesForm.series_coverImage.label(class="mt-2") }}<br>
+                                            {{ seriesForm.series_coverImage }}<br>
+                                                <div class="series-form-editor mt-2">
 
+                                                </div>
                                             {{ episodeForm.description(class = "description-field input-box-border border border-top-0 border-left-0 border-right-0",placeholder="Description") }}
 
                                         </div>
@@ -607,13 +620,14 @@
                                 </div>
 
 
-                                {{ seriesForm.series_price.label }} <br>
-                                {{ seriesForm.series_price(class = "input-box-border border border-top-0 border-left-0 border-right-0") }}
-                                <br>
+
 
 
                                 <br>
-                                {{ seriesForm.series_submit }}
+                                <div class="text-center">
+                                    {{ seriesForm.series_submit(class="fixed-btn  mb-3") }}
+                                </div>
+
                             </fieldset>
                         </form>
 

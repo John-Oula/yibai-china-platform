@@ -134,9 +134,10 @@
       </div>
             <button id="logout" class="dropdown-btn">Logout </button>
 
-  {% else %}id
-    <a href="#}">Login</a>
-  <a href="#">Sign up</a>
+  {% else %}
+    <div class="text-center text-light ">
+    <p class="align-self-center">Log in on the "Profile" page</p>
+    </div>
     {% endif %}
 </div>
 
@@ -220,7 +221,42 @@
 };
 var quill = new Quill('#editor', options);
 
+	$('form#series-course').on('submit', function(event) {
+        var csrf_token = $('#csrf_token').attr('value');
+        var html = quill.root.innerHTML;
+    $('#series_description').val( html );
+		$.ajax({
+        beforeSend: function(xhr, settings) {
+            if (!/^(GET|HEAD|OPTIONS|TRACE)$/i.test(settings.type) && !this.crossDomain) {
+                xhr.setRequestHeader("X-CSRFToken", csrf_token);
+                $('.loader').css('display','block')
+            }
+        },  enctype: 'multipart/form-data',
+			data : new FormData(this),
+			type : 'POST',
+			url : '/createcourse?status=series',
+            processData: false,
+            contentType: false,
 
+          error: function(error){
+
+          popover(error,'success')
+          },
+          complete: function () {
+            $('.loader').css('display','none')
+
+          }
+
+		})
+		.done(function(data) {
+
+        popover(data,'success')
+
+		});
+
+		event.preventDefault();
+
+	});
 
 	$('form#course').on('submit', function(event) {
  var csrf_token = $('#csrf_token').attr('value');
@@ -247,6 +283,7 @@ var quill = new Quill('#editor', options);
 
           },
           complete: function () {
+            homepage();
             $('.loader').css('display','none')
 
           },
@@ -256,6 +293,7 @@ var quill = new Quill('#editor', options);
 
         $('.loader').css('display','none')
             popover(data,'success')
+
 
 		});
 

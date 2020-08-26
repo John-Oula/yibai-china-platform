@@ -106,6 +106,20 @@ function update() {
 
 }
 
+function homepage() {
+
+
+  $('#live').css('display','none');
+$('.live-list').css('display','none');
+$('.profile').css('display','none');
+$('.video-details').css('display','none');
+$('.upload-list').css('display','block');
+$('#user-profile').css('display','none');
+$('#course-upload').css('display','none');
+$('.checkout').css('display','none')
+
+
+};
 
 function calculateTime(now,scheduled) {
 
@@ -789,6 +803,7 @@ $('.video-details').css('display','none');
 $('.upload-list').css('display','block');
 $('#user-profile').css('display','none');
 $('.checkout').css('display','none')
+    $('#series-course').css('display','none');
   });
 
 
@@ -871,6 +886,7 @@ $(document).ready(function(){
             if (obj.isSeries === true){
 
               $('#episode-tab').css('display','block');
+
 
 
                     $.each(obj.episode, function(key,value) {
@@ -961,9 +977,10 @@ $(document).ready(function(){
         $('.checkout').css('display','none')
         $('#comment-nav').css('display','none')
         $('#course-update').css('display','none')
-        $('#course-create').css('display','none')
+
         $('.schedule').css('display','none')
         $('#video-bot-nav').css('display','flex')
+    $('#series-course').css('display','none');
 
 
 
@@ -1268,7 +1285,7 @@ $(document).ready(function(){
         $('.video-details').css('display','none');
         $('.upload-list').css('display','none');
         $('#user-profile').css('display','none');
-        $('#live-create').css('display','none');
+
         $('.schedule-container').css('display','none');
         $('#live-update').css('display','none');
         $('.upload-option').css('display','block');
@@ -1312,7 +1329,7 @@ $(document).ready(function(){
         $('.video-details').css('display','none');
         $('.upload-list').css('display','none');
         $('#user-profile').css('display','none');
-        $('#live-create').css('display','none');
+
         $('.schedule-container').css('display','none');
         $('#live-update').css('display','none');
         $('.upload-option').css('display','none');
@@ -1321,7 +1338,7 @@ $(document).ready(function(){
       $('#series-click').on("click",function(e){
         e.preventDefault();
 
-        $(".editor-source").detach().appendTo(".form-editor");
+        $(".editor-source").detach().appendTo(".series-form-editor");
         $('.editor-source').css('display','block')
         $('#live').css('display','none');
         $('.live-list').css('display','none');
@@ -1334,7 +1351,7 @@ $(document).ready(function(){
         $('.video-details').css('display','none');
         $('.upload-list').css('display','none');
         $('#user-profile').css('display','none');
-        $('#live-create').css('display','none');
+
         $('.schedule-container').css('display','none');
         $('#live-update').css('display','none');
         $('.upload-option').css('display','none');
@@ -1521,6 +1538,7 @@ $('.append-schedule').empty();
         $('#update_series_price').val(data.price);
         $('#update_series_category').val(data.category);
         $('#series-update').attr('course-id',data.id);
+        $('#series-course').css('display','none');
 
 
 });
@@ -1572,6 +1590,7 @@ $('.append-schedule').empty();
         $('#user-profile').css('display','none');
         $('#edit-live').css('display','none');
         $('.schedule-container').css('display','none');
+        $('#series-course').css('display','none');
 
 
 });
@@ -1786,7 +1805,7 @@ $(document).ready(function(){
 
 
 $('#main').ready(function(){
-      var arg = 'videoId=';
+     var arg = 'videoId=';
   var videoUrl = '/videoDetails?'+arg;
   var userUrl = '/userDetails?username='
 
@@ -1812,14 +1831,19 @@ $('#main').ready(function(){
       $('.upload-list').append('<div class="thumb-wrapper" data-href="'+videoUrl+ value.id +'"><li><a  class="video"   video-id="'+ value.id +'" href="#"><img class="video-feed"  loading="lazy" src="../static/coverImages/'+ value.coverImage +'" alt=""></a></li></div><div class="video-info"><div class="row no-gutters"><div class="col-2 col-sm-2 col-md-2 no-gutters">     <div class="profile-pic-wrapper click-pro-pic"  data-href=" '+userUrl+ value.username +'">     <span><a  class="user-profile-pic"   user-id="" href="#"><img id="profilepic"  src="../static/profile_pics/'+ value.userImg +'" alt=""></a></span> </div> </div><div class="col no-gutters"><div class="inner-info"> <div class="flex-fill flex-column">    <h6>'+ value.title +'</h6>     <div class="upload-username">'+ value.username +'</div>     <span class="upload-username">'+ value.category +'</span> <span>     <p class="likes-comments"  class="text-justify text-left " data-likes="">     <span>'+ value.likes +'</span>     <img     src="../static/heart.png" alt="" width="16">     <span>'+ value.comments +'</span>     <img  src="../static/comment.svg" alt="" width="16"> </p> </span></div>          </div> </div></div></div>');
 
 });
-$('#live').css('display','none');
+
+
+  $('#live').css('display','none');
 $('.live-list').css('display','none');
 $('.profile').css('display','none');
 $('.video-details').css('display','none');
 $('.upload-list').css('display','block');
 $('#user-profile').css('display','none');
+$('#course-upload').css('display','none');
+$('#series-course').css('display','none');
+$('.checkout').css('display','none')
 
-  });
+});
 });
 
 $("form#series-course").on('click','.subtitle',function () {
@@ -1854,40 +1878,7 @@ for (i = 0; i < dropdown.length; i++) {
 
 $(document).ready(function() {
 
-	$('form#series-course').on('submit', function(event) {
-        var csrf_token = $('#csrf_token').attr('value');
-		$.ajax({
-        beforeSend: function(xhr, settings) {
-            if (!/^(GET|HEAD|OPTIONS|TRACE)$/i.test(settings.type) && !this.crossDomain) {
-                xhr.setRequestHeader("X-CSRFToken", csrf_token);
-                $('.loader').css('display','block')
-            }
-        },  enctype: 'multipart/form-data',
-			data : new FormData(this),
-			type : 'POST',
-			url : '/createcourse?status=series',
-            processData: false,
-            contentType: false,
 
-          error: function(error){
-
-          popover(error,'success')
-          },
-          complete: function () {
-            $('.loader').css('display','none')
-
-          }
-
-		})
-		.done(function(data) {
-
-        popover(data,'success')
-
-		});
-
-		event.preventDefault();
-
-	});
 	$('form#addEpisode').on('submit', function(event) {
  var csrf_token = $('#csrf_token').attr('value');
 		$.ajax({

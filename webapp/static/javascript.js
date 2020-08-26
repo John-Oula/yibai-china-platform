@@ -803,7 +803,7 @@ $('.video-details').css('display','none');
 $('.upload-list').css('display','block');
 $('#user-profile').css('display','none');
 $('.checkout').css('display','none')
-
+    $('#create-series').css('display','none');
   });
 
 
@@ -980,7 +980,7 @@ $(document).ready(function(){
 
         $('.schedule').css('display','none')
         $('#video-bot-nav').css('display','flex')
-    $('#series-course').css('display','none');
+    $('#create-series').css('display','none');
 
 
 
@@ -1538,7 +1538,7 @@ $('.append-schedule').empty();
         $('#update_series_price').val(data.price);
         $('#update_series_category').val(data.category);
         $('#series-update').attr('course-id',data.id);
-        $('#series-course').css('display','none');
+        $('#create-series').css('display','none');
 
 
 });
@@ -1590,7 +1590,7 @@ $('.append-schedule').empty();
         $('#user-profile').css('display','none');
         $('#edit-live').css('display','none');
         $('.schedule-container').css('display','none');
-        $('#series-course').css('display','none');
+        $('#create-series').css('display','none');
 
 
 });

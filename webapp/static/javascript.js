@@ -1840,7 +1840,6 @@ $('.video-details').css('display','none');
 $('.upload-list').css('display','block');
 $('#user-profile').css('display','none');
 $('#course-upload').css('display','none');
-$('#series-course').css('display','none');
 $('.checkout').css('display','none')
 
 });

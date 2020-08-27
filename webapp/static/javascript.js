@@ -928,7 +928,7 @@ $(document).ready(function(){
           $('video').css('display','none');
         }
 
-        if (obj.price == null){
+        if (obj.price == 0){
           $('#video-price').css('display','none');
           $('.addCart').css('display','none');
           $('#buy').css('display','none');
@@ -2311,7 +2311,6 @@ $(document).ready(function() {
                 xhr.setRequestHeader("X-CSRFToken", csrf_token);
 
             }
-            $('.loader').css('display','block')
         },
         error:function (error) {
 

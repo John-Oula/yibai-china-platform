@@ -2149,6 +2149,14 @@ def createCourse():
     status = request.args.get('status', type=str)
     seriesForm = Series_form()
     episodeForm = Episode_form()
+    if seriesForm.series_price.data == '':
+        seriesForm.series_price.data = 0
+    else:
+        seriesForm.series_price.data
+    if form.upload_price.data == '':
+        form.upload_price.data = 0
+    else:
+        form.upload_price.data
 
     if request.method == 'POST' and status == 'single':
 
@@ -2160,6 +2168,7 @@ def createCourse():
         msg = 'uploaded succsesfully'
         
         return  msg
+
 
     elif request.method == 'POST' and status == 'series':
         series = Series(title=seriesForm.series_title.data, description=seriesForm.series_description.data,

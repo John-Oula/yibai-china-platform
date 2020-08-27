@@ -1671,15 +1671,15 @@ $(document).ready(function () {
             $.each(details, function (key, value) {
                 if (value.hasBooked == true){
                                     $('.modal-body.append-user-schedule').append('<div class=" text-center p-2 bg-dark text-light schedule-box"><h4>' + value.date + '</h4><span>' + value.startTime + ' - ' + value.endTime + '</span><span class="mt-1"><a class="click-book" data-href="' + bookUrl + value.id + param + type + '"><button   class="fixed-btn" >Book</button></a><a  class="click-unbook" data-href="' + unbookUrl + value.id + param + type + '" ><button   class="fixed-btn" >Unbook</button></a></span></div>');
-                    $('#booked-schedule').css('display','none')
-                    $('#unbooked-schedule').css('display','flex')
+                    $('.click-book').css('display','none')
+                    $('.click-unbook').css('display','flex')
 
                 }
                 else if (value.hasBooked == false){
                                     $('.modal-body.append-user-schedule').append('<div class=" text-center p-2 bg-dark text-light schedule-box"><h4>' + value.date + '</h4><span>' + value.startTime + ' - ' + value.endTime + '</span><span class="mt-1"><a  class="click-book" data-href="' + bookUrl + value.id + param + type + '"><button   class="fixed-btn" >Book</button></a><a  class="click-unbook" data-href="' + unbookUrl + value.id + param + type + '" ><button   class="fixed-btn" >Unbook</button></a></span></div>');
 
-                    $('#booked-schedule').css('display','flex')
-                    $('#unbooked-schedule').css('display','none')
+                    $('.click-book').css('display','flex')
+                    $('.click-unbook').css('display','none')
 
                 }
 

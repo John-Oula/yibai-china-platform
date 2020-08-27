@@ -253,7 +253,19 @@ class User(db.Model, UserMixin,AnonymousUserMixin):
         else:
             return False
 
+    def has_booked(self,schedule):
 
+        if current_user in schedule.userSchedule:
+            return True
+        else:
+            return False
+
+    def has_bookedLive(self,live):
+
+        if current_user in live.bookers:
+            return True
+        else:
+            return False
 
     # is_admin = db.Column(db.Boolean,default=False)
 
@@ -310,6 +322,14 @@ class Available(db.Model):
     start_time = db.Column("Start Time", db.String, nullable=True)
     end_time = db.Column('End time', db.String, nullable=True)
     timestamp = db.Column(db.DateTime, default=datetime.datetime.utcnow)
+    meetingUrl = db.Column('meetingUrl', db.VARCHAR)
+    meetingCode = db.Column('MeetingCode', db.BigInteger, nullable=True)
+    price = db.Column('price', db.Integer)
+
+
+
+
+
 
 
 
@@ -833,7 +853,7 @@ def userDetails():
 
     scheduleList = []
     for schedule in user.available:
-        userschedule = {'id': schedule.id,'date': schedule.date_available,'time': schedule.timestamp,'startTime':schedule.start_time,'endTime':schedule.end_time}
+        userschedule = {'id': schedule.id,'date': schedule.date_available,'time': schedule.timestamp,'startTime':schedule.start_time,'endTime':schedule.end_time,'hasBooked':current_user.has_booked(schedule)}
         scheduleList.append(userschedule)
         bookersList = []
         for users in schedule.userSchedule:
@@ -2259,7 +2279,7 @@ def getUserSeries():
             data = {'id': series[i].id, 'title': series[i].title, 'price': series[i].price,
                     'host': series[i].user_series.username, 'coverImg': series[i].coverImage,
                     'userImg': series[i].user_series.image_file, 'category': series[i].category,
-                    'totalEpisodes': len(series[i].episode),'likes': series[i].liked.count(),'totalComments': series[i].comments.count()}
+                    'totalEpisodes': len(series[i].episode),'likes': series[i].liked.count(),'totalComments': series[i].comments.count(),'isSeries':series[i].is_series()}
             ep = []
             for e in series[i].episode:
                 episode = {'episodeId': e.id, 'seriesId': e.sub.id, 'subtitle': e.subtitle, 'video': e.upload_ref}
@@ -2347,7 +2367,7 @@ def editSeries():
 
     return jsonify({'result':l})
 
-@app.route('/editSchedule', methods=['POST', 'GET','DELETE'])
+@app.route('/editSchedule', methods=['POST', 'GET','DELETE','PUT'])
 @csrf.exempt
 def editSchedule():
     schedule_id = request.args.get('schedule_id', type=int)
@@ -2367,12 +2387,50 @@ def editSchedule():
 
         return jsonify({'result': 'updated'})
 
+    elif request.method == 'PUT':
+            meeting = inquire(schedule.meetingCode, current_user.username, 1)
+            meeting_info = meeting["meeting_info_list"]
+            for item in meeting_info:
+                meeting_id = item['meeting_id']
+            fulltime = request.form['date-time']
+            fullDate = datetime.fromtimestamp(int(fulltime) / 1000).strftime('%Y-%m-%d')
+            startTime = datetime.fromtimestamp(int(fulltime) / 1000).strftime('%H:%M')
+            end_time = request.form['end-time']
+            endTime = datetime.fromtimestamp(int(end_time) / 1000).strftime('%H:%M')
+
+            meeting = modifyMeeting('Consultation',fulltime=fulltime,meetingId=meeting_id, username=current_user.username, end_time=end_time,instanceId=1)
+
+            meeting_info = meeting["meeting_info_list"]
+            for item in meeting_info:
+                meetingCode = item['meeting_code']
+
+
+
+            schedule.date=fullDate
+            schedule.start_time=startTime
+            schedule.end_time=endTime,
+            schedule.meetingCode=meetingCode
+
+            msg = 'Updated successfully'
+
+
+            db.session.commit()
+            return msg
+
     elif request.method == 'DELETE':
         schedule.user.remove(current_user)
+        meeting = inquire(schedule.meetingCode,current_user.username,1)
+        meeting_info = meeting["meeting_info_list"]
+        for item in meeting_info:
+            meeting_id = item['meeting_id']
 
+        cancelMeeting(meeting_id, current_user.username, 1)
+        db.session.delete(schedule)
         db.session.commit()
 
+
         return jsonify({'result': 'deleted'})
+
 
 
     return jsonify({'result':l})
@@ -2523,7 +2581,7 @@ def getUserSchedule():
     i = 0
     l = []
     for date in user.available:
-        data ={'id':date.id,'date':date.date_available,'start_time':date.start_time,'end_time':date.end_time,'timestamp':date.timestamp}
+        data ={'id':date.id,'date':date.date_available,'start_time':date.start_time,'end_time':date.end_time,'timestamp':date.timestamp,'meetingCode':date.meetingCode,'meetingUrl':date.meetingUrl}
         l.append(data)
 
         i+=1
@@ -2536,7 +2594,14 @@ def getUserSchedule():
         end_time = request.form['end-time']
         endTime = datetime.fromtimestamp(int(end_time) / 1000).strftime('%H:%M')
 
-        schedule = Available(start_time = startTime,end_time=endTime,date_available=fullDate)
+        meeting = createMeeting('Consultation', fulltime, end_time)
+
+        meeting_info = meeting["meeting_info_list"]
+        for item in meeting_info:
+            meetingCode = item['meeting_code']
+            meetingUrl = item['join_url']
+
+        schedule = Available(start_time = startTime,end_time=endTime,date_available=fullDate,meetingCode=meetingCode,meetingUrl=meetingUrl)
         schedule.user.append(current_user)
         db.session.add(schedule)
 
@@ -2555,7 +2620,7 @@ def getUserBookedSchedule():
     i = 0
     l = []
     for date in user.bookSchedule:
-        data ={'id':date.id,'date':date.date_available,'start_time':date.start_time,'end_time':date.end_time,'timestamp':date.timestamp}
+        data ={'id':date.id,'date':date.date_available,'start_time':date.start_time,'end_time':date.end_time,'timestamp':date.timestamp,'meetingCode':date.meetingCode,'meetingUrl':date.meetingUrl}
         l.append(data)
 
         i+=1
@@ -2573,7 +2638,7 @@ def getUserBookedLive():
     i = 0
     l = []
     for live in user.book:
-        data ={'id': live.id, 'title': live.title,'startTime': live.start_time,'endTime': live.end_time,'date': live.date,'coverImage': live.coverImage,'description':live.description,'category': live.category,'meetingCode':live.meetingCode,'url':live.meetingUrl}
+        data ={'id': live.id, 'title': live.title,'startTime': live.start_time,'endTime': live.end_time,'date': live.date,'coverImage': live.coverImage,'description':live.description,'category': live.category,'meetingCode':live.meetingCode,'meetingUrl':live.meetingUrl}
         l.append(data)
 
         i+=1

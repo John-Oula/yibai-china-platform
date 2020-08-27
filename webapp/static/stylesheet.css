@@ -2145,7 +2145,6 @@ div.modal , #episode-modal , #series-modal{
     display: none;
 }
 .schedule-btn{
-    display: none;
 }
 
 .schedule-box{
@@ -2309,6 +2308,10 @@ background-color: white;
     color: white;
 }
 
+.my-green{
+    background-color: #5bb75b;
+}
+
 #course-update{
     display: none;
 }
@@ -2333,6 +2336,11 @@ display: none;
         overflow-y: scroll;
     height: 300px;
 }
+
+.click-unbook{
+    display: none;
+}
+
 }
 
 

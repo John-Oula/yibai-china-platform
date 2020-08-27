@@ -112,7 +112,7 @@
           <a id="course-create" href="">Create course</a>
           <a id="update-course" data-href="{{ url_for('getUserSeries',user_id = current_user.id) }}" href="#">Manage course</a>
           <a href="#">Bought Courses</a>
-          <a href="#">Stats</a>
+          <a id="series-stats" href="#">Stats</a>
       </div>
             <button id="schedule" class="dropdown-btn">Schedule
           <i class="fa fa-caret-down"></i>
@@ -120,8 +120,8 @@
       <div class="dropdown-container">
           <a id="schedule-create" data-href="{{ url_for('getUserSchedule',user_id = current_user.id) }}" href="">Create availability</a>
           <a id="edit-schedule" data-href="{{ url_for('getUserSchedule',user_id = current_user.id) }}" href="#">Manage availability</a>
-          <a href="#">Booked schedule </a>
-          <a href="#">Stats</a>
+          <a id="booked-schedule" data-href="{{ url_for('getUserBookedSchedule',user_id = current_user.id) }}" href="#">Booked schedule </a>
+          <a id="schedule-stats" data-href="{{ url_for('getUserBookedSchedule',user_id = current_user.id) }}" href="#">Stats</a>
       </div>
             <button id="liveSession" class="dropdown-btn">Live Sessions
           <i class="fa fa-caret-down"></i>
@@ -129,10 +129,10 @@
       <div class="dropdown-container">
           <a id="live-create" href="#">Create live Session</a>
           <a id="update-live" data-href="{{ url_for('getUserLive',user_id = current_user.id) }}" href="">Manage live Session</a>
-          <a href="#">Booked live Session</a>
-          <a href="#">Stats</a>
+          <a id="booked-live" data-href="{{ url_for('getUserBookedLive',user_id = current_user.id) }}"href="#">Booked live Session</a>
+          <a id="live-stats" data-href="{{ url_for('getUserBookedLive',user_id = current_user.id) }}"href="#">Stats</a>
       </div>
-            <button id="logout" class="dropdown-btn">Logout </button>
+      <button id="logout" class="dropdown-btn" ><a  class="p-0 m-0" href="{{ url_for('logout') }}"><span>Logout</span> </a></button>
 
   {% else %}
     <div class="text-center text-light ">

@@ -397,6 +397,7 @@ class Series(db.Model):
     title = db.Column('title', db.String(30))
     status = db.Column('status', db.String(7))
     category = db.Column('category', db.String(30))
+    views = db.Column('views', db.Integer)
     coverImage = db.Column('coverImage', db.VARCHAR)
     upload_ref = db.Column('upload_ref', db.VARCHAR)
     description = db.Column('description', db.VARCHAR)
@@ -408,10 +409,11 @@ class Series(db.Model):
     episode = db.relationship('Episode', backref='sub', lazy=True)
 
 
-    def __repr__(self, id, title,coverImage, category,user_id,payment_id,status, description, price, upload_ref):
+    def __repr__(self, id, title,coverImage,views, category,user_id,payment_id,status, description, price, upload_ref):
         self.id = id
         self.title = title
         self.category = category
+        self.views = views
         self.coverImage = coverImage
         self.description = description
         self.price = price
@@ -444,7 +446,7 @@ class Episode(db.Model):
     __tablename__ = 'episode'
     id = db.Column('id', db.Integer, primary_key=True)
     subtitle = db.Column('subtitle', db.String(30))
-
+    views = db.Column('views', db.Integer)
     description = db.Column('description', db.VARCHAR)
     timestamp = db.Column(db.DateTime, default=datetime.datetime.utcnow)
     upload_ref = db.Column('upload_ref', db.VARCHAR)
@@ -455,10 +457,11 @@ class Episode(db.Model):
     transcript_ref = db.Column('transcript_ref', db.VARCHAR)
     auido_ref = db.Column('auido_ref', db.VARCHAR)
 
-    def __repr__(self, id,subtitle, category, description, upload_ref, transcript_ref,auido_ref ,user_id,series_id):
+    def __repr__(self, id,subtitle,views, category, description, upload_ref, transcript_ref,auido_ref ,user_id,series_id):
         self.id = id
         self.subtitle = subtitle
         self.category = category
+        self.views = views
         self.description = description
         self.upload_ref = upload_ref
         self.transcript_ref = transcript_ref
@@ -466,13 +469,17 @@ class Episode(db.Model):
         self.user_id = user_id
         self.series_id = series_id
 
+
     def fileType(self):
         if self.upload_ref:
-            file_path = os.path.abspath('webapp/static/videos/'+self.upload_ref)
-            if filetype.guess(file_path).mime.split('/')[0] == 'video':
-                return 'video'
-            elif filetype.guess(file_path).mime.split('/')[0] == 'audio':
-                return 'audio'
+            videoList=['mov','mp4','m4a','3gp','3g2','mj2' ,'MOV','MP4']
+            for v in videoList:
+                #                file_path = os.path.abspath('webapp/static/videos/' + self.upload_ref)
+                if self.upload_ref.split('.')[1] == v:
+                    return 'video'
+                elif self.upload_ref.split('.')[1] == 'mp3':
+                    return 'audio'
+
         else:
             return 'Error loading content'
 
@@ -892,7 +899,7 @@ def comment():
     return '',204
 
 
-@app.route('/cart')
+@app.route('/cart',methods=['POST','GET'])
 @login_required
 def cart():
     user_id = request.args.get('user_id', type=int)
@@ -902,7 +909,6 @@ def cart():
     l = []
 
 
-    userCart = db.session.query(Upload).join(Upload , User.cart).all()
     for cart in user.cart:
         data = {"id": cart.id, "title": cart.title, "coverImage": cart.coverImage, "price": cart.price}
         l.append(data)
@@ -1287,9 +1293,8 @@ def  logout():
 
     logout_user()
     session['known'] = False
-    print(session)
 
-    return redirect(url_for('login'))
+    return redirect(url_for('home'))
 
 
 @app.route('/session/<username>')
@@ -2245,7 +2250,7 @@ def getUserSeries():
             data = {'id': series[i].id, 'title': series[i].title, 'price': series[i].price,
                     'host': series[i].user_series.username, 'coverImg': series[i].coverImage,
                     'userImg': series[i].user_series.image_file, 'category': series[i].category,
-                    'totalEpisodes': len(series[i].episode)}
+                    'totalEpisodes': len(series[i].episode),'likes': series[i].liked.count(),'totalComments': series[i].comments.count()}
             ep = []
             for e in series[i].episode:
                 episode = {'episodeId': e.id, 'seriesId': e.sub.id, 'subtitle': e.subtitle, 'video': e.upload_ref}
@@ -2269,13 +2274,15 @@ def getUserSeries():
     return jsonify({'result':l})
 
 @app.route('/getEpisode', methods=['POST', 'GET','PUT'])
-
 def getEpisode():
     episode_id = request.args.get('episode_id', type=int)
     episode = Episode.query.filter_by(id = episode_id).first()
     data = {'id': episode.id, 'seriesId': episode.sub.id,'type':episode.fileType(), 'subtitle': episode.subtitle, 'video': episode.upload_ref,'description': episode.description}
-
-
+    commentList = []
+    for c in episode.comments:
+        data= {'id':c.id,'content':c.content,'timestamp':c.timestamp,'username':c.author.username,'proPic':c.author.image_file,'userId':c.author.id}
+        commentList.append(data)
+    data.update({'comments':commentList})
     return jsonify({'result':data})
 
 @app.route('/editSeries', methods=['POST', 'GET','DELETE','PUT'])
@@ -2318,10 +2325,10 @@ def editSeries():
 
 
     elif request.method == 'DELETE':
-        for e in series[i].episode:
+        for e in series.episode:
             db.session.delete(e)
             i += 1
-        series.delete()
+        db.session.delete(series)
         db.session.commit()
 
         msg = 'Deleted Successfully'
@@ -2499,7 +2506,7 @@ def getUserLive():
     return jsonify({'result':l})
 
 @app.route('/getUserSchedule', methods=['POST', 'GET','PUT'])
-@csrf.exempt
+@login_required
 def getUserSchedule():
     user_id = request.args.get('user_id', type=int)
     user = User.query.filter_by(id = user_id).first()
@@ -2527,6 +2534,43 @@ def getUserSchedule():
         db.session.commit()
         msg = "Created successfully"
         return  msg
+    return jsonify({'result':l})
+
+
+@app.route('/getUserBookedSchedule', methods=[ 'GET'])
+@login_required
+def getUserBookedSchedule():
+    user_id = request.args.get('user_id', type=int)
+    user = User.query.filter_by(id = user_id).first()
+
+    i = 0
+    l = []
+    for date in user.bookSchedule:
+        data ={'id':date.id,'date':date.date_available,'start_time':date.start_time,'end_time':date.end_time,'timestamp':date.timestamp}
+        l.append(data)
+
+        i+=1
+
+    print(l)
+
+    return jsonify({'result':l})
+
+@app.route('/getUserBookedLive', methods=[ 'GET'])
+@login_required
+def getUserBookedLive():
+    user_id = request.args.get('user_id', type=int)
+    user = User.query.filter_by(id = user_id).first()
+
+    i = 0
+    l = []
+    for live in user.book:
+        data ={'id': live.id, 'title': live.title,'startTime': live.start_time,'endTime': live.end_time,'date': live.date,'coverImage': live.coverImage,'description':live.description,'category': live.category,'meetingCode':live.meetingCode,'url':live.meetingUrl}
+        l.append(data)
+
+        i+=1
+
+    print(l)
+
     return jsonify({'result':l})
 
 

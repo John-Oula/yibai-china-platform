@@ -1761,6 +1761,7 @@ body{
     color: #818181;
     display: block;
     transition: 0.3s;
+
 }
 
 .sidenav a:hover {
@@ -2193,9 +2194,6 @@ div.modal , #episode-modal , #series-modal{
 }
 
 
-.click-unbook{
-    display: none;
-}
 
 
 .audio{

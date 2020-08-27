@@ -151,6 +151,9 @@ bookSchedule = db.Table('bookSchedule',
 likes = db.Table('likes',
                 db.Column('user_id', db.Integer, db.ForeignKey('user.id')),
                 db.Column('series_id', db.Integer, db.ForeignKey('series.id')))
+likesEpisode = db.Table('likesEpisode',
+                db.Column('user_id', db.Integer, db.ForeignKey('user.id')),
+                db.Column('episode_id', db.Integer, db.ForeignKey('episode.id')))
 
 
 skills = db.Table('skills',
@@ -213,6 +216,7 @@ class User(db.Model, UserMixin,AnonymousUserMixin):
     book = db.relationship('Post', secondary=book,backref=db.backref('bookers', lazy='dynamic'))
     bookSchedule = db.relationship('Available', secondary=bookSchedule,backref=db.backref('userSchedule', lazy='dynamic'))
     likes = db.relationship('Series', secondary=likes,backref=db.backref('liked', lazy='dynamic'))
+    likesEpisode = db.relationship('Episode', secondary=likesEpisode,backref=db.backref('userLikedEpisode', lazy='dynamic'))
     cart = db.relationship('Series', secondary=cart,backref='user_cart', lazy='dynamic')
 
 
@@ -249,6 +253,11 @@ class User(db.Model, UserMixin,AnonymousUserMixin):
         return self.followed.filter(followers.c.followed_id == user.id).count() > 0
     def has_liked(self, video):
         if current_user in video.liked:
+            return True
+        else:
+            return False
+    def has_likedEpisode(self, video):
+        if current_user in video.userLikedEpisode:
             return True
         else:
             return False
@@ -1604,7 +1613,7 @@ def videoDetails():
         data ={'id': videos.id,'coverImg':videos.coverImage, 'title': videos.title,'isSeries':videos.is_series(),'videoRef':videos.upload_ref,'type':videos.fileType(),'description':videos.description,'price':videos.price,'userId':videos.user_series.id,'username': videos.user_series.username,'userImg': videos.user_series.image_file, 'category': videos.category,'likes':videos.liked.count(),'comments':videos.comments.count()}
         ep = []
         for e in videos.episode:
-            episode = {'episodeId':e.id,'seriesId':e.sub.id,'subtitle':e.subtitle,'description':e.description}
+            episode = {'episodeId':e.id,'seriesId':e.sub.id,'subtitle':e.subtitle,'description':e.description,'videoRef':e.upload_ref,'hasLikedEpisode': current_user.has_likedEpisode(e),'likes':e.userLikedEpisode.count()}
             ep.append(episode)
 
         data.update({'episode':ep})
@@ -1640,7 +1649,7 @@ def liveDetails():
     live = Post.query.filter_by(id=liveId).first()
     scheduleList = []
 
-    data = {'id': live.id, 'title': live.title,'startTime': live.start_time,'endTime': live.end_time,'date': live.date,'coverImage': live.coverImage,'description':live.description,'category': live.category,'meetingCode':live.meetingCode,'url':live.meetingUrl}
+    data = {'id': live.id, 'title': live.title,'startTime': live.start_time,'endTime': live.end_time,'date': live.date,'coverImage': live.coverImage,'description':live.description,'category': live.category,'meetingCode':live.meetingCode,'meetingUrl':live.meetingUrl,'hasBooked':current_user.has_bookedLive(live)}
     host = {'userId':live.author.id,'host': live.author.username,'userImg': live.author.image_file,'introduction':live.author.introduction,'followers':live.author.followers.count()}
     for s in live.author.available:
         schedule = {'id': s.id,'date': s.date_available,'time': s.timestamp}
@@ -1695,6 +1704,25 @@ def unlike(id):
     video.liked.remove(current_user)
     db.session.commit()
     likes= video.liked.count()
+    return jsonify({'result':'success','likes':likes})
+
+@app.route('/like/episode<int:id>')
+@login_required
+def likeEpisode(id):
+    video = Episode.query.filter_by(id=id).first()
+    video.userLikedEpisode.append(current_user)
+    db.session.commit()
+    likes= video.userLikedEpisode.count()
+    return jsonify({'result':'success','likes':likes})
+
+
+@app.route('/unlike/episode<int:id>')
+@login_required
+def unlikeEpisode(id):
+    video = Episode.query.filter_by(id=id).first()
+    video.userLikedEpisode.remove(current_user)
+    db.session.commit()
+    likes= video.userLikedEpisode.count()
     return jsonify({'result':'success','likes':likes})
 
 def createMeeting(title,fulltime,end_time):
@@ -2306,7 +2334,7 @@ def getUserSeries():
 def getEpisode():
     episode_id = request.args.get('episode_id', type=int)
     episode = Episode.query.filter_by(id = episode_id).first()
-    data = {'id': episode.id, 'seriesId': episode.sub.id,'type':episode.fileType(), 'subtitle': episode.subtitle, 'video': episode.upload_ref,'description': episode.description}
+    data = {'id': episode.id, 'seriesId': episode.sub.id,'type':episode.fileType(), 'subtitle': episode.subtitle, 'video': episode.upload_ref,'description': episode.description,'hasLikedEpisode': current_user.has_likedEpisode(episode),'likes':episode.userLikedEpisode.count()}
     commentList = []
     for c in episode.comments:
         data= {'id':c.id,'content':c.content,'timestamp':c.timestamp,'username':c.author.username,'proPic':c.author.image_file,'userId':c.author.id}

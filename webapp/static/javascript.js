@@ -888,10 +888,20 @@ $(document).ready(function () {
             $('.video-details').css('display', 'block');
             $('.loader').css('display', 'none');
             $('#episode').empty();
+            if (obj.price == 0) {
+                $('#video-price').css('display', 'none');
+                $('.addCart').css('display', 'none');
+                $('#buy').css('display', 'none');
+            } else {
+                $('#video-price').css('display', 'flex');
+                $('.addCart').css('display', 'flex');
+                $('#buy').css('display', 'flex');
+            }
             if (obj.isSeries === true) {
                 $('.like-btn').attr('data-href', '/like/episode' + obj.id);
                 $('#unlike-btn').attr('data-href', '/unlike/episode' + obj.id);
                 $('#episode-tab').css('display', 'block');
+                $('#episode-subtitle').css('display', 'block');
 
                 $.each(obj.episode, function (key, value) {
 
@@ -904,13 +914,15 @@ $(document).ready(function () {
                 $('#unlike-btn').attr('data-href', '/unlike/video' + obj.id);
 
                 $('#episode-tab').css('display', 'none');
+                $('#episode-subtitle').css('display', 'none');
 
 
             }
             if (obj.type == 'video') {
                 $('video').attr("src", videoSrc + obj.videoRef);
                 $('video').css('display', 'block');
-                $('#episode-title').text(obj.episode.subtitle);
+                $('#episode-subtitle').text(obj.episode.subtitle);
+
                 $('.video-js').attr("src", videoSrc + obj.videoRef);
                 $('.controls').css('display', 'none');
                 $('video').css('display', 'block');
@@ -919,7 +931,7 @@ $(document).ready(function () {
             else if (obj.type == 'audio') {
 
                 $('#audio-file').attr("audioFile", obj.videoRef);
-                $('#episode-title').text(obj.episode.subtitle);
+                $('#episode-subtitle').text(obj.episode.subtitle);
                 $('.controls').css('display', 'flex');
                 $('video').css('display', 'none');
                 $('.course-img').css('display', 'block');
@@ -935,9 +947,10 @@ $(document).ready(function () {
 
 
                 $('video').attr("src", videoSrc + obj.episode[0].videoRef);
+
                 $('#video-likes').text(ep.likes);
                 $('video').css('display', 'block');
-                $('#episode-title').text(ep.subtitle);
+                $('#episode-subtitle').text(ep.subtitle);
                 $('.video-js').attr("src", videoSrc +obj.episode[0].videoRef);
                 $('.controls').css('display', 'none');
                 $('video').css('display', 'block');
@@ -945,15 +958,7 @@ $(document).ready(function () {
                 $('.like-btn').attr('data-href', '/like/episode' + obj.episode[0].episodeId);
                 $('#unlike-btn').attr('data-href', '/unlike/episode' + obj.episode[0].episodeId);
             }
-            if (obj.price == 0) {
-                $('#video-price').css('display', 'none');
-                $('.addCart').css('display', 'none');
-                $('#buy').css('display', 'none');
-            } else {
-                $('#video-price').css('display', 'flex');
-                $('.addCart').css('display', 'flex');
-                $('#buy').css('display', 'flex');
-            }
+
             if (obj.hasLiked == true) {
                 $('#unlike-btn').css('display', 'flex');
 
@@ -1081,7 +1086,7 @@ $(document).ready(function () {
             var obj = data.result;
             $('#video-likes').text(obj.likes)
             $('#video-comments').text(obj.comments)
-            $('#episode-title').text(obj.subtitle)
+            $('#episode-subtitle').text(obj.subtitle)
             if (obj.hasLikedEpisode == true) {
                 $('#unlike-btn').css('display', 'flex');
 

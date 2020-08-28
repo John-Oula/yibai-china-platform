@@ -1629,7 +1629,10 @@ def videoDetails():
         data ={'id': videos.id,'coverImg':videos.coverImage, 'title': videos.title,'isSeries':videos.is_series(),'videoRef':videos.upload_ref,'type':videos.fileType(),'description':videos.description,'price':videos.price,'userId':videos.user_series.id,'username': videos.user_series.username,'userImg': videos.user_series.image_file, 'category': videos.category,'likes':videos.liked.count(),'comments':videos.comments.count()}
         ep = []
         for e in videos.episode:
-            episode = {'episodeId':e.id,'seriesId':e.sub.id,'subtitle':e.subtitle,'description':e.description,'videoRef':e.upload_ref,'hasLikedEpisode': current_user.has_likedEpisode(e),'likes':e.userLikedEpisode.count()}
+            if current_user.is_authenticated:
+                episode = {'episodeId':e.id,'seriesId':e.sub.id,'subtitle':e.subtitle,'description':e.description,'videoRef':e.upload_ref,'hasLikedEpisode': current_user.has_likedEpisode(e),'likes':e.userLikedEpisode.count()}
+            else:
+                episode = {'episodeId':e.id,'seriesId':e.sub.id,'subtitle':e.subtitle,'description':e.description,'videoRef':e.upload_ref,'hasLikedEpisode': False,'likes':e.userLikedEpisode.count()}
             ep.append(episode)
 
         data.update({'episode':ep})

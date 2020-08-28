@@ -547,7 +547,7 @@ $(document).ready(function () {
             $('#live-date').html(data.date);
             $('#live-description').html(data.description);
             $('img.live-img').attr('src', coverImgUrl + data.coverImage);
-            $('img#profilepic').attr('src', userImgUrl + data.host.userImg);
+            $('img.profilepic').attr('src', userImgUrl + data.host.userImg);
             $('.click-book').attr('data-href', bookUrl + data.id+param);
             $('.click-unbook').attr('data-href', unbookUrl + data.id+param);
             $('#live-username').html(data.host.host);
@@ -674,7 +674,7 @@ $(document).ready(function () {
             $('#my-live-sessions').html(data.liveSessions);
             $('#my-introduction').html(data.introduction);
             $('.user-form').css('display', 'none');
-            $('img#profilepic').attr("src", userImgSrc + data.userImage);
+            $('img.profilepic').attr("src", userImgSrc + data.userImage);
             $('#user-profile').css('display', 'block');
             $('#live').css('display', 'none');
             $('.video-details').css('display', 'none');
@@ -876,7 +876,7 @@ $(document).ready(function () {
             $('#video-description img').css('width', '100%');
             $('#video-price').html(currency + obj.price);
             $('#video-price').css("fontSize", "17px");
-            $('img#profilepic').attr("src", userImgSrc + obj.userImg);
+            $('img.profilepic').attr("src", userImgSrc + obj.userImg);
             $('#user-profile').css('display', 'none');
             $('.checkout').css('display', 'none')
             $('#comment-nav').css('display', 'none')
@@ -1043,7 +1043,7 @@ $(document).ready(function () {
             $('#user-followers').html(data.followers);
             $('#user-live-sessions').html(data.liveSessions);
             $('#user-introduction').html(data.introduction);
-            $('img#profilepic').attr("src", userImgSrc + data.userImage);
+            $('img.profilepic').attr("src", userImgSrc + data.userImage);
             $('#user-profile').css('display', 'none');
             $('#live').css('display', 'none');
             $('.video-details').css('display', 'none');

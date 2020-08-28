@@ -870,7 +870,10 @@ def userDetails():
 
     scheduleList = []
     for schedule in user.available:
-        userschedule = {'id': schedule.id,'date': schedule.date_available,'time': schedule.timestamp,'startTime':schedule.start_time,'endTime':schedule.end_time,'hasBooked':current_user.has_booked(schedule)}
+        if current_user.is_authenticated:
+            userschedule = {'id': schedule.id,'date': schedule.date_available,'time': schedule.timestamp,'startTime':schedule.start_time,'endTime':schedule.end_time,'hasBooked':current_user.has_booked(schedule)}
+        else:
+            userschedule = {'id': schedule.id,'date': schedule.date_available,'time': schedule.timestamp,'startTime':schedule.start_time,'endTime':schedule.end_time,'hasBooked':False}
         scheduleList.append(userschedule)
         bookersList = []
         for users in schedule.userSchedule:

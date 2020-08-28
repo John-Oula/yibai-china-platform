@@ -1667,8 +1667,10 @@ def liveDetails():
     liveId= request.args.get('liveId', type=int)
     live = Post.query.filter_by(id=liveId).first()
     scheduleList = []
-
-    data = {'id': live.id, 'title': live.title,'startTime': live.start_time,'endTime': live.end_time,'date': live.date,'coverImage': live.coverImage,'description':live.description,'category': live.category,'meetingCode':live.meetingCode,'meetingUrl':live.meetingUrl,'hasBooked':current_user.has_bookedLive(live)}
+    if current_user.is_authenticated:
+        data = {'id': live.id, 'title': live.title,'startTime': live.start_time,'endTime': live.end_time,'date': live.date,'coverImage': live.coverImage,'description':live.description,'category': live.category,'meetingCode':live.meetingCode,'meetingUrl':live.meetingUrl,'hasBooked':current_user.has_bookedLive(live)}
+    else:
+        data = {'id': live.id, 'title': live.title,'startTime': live.start_time,'endTime': live.end_time,'date': live.date,'coverImage': live.coverImage,'description':live.description,'category': live.category,'meetingCode':live.meetingCode,'meetingUrl':live.meetingUrl,'hasBooked':False}
     host = {'userId':live.author.id,'host': live.author.username,'userImg': live.author.image_file,'introduction':live.author.introduction,'followers':live.author.followers.count()}
     for s in live.author.available:
         schedule = {'id': s.id,'date': s.date_available,'time': s.timestamp}
@@ -2353,7 +2355,10 @@ def getUserSeries():
 def getEpisode():
     episode_id = request.args.get('episode_id', type=int)
     episode = Episode.query.filter_by(id = episode_id).first()
-    data = {'id': episode.id, 'seriesId': episode.sub.id,'type':episode.fileType(), 'subtitle': episode.subtitle, 'video': episode.upload_ref,'description': episode.description,'hasLikedEpisode': current_user.has_likedEpisode(episode),'likes':episode.userLikedEpisode.count()}
+    if current_user.is_authenticated:
+        data = {'id': episode.id, 'seriesId': episode.sub.id,'type':episode.fileType(), 'subtitle': episode.subtitle, 'video': episode.upload_ref,'description': episode.description,'hasLikedEpisode': current_user.has_likedEpisode(episode),'likes':episode.userLikedEpisode.count()}
+    else:
+        data = {'id': episode.id, 'seriesId': episode.sub.id,'type':episode.fileType(), 'subtitle': episode.subtitle, 'video': episode.upload_ref,'description': episode.description,'hasLikedEpisode': False,'likes':episode.userLikedEpisode.count()}
     commentList = []
 #    for c in episode.userCommentEpisode:
 #        data= {'id':c.id,'content':c.content,'timestamp':c.timestamp,'username':c.author.username,'proPic':c.author.image_file,'userId':c.author.id}

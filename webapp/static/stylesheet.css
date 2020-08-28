@@ -298,7 +298,7 @@ li#burgermenu-text{
     color: #353a3c;
     font-family: Josefin Sans, sans-serif;
 }
-#profilepic {
+.profilepic {
 
     display: inline;
     width: 100%;
@@ -2259,6 +2259,7 @@ div.modal , #episode-modal , #series-modal{
 .controls{
     position: absolute;
     top: 120px;
+    display: none;
 }
 #pause-btn{
     display: none;
@@ -2339,6 +2340,9 @@ display: none;
 
 .click-unbook{
     display: none;
+}
+.live-card{
+    margin-bottom: 10px;
 }
 
 }

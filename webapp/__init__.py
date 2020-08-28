@@ -170,7 +170,11 @@ available = db.Table('available',
     db.Column('user_id', db.Integer, db.ForeignKey('user.id')),
     db.Column('date_id', db.Integer, db.ForeignKey('availableStatus.id'))
 )
+episodeComment = db.Table('episodeComment',
+    db.Column('comment_id', db.Integer, db.ForeignKey('comment.id')),
+    db.Column('episode_id', db.Integer, db.ForeignKey('episode.id')),
 
+)
 cart = db.Table('cart',
                 db.Column('user_id', db.Integer, db.ForeignKey('user.id')),
                 db.Column('course_id', db.Integer, db.ForeignKey('series.id')))
@@ -481,7 +485,7 @@ class Episode(db.Model):
     upload_ref = db.Column('upload_ref', db.VARCHAR)
     user_id = db.Column('user_id', db.Integer, db.ForeignKey('user.id'), nullable=True)
     series_id = db.Column(db.Integer,db.ForeignKey('series.id'))
-    comments = db.relationship('Comment', backref='episode', lazy='dynamic')
+
 
     transcript_ref = db.Column('transcript_ref', db.VARCHAR)
     auido_ref = db.Column('auido_ref', db.VARCHAR)
@@ -546,6 +550,10 @@ class Comment(db.Model):
    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
    series_id = db.Column(db.Integer, db.ForeignKey('series.id'))
    episode_id = db.Column(db.Integer, db.ForeignKey('episode.id'))
+   episodeComment = db.relationship('Episode', secondary=episodeComment,
+                                    backref=db.backref('userCommentEpisode', lazy='dynamic'))
+
+
 class Reviews(db.Model):
    __tablename__ = 'reviews'
    id = db.Column(db.Integer, primary_key=True)
@@ -903,29 +911,34 @@ def addCart():
     print(data)
     return data
 
+@app.route('/episodeComment',methods=['POST', 'GET'])
+@login_required
+def episodeComment():
+    episode_id = request.args.get('episode_id', type=int)
+    form = Comment_form()
+
+    episode = Episode.query.filter_by(id=episode_id).first_or_404()
+
+    comment = Comment(content=form.content.data, user_id=current_user.id, episode_id=episode_id)
+    episode.userCommentEpisode.append(comment)
+    db.session.commit()
+
+    msg = 'Posted successfully'
+    return msg
+
+
 @app.route('/comment',methods=['POST', 'GET'])
 @login_required
 def comment():
     form = Comment_form()
     series_id = request.args.get('series_id', type=int)
-    episode_id = request.args.get('episode_id', type=int)
-    if series_id:
-        course = Series.query.filter_by(id=series_id).first_or_404()
-        comment = Comment(content=form.content.data, user_id=current_user.id, series_id=course.id)
-        course.comments.append(comment)
-        db.session.commit()
+    course = Series.query.filter_by(id=series_id).first_or_404()
+    comment = Comment(content=form.content.data, user_id=current_user.id, series_id=course.id)
+    course.comments.append(comment)
+    db.session.commit()
+    msg = 'Posted successfully'
+    return msg
 
-        msg = 'Posted successfully'
-        return msg
-    elif episode_id:
-        course = Series.query.filter_by(id=series_id).first_or_404()
-        comment = Comment(content=form.content.data, user_id=current_user.id, episode_id=episode_id)
-        course.comments.append(comment)
-        db.session.commit()
-
-        msg = 'Posted successfully'
-        return msg
-    return '',204
 
 
 @app.route('/cart',methods=['POST','GET'])
@@ -2336,9 +2349,9 @@ def getEpisode():
     episode = Episode.query.filter_by(id = episode_id).first()
     data = {'id': episode.id, 'seriesId': episode.sub.id,'type':episode.fileType(), 'subtitle': episode.subtitle, 'video': episode.upload_ref,'description': episode.description,'hasLikedEpisode': current_user.has_likedEpisode(episode),'likes':episode.userLikedEpisode.count()}
     commentList = []
-    for c in episode.comments:
-        data= {'id':c.id,'content':c.content,'timestamp':c.timestamp,'username':c.author.username,'proPic':c.author.image_file,'userId':c.author.id}
-        commentList.append(data)
+#    for c in episode.userCommentEpisode:
+#        data= {'id':c.id,'content':c.content,'timestamp':c.timestamp,'username':c.author.username,'proPic':c.author.image_file,'userId':c.author.id}
+#        commentList.append(data)
     data.update({'comments':commentList})
     return jsonify({'result':data})
 

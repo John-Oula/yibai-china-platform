@@ -16,7 +16,7 @@ import random
 import re
 import socket
 from functools import wraps
-from alipay import AliPay, ISVAliPay
+
 from flask_admin.menu import MenuLink
 from flask_share import Share
 from flask_admin import Admin,BaseView, expose
@@ -41,10 +41,11 @@ import os.path as op
 from wtforms.widgets import TextArea
 
 
-#from alipaySDK.alipay.aop.api.AlipayClientConfig import AlipayClientConfig
-#from alipaySDK.alipay.aop.api.DefaultAlipayClient import DefaultAlipayClient
-#from alipaySDK.alipay.aop.api.domain.AlipayTradeWapPayModel import AlipayTradeWapPayModel
-#from alipaySDK.alipay.aop.api.request.AlipayTradeWapPayRequest import AlipayTradeWapPayRequest
+from alipaySDK.alipay.aop.api.AlipayClientConfig import AlipayClientConfig
+from alipaySDK.alipay.aop.api.DefaultAlipayClient import DefaultAlipayClient
+from alipaySDK.alipay.aop.api.domain.AlipayTradeWapPayModel import AlipayTradeWapPayModel
+from alipaySDK.alipay.aop.api.request.AlipayTradeWapPayRequest import AlipayTradeWapPayRequest
+
 
 app = Flask(__name__)
 
@@ -106,13 +107,13 @@ else:
 #    alipay_root_cert_string = open("/var/www/App/certs/alipayRootCert.crt").read()
 #    alipay_public_key_cert_string = open("/var/www/App/certs/alipayCertPublicKey_RSA2.crt").read()
 #
-#alipay_client_config = AlipayClientConfig()
-#alipay_client_config.server_url = 'https://openapi.alipay.com/gateway.do'
-#alipay_client_config.app_id ='2021001182663949'
-#alipay_client_config.app_private_key = app_private_key_string
-#alipay_client_config.alipay_public_key = alipay_public_key_string
-#
-#client = DefaultAlipayClient(alipay_client_config=alipay_client_config, logger=logger)
+alipay_client_config = AlipayClientConfig()
+alipay_client_config.server_url = 'https://openapi.alipay.com/gateway.do'
+alipay_client_config.app_id ='2021001182663949'
+alipay_client_config.app_private_key = app_private_key_string
+alipay_client_config.alipay_public_key = alipay_public_key_string
+
+client = DefaultAlipayClient(alipay_client_config=alipay_client_config, logger=logger)
 
 
 

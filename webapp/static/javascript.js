@@ -886,6 +886,15 @@ $('.video-details').ready(function () {
         req.done(function (data) {
 
             var obj = data.result;
+            if (obj.hasLiked === true) {
+                $('#unlike-btn').css('display', 'flex');
+
+                $('.like-btn').css('display', 'none');
+            } else if (obj.hasLiked === false) {
+                $('.like-btn').css('display', 'flex');
+
+                $('#unlike-btn').css('display', 'none');
+            }
             $('.profile-pic-wrapper').attr("data-href", userUrl + obj.username);
             $('#comment-form').attr("data-href", commentUrl + obj.id);
             $('#buy').attr("data-href", courseUrl + obj.id);
@@ -977,15 +986,7 @@ $('.video-details').ready(function () {
                 $('#unlike-btn').attr('data-href', '/unlike/episode' + obj.episode[0].episodeId);
             }
 
-            if (obj.hasLiked == true) {
-                $('#unlike-btn').css('display', 'flex');
 
-                $('.like-btn').css('display', 'none');
-            } else if (obj.hasLiked == false) {
-                $('.like-btn').css('display', 'flex');
-
-                $('#unlike-btn').css('display', 'none');
-            }
 
             if (data.result.episode[0].hasLikedEpisode === true) {
                     $('#unlike-btn').css('display', 'flex');
@@ -1012,7 +1013,7 @@ $('.video-details').ready(function () {
 
 
         });
-//    });
+    });
 
     $('#main').on("click", ".click-pro-pic", function (e) {
          
@@ -1966,7 +1967,7 @@ $('.video-details').ready(function () {
     });
 
 
-});
+
 
 function pageRedirect(url) {
     window.location.href = url;

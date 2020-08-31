@@ -39,6 +39,7 @@ from flask_admin.contrib.sqla import ModelView
 from flask_admin.contrib.fileadmin import FileAdmin
 import os.path as op
 from wtforms.widgets import TextArea
+from alipay import AliPay, ISVAliPay
 
 #from alipaySDK.alipay.aop.api.AlipayClientConfig import AlipayClientConfig
 #from alipaySDK.alipay.aop.api.DefaultAlipayClient import DefaultAlipayClient
@@ -66,14 +67,29 @@ def get_Host_name_IP(hostname):
     # Driver code
 
 import requests
-#alipay setup
 
-#logging.basicConfig(
-#    level=logging.INFO,
-#    format='%(asctime)s %(levelname)s %(message)s',
-#    filemode='a', )
-#logger = logging.getLogger('')
 
+logging.basicConfig(
+    level=logging.INFO,
+    format='%(asctime)s %(levelname)s %(message)s',
+    filemode='a', )
+logger = logging.getLogger('')
+
+
+if get_Host_name_IP('CJAY') == True:
+    app_private_key_string = open("/Users/ASUS/Desktop/webApp/keys/appPrivateKey.txt").read()
+    alipay_public_key_string = open("/Users/ASUS/Desktop/webApp/keys/alipayPublicKey.txt").read()
+    app_public_key_cert_string = open("/Users/ASUS/Desktop/webApp/certs/appCertPublicKey_2021001182663949.crt").read()
+    alipay_root_cert_string = open("/Users/ASUS/Desktop/webApp/certs/alipayRootCert.crt").read()
+    alipay_public_key_cert_string = open("/Users/ASUS/Desktop/webApp/certs/alipayCertPublicKey_RSA2.pem").read()
+
+
+else:
+    app_private_key_string = open("/var/www/App/keys/appPrivateKey.txt").read()
+    alipay_public_key_string = open('/var/www/App/keys/alipayPublicKey.txt').read()
+    app_public_key_cert_string = open("/var/www/App/certs/appCertPublicKey_2021001182663949.crt").read()
+    alipay_root_cert_string = open("/var/www/App/certs/alipayRootCert.crt").read()
+    alipay_public_key_cert_string = open("/var/www/App/certs/alipayCertPublicKey_RSA2.crt").read()
 
 #if get_Host_name_IP('CJAY') == True:
 #    app_private_key_string = open("/Users/ASUS/Desktop/webApp/keys/appPrivateKey.txt").read()

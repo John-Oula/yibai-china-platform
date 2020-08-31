@@ -1171,7 +1171,8 @@ $('.video-details').ready(function () {
         $('#calendar').css('display', 'block');
         $('.schedule-btn').css('display', 'block');
         $('#live').css('display', 'none');
-        
+        $('.live-list').css('display', 'none');
+
 
         $('.my-profile').css('display', 'none');
         $('#create-course').css('display', 'none');
@@ -1321,6 +1322,7 @@ $('.video-details').ready(function () {
         
         $('#create-live').css('display', 'none');
         $('.schedule').css('display', 'none');
+        $('.live-list').css('display', 'none');
         $('#course-upload').css('display', 'none');
         $('#course-update').css('display', 'none');
         $('#create-series').css('display', 'none');
@@ -1370,7 +1372,8 @@ $('.video-details').ready(function () {
 
             $('#course-update').css('display', 'none');
             $('#live').css('display', 'none');
-            
+            $('.live-list').css('display', 'none');
+
             $('#create-live').css('display', 'none');
             $('#live-update').css('display', 'none');
             $('.schedule').css('display', 'none');
@@ -1421,7 +1424,8 @@ $('.video-details').ready(function () {
 
             $('#course-update').css('display', 'none');
             $('#live').css('display', 'none');
-            
+            $('.live-list').css('display', 'none');
+
             $('#create-live').css('display', 'none');
             $('#live-update').css('display', 'none');
             $('.schedule').css('display', 'none');
@@ -1477,7 +1481,8 @@ $('.video-details').ready(function () {
 
         $('#course-update').css('display', 'none');
         $('#live').css('display', 'none');
-        
+        $('.live-list').css('display', 'none');
+
         $('#create-live').css('display', 'none');
         $('#live-update').css('display', 'none');
         $('.schedule').css('display', 'none');
@@ -1527,7 +1532,8 @@ $('.video-details').ready(function () {
 
         $('#course-update').css('display', 'none');
         $('#live').css('display', 'none');
-        
+        $('.live-list').css('display', 'none');
+
         $('#create-live').css('display', 'none');
         $('#live-update').css('display', 'none');
         $('.schedule').css('display', 'none');
@@ -1602,7 +1608,8 @@ $('.video-details').ready(function () {
         closeNav()
         $(".calendar-source").detach().appendTo(".append-calendar");
         $('#live').css('display', 'none');
-        
+        $('.live-list').css('display', 'none');
+
         $('#create-live').css('display', 'block');
         $('#calendar').css('display', 'block');
         $('.schedule').css('display', 'none');
@@ -1704,10 +1711,11 @@ $('.video-details').ready(function () {
 
             $('#course-update').css('display', 'block');
             $('#live').css('display', 'none');
-            
+            $('.live-list').css('display', 'none');
             $('#create-live').css('display', 'none');
             $('#live-update').css('display', 'none');
             $('.schedule').css('display', 'none');
+            $('.my-profile').css('display', 'none');
             $('#course-upload').css('display', 'none');
             $('#create-series').css('display', 'none');
             $('.profile').css('display', 'none');
@@ -1818,6 +1826,7 @@ $('.video-details').ready(function () {
             $('#calendar').css('display', 'none');
             $('.update-schedule-btn').css('display', 'none');
             $('#live').css('display', 'none');
+            $('.live-list').css('display', 'none');
             
             $('.profile').css('display', 'none');
             $('#create-course').css('display', 'none');
@@ -1830,6 +1839,7 @@ $('.video-details').ready(function () {
             $('.upload-option').css('display', 'none');
             $('#update-schedule').css('display', 'none');
             $('.schedule').css('display', 'none');
+            $('.my-profile').css('display', 'none');
 
         });
 
@@ -1897,7 +1907,8 @@ $('.video-details').ready(function () {
             $('#course-update').css('display', 'none');
 
             $('#live').css('display', 'none');
-            
+            $('.live-list').css('display', 'none');
+
             $('#create-live').css('display', 'none');
             $('.schedule').css('display', 'none');
             $('#course-upload').css('display', 'none');

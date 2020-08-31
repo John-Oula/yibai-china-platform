@@ -1868,7 +1868,6 @@ video{
     padding: 0px;
 }
 .video-details{
-    display: none;
 }
 
 .video-nav{
@@ -1920,8 +1919,8 @@ a.video{
     position: absolute;
 }
 
-.profile , .my-profile{
-    display: none;
+
+.my-profile{
 }
 
 .user-profile-info{
@@ -1979,7 +1978,6 @@ a.video{
     display: none;
 }
 #live{
-    display: none;
 }
 #live-card{
     height: fit-content;
@@ -2030,7 +2028,6 @@ a.video{
 }
 
 .live-details{
-    display: none;
 }
 
 
@@ -2106,6 +2103,10 @@ a.video{
 }
 
 #user-profile{
+    display: none;
+}
+
+.profile{
     display: none;
 }
 
@@ -2256,11 +2257,7 @@ div.modal , #episode-modal , #series-modal{
 
 }
 
-.controls{
-    position: absolute;
-    top: 120px;
-    display: none;
-}
+
 #pause-btn{
     display: none;
 }
@@ -2298,6 +2295,7 @@ background-color: white;
 
 .user-form{
     width: 100%;
+    display: none;
 }
 #introduction{
     width: 100%;
@@ -2346,9 +2344,12 @@ display: none;
 }
 
 #episode-title{
+}
+#controls{
+    position: absolute;
+    top: 120px;
     display: none;
 }
-
 }
 
 

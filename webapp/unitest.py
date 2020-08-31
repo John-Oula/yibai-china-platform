@@ -1,7 +1,7 @@
 from datetime import datetime, timedelta
 import unittest
-from webapp import app, Series, Episode, Skill, Available, follow, Reviews
-from webapp import User, Post, Lesson, db, Comment, likes, Upload
+from webapp import app, Series, Episode, Skill, Available, follow, Reviews, Role, Permission
+from webapp import User, Live, Lesson, db, Comment, likes, Upload
 from flask import jsonify
 import psycopg2
 
@@ -33,17 +33,17 @@ class UserModelCase(unittest.TestCase):
         db.session.commit()
         user_list=User.query.all()
 
-        p1 = Post(user_id=1, title='tech', description='this is a test ',category='MANDARIN', date='2019-12-4')
-        p2 = Post(user_id=2, title='china', description='this is a test', category="CAREER", date='2019-12-3')
-        p3 = Post(user_id=3, title='biz', description='this is a test', category="LEGAL", date='2019-12-2')
-        p4 = Post(user_id=4, title='living', description='this is a test', category="BUSINESS", date='2019-12-1')
+        p1 = Live(user_id=1, title='tech', description='this is a test ', category='MANDARIN', date='2019-12-4')
+        p2 = Live(user_id=2, title='china', description='this is a test', category="CAREER", date='2019-12-3')
+        p3 = Live(user_id=3, title='biz', description='this is a test', category="LEGAL", date='2019-12-2')
+        p4 = Live(user_id=4, title='living', description='this is a test', category="BUSINESS", date='2019-12-1')
         db.session.add(p1)
         db.session.add(p2)
         db.session.add(p3)
         db.session.add(p4)
         db.session.commit()
 
-        pages = Post.query.paginate(per_page=1)
+        pages = Live.query.paginate(per_page=1)
         print(pages)
 
         l1 = Lesson(title='Introduction', description="this is a test", post_id=1, user_id=1)
@@ -154,7 +154,7 @@ class UserModelCase(unittest.TestCase):
             print("User ",u1.id," is available on",date.date_available)
         db.session.commit()
 
-        posts = Post.query.all()
+        posts = Live.query.all()
 #        for lesson in p1.lesson:
 #            print(lesson.title)
 #
@@ -162,7 +162,7 @@ class UserModelCase(unittest.TestCase):
 #                print(lesson.title)
 #            else:
 #                pass
-        posts = Post.query.all()
+        posts = Live.query.all()
 #        for post in u1.lesson:
 #            if post.post_id == p2.id:
 #
@@ -213,7 +213,7 @@ class UserModelCase(unittest.TestCase):
 
         author1 = p1.author.username
         author2 = p4.author.username
-        #       join=Post.query.join(user, (id == p1.user_id))
+        #       join=Live.query.join(user, (id == p1.user_id))
         #       print(join)
         print(author1, 'created session titled')
 #        for episodes in s1.episode:
@@ -245,20 +245,41 @@ class UserModelCase(unittest.TestCase):
         update()
         print(u1.get_reset_token())
 
-#        print(len(up1))
-#        print(len(f2))
-#        print(len(f3))
-#        print(len(f4))
-#        assert len(f1) == 4
-#        assert len(f2) == 2
-#        assert len(f3) == 2
-#        assert len(f4) == 1
-#        assert f1 == [p4, p3, p2,p1]
-#        assert f2 == [p4, p2]
-#        assert f3 == [p3, p2]
-#        assert f4 == [p4]
+    def test_user_role(self):
+        Role.insert_roles()
+        u = User(email='authentigcation@100chinaguide.com',username= 'cccccc', password='cat')
 
+        self.assertFalse(u.can(Permission.FOLLOW))
+        self.assertTrue(u.can(Permission.COMMENT))
+        self.assertTrue(u.can(Permission.UPLOAD))
+        self.assertFalse(u.can(Permission.MODERATE),msg='Is not admin')
+        self.assertFalse(u.can(Permission.ADMIN),msg='Is not admin')
 
+    def test_moderator_role(self):
+        r = Role.query.filter_by(name='Moderator').first()
+        u = User(email='john@example.com',username= 'cccccc', password='cat', role=r)
+        self.assertTrue(u.can(Permission.FOLLOW))
+        self.assertTrue(u.can(Permission.COMMENT))
+        self.assertTrue(u.can(Permission.UPLOAD))
+        self.assertTrue(u.can(Permission.MODERATE))
+        self.assertFalse(u.can(Permission.ADMIN))
+
+    def test_administrator_role(self):
+        r = Role.query.filter_by(name='Administrator').first()
+        u = User(email='authentication@100chinaguide.com',username= 'cccccc', password='cat', role=r)
+        self.assertTrue(u.can(Permission.FOLLOW))
+        self.assertTrue(u.can(Permission.COMMENT))
+        self.assertTrue(u.can(Permission.UPLOAD))
+        self.assertTrue(u.can(Permission.MODERATE))
+        self.assertTrue(u.can(Permission.ADMIN))
+
+    def test_anonymous_user(self):
+        u = AnonymousUser()
+        self.assertFalse(u.can(Permission.FOLLOW))
+        self.assertFalse(u.can(Permission.COMMENT))
+        self.assertFalse(u.can(Permission.UPLOAD))
+        self.assertFalse(u.can(Permission.MODERATE))
+        self.assertFalse(u.can(Permission.ADMIN))
 
 if __name__ == '__main__':
     unittest.main(verbosity=2)

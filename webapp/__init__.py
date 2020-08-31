@@ -15,11 +15,15 @@ import os
 import random
 import re
 import socket
+from functools import wraps
+
+from flask_admin.menu import MenuLink
 from flask_share import Share
+from flask_admin import Admin,BaseView, expose
 
 import filetype
 from PIL import Image
-from flask import Flask, render_template, url_for, flash, redirect, session, request, jsonify
+from flask import Flask, render_template, url_for, flash, redirect, session, request, jsonify, abort
 from flask_login import login_user, login_required, current_user, logout_user,AnonymousUserMixin, UserMixin, LoginManager
 from flask_mail import Mail, Message
 from flask_migrate import Migrate
@@ -31,6 +35,10 @@ from itsdangerous import TimedJSONWebSignatureSerializer as Serializer
 from werkzeug.utils import secure_filename
 from wtforms import *
 from wtforms.validators import Required
+from flask_admin.contrib.sqla import ModelView
+from flask_admin.contrib.fileadmin import FileAdmin
+import os.path as op
+from wtforms.widgets import TextArea
 
 #from alipaySDK.alipay.aop.api.AlipayClientConfig import AlipayClientConfig
 #from alipaySDK.alipay.aop.api.DefaultAlipayClient import DefaultAlipayClient
@@ -97,6 +105,8 @@ app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 app.config['SECRET_KEY'] = 'Adawug;irwugw79536870635785ty0875y03davvavavdey'
 appID=200000164
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+# set optional bootswatch theme
+app.config['FLASK_ADMIN_SWATCH'] = 'yeti'
 app.config['WTF_CSRF_ENABLED'] = True
 if get_Host_name_IP('CJAY') == True:
     app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:@qwerty1234!@localhost/postgres'
@@ -124,11 +134,34 @@ login_manager.init_app(app)
 app.config['MAIL_SERVER']='smtp.100chinaguide.com'
 app.config['MAIL_PORT'] = 80
 app.config['MAIL_USERNAME'] = 'authentication@100chinaguide.com'
+app.config['FLASKY_ADMIN'] = 'authentication@100chinaguide.com'
 app.config['MAIL_PASSWORD'] = 'verify@2020'
 app.config['MAIL_USE_TLS'] = False
 app.config['MAIL_USE_SSL'] = False
 
 mail = Mail(app)
+
+admin = Admin(app, name='Management Panel', template_mode='bootstrap3')
+staticPath = op.join(op.dirname(__file__), 'static')
+
+class CKTextAreaWidget(TextArea):
+    def __call__(self, field, **kwargs):
+        if kwargs.get('class'):
+            kwargs['class'] += ' ckeditor'
+        else:
+            kwargs.setdefault('class', 'ckeditor')
+        return super(CKTextAreaWidget, self).__call__(field, **kwargs)
+
+class CKTextAreaField(TextAreaField):
+    widget = CKTextAreaWidget()
+
+class MessageAdmin(ModelView):
+    extra_js = ['//cdn.ckeditor.com/4.6.0/standard/ckeditor.js']
+
+    form_overrides = {
+        'description': CKTextAreaField
+    }
+
 @login_manager.user_loader
 def load_user(user_id):
     return User.query.get(int(user_id))
@@ -179,10 +212,12 @@ cart = db.Table('cart',
                 db.Column('user_id', db.Integer, db.ForeignKey('user.id')),
                 db.Column('course_id', db.Integer, db.ForeignKey('series.id')))
 
-class User(db.Model, UserMixin,AnonymousUserMixin):
+class User(db.Model, UserMixin):
     __tablename__ = 'user'
     id = db.Column('id', db.Integer, primary_key=True)
     role = db.Column('role', db.Integer, default=0)
+    role_id = db.Column(db.Integer, db.ForeignKey('roles.id'))
+
     sub_role = db.Column('sub role', db.Integer, default=1)
     fullname = db.Column('fullname', db.String(20))
     username = db.Column('username', db.String(20), unique=True, nullable=True)
@@ -199,7 +234,7 @@ class User(db.Model, UserMixin,AnonymousUserMixin):
     province = db.Column('province', db.String(60), nullable=True)
     city = db.Column('city', db.String(60), nullable=True)
     phone = db.Column('phone', db.BIGINT(), nullable=True)
-    posts = db.relationship('Post', backref='author', lazy=True)
+    posts = db.relationship('Live', backref='author', lazy=True)
     uploads = db.relationship('Upload', backref='uploader', lazy=True)
     series = db.relationship('Series', backref='user_series', lazy=True)
     episode = db.relationship('Episode', backref='user_episode', lazy=True)
@@ -217,13 +252,36 @@ class User(db.Model, UserMixin,AnonymousUserMixin):
 #                               primaryjoin=(review.c.reviewer_id == id),
 #                               secondaryjoin=(review.c.reviewed_id == id),
 #                               backref=db.backref('user_review', lazy='dynamic'), lazy='dynamic')
-    book = db.relationship('Post', secondary=book,backref=db.backref('bookers', lazy='dynamic'))
+    book = db.relationship('Live', secondary=book,backref=db.backref('bookers', lazy='dynamic'))
     bookSchedule = db.relationship('Available', secondary=bookSchedule,backref=db.backref('userSchedule', lazy='dynamic'))
     likes = db.relationship('Series', secondary=likes,backref=db.backref('liked', lazy='dynamic'))
     likesEpisode = db.relationship('Episode', secondary=likesEpisode,backref=db.backref('userLikedEpisode', lazy='dynamic'))
     cart = db.relationship('Series', secondary=cart,backref='user_cart', lazy='dynamic')
 
+    def __init__(self, **kwargs):
+        super(User, self).__init__(**kwargs)
+        if self.role is None:
+            if self.email == app.config['FLASKY_ADMIN']:
+                self.role = Role.query.filter_by(permissions=0xff).first()
+            if self.role is None:
+                self.role = Role.query.filter_by(default=True).first()
 
+    def can(self, permissions):
+        return self.role is not None and (self.role.permissions & permissions) == permissions
+
+    def is_administrator(self):
+        return self.can(Permission.ADMINISTER)
+
+
+    class AnonymousUser(AnonymousUserMixin):
+        def can(self, permissions):
+            return False
+
+
+    def is_administrator(self):
+        return False
+
+    login_manager.anonymous_user = AnonymousUser
 
     def get_reset_token(self,expires_sec=1800):
         s = Serializer(app.config['SECRET_KEY'],expires_sec)
@@ -283,11 +341,11 @@ class User(db.Model, UserMixin,AnonymousUserMixin):
     # is_admin = db.Column(db.Boolean,default=False)
 
     def followed_posts(self):
-        followed = Post.query.join(
-            followers, (followers.c.followed_id == Post.user_id)).filter(
+        followed = Live.query.join(
+            followers, (followers.c.followed_id == Live.user_id)).filter(
             followers.c.follower_id == self.id)
-        own = Post.query.filter_by(user_id=self.id)
-        return followed.union(own).order_by(Post.timestamp.desc())
+        own = Live.query.filter_by(user_id=self.id)
+        return followed.union(own).order_by(Live.timestamp.desc())
 
     def followed_uploads(self):
         followed = Upload.query.join(
@@ -296,27 +354,50 @@ class User(db.Model, UserMixin,AnonymousUserMixin):
         own = Upload.query.filter_by(user_id=self.id)
         return followed.union(own).order_by(Upload.timestamp.desc())
 
-    def __repr__(self, user_id, role, sub_role, fullname, username, password, image_file,introduction,introduction_video, id_type, id_number,
-                 id_document, nationality, occupation, email, province, city, phone):
-        self.user_id = user_id
-        self.role = role
-        self.sub_role = sub_role
-        self.fullname = fullname
-        self.username = username
-        self.password = password
-        self.image_file = image_file
 
-        self.introduction = introduction
-        self.introduction_video = introduction_video
-        self.id_type = id_type
-        self.id_number = id_number
-        self.id_document = id_document
-        self.nationality = nationality
-        self.occupation = occupation
-        self.email = email
-        self.province = province
-        self.city = city
-        self.phone = phone
+
+class Role(db.Model):
+    __tablename__ = 'roles'
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(64), unique=True)
+    default = db.Column(db.Boolean, default=False, index=True)
+    permissions = db.Column(db.Integer)
+    users = db.relationship('User', backref='roles', lazy='dynamic')
+
+    def __init__(self, **kwargs):
+        super(Role, self).__init__(**kwargs)
+        if self.permissions is None:
+            self.permissions = 0
+
+    @staticmethod
+    def insert_roles():
+        roles = { 'User': (Permission.FOLLOW |
+                           Permission.COMMENT |
+                           Permission.LIVE_SESSION |
+                           Permission.UPLOAD, True),
+                  'Moderator': (Permission.FOLLOW |
+                                Permission.COMMENT |
+                                Permission.UPLOAD |
+                                Permission.MODERATE, False),
+                  'Administrator': (0xff, False)        }
+        for r in roles:
+            role = Role.query.filter_by(name=r).first()
+        if role is None:
+            role = Role(name=r)
+        role.permissions = roles[r][0]
+        role.default = roles[r][1]
+        db.session.add(role)
+        db.session.commit()
+
+class Permission:
+    FOLLOW = 0x01
+    COMMENT = 0x02
+    UPLOAD = 0x04
+    LIVE_SESSION = 0x06
+    MODERATE = 0x08
+    ADMINISTER = 0x80
+
+
 
 class Skill(db.Model):
     __tablename__ = 'skill'
@@ -339,14 +420,7 @@ class Available(db.Model):
     meetingCode = db.Column('MeetingCode', db.BigInteger, nullable=True)
     price = db.Column('price', db.Integer)
 
-
-
-
-
-
-
-
-class Post(db.Model):
+class Live(db.Model):
     __tablename__ = 'post'
     id = db.Column('id', db.Integer, primary_key=True)
     meetingCode = db.Column('MeetingCode', db.BigInteger, nullable=True)
@@ -364,22 +438,7 @@ class Post(db.Model):
     end_time = db.Column('End time', db.String, nullable=True)
     lesson = db.relationship('Lesson', backref=db.backref('lessons'))
 
-    def __repr__(self, id,meetingCode,meetingUrl, verified, title,coverImage, category, description, files, timestamp ,date, user_id, start_time,
-                 end_time):
-        self.id = id
-        self.meetingCode = meetingCode
-        self.meetingUrl = meetingUrl
-        self.verified = verified
-        self.title = title
-        self.coverImage = coverImage
-        self.category = category
-        self.files = files
-        self.description = description
-        self.timestamp = timestamp
-        self.date = date
-        self.user_id = user_id
-        self.start_time = start_time
-        self.end_time = end_time
+
 
 class Lesson(db.Model):
     __tablename__ = 'lesson'
@@ -389,11 +448,7 @@ class Lesson(db.Model):
     post_id = db.Column('post_id', db.Integer, db.ForeignKey('post.id'), nullable=False)
     user_id = db.Column('user_id', db.Integer, db.ForeignKey('user.id'), nullable=False)
 
-    def __repr__(self, id, title, description, post_id):
-        self.id = id
-        self.title = title
-        self.description = description
-        self.post_id = post_id
+
 
 
 class Upload(db.Model):
@@ -410,17 +465,7 @@ class Upload(db.Model):
     timestamp = db.Column(db.DateTime, default=datetime.datetime.utcnow)
     user_id = db.Column('user_id', db.Integer, db.ForeignKey('user.id'), nullable=True)
 
-    def __repr__(self, id, title, category, description, price, upload_ref,coverImage,transcript_ref,auido_ref, user_id):
-        self.id = id
-        self.title = title
-        self.category = category
-        self.description = description
-        self.price = price
-        self.coverImage = coverImage
-        self.upload_ref = upload_ref
-        self.transcript_ref = transcript_ref
-        self.auido_ref = auido_ref
-        self.user_id = user_id
+
 
 
 
@@ -442,17 +487,7 @@ class Series(db.Model):
     episode = db.relationship('Episode', backref='sub', lazy=True)
 
 
-    def __repr__(self, id, title,coverImage,views, category,user_id,payment_id,status, description, price, upload_ref):
-        self.id = id
-        self.title = title
-        self.category = category
-        self.views = views
-        self.coverImage = coverImage
-        self.description = description
-        self.price = price
-        self.upload_ref = upload_ref
-        self.user_id = user_id
-        self.status = status
+
 
     def is_series(self):
         if self.status == 'single':
@@ -490,17 +525,17 @@ class Episode(db.Model):
     transcript_ref = db.Column('transcript_ref', db.VARCHAR)
     auido_ref = db.Column('auido_ref', db.VARCHAR)
 
-    def __repr__(self, id,subtitle,views, category, description, upload_ref, transcript_ref,auido_ref ,user_id,series_id):
-        self.id = id
-        self.subtitle = subtitle
-        self.category = category
-        self.views = views
-        self.description = description
-        self.upload_ref = upload_ref
-        self.transcript_ref = transcript_ref
-        self.auido_ref = auido_ref
-        self.user_id = user_id
-        self.series_id = series_id
+#    def __init__ (self, id,subtitle,views, category, description, upload_ref, transcript_ref,auido_ref ,user_id,series_id):
+#        self.id = id
+#        self.subtitle = subtitle
+#        self.category = category
+#        self.views = views
+#        self.description = description
+#        self.upload_ref = upload_ref
+#        self.transcript_ref = transcript_ref
+#        self.auido_ref = auido_ref
+#        self.user_id = user_id
+#        self.series_id = series_id
 
 
     def fileType(self):
@@ -526,13 +561,6 @@ class Payment(db.Model):
     series_id = db.Column('series_id', db.Integer, db.ForeignKey('series.id'), nullable=False)
 
 
-    def __repr__(self, id,order_number, amount, price,user_id,series_id):
-        self.id = id
-        self.order_number = order_number
-        self.amount = amount
-        self.price = price
-        self.user_id = user_id
-        self.series_id = series_id
 
 
 
@@ -580,7 +608,38 @@ class Comments(db.Model):
     def level(self):
         return len(self.path) // self._N - 1
 
+class RoleView(BaseView):
+    @expose('/')
+    def index(self):
+        all_users = User.query.all()
+        return self.render('admin/live.html',all_users=all_users)
 
+def permission_required(permission):
+    def decorator(f):
+        @wraps(f)
+        def decorated_function(*args, **kwargs):
+            if not current_user.can(permission):
+                abort(403)
+            return f(*args, **kwargs)
+        return decorated_function
+    return decorator
+def admin_required(f):
+    return permission_required(Permission.ADMINISTER)(f)
+admin.add_view(ModelView(User, db.session, category="User List"))
+admin.add_view(ModelView(Live, db.session, category="Live"))
+admin.add_view(ModelView(Series, db.session, category="Course"))
+admin.add_view(ModelView(Available, db.session, category="Schedule"))
+admin.add_view(ModelView(Comment, db.session, category=""))
+admin.add_view(ModelView(Episode, db.session, category="Course"))
+admin.add_view(ModelView(Payment, db.session, category=""))
+admin.add_view(FileAdmin(staticPath, '/static/', name='Files'))
+admin.add_view(RoleView(name="Assign roles", endpoint='roles',category="Roles & Permissions"))
+admin.add_sub_category(name="Links", parent_name="Course")
+admin.add_sub_category(name="Assign roles", parent_name="Roles & Permissions")
+admin.add_sub_category(name="Create roles", parent_name="Roles & Permissions")
+admin.add_sub_category(name="Create live", parent_name="Live")
+admin.add_link(MenuLink(name='Create live', url='/', category='Live'))
+admin.add_link(MenuLink(name='Create roles', url='/', category='Roles & Permissions'))
 ### FORMS ###
 
 class Signup_form(FlaskForm):
@@ -741,7 +800,7 @@ class Lesson_form(FlaskForm):
 
 class Comment_form(FlaskForm):
     content = StringField()
-    submit = SubmitField('Post')
+    submit = SubmitField('Live')
 
 
 
@@ -763,7 +822,9 @@ class Reset_password(FlaskForm):
 
 
 
-
+@app.context_processor
+def inject_permissions():
+    return dict(Permission=Permission)
 
 @app.route('/' ,methods=['POST','GET'])
 def home():
@@ -814,7 +875,7 @@ def home():
 @app.route('/liveSession')
 def liveSession():
 
-    videos = Post.query.order_by(Post.timestamp.desc()).all()
+    videos = Live.query.order_by(Live.timestamp.desc()).all()
     i = 0
     l = []
     for v in range(len(videos)):
@@ -997,7 +1058,7 @@ def event():
 
 @app.route('/consult')
 def consult():
-    all_posts = Post.query.all()
+    all_posts = Live.query.all()
 
     return render_template('CONSULT.html',all_posts=all_posts)
 
@@ -1009,10 +1070,35 @@ def unitalk():
 def about():
     return render_template('ABOUT.html')
 
-
 @app.route('/live')
 def live():
     return render_template('live.html')
+
+
+@app.route('/liveInfo')
+def liveInfo():
+    return render_template('liveDetails.html')
+
+
+@app.route('/userProfile')
+def profilePage():
+    form = Upload_form()
+    seriesForm = Series_form()
+    episodeForm = Episode_form()
+    sessionForm = Session_form()
+    UpdateEpisode = UpdateEpisode_form()
+    UpdateSeries = UpdateSeries_form()
+    UpdateUploads = UpdateUploads_form()
+    UpdateSession = UpdateSession_form()
+    signupForm = Signup_form()
+    userForm = User_form()
+    commentForm = Comment_form()
+    return render_template('profile.html',commentForm=commentForm,userForm = userForm,UpdateSession=UpdateSession,UpdateUploads=UpdateUploads,UpdateSeries=UpdateSeries,UpdateEpisode=UpdateEpisode,sessionForm=sessionForm,form=form,seriesForm=seriesForm,episodeForm=episodeForm)
+
+@app.route('/videoInfo')
+def videoInfo():
+    commentForm = Comment_form()
+    return render_template('videoDetails.html',commentForm=commentForm)
 
 def hash_password(password):
     """Hash a password for storing."""
@@ -1141,8 +1227,8 @@ def dashboard(username):
 
     all_users = User.query.all()
     total_users = len(all_users)
-    all_posts = len(Post.query.all())
-    data = Post.query.all()
+    all_posts = len(Live.query.all())
+    data = Live.query.all()
     user_posts = len(current_user.posts)
     book_posts = len(current_user.book)
     booked = all_users
@@ -1176,7 +1262,7 @@ def reverse_admin():
 
 
 def time():
-    date = Post.query.all()
+    date = Live.query.all()
     for time in date:
         start = time.start_time
         x = re.split(r'([T+])', start)
@@ -1348,14 +1434,14 @@ def user_profile(username):
 
     user = User.query.filter_by(username=username).first_or_404()
     image_file = url_for('static', filename ='profile_pics/' + current_user.image_file)
-    followed_posts=Post.query.join(followers, (followers.c.followed_id == Post.user_id)).all()
+    followed_posts=Live.query.join(followers, (followers.c.followed_id == Live.user_id)).all()
 
-    all_posts = Post.query.all()
-    posts = Post.query.all()
+    all_posts = Live.query.all()
+    posts = Live.query.all()
     postNum=len(all_posts)
 
     all_users = User.query.all()
-    author = db.session.query(Post.title).join(User.posts)
+    author = db.session.query(Live.title).join(User.posts)
     user_role = current_user.role
     session['username'] = username
     seriesId=Series.query.all()
@@ -1372,13 +1458,13 @@ def my_profile(username):
 
     user = User.query.filter_by(username=username).first_or_404()
     image_file = url_for('static', filename ='profile_pics/' + current_user.image_file)
-    followed_posts=Post.query.join(followers, (followers.c.followed_id == Post.user_id)).all()
+    followed_posts=Live.query.join(followers, (followers.c.followed_id == Live.user_id)).all()
 
-    all_posts = Post.query.all()
+    all_posts = Live.query.all()
     postNum=len(all_posts)
 
     all_users = User.query.all()
-    author = db.session.query(Post.title).join(User.posts)
+    author = db.session.query(Live.title).join(User.posts)
     user_role = current_user.role
     session['username'] = username
     seriesId=Series.query.all()
@@ -1395,14 +1481,14 @@ def feed(username):
 
     user = User.query.filter_by(username=username).first_or_404()
     image_file = url_for('static', filename ='profile_pics/' + current_user.image_file)
-#    followed_posts=Post.query.join(followers, (followers.c.followed_id == Post.user_id)).all()
+#    followed_posts=Live.query.join(followers, (followers.c.followed_id == Live.user_id)).all()
     suggestUser = User.query.filter_by(id=3).first_or_404()
     form = Upload_form()
     all_users = User.query.all()
     followed_posts = current_user.followed_posts()
 
 
-    author = db.session.query(Post.title).join(User.posts)
+    author = db.session.query(Live.title).join(User.posts)
     user_role = current_user.role
     session['username'] = username
     seriesId=Series.query.all()
@@ -1430,14 +1516,14 @@ def user(username):
     image_file = url_for('static', filename ='profile_pics/' + user.image_file)
     suggestUser = User.query.filter_by(id=3).first_or_404()
 
-    all_posts = Post.query.all()
+    all_posts = Live.query.all()
     all_lessons = Lesson.query.all()
     seriesId=Series.query.all()
     for seriesId in seriesId:
         seriesIdNum = int(seriesId.id) + 1
 
 #    uploads = url_for('static', filename='videos/' + current_user.uploads)
-#    followed_posts = Post.query(User).join(Post)
+#    followed_posts = Live.query(User).join(Live)
 #    print(followed_posts)
     return render_template('USER_BASE.html',suggestUser=suggestUser,seriesIdNum=seriesIdNum,user=user,image_file=image_file,all_posts=all_posts,all_lessons = all_lessons)
 
@@ -1544,7 +1630,7 @@ def book(id):
 
         db.session.commit()
     elif type == 'live':
-        post=Post.query.filter_by(id=id).first()
+        post=Live.query.filter_by(id=id).first()
         post.bookers.append(current_user)
         db.session.commit()
 
@@ -1564,7 +1650,7 @@ def unbook(id):
 
         db.session.commit()
     elif type == 'live':
-        post = Post.query.filter_by(id=id).first()
+        post = Live.query.filter_by(id=id).first()
         post.bookers.remove(current_user)
         db.session.commit()
 
@@ -1574,7 +1660,7 @@ def unbook(id):
 @app.route('/post/<int:id>')
 @login_required
 def  post(id):
-    post = Post.query.get_or404(id)
+    post = Live.query.get_or404(id)
     return redirect(url_for('login'))
 
 
@@ -1665,7 +1751,7 @@ def videoDetails():
 @app.route('/liveDetails' , methods=['POST','GET'])
 def liveDetails():
     liveId= request.args.get('liveId', type=int)
-    live = Post.query.filter_by(id=liveId).first()
+    live = Live.query.filter_by(id=liveId).first()
     scheduleList = []
     if current_user.is_authenticated:
         data = {'id': live.id, 'title': live.title,'startTime': live.start_time,'endTime': live.end_time,'date': live.date,'coverImage': live.coverImage,'description':live.description,'category': live.category,'meetingCode':live.meetingCode,'meetingUrl':live.meetingUrl,'hasBooked':current_user.has_bookedLive(live)}
@@ -1953,13 +2039,13 @@ def meetingInfo(username,meetingcode,post_id):
         meetingEnd = datetime.fromtimestamp(int(item['end_time'])).strftime('%H:%M')
     user = User.query.filter_by(username=username).first_or_404()
     image_file = url_for('static', filename ='profile_pics/' + current_user.image_file)
-    followed_posts=Post.query.join(followers, (followers.c.followed_id == Post.user_id)).all()
+    followed_posts=Live.query.join(followers, (followers.c.followed_id == Live.user_id)).all()
 
-    all_posts = Post.query.all()
+    all_posts = Live.query.all()
     postId=post_id
 
     all_users = User.query.all()
-    author = db.session.query(Post.title).join(User.posts)
+    author = db.session.query(Live.title).join(User.posts)
     user_role = current_user.role
     seriesId = Series.query.all()
     for seriesId in seriesId:
@@ -1972,7 +2058,7 @@ def meetingInfo(username,meetingcode,post_id):
 def cancel_meeting(meetingId,meetingcode):
 
     cancelMeeting(meetingId,current_user.username,1)
-    meeting=Post.query.filter_by(meetingCode=meetingcode).first_or_404()
+    meeting=Live.query.filter_by(meetingCode=meetingcode).first_or_404()
     db.session.delete(meeting)
 
     db.session.commit()
@@ -2008,7 +2094,7 @@ def modify_meeting(username,meetingId,post_id):
             meetingCode = item['meeting_code']
 
 
-        post = Post.query.filter_by(id=post_id).first_or_404()
+        post = Live.query.filter_by(id=post_id).first_or_404()
         lesson = Lesson(title=request.form['title'], description=request.form['description'])
         verify = User(id_type=verify_form.id_type.data, id_number=verify_form.id_number.data,
                       id_document=verify_form.id_document.data,
@@ -2057,7 +2143,7 @@ def create(username):
             meetingCode = item['meeting_code']
 
 
-        post = Post(title=form.title.data,category=form.category.data,description=form.description.data,date= fullDate,start_time= startTime ,end_time = endTime, author=current_user,meetingCode=meetingCode)
+        post = Live(title=form.title.data, category=form.category.data, description=form.description.data, date= fullDate, start_time= startTime, end_time = endTime, author=current_user, meetingCode=meetingCode)
         lesson = Lesson(title=request.form['title'],description=request.form['description'])
         verify = User(id_type = verify_form.id_type.data,id_number = verify_form.id_number.data,id_document = verify_form.id_document.data,
                      nationality = verify_form.nationality.data,occupation = verify_form.occupation.data,email = verify_form.email.data,phone = verify_form.phone.data)
@@ -2230,7 +2316,7 @@ def createCourse():
     if request.method == 'POST' and status == 'single':
 
 
-        upload = Series(title=form.upload_title.data,coverImage=saveFile(form.upload_coverImage.data,'coverImages'), description=form.upload_description.data,category=form.upload_category.data,status=status,price= form.upload_price.data,upload_ref=saveFile(form.upload_fileName.data,'videos'),user_series=current_user)
+        upload = Series(title=form.upload_title.data,coverImage=saveFile(form.upload_coverImage.data,'coverImages'), description=form.upload_description.data,category=form.upload_category.data,status=status,price= str(form.upload_price.data),upload_ref=saveFile(form.upload_fileName.data,'videos'),user_series=current_user)
         db.session.add(upload)
 
         db.session.commit()
@@ -2491,7 +2577,7 @@ def editSchedule():
 @csrf.exempt
 def editLive():
     live_id = request.args.get('live_id', type=int)
-    live = Post.query.filter_by(id = live_id).first()
+    live = Live.query.filter_by(id = live_id).first()
     update_form = UpdateSession_form()
 
     if request.method == 'GET':
@@ -2587,7 +2673,7 @@ def getUserLive():
     user_id = request.args.get('user_id', type=int)
 
     form = Session_form()
-    series = Post.query.filter_by(user_id = user_id).order_by(Post.timestamp.desc()).all()
+    series = Live.query.filter_by(user_id = user_id).order_by(Live.timestamp.desc()).all()
     i = 0
     l = []
     for v in range(len(series)):
@@ -2613,8 +2699,8 @@ def getUserLive():
             meetingUrl = item['join_url']
 
 
-        post = Post(title=form.title.data, category=form.category.data, description=form.description.data,
-                    date=fullDate,meetingUrl = meetingUrl , start_time=startTime, end_time=endTime, author=current_user, meetingCode=meetingCode)
+        post = Live(title=form.title.data, category=form.category.data, description=form.description.data,
+                    date=fullDate, meetingUrl = meetingUrl, start_time=startTime, end_time=endTime, author=current_user, meetingCode=meetingCode)
 
         db.session.add(post)
         db.session.commit()
@@ -2803,7 +2889,7 @@ def lesson(username,id):
 
     user = User.query.filter_by(username=username).first_or_404()
     form = Lesson_form()
-    post = Post.query.filter_by(id=id).first()
+    post = Live.query.filter_by(id=id).first()
     if request.method == 'POST':
 
 
@@ -2846,7 +2932,7 @@ def superview():
 @login_required
 def session_admin(id):
     user = User.query.filter_by(id=id).first_or_404()
-    all_posts = Post.query.all()
+    all_posts = Live.query.all()
 
     image_file = url_for('static', filename ='profile_pics/' + current_user.image_file)
     user_role = current_user.role
@@ -2857,7 +2943,7 @@ def session_admin(id):
 @app.route('/session_view/<int:id>',methods=['GET','POST'])
 @login_required
 def session_view(id):
-    session_post = Post.query.filter_by(id=id).first()
+    session_post = Live.query.filter_by(id=id).first()
     user = User.query.filter_by(id=id).first_or_404()
     comments = Comment.query.all()
     image_file = url_for('static', filename ='profile_pics/' + current_user.image_file)
@@ -2869,7 +2955,7 @@ def session_view(id):
 @app.route('/session_verify/<int:id>',methods=['GET','POST'])
 @login_required
 def session_verify(id):
-    session_post = Post.query.filter_by(id=id).first()
+    session_post = Live.query.filter_by(id=id).first()
     session_post.verified = 1
     db.session.commit()
 
@@ -2878,7 +2964,7 @@ def session_verify(id):
 @app.route('/session_unverify/<int:id>',methods=['GET','POST'])
 @login_required
 def session_unverify(id):
-    session_post = Post.query.filter_by(id=id).first()
+    session_post = Live.query.filter_by(id=id).first()
     session_post.verified = 0
     db.session.commit()
 
@@ -2888,7 +2974,7 @@ def session_unverify(id):
 @login_required
 def video_admin(id):
     user = User.query.filter_by(id=id).first_or_404()
-    uploads  = Upload.query.all()
+    uploads  = Series.query.all()
     image_file = url_for('static', filename ='profile_pics/' + current_user.image_file)
     user_role = current_user.role
     all_users = User.query.all()

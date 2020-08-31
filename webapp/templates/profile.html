@@ -22,174 +22,8 @@
 {% endblock %}
 
 {% block body %}
-    <div class="home-wrapper">
-        <p class="text-center title">Why 100ChinaGuide?</p>
-        <div class="container">
-            <div id="myCarousel" class="carousel slide" data-ride="carousel">
-                <!-- Indicators -->
-                <ol class="carousel-indicators">
-                    <li data-target="#myCarousel" data-slide-to="0" class="active"></li>
-                    <li data-target="#myCarousel" data-slide-to="1"></li>
-                    <li data-target="#myCarousel" data-slide-to="2"></li>
-                </ol>
-
-                <!-- Wrapper for slides -->
-                <div class="carousel-inner">
-                    <div class="item active">
-                        <div class="card shadow-lg">
-                            <div class="card-body">
-                                <img src="../static/Group%20277%20-%20Copy.png" alt="" class="d-block mx-auto"><br>
-                                <p class="home-text-upper">LIVE MANDARIN SESSION STREAMING</p>
-                                <p class="home-text-lower">Stream live mandarin classes at no cost <br> from anywhere in
-                                    the world. </p>
-
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="item">
-                        <div class="card shadow-lg">
-                            <div class="card-body">
-
-                                <img src="../static/Group%20278%20-%20Copy.png" alt="" class="d-block mx-auto"><br>
-                                <p class="home-text-upper">LIVE PROFESSIONAL CONSULTANCY</p>
-                                <p class="home-text-lower">Get access to live consultancy services from certified
-                                    sources <br> on our platform according to your field of specialization. </p>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="item">
-                        <div class="card shadow-lg">
-                            <div class="card-body">
-
-                                <img src="../static/Union%2066%20-%20Copy.png" alt="" class="d-block mx-auto"
-                                     height="149" width="107"><br>
-                                <p class="home-text-upper">KNOWLEDGE HUB</p>
-                                <p class="home-text-lower">Get detailed and accurate information from accredited sources
-                                    <br>if you plan to come to China or in China.</p>
-
-                            </div>
-
-                        </div>
-                    </div>
-                </div>
-                <!-- Left and right controls -->
-                <a class="left carousel-control" href="#myCarousel" data-slide="prev">
-                    <span class="glyphicon glyphicon-chevron-left"></span>
-                    <span class="sr-only">Previous</span>
-                </a>
-                <a class="right carousel-control" href="#myCarousel" data-slide="next">
-                    <span class="glyphicon glyphicon-chevron-right"></span>
-                    <span class="sr-only">Next</span>
-                </a>
-            </div>
-        </div>
-        <div class="row text-center" id="home-image-one">
-            <div class="col-4 text-center">
-                <div class="card shadow-lg">
-                    <div class="card-body">
-                        <img src="../static/Group%20277%20-%20Copy.png" alt="" class="d-block mx-auto"><br>
-                        <p class="home-text-upper">LIVE MANDARIN SESSION STREAMING</p>
-                        <p class="home-text-lower">Stream live mandarin classes at no cost <br> from anywhere in the
-                            world. </p>
-
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-4 text-center">
-                <div class="card shadow-lg">
-                    <div class="card-body">
-
-                        <img src="../static/Group%20278%20-%20Copy.png" alt="" class="d-block mx-auto"><br>
-                        <p class="home-text-upper">LIVE PROFESSIONAL CONSULTANCY</p>
-                        <p class="home-text-lower">Get access to live consultancy services from certified sources <br>
-                            on our platform according to your field of specialization. </p>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-4 text-center">
-                <div class="card shadow-lg">
-                    <div class="card-body">
-
-                        <img src="../static/Union%2066%20-%20Copy.png" alt="" class="d-block mx-auto" height="149"
-                             width="107"><br>
-                        <p class="home-text-upper">KNOWLEDGE HUB</p>
-                        <p class="home-text-lower">Get detailed and accurate information from accredited sources <br>if
-                            you plan to come to China or in China.</p>
-
-                    </div>
-
-                </div>
-            </div>
-
-
-        </div>
-
-        <div class="row" id="home-image-two">
-            <div class="col-6">
-                <img src="../static/sign%20up%20img.png" alt="" width="850">
-            </div>
-            <div class="col-4 left-home-text">
-                <p class="upper-text">CONTRIBUTE YOUR OWN</p>
-                <p class="lower-text">Explore unlimited guide uploads that will help you according to your needs.</p>
-            </div>
-
-        </div>
-
-        <div class="row" id="home-image-three">
-            <div class="col-5 right-home-text">
-                <p class="upper-text-dark">GET UNLIMITED ACCESS TO GUIDES</p>
-                <p class="lower-text-dark">Get to upload your own guide uploads for others to benefit from.</p>
-            </div>
-            <div class="col-6">
-                <img class="laptop" src="../static/LAPTOP.png" alt="" width="700">
-            </div>
-
-
-        </div>
-        <div class="text-center home-signup">
-            <h3 class="bottom-header"><b>SIGN UP TODAY <br> AND GET STARTED</b></h3>
-
-            <button type="button" id="card-btn" href="{{ url_for('signup') }}">SIGN UP</button>
-
-        </div>
-        <br>
-        <br>
-        <br>
-        <br>
-        <br>
-
-        <card class="card " id="footer">
-            <card class="card-body" id="footer-body">
-                <div class="row">
-                    <div class="col-3">
-                        <h6>CONTACT US</h6><br>
-                        <p class="about-text">+8618994050515</p>
-                        <p class="about-text">service@100chinaguide.com</p>
-                    </div>
-                    <div class="col-3">
-                        <h6>CUSTOMER SERVICE</h6><br>
-                        <p class="about-text">Contact us</p>
-                        <p class="about-text">FAQ</p>
-                    </div>
-                    <div class="col-3">
-                        <h6>INFORMATION</h6><br>
-                        <p class="about-text"><a href="">About us</a></p>
-                        <p class="about-text"><a href="">Privacy Policy</a></p>
-                        <p class="about-text"><a href="">Terms and Conditions</a></p>
-                    </div>
-
-                </div>
-
-            </card>
-        </card>
-    </div>
 
     <div id="main">
-    <li class="test"></li>
     <div id="currentUser" username="{{ current_user.username }}" propic="{{ current_user.image_file }}" ></div>
 
         {% if current_user.is_authenticated %}
@@ -209,97 +43,119 @@
         }(document, 'script', 'facebook-jssdk'));</script>
 
 
-        <div class="">
-            <ul class="upload-list">
-
-
-            </ul>
-
-        </div>
-
-
-        <div class="profile mt-3">
-
-            <div class="row user-profile-info no-gutters">
-                <div class="col-2 no-gutters">
-
-                    <div data-href="" class="click-pro-pic user-profile-pic-wrapper">
-                        <span><img class="profilepic" src="" alt=""></span>
-                    </div>
-                </div>
-                <div class="col-3 no-gutters text-center">
-                    <div id="user-followers"></div>
-
-                    <span>Followers</span>
-                </div>
-                <div class="col-3 no-gutters text-center">
-                    <div id="user-videos"></div>
-                    <span>Videos</span>
-
-                </div>
-                <div class="col-3 no-gutters text-center">
-                    <div id="user-live-sessions">
-                    </div>
-                    <span>Live Sessions</span>
-
-                </div>
-
-            </div>
-            <div id="">
-                <div id="user-username"></div>
-
-            </div>
-
-            <div class="profile-btn text-center">
-      <span>
-           <a id="follow" data-href=""> <button type="button" id="follow-btn" class="fixed-btn">Follow</button></a>
-           <a id="unfollow" data-href=""><button type="button" id="unfollow-btn" class="fixed-btn">Unfollow</button></a>
-
-      </span>
-                <span>
 
 
 
-           <a id="" data-href=""> <button type="button" data-href="" id="book-schedule-btn" class="fixed-btn">Book Schedule</button></a>
 
-     </span>
-
-            </div>
-            <ul class="nav nav-tabs nav-fill" id="myTab" role="tablist">
-                <li class="nav-item">
-                    <a class="nav-link active" id="bio-tab" data-toggle="tab" href="#bio" role="tab" aria-controls="bio"
-                       aria-selected="true">BIO</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" id="contents-tab" data-toggle="tab" href="#contents" role="tab"
-                       aria-controls="contents" aria-selected="false">CONTENTS</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" id="reviews-tab" data-toggle="tab" href="#reviews" role="tab"
-                       aria-controls="reviews" aria-selected="false">REVIEWS</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" id="stats-tab" data-toggle="tab" href="#stats" role="tab" aria-controls="stats"
-                       aria-selected="false">STATS</a>
-                </li>
-            </ul>
-            <div class="tab-content" id="myTabContent">
-                <div class="tab-pane fade show active p-3" id="bio" role="tabpanel" aria-labelledby="bio-tab">
-                    <p>Introduction</p>
-                    <span id="user-introduction"></span>
-                    <p id="video-description"></p>
-                </div>
-                <div class="tab-pane fade" id="contents" role="tabpanel" aria-labelledby="contents-tab"></div>
-                <div class="tab-pane fade" id="reviews" role="tabpanel" aria-labelledby="reviews-tab">
-
-                </div>
-                <div class="tab-pane fade" id="stats" role="tabpanel" aria-labelledby="stats-tab"></div>
-            </div>
-        </div>
 
 
 
         <div></div>
+
+            {% if current_user.is_authenticated %}
+
+                <div class="my-profile mt-3 ">
+                    <div class="row user-profile-info no-gutters">
+                        <div class="col-2 no-gutters">
+
+                            <div data-href="" class=" user-profile-pic-wrapper">
+                                <span><img class="profilepic" src="" alt=""></span>
+                            </div>
+                        </div>
+                        <div class="col-3 no-gutters text-center">
+                            <div id="my-followers"></div>
+
+                            <span>Followers</span>
+                        </div>
+                        <div class="col-3 no-gutters text-center">
+                            <div id="my-videos"></div>
+                            <span>Videos</span>
+
+                        </div>
+                        <div class="col-3 no-gutters text-center">
+                            <div id="my-live-sessions">
+                            </div>
+                            <span>Live Sessions</span>
+
+                        </div>
+                    </div>
+
+                    <div class="mt-1 p-3">
+                        <div id="my-username"></div>
+
+                    </div>
+
+                    <div class="profile-btn text-center">
+
+                        <span>
+
+
+
+           <a data-href="{{ url_for('updateInfo') }}" id="edit-profile"><button type="button" class="fixed-btn">Edit Profile</button></a>
+
+     </span>
+
+                    </div>
+                    <ul class="nav nav-tabs nav-fill" id="myProfileTab" role="tablist">
+                        <li class="nav-item">
+                            <a class="nav-link active" id="my-bio-tab" data-toggle="tab" href="#my-bio" role="tab"
+                               aria-controls="bio" aria-selected="true">BIO</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" id="my-contents-tab" data-toggle="tab" href="#my-contents" role="tab"
+                               aria-controls="contents" aria-selected="false">CONTENTS</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" id="my-reviews-tab" data-toggle="tab" href="#my-reviews" role="tab"
+                               aria-controls="reviews" aria-selected="false">REVIEWS</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" id="my-stats-tab" data-toggle="tab" href="#my-stats" role="tab"
+                               aria-controls="stats" aria-selected="false">STATS</a>
+                        </li>
+                    </ul>
+                    <div class="tab-content" id="myProfileTab">
+                        <div class="tab-pane fade show active p-3" id="my-bio" role="tabpanel"
+                             aria-labelledby="bio-tab">
+                            <p>Introduction</p>
+                            <div class="user-intro">
+                                <form data-href="{{ url_for('updateInfo') }}" action="" class=" text-center user-form"
+                                      method="POST" enctype="multipart/form-data">
+                                    <fieldset>
+                                        {{ userForm.hidden_tag() }}
+                                        {{ userForm.introduction( placeholder="Write your introduction here",class = "input-box-border border border-top-0 border-left-0 border-right-0") }}
+                                        <br>
+                                        {{ userForm.introVideo.label }} <br>
+                                        {{ userForm.introVideo(class = "description-field input-box-border border border-top-0 border-left-0 border-right-0") }}
+                                        <br>
+                                        {{ userForm.submit(class="fixed-btn text-light") }}
+                                    </fieldset>
+                                </form>
+                            </div>
+                            <span id="my-introduction"></span>
+                            <p id="video-description"></p>
+                        </div>
+                        <div class="tab-pane fade" id="my-contents" role="tabpanel"
+                             aria-labelledby="contents-tab"></div>
+                        <div class="tab-pane fade" id="my-reviews" role="tabpanel" aria-labelledby="reviews-tab"></div>
+                        <div class="tab-pane fade" id="my-stats" role="tabpanel" aria-labelledby="stats-tab"></div>
+                    </div>
+                    <br>
+                    <br>
+                    <br>
+                </div>
+            {% else %}
+                <div class="mx-auto d-block text-center" id="login_container">
+
+
+                </div>
+                <div class="text-center">
+                    <small class=""><a href="{{ url_for('signIn') }}" id="login-text" class="">Log in </a>another
+                    way</small>
+                </div>
+
+
+            {% endif %}
         <div class="schedule p-3 text-center">
             <div class="calendar-container text-center">
                 <form method="POST" data-href="{{ url_for('getUserSchedule',user_id = current_user.id) }}"
@@ -709,58 +565,61 @@
 
             </div>
         </div>
-    <div class="checkout">
 
-        <div class="checkout-img-wrapper">
-            <img class="live-img" src="" alt="">
+        <!-- Trigger the modal with a button -->
 
-        </div>
-        <div class="p-2">
-            <h5 id="checkout-title"></h5>
-            <h6 class="orangeColor mt-4 mb-4">Payment summary</h6>
-            <h6>Payment method</h6>
-            <p>Alipay</p>
-            <h6 class="mt-3">Total Price</h6>
-            <div class="mt-3">
-                <span>Original price</span>
-                <span class="float-right" id="original-price"></span>
+        <!-- Modal -->
+        <div id="myModal" class="modal fade" role="dialog">
+            <div class="modal-dialog">
+
+                <!-- Modal content-->
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    </div>
+                    <div class="modal-body">
+                        <p>Are you sure you want to delete?.</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default yes-btn" data-dismiss="modal">Yes</button>
+                        <button type="button" class="btn btn-default" data-dismiss="modal">No</button>
+                    </div>
+                </div>
+
             </div>
-            <hr/>
-            <div class="mt-4">
-                <span>Total</span>
-                <span class="float-right total-price"></span>
-            </div>
-            <div class="mt-5 " style="
-    font-size: 11px;
-">By completing your purchase you agree to these our Terms of Service
-            </div>
-            <br>
-            <br>
-            <br>
         </div>
 
+        <div id="book-schedule" class="modal fade" role="dialog">
+            <div class="modal-dialog">
 
-        <nav class="video-nav" class="shadow-lg">
-            <h3  class="navLink total-price"></h3>
-            {% if current_user.is_authenticated %}
-                <a class="navLink click-pay" data-href="" href="">
-                    <button class="common-btn">COMPLETE PAYMENT</button>
-                </a>
-            {% else %}
-                <a class="navLink click-pay-login">
-                    <button class="common-btn">COMPLETE PAYMENT</button>
-                </a>
-            {% endif %}
+                <!-- Modal content-->
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    </div>
+                    <div class="modal-body append-user-schedule row">
 
-        </nav>
+                    </div>
 
-    </div>
+                </div>
 
-    </div>
+            </div>
+        </div>
 
 
 
-    </div>
+
+
+        <div class="schedule-container">
+            <div class="row append-schedule no-gutters">
+
+            </div>
+            </div>
+            </div>
+
+
+
+
 
 
     </body>

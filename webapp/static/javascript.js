@@ -108,10 +108,10 @@ function update() {
 function homepage() {
 
 
-    $('#live').css('display', 'none');
-    $('.live-list').css('display', 'none');
-    $('.profile').css('display', 'none');
-    $('.video-details').css('display', 'none');
+    
+    
+    
+    
     $('.upload-list').css('display', 'block');
     $('#user-profile').css('display', 'none');
     $('#course-upload').css('display', 'none');
@@ -284,7 +284,7 @@ function updateText(word, verb) {
 
 
 $(document).ready(function () {
-    $('#main').on('click', '.click-book', function (e) {
+    $('#main').on('click', '#book.click-book', function (e) {
         e.preventDefault();
 
         var bookURL = $(this).attr("data-href");
@@ -306,13 +306,45 @@ $(document).ready(function () {
         });
         req.done(function (data) {
             popover('Booked successfully', 'green')
-            $('.click-book').css("display", "none");
-            $('.click-unbook').css("display", "flex");
+
+            $('#book').css("display", "none");
+
+            $('#unbook').css("display", "flex");
         })
 
 
     })
-    $('#main').on('click', '.click-unbook', function (e) {
+    $('#main').on('click', '#book-schedule.click-book', function (e) {
+        e.preventDefault();
+
+        var bookURL = $(this).attr("data-href");
+
+
+        req = $.ajax({
+            url: bookURL,
+            type: 'GET',
+            data: {},
+            success: function (data) {
+                console.log(data)
+            }, error: function (error) {
+                console.log(error)
+                console.log("error")
+                popover('Login to Book a seat', 'error')
+
+            }
+
+        });
+        req.done(function (data) {
+            popover('Booked successfully', 'green')
+
+            $('#book-schedule').css("display", "none");
+
+            $('#unbook-schedule').css("display", "flex");
+        })
+
+
+    })
+    $('#main').on('click', '#unbook.click-unbook', function (e) {
         e.preventDefault();
 
         var unbookURL = $(this).attr("data-href");
@@ -332,8 +364,36 @@ $(document).ready(function () {
 
         });
         req.done(function (data) {
-            $('.click-book').css("display", "flex");
-            $('.click-unbook').css("display", "none");
+            $('#book-schedule').css("display", "flex");
+
+            $('#unbook-schedule').css("display", "none");
+        })
+
+
+    })
+    $('#main').on('click', '#unbook-schedule.click-unbook', function (e) {
+        e.preventDefault();
+
+        var unbookURL = $(this).attr("data-href");
+
+
+        req = $.ajax({
+            url: unbookURL,
+            type: 'GET',
+            data: {},
+            success: function (data) {
+                console.log(data)
+            }, error: function (error) {
+                console.log(error)
+                console.log("error")
+
+            }
+
+        });
+        req.done(function (data) {
+            $('#book-schedule').css("display", "flex");
+
+            $('#unbook-schedule').css("display", "none");
         })
 
 
@@ -499,10 +559,13 @@ $(document).ready(function () {
     });
 });
 
-$(document).ready(function () {
-    $('.live-list').on('click', '.live-card', function (e) {
-        e.preventDefault();
-        var liveUrl = $(this).attr("data-href");
+$('.live-details').ready(function () {
+    $('.live-details').css('display', 'block');
+//    $('.live-list').on('click', '.live-card', function (e) {
+//        e.preventDefault();
+//        var liveUrl = $(this).attr("data-href");
+        var liveParam = $.urlParam('liveId')
+        var liveUrl = '/liveDetails?liveId=' + liveParam;
         var userImgUrl = '../static/profile_pics/';
         var userUrl = '/userDetails?username=';
         var coverImgUrl = '../static/coverImages/';
@@ -551,7 +614,7 @@ $(document).ready(function () {
             $('.click-book').attr('data-href', bookUrl + data.id+param);
             $('.click-unbook').attr('data-href', unbookUrl + data.id+param);
             $('#live-username').html(data.host.host);
-            $('.profile').css('display', 'none');
+            
             $('#user-profile').css('display', 'none');
             $('.checkout').css('display', 'none')
         });
@@ -559,7 +622,7 @@ $(document).ready(function () {
 
     });
 
-});
+//});
 $('#posts-btn').click(function (e) {
     e.preventDefault();
     var postsURL = $(this).attr("data-href");
@@ -582,10 +645,11 @@ $('#posts-btn').click(function (e) {
         $('#session-content').css('display', 'none');
     });
 });
-$(document).ready(function () {
-    $('.live').click(function (e) {
-        e.preventDefault();
+$('.live-list').ready(function () {
+//    $('.live').click(function (e) {
+//        e.preventDefault();
         var liveUrl = '/liveDetails?liveId=';
+        var liveInfoUrl = '/liveInfo?liveId=';
         var userUrl = '/userDetails?username='
 
         req = $.ajax({
@@ -603,25 +667,25 @@ $(document).ready(function () {
         });
         req.done(function (data) {
             var obj = data.result;
-            $('.live-list').empty();
+//            $('.live-list').empty();
             $.each(obj, function (key, value) {
 
 
-                $('.live-list').append('<card class="card shadow-lg live-card"  data-href="' + liveUrl + value.id + '"> <card > <div class="live-img-wrapper"><img class="live-img" src="../static/coverImages/' + value.coverImg + '" alt=""></div> <div class="live-profile-pic-wrapper click-pro-pic"  data-href="' + userUrl + value.host.host + '"><span><a  class="user-profile-pic border-light" href="#"><img class="profilepic"  src="../static/profile_pics/' + value.userImg + '" alt=""></a></span> </div><div class="p-2 row no-gutters"><span class="live-info col-8 flex-content flex-column no-gutters"><span class="live-title">' + value.title + '</span><span class="">Hosted by:' + value.host + ' </span><span class="">Category:' + value.category + '</span><span class=""> </span></span>  <span class="live-info col-4 flex-content flex-column no-gutters">           <span class="text-right">' + value.startTime + '-' + value.endTime + '</span><span class="text-right">' + value.date + '</span>  <div class="circle-icon text-right text-center mt-2  p-2 shadow-sm"> <img class="rounded-circle" src="../static/share.svg" alt=""> </div> </span> </div> </card> </card>');
+                $('.live-list').append('<card class="card shadow-lg live-card"  data-href="' + liveUrl + value.id + '" > <card ><a href="' + liveInfoUrl + value.id + '"> <div class="live-img-wrapper"><img class="live-img" src="../static/coverImages/' + value.coverImg + '" alt=""></div> <div class="live-profile-pic-wrapper click-pro-pic"  data-href="' + userUrl + value.host.host + '"><span><a  class="user-profile-pic border-light" href="#"><img class="profilepic"  src="../static/profile_pics/' + value.userImg + '" alt=""></a></span> </div><div class="p-2 row no-gutters"><span class="live-info col-8 flex-content flex-column no-gutters"><span class="live-title">' + value.title + '</span><span class="">Hosted by:' + value.host + ' </span><span class="">Category:' + value.category + '</span><span class=""> </span></span>  <span class="live-info col-4 flex-content flex-column no-gutters">           <span class="text-right">' + value.startTime + '-' + value.endTime + '</span><span class="text-right">' + value.date + '</span>  <div class="circle-icon text-right text-center mt-2  p-2 shadow-sm"> <img class="rounded-circle" src="../static/share.svg" alt=""> </div> </span> </div> </a></card> </card>');
 
             });
             $('#live').css('display', 'block');
             $('.live-list').css('display', 'block');
             $('.live-details').css('display', 'none');
             $('.profile').css('display', 'none');
-            $('.video-details').css('display', 'none');
-            $('.upload-list').css('display', 'none');
+            
+            
             $('#user-profile').css('display', 'none');
             $('.checkout').css('display', 'none')
         });
 
 
-    });
+//    });
     $('.share-btn').click(function (e) {
         e.preventDefault();
         $('.fb-share-button').appendTo('.share-logos')
@@ -634,23 +698,24 @@ $(document).ready(function () {
 
 });
 
-$(document).ready(function () {
-    $('.profile-nav').click(function (e) {
-        e.preventDefault();
+$('.profile').ready(function () {
+//    $('.profile-nav').click(function (e) {
         $('#user-profile').css('display', 'block');
-        $('.upload-list').css('display', 'none');
-        $('#live').css('display', 'none');
-        $('.live-list').css('display', 'none');
-        $('.live-details').css('display', 'none');
-        $('.profile').css('display', 'none');
-        $('.video-details').css('display', 'none');
+        $('.loader').css('display', 'none');
+        
+        
+        
+        var param = $.urlParam('username');
+        var url = '/userDetails?username='+ param;
+        
+        
         $('#create-course').css('display', 'none');
         $('#course-update').css('display', 'none');
         $('#live-update').css('display', 'none');
         $('.checkout').css('display', 'none')
 
         req = $.ajax({
-            url: $(this).attr('data-href'),
+            url: url,
             type: 'GET',
             data: {},
             success: function (data) {
@@ -664,7 +729,7 @@ $(document).ready(function () {
         });
         req.done(function (data) {
 
-            $('.upload-list').css('display', 'none');
+
             $('.my-profile').css('display', 'block');
 
 
@@ -677,11 +742,11 @@ $(document).ready(function () {
             $('img.profilepic').attr("src", userImgSrc + data.userImage);
             $('#user-profile').css('display', 'block');
             $('#live').css('display', 'none');
-            $('.video-details').css('display', 'none');
+            
             $('.checkout').css('display', 'none');
             $('.schedule').css('display', 'none');
 
-        });
+//        });
 
 
     });
@@ -750,52 +815,6 @@ $(document).ready(function () {
 });
 
 
-$(document).ready(function () {
-
-    $('.home-icon').click(function (e) {
-        e.preventDefault();
-        var arg = 'videoId=';
-        var videoUrl = '/videoDetails?' + arg;
-        var userUrl = '/userDetails?username='
-
-        req = $.ajax({
-            url: '/videos',
-            type: 'GET',
-            data: {},
-            success: function (data) {
-                console.log(data)
-            }, error: function (error) {
-                console.log(error)
-                console.log("error")
-
-            }
-
-        });
-        req.done(function (data) {
-            var obj = data.result;
-            $('.upload-list').empty();
-            $.each(obj, function (key, value) {
-
-
-                $('.upload-list').append('<div class="thumb-wrapper" data-href="' + videoUrl + value.id + '"><li><a  class="video"   video-id="' + value.id + '" href="#"><img class="video-feed" src="../static/coverImages/' + value.coverImage + '" alt=""></a></li></div><div class="video-info"><div class="row no-gutters"><div class="col-2 col-sm-2 col-md-2 no-gutters">     <div class="profile-pic-wrapper click-pro-pic"  data-href=" ' + userUrl + value.username + '">     <span><a  class="user-profile-pic"   user-id="" href="#"><img class="profilepic"  src="../static/profile_pics/' + value.userImg + '" alt=""></a></span> </div> </div><div class="col no-gutters"><div class="inner-info"> <div class="flex-fill flex-column">    <h6>' + value.title + '</h6>     <div class="upload-username">' + value.username + '</div>     <span class="upload-username">' + value.category + '</span> <span>     <p class="likes-comments"  class="text-justify text-left " data-likes="">     <span>' + value.likes + '</span>     <img     src="../static/heart.png" alt="" width="16">     <span>' + value.comments + '</span>     <img  src="../static/comment.svg" alt="" width="16"> </p> </span></div>          </div> </div></div></div>');
-
-            });
-            $('#live').css('display', 'none');
-            $('.live-list').css('display', 'none');
-            $('.profile').css('display', 'none');
-            $('.video-details').css('display', 'none');
-            $('.upload-list').css('display', 'block');
-            $('#user-profile').css('display', 'none');
-            $('.checkout').css('display', 'none')
-            $('#create-series').css('display', 'none');
-            $('#course-update').css('display', 'none');
-        });
-
-
-    });
-
-
-});
 
 
 function openNav() {
@@ -835,12 +854,13 @@ function closeLeftNav() {
 }
 
 
-$(document).ready(function () {
-    $('.upload-list').on("click", '.thumb-wrapper', function (e) {
-        $('.upload-list').css('display', 'none');
+$('.video-details').ready(function () {
+//    $('.upload-list').on("click", '.thumb-wrapper', function (e) {
+        
         $('.loader').css('display', 'block');
-        e.preventDefault();
-        var url = $(this).attr("data-href");
+//        e.preventDefault();
+        var vidParam = $.urlParam('videoId')
+        var url = '/videoDetails?videoId='+vidParam;
         var videoSrc = "../static/videos/";
         var userImgSrc = "../static/profile_pics/";
         var userUrl = "/userDetails?username=";
@@ -908,8 +928,7 @@ $(document).ready(function () {
                     $('#episode').append('<div class="card shadow-sm click-episode" data-href="/getEpisode?episode_id=' + value.episodeId + '" ><div class="p-2"><span><img src="../static/play.svg" alt="" width="12"><span id="episode-title" class="mr-2 ml-5">' + value.subtitle + '</span><span id="episode-duration"></span></span></div></div>')
 
                 });
-            }
-            else if (obj.isSeries === false) {
+            } else if (obj.isSeries === false) {
                 $('.like-btn').attr('data-href', '/like/video' + obj.id);
                 $('#unlike-btn').attr('data-href', '/unlike/video' + obj.id);
 
@@ -918,21 +937,20 @@ $(document).ready(function () {
 
 
             }
-            if (obj.type == 'video') {
+            if (obj.type === 'video') {
                 $('video').attr("src", videoSrc + obj.videoRef);
                 $('video').css('display', 'block');
                 $('#episode-subtitle').text(obj.episode.subtitle);
 
                 $('.video-js').attr("src", videoSrc + obj.videoRef);
-                $('.controls').css('display', 'none');
+                $('#controls').css('display', 'none');
                 $('video').css('display', 'block');
                 $('.course-img').css('display', 'none');
-            }
-            else if (obj.type == 'audio') {
+            } else if (obj.type === 'audio') {
 
                 $('#audio-file').attr("audioFile", obj.videoRef);
                 $('#episode-subtitle').text(obj.episode.subtitle);
-                $('.controls').css('display', 'flex');
+                $('#controls').css('display', 'flex');
                 $('video').css('display', 'none');
                 $('.course-img').css('display', 'block');
                 $('.course-img').attr("src", coverImgUrl + obj.coverImg);
@@ -941,8 +959,7 @@ $(document).ready(function () {
 
                 wavesurfer.load(audioSrc);
 
-            }
-            else if (obj.videoRef == null) {
+            } else if (obj.videoRef == null) {
                 var ep = obj.episode[0];
 
 
@@ -952,7 +969,7 @@ $(document).ready(function () {
                 $('video').css('display', 'block');
                 $('#episode-subtitle').text(ep.subtitle);
                 $('.video-js').attr("src", videoSrc +obj.episode[0].videoRef);
-                $('.controls').css('display', 'none');
+                $('#controls').css('display', 'none');
                 $('video').css('display', 'block');
                 $('.course-img').css('display', 'none');
                 $('.like-btn').attr('data-href', '/like/episode' + obj.episode[0].episodeId);
@@ -963,8 +980,7 @@ $(document).ready(function () {
                 $('#unlike-btn').css('display', 'flex');
 
                 $('.like-btn').css('display', 'none');
-            }
-            else if (obj.hasLiked == false) {
+            } else if (obj.hasLiked == false) {
                 $('.like-btn').css('display', 'flex');
 
                 $('#unlike-btn').css('display', 'none');
@@ -995,9 +1011,10 @@ $(document).ready(function () {
 
 
         });
-    });
+//    });
 
     $('#main').on("click", ".click-pro-pic", function (e) {
+         
         e.preventDefault();
         var url = $(this).attr("data-href");
         var videoSrc = "../static/videos/";
@@ -1022,7 +1039,6 @@ $(document).ready(function () {
         });
         req.done(function (data) {
 
-            $('.upload-list').css('display', 'none');
             $('.profile').css('display', 'block');
             $('#book-schedule-btn').attr('data-href', userUrl + data.username);
             $('#unfollow').attr('data-href', unfollowUrl + "/" + data.username);
@@ -1051,7 +1067,7 @@ $(document).ready(function () {
             $('img.profilepic').attr("src", userImgSrc + data.userImage);
             $('#user-profile').css('display', 'none');
             $('#live').css('display', 'none');
-            $('.video-details').css('display', 'none');
+            
             $('.checkout').css('display', 'none');
 
         });
@@ -1121,8 +1137,8 @@ $(document).ready(function () {
                 $('video').css('display', 'none');
             }
 
-            $('.upload-list').css('display', 'none');
-            $('.profile').css('display', 'none');
+            
+            
 
             $('#user-profile').css('display', 'none');
             $('#episode-description').append('<div><span>Episode Summary</span></div>')
@@ -1154,7 +1170,8 @@ $(document).ready(function () {
         $('.schedule-btn').css('display', 'block');
         $('#live').css('display', 'none');
         $('.live-list').css('display', 'none');
-        $('.profile').css('display', 'none');
+
+        $('.my-profile').css('display', 'none');
         $('#create-course').css('display', 'none');
         $('.video-details').css('display', 'none');
         $('.upload-list').css('display', 'none');
@@ -1206,8 +1223,8 @@ $(document).ready(function () {
             $('.live-list').css('display', 'none');
             $('.profile').css('display', 'none');
             $('#create-course').css('display', 'none');
-            $('.video-details').css('display', 'none');
-            $('.upload-list').css('display', 'none');
+            
+            
             $('#user-profile').css('display', 'none');
             $('.checkout').css('display', 'none')
         });
@@ -1243,11 +1260,10 @@ $(document).ready(function () {
             $('#edit-live').css('display', 'none');
             $('#live').css('display', 'none');
             $('#live-update').css('display', 'none');
-            $('.live-list').css('display', 'none');
-            $('.profile').css('display', 'none');
+            $('.my-profile').css('display', 'none');
             $('#create-course').css('display', 'none');
-            $('.video-details').css('display', 'none');
-            $('.upload-list').css('display', 'none');
+            
+            
             $('#user-profile').css('display', 'none');
             $('.schedule-container').css('display', 'none');
         });
@@ -1284,8 +1300,8 @@ $(document).ready(function () {
             $('.live-list').css('display', 'none');
             $('.profile').css('display', 'none');
             $('#create-course').css('display', 'none');
-            $('.video-details').css('display', 'none');
-            $('.upload-list').css('display', 'none');
+            
+            
             $('#user-profile').css('display', 'none');
             $('#update-schedule').css('display', 'none');
             $('.schedule-container').css('display', 'block');
@@ -1306,7 +1322,7 @@ $(document).ready(function () {
         $('#course-upload').css('display', 'none');
         $('#course-update').css('display', 'none');
         $('#create-series').css('display', 'none');
-        $('.profile').css('display', 'none');
+        $('.my-profile').css('display', 'none');
         $('#create-course').css('display', 'none');
         $('.video-details').css('display', 'none');
         $('.upload-list').css('display', 'none');
@@ -1358,7 +1374,7 @@ $(document).ready(function () {
             $('.schedule').css('display', 'none');
             $('#course-upload').css('display', 'none');
             $('#create-series').css('display', 'none');
-            $('.profile').css('display', 'none');
+            $('.my-profile').css('display', 'none');
             $('#create-course').css('display', 'none');
             $('.video-details').css('display', 'none');
             $('.upload-list').css('display', 'none');
@@ -1409,7 +1425,7 @@ $(document).ready(function () {
             $('.schedule').css('display', 'none');
             $('#course-upload').css('display', 'none');
             $('#create-series').css('display', 'none');
-            $('.profile').css('display', 'none');
+            $('.my-profile').css('display', 'none');
             $('#create-course').css('display', 'none');
             $('.video-details').css('display', 'none');
             $('.upload-list').css('display', 'none');
@@ -1465,7 +1481,7 @@ $(document).ready(function () {
         $('.schedule').css('display', 'none');
         $('#course-upload').css('display', 'none');
         $('#create-series').css('display', 'none');
-        $('.profile').css('display', 'none');
+        $('.my-profile').css('display', 'none');
         $('#create-course').css('display', 'none');
         $('.video-details').css('display', 'none');
         $('.upload-list').css('display', 'none');
@@ -1502,7 +1518,7 @@ $(document).ready(function () {
                 $.each(data.result, function (key, value) {
 
 
-                    $('.booked-live').append('<div class=" text-center p-2 bg-dark text-light schedule-box"><h4>' + value.date + '</h4><span>' + value.start_time + ' - ' + value.end_time + '</span><div class="row w-100"><div class=" col h-50 text-light text-center d-flex my-green"><a class="p-2 text-light" href="' + value.meetingUrl + '">JOIN</a></div><div class="w-100 col h-50 text-light text-center my-green"><a id="unbook-schedule" class="p-2 text-light d-flex click-unbook" data-href="/unbook/'+value.id+'?type=schedule" href="" >UNBOOK</a></div></div></div></div>');
+                    $('.booked-live').append('<div class=" text-center p-2 bg-dark text-light schedule-box"><h4>' + value.date + '</h4><span>' + value.start_time + ' - ' + value.end_time + '</span><div class="row w-100"><div class=" col h-50 text-light text-center d-flex my-green"><a class="p-2 text-light" href="' + value.meetingUrl + '">JOIN</a></div><div class="w-100 col h-50 text-light text-center my-green"><a id="unbook" class="p-2 text-light d-flex click-unbook" data-href="/unbook/'+value.id+'?type=schedule" href="" >UNBOOK</a></div></div></div></div>');
                 });
         });
 
@@ -1515,7 +1531,7 @@ $(document).ready(function () {
         $('.schedule').css('display', 'none');
         $('#course-upload').css('display', 'none');
         $('#create-series').css('display', 'none');
-        $('.profile').css('display', 'none');
+        $('.my-profile').css('display', 'none');
         $('#create-course').css('display', 'none');
         $('.video-details').css('display', 'none');
         $('.upload-list').css('display', 'none');
@@ -1565,7 +1581,7 @@ $(document).ready(function () {
         $('.schedule').css('display', 'none');
         $('#course-upload').css('display', 'none');
         $('#create-series').css('display', 'none');
-        $('.profile').css('display', 'none');
+        $('.my-profile').css('display', 'none');
         $('#create-course').css('display', 'none');
         $('.video-details').css('display', 'none');
         $('.upload-list').css('display', 'none');
@@ -1590,7 +1606,7 @@ $(document).ready(function () {
         $('.schedule').css('display', 'none');
         $('#course-upload').css('display', 'none');
         $('#create-series').css('display', 'none');
-        $('.profile').css('display', 'none');
+        $('.my-profile').css('display', 'none');
         $('#create-course').css('display', 'block');
         $('.video-details').css('display', 'none');
         $('.upload-list').css('display', 'none');
@@ -1613,8 +1629,8 @@ $(document).ready(function () {
         $('#create-series').css('display', 'none');
         $('.profile').css('display', 'none');
         $('#create-course').css('display', 'block');
-        $('.video-details').css('display', 'none');
-        $('.upload-list').css('display', 'none');
+        
+        
         $('#user-profile').css('display', 'none');
 
         $('.schedule-container').css('display', 'none');
@@ -1635,8 +1651,8 @@ $(document).ready(function () {
         $('#create-series').css('display', 'block');
         $('.profile').css('display', 'none');
         $('#create-course').css('display', 'block');
-        $('.video-details').css('display', 'none');
-        $('.upload-list').css('display', 'none');
+        
+        
         $('#user-profile').css('display', 'none');
 
         $('.schedule-container').css('display', 'none');
@@ -1733,13 +1749,13 @@ $(document).ready(function () {
 
             $.each(details, function (key, value) {
                 if (value.hasBooked == true){
-                                    $('.modal-body.append-user-schedule').append('<div class=" text-center p-2 bg-dark text-light schedule-box"><h4>' + value.date + '</h4><span>' + value.startTime + ' - ' + value.endTime + '</span><span class="mt-1"><a class="click-book" data-href="' + bookUrl + value.id + param + type + '"><button   class="fixed-btn" >Book</button></a><a  class="click-unbook" data-href="' + unbookUrl + value.id + param + type + '" ><button   class="fixed-btn" >Unbook</button></a></span></div>');
+                                    $('.modal-body.append-user-schedule').append('<div class=" text-center p-2 bg-dark text-light schedule-box"><h4>' + value.date + '</h4><span>' + value.startTime + ' - ' + value.endTime + '</span><span class="mt-1"><a id="book-schedule" class="click-book" data-href="' + bookUrl + value.id + param + type + '"><button   class="fixed-btn" >Book</button></a><a  id="book-schedule" class="click-unbook" data-href="' + unbookUrl + value.id + param + type + '" ><button   class="fixed-btn" >Unbook</button></a></span></div>');
                     $('.click-book').css('display','none')
                     $('.click-unbook').css('display','flex')
 
                 }
                 else if (value.hasBooked == false){
-                                    $('.modal-body.append-user-schedule').append('<div class=" text-center p-2 bg-dark text-light schedule-box"><h4>' + value.date + '</h4><span>' + value.startTime + ' - ' + value.endTime + '</span><span class="mt-1"><a  class="click-book" data-href="' + bookUrl + value.id + param + type + '"><button   class="fixed-btn" >Book</button></a><a  class="click-unbook" data-href="' + unbookUrl + value.id + param + type + '" ><button   class="fixed-btn" >Unbook</button></a></span></div>');
+                                    $('.modal-body.append-user-schedule').append('<div class=" text-center p-2 bg-dark text-light schedule-box"><h4>' + value.date + '</h4><span>' + value.startTime + ' - ' + value.endTime + '</span><span class="mt-1"><a  id="book-schedule" class="click-book" data-href="' + bookUrl + value.id + param + type + '"><button   class="fixed-btn" >Book</button></a><a id="unbook-schedule"  class="click-unbook" data-href="' + unbookUrl + value.id + param + type + '" ><button   class="fixed-btn" >Unbook</button></a></span></div>');
 
                     $('.click-book').css('display','flex')
                     $('.click-unbook').css('display','none')
@@ -1759,8 +1775,8 @@ $(document).ready(function () {
             $('#create-series').css('display', 'none');
             $('.profile').css('display', 'block');
             $('#create-course').css('display', 'block');
-            $('.video-details').css('display', 'none');
-            $('.upload-list').css('display', 'none');
+            
+            
             $('#user-profile').css('display', 'none');
 
 
@@ -1885,7 +1901,7 @@ $(document).ready(function () {
             $('#course-upload').css('display', 'none');
             $('#create-series').css('display', 'none');
             $('#course-update').css('display', 'none');
-            $('.profile').css('display', 'none');
+            $('.my-profile').css('display', 'none');
             $('#create-course').css('display', 'block');
             $('.video-details').css('display', 'none');
             $('.upload-list').css('display', 'none');
@@ -1923,16 +1939,16 @@ $(document).ready(function () {
         $('#live-update').css('display', 'block');
         $('#course-update').css('display', 'block');
 
-        $('#live').css('display', 'none');
-        $('.live-list').css('display', 'none');
+        
+        
         $('#create-live').css('display', 'none');
         $('.schedule').css('display', 'none');
         $('#course-upload').css('display', 'none');
         $('#create-series').css('display', 'none');
-        $('.profile').css('display', 'none');
+        
         $('#create-course').css('display', 'block');
-        $('.video-details').css('display', 'none');
-        $('.upload-list').css('display', 'none');
+        
+        
         $('#user-profile').css('display', 'none');
         $('.schedule-container').css('display', 'none');
 
@@ -2059,8 +2075,8 @@ $(document).ready(function () {
             $('#create-series').css('display', 'none');
             $('.profile').css('display', 'none');
             $('#create-course').css('display', 'none');
-            $('.video-details').css('display', 'none');
-            $('.upload-list').css('display', 'none');
+            
+            
             $('#user-profile').css('display', 'none');
             $('.schedule-container').css('display', 'none');
 
@@ -2104,9 +2120,9 @@ $(document).ready(function () {
 });
 
 
-$('#main').ready(function () {
+$('.upload-list').ready(function () {
     var arg = 'videoId=';
-    var videoUrl = '/videoDetails?' + arg;
+    var videoUrl = '/videoInfo?' + arg;
     var userUrl = '/userDetails?username='
 
     req = $.ajax({
@@ -2127,7 +2143,7 @@ $('#main').ready(function () {
         $.each(obj, function (key, value) {
 
 
-            $('.upload-list').append('<div class="thumb-wrapper" data-href="' + videoUrl + value.id + '"><li><a  class="video"   video-id="' + value.id + '" href="#"><img class="video-feed"  loading="lazy" src="../static/coverImages/' + value.coverImage + '" alt=""></a></li></div><div class="video-info"><div class="row no-gutters"><div class="col-2 col-sm-2 col-md-2 no-gutters">     <div class="profile-pic-wrapper click-pro-pic"  data-href=" ' + userUrl + value.username + '">     <span><a  class="user-profile-pic"   user-id="" href="#"><img class="profilepic"  src="../static/profile_pics/' + value.userImg + '" alt=""></a></span> </div> </div><div class="col no-gutters"><div class="inner-info"> <div class="flex-fill flex-column">    <h6>' + value.title + '</h6>     <div class="upload-username">' + value.username + '</div>     <span class="upload-username">' + value.category + '</span> <span>     <p class="likes-comments"  class="text-justify text-left " data-likes="">     <span>' + value.likes + '</span>     <img     src="../static/heart.png" alt="" width="16">     <span>' + value.comments + '</span>     <img  src="../static/comment.svg" alt="" width="16"> </p> </span></div>          </div> </div></div></div>');
+            $('.upload-list').append('<div class="thumb-wrapper" data-href="' + videoUrl + value.id + '"><li><a  class="video"   video-id="' + value.id + '" href="'+ videoUrl + value.id +'"><img class="video-feed"  loading="lazy" src="../static/coverImages/' + value.coverImage + '" alt=""></a></li></div><div class="video-info"><div class="row no-gutters"><div class="col-2 col-sm-2 col-md-2 no-gutters">     <div class="profile-pic-wrapper click-pro-pic"  data-href=" ' + userUrl + value.username + '">     <span><a  class="user-profile-pic"   user-id="" href="#"><img class="profilepic"  src="../static/profile_pics/' + value.userImg + '" alt=""></a></span> </div> </div><div class="col no-gutters"><div class="inner-info"> <div class="flex-fill flex-column">    <h6>' + value.title + '</h6>     <div class="upload-username">' + value.username + '</div>     <span class="upload-username">' + value.category + '</span> <span>     <p class="likes-comments"  class="text-justify text-left " data-likes="">     <span>' + value.likes + '</span>     <img     src="../static/heart.png" alt="" width="16">     <span>' + value.comments + '</span>     <img  src="../static/comment.svg" alt="" width="16"> </p> </span></div>          </div> </div></div></div>');
 
         });
 
@@ -2135,7 +2151,7 @@ $('#main').ready(function () {
         $('#live').css('display', 'none');
         $('.live-list').css('display', 'none');
         $('.profile').css('display', 'none');
-        $('.video-details').css('display', 'none');
+        
         $('.upload-list').css('display', 'block');
         $('#user-profile').css('display', 'none');
         $('#course-upload').css('display', 'none');
@@ -2399,3 +2415,11 @@ $(document).ready(function () {
     });
 
 });
+
+$.urlParam = function(name){
+    var results = new RegExp('[\?&]' + name + '=([^&#]*)').exec(window.location.href);
+    if (results==null) {
+       return null;
+    }
+    return decodeURI(results[1]) || 0;
+}

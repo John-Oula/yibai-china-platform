@@ -10003,7 +10003,7 @@ $.widget( "mobile.selectmenu", $.extend( {
 		var inline = this.options.inline || this.element.jqmData( "inline" ),
 			mini = this.options.mini || this.element.jqmData( "mini" ),
 			classes = "";
-		// TODO: Post 1.1--once we have time to test thoroughly--any classes manually applied to the original element should be carried over to the enhanced element, with an `-enhanced` suffix. See https://github.com/jquery/jquery-mobile/issues/3577
+		// TODO: Live 1.1--once we have time to test thoroughly--any classes manually applied to the original element should be carried over to the enhanced element, with an `-enhanced` suffix. See https://github.com/jquery/jquery-mobile/issues/3577
 		/* if ( $el[0].className.length ) {
 			classes = $el[0].className;
 		} */

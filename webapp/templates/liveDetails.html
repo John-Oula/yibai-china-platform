@@ -1,0 +1,266 @@
+{% extends "base.html" %}
+
+{% block title %}{{ super() }}{% endblock %}
+
+{% block head %}
+    {{ super() }}
+
+{% endblock %}
+
+
+{% block background %}
+    <body class="home">
+{% endblock %}
+
+
+{% block nav %}
+    {{ super() }}
+{% endblock %}
+
+{% block topNav %}
+    {{ super() }}
+{% endblock %}
+
+{% block body %}
+
+    <div id="main">
+    <div id="currentUser" username="{{ current_user.username }}" propic="{{ current_user.image_file }}" ></div>
+
+        {% if current_user.is_authenticated %}
+            <span class="uId" user-Id="{{ current_user.id }}"></span>
+        {% else %}
+            <span></span>
+        {% endif %}
+        <!-- Load Facebook SDK for JavaScript -->
+        <div id="fb-root"></div>
+        <script>(function (d, s, id) {
+            var js, fjs = d.getElementsByTagName(s)[0];
+            if (d.getElementById(id)) return;
+            js = d.createElement(s);
+            js.id = id;
+            js.src = "https://connect.facebook.net/en_US/sdk.js#xfbml=1&version=v3.0";
+            fjs.parentNode.insertBefore(js, fjs);
+        }(document, 'script', 'facebook-jssdk'));</script>
+
+        <div class="loader p-2 text-center mx-auto shadow-lg center ">
+
+            <img src="../static/loader.gif" width="60" alt="">
+            <small></small>
+
+        </div>
+
+
+
+
+
+
+            <div class="live-details">
+                <div class="live-details-img-wrapper">
+                    <img class="live-img" src="" alt="">
+
+                </div>
+
+                <div class="live-profile-pic-wrapper click-pro-pic" data-href="">
+                    <span><a class="user-profile-pic border-light" href="#"><img class="profilepic" src=""
+                                                                                 alt=""></a></span>
+                </div>
+
+                <div class="p-2 row no-gutters">
+                <span class="live-info col-8 flex-content flex-column no-gutters">
+                                    <span class="live-title"></span>
+
+                    <span class="">Time: <span id="live-startTime"></span> - <span id="live-endTime"></span></span>
+                    <span class="">Date: <span id="live-date"></span> </span>
+                </span>
+                    <span class="live-info col-4 flex-content flex-column no-gutters">
+
+                    <button data-href="" id="profile-btn" class="fixed-btn click-pro-pic">Profile</button>
+                </span>
+                </div>
+                <ul class="nav nav-tabs nav-fill" id="myTab" role="tablist">
+                    <li class="nav-item">
+                        <a class="nav-link active" id="description-tab" data-toggle="tab" href="#description" role="tab"
+                           aria-controls="description" aria-selected="true">DESCRIPTION</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" id="host-tab" data-toggle="tab" href="#host" role="tab" aria-controls="host"
+                           aria-selected="false">HOST</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" id="schedule-tab" data-toggle="tab" href="#schedule" role="tab"
+                           aria-controls="schedule" aria-selected="false">SCHEDULE</a>
+                    </li>
+                </ul>
+                <div class="tab-content" id="myTabContent">
+                    <div class="tab-pane fade show active p-3" id="description" role="tabpanel"
+                         aria-labelledby="description-tab">
+                        <p>Description</p>
+                        <p id="live-description"></p>
+                    </div>
+                    <div class="tab-pane fade" id="host" role="tabpanel" aria-labelledby="host-tab"></div>
+                    <div class="tab-pane fade" id="schedule" role="tabpanel" aria-labelledby="schedule-tab"></div>
+                </div>
+
+                <div class="p-3">
+                    <h6>Host videos</h6>
+                </div>
+                <div>
+                    <nav class="video-nav" class="shadow-lg">
+                        <h3 id="video-price" class="navLink" href=""></h3>
+                        <a class="navLink share-btn" href=""><img class="mobile-icon" src="../static/share.svg" alt=""></a>
+                        <a id="book" class="navLink click-book" data-href="" href="">
+                            <button class="common-btn">BOOK A SEAT</button>
+                        </a>
+                        <a id="unbook" class="navLink click-unbook" data-href="" href=""><button class="common-btn">UNBOOK</button></a>
+                    </nav>
+                </div>
+            </div>
+
+        <div></div>
+
+<div class="profile mt-3">
+
+            <div class="row user-profile-info no-gutters">
+                <div class="col-2 no-gutters">
+
+                    <div data-href="" class="click-pro-pic user-profile-pic-wrapper">
+                        <span><img class="profilepic" src="" alt=""></span>
+                    </div>
+                </div>
+                <div class="col-3 no-gutters text-center">
+                    <div id="user-followers"></div>
+
+                    <span>Followers</span>
+                </div>
+                <div class="col-3 no-gutters text-center">
+                    <div id="user-videos"></div>
+                    <span>Videos</span>
+
+                </div>
+                <div class="col-3 no-gutters text-center">
+                    <div id="user-live-sessions">
+                    </div>
+                    <span>Live Sessions</span>
+
+                </div>
+
+            </div>
+            <div id="">
+                <div id="user-username"></div>
+
+            </div>
+
+            <div class="profile-btn text-center">
+      <span>
+           <a id="follow" data-href=""> <button type="button" id="follow-btn" class="fixed-btn">Follow</button></a>
+           <a id="unfollow" data-href=""><button type="button" id="unfollow-btn" class="fixed-btn">Unfollow</button></a>
+
+      </span>
+                <span>
+
+
+
+           <a id="" data-href=""> <button type="button" data-href="" id="book-schedule-btn" class="fixed-btn">Book Schedule</button></a>
+
+     </span>
+
+            </div>
+            <ul class="nav nav-tabs nav-fill" id="myTab" role="tablist">
+                <li class="nav-item">
+                    <a class="nav-link active" id="bio-tab" data-toggle="tab" href="#bio" role="tab" aria-controls="bio"
+                       aria-selected="true">BIO</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" id="contents-tab" data-toggle="tab" href="#contents" role="tab"
+                       aria-controls="contents" aria-selected="false">CONTENTS</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" id="reviews-tab" data-toggle="tab" href="#reviews" role="tab"
+                       aria-controls="reviews" aria-selected="false">REVIEWS</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" id="stats-tab" data-toggle="tab" href="#stats" role="tab" aria-controls="stats"
+                       aria-selected="false">STATS</a>
+                </li>
+            </ul>
+            <div class="tab-content" id="myTabContent">
+                <div class="tab-pane fade show active p-3" id="bio" role="tabpanel" aria-labelledby="bio-tab">
+                    <p>Introduction</p>
+                    <span id="user-introduction"></span>
+                    <p id="video-description"></p>
+                </div>
+                <div class="tab-pane fade" id="contents" role="tabpanel" aria-labelledby="contents-tab"></div>
+                <div class="tab-pane fade" id="reviews" role="tabpanel" aria-labelledby="reviews-tab">
+
+                </div>
+                <div class="tab-pane fade" id="stats" role="tabpanel" aria-labelledby="stats-tab"></div>
+            </div>
+        </div>
+
+        <!-- Trigger the modal with a button -->
+
+        <!-- Modal -->
+        <div id="myModal" class="modal fade" role="dialog">
+            <div class="modal-dialog">
+
+                <!-- Modal content-->
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    </div>
+                    <div class="modal-body">
+                        <p>Are you sure you want to delete?.</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default yes-btn" data-dismiss="modal">Yes</button>
+                        <button type="button" class="btn btn-default" data-dismiss="modal">No</button>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <div id="book-schedule" class="modal fade" role="dialog">
+            <div class="modal-dialog">
+
+                <!-- Modal content-->
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    </div>
+                    <div class="modal-body append-user-schedule row">
+
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+
+
+
+
+
+        <div class="schedule-container">
+            <div class="row append-schedule no-gutters">
+
+            </div>
+            </div>
+            </div>
+
+
+
+
+
+
+    </body>
+
+
+
+
+{% endblock %}
+
+{% block bottomNav %}
+    {{ super() }}
+{% endblock %}
+

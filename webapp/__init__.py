@@ -826,6 +826,22 @@ class Reset_password(FlaskForm):
 def inject_permissions():
     return dict(Permission=Permission)
 
+@app.context_processor
+def forms():
+    form = Upload_form()
+    seriesForm = Series_form()
+    episodeForm = Episode_form()
+    sessionForm = Session_form()
+    UpdateEpisode = UpdateEpisode_form()
+    UpdateSeries = UpdateSeries_form()
+    UpdateUploads = UpdateUploads_form()
+    UpdateSession = UpdateSession_form()
+    signupForm = Signup_form()
+    userForm = User_form()
+    commentForm = Comment_form()
+
+    return dict(commentForm=commentForm,userForm = userForm,signupForm=signupForm,UpdateSession=UpdateSession,UpdateUploads=UpdateUploads,UpdateSeries=UpdateSeries,UpdateEpisode=UpdateEpisode,sessionForm=sessionForm,form=form,seriesForm=seriesForm,episodeForm=episodeForm)
+
 @app.route('/' ,methods=['POST','GET'])
 def home():
     page = request.args.get('page', type=int)

@@ -600,7 +600,7 @@ $('.live-details').ready(function () {
             }
 
 
-            $('.live-list').css('display', 'none');
+
             $('.live-details').css('display', 'block');
             $('#profile-btn').attr('data-href', userUrl + data.host.host);
             $('.live-profile-pic-wrapper').attr('data-href', userUrl + data.host.host);
@@ -646,6 +646,7 @@ $('#posts-btn').click(function (e) {
     });
 });
 $('.live-list').ready(function () {
+    $('.live-list').css('display', 'block');
 //    $('.live').click(function (e) {
 //        e.preventDefault();
         var liveUrl = '/liveDetails?liveId=';
@@ -1169,7 +1170,7 @@ $('.video-details').ready(function () {
         $('#calendar').css('display', 'block');
         $('.schedule-btn').css('display', 'block');
         $('#live').css('display', 'none');
-        $('.live-list').css('display', 'none');
+        
 
         $('.my-profile').css('display', 'none');
         $('#create-course').css('display', 'none');
@@ -1220,7 +1221,7 @@ $('.video-details').ready(function () {
             $('#edit-live').css('display', 'block');
             $('#live').css('display', 'none');
             $('#live-update').css('display', 'none');
-            $('.live-list').css('display', 'none');
+            
             $('.profile').css('display', 'none');
             $('#create-course').css('display', 'none');
             
@@ -1297,7 +1298,7 @@ $('.video-details').ready(function () {
             $('#edit-live').css('display', 'none');
             $('#live').css('display', 'none');
             $('#live-update').css('display', 'none');
-            $('.live-list').css('display', 'none');
+            
             $('.profile').css('display', 'none');
             $('#create-course').css('display', 'none');
             
@@ -1316,7 +1317,7 @@ $('.video-details').ready(function () {
         $(".editor-source").detach().appendTo(".form-editor");
         $('.editor-source').css('display', 'none')
         $('#live').css('display', 'none');
-        $('.live-list').css('display', 'none');
+        
         $('#create-live').css('display', 'none');
         $('.schedule').css('display', 'none');
         $('#course-upload').css('display', 'none');
@@ -1368,7 +1369,7 @@ $('.video-details').ready(function () {
 
             $('#course-update').css('display', 'none');
             $('#live').css('display', 'none');
-            $('.live-list').css('display', 'none');
+            
             $('#create-live').css('display', 'none');
             $('#live-update').css('display', 'none');
             $('.schedule').css('display', 'none');
@@ -1419,7 +1420,7 @@ $('.video-details').ready(function () {
 
             $('#course-update').css('display', 'none');
             $('#live').css('display', 'none');
-            $('.live-list').css('display', 'none');
+            
             $('#create-live').css('display', 'none');
             $('#live-update').css('display', 'none');
             $('.schedule').css('display', 'none');
@@ -1475,7 +1476,7 @@ $('.video-details').ready(function () {
 
         $('#course-update').css('display', 'none');
         $('#live').css('display', 'none');
-        $('.live-list').css('display', 'none');
+        
         $('#create-live').css('display', 'none');
         $('#live-update').css('display', 'none');
         $('.schedule').css('display', 'none');
@@ -1525,7 +1526,7 @@ $('.video-details').ready(function () {
 
         $('#course-update').css('display', 'none');
         $('#live').css('display', 'none');
-        $('.live-list').css('display', 'none');
+        
         $('#create-live').css('display', 'none');
         $('#live-update').css('display', 'none');
         $('.schedule').css('display', 'none');
@@ -1575,7 +1576,7 @@ $('.video-details').ready(function () {
 
         $('#course-update').css('display', 'none');
         $('#live').css('display', 'none');
-        $('.live-list').css('display', 'none');
+        
         $('#create-live').css('display', 'none');
         $('#live-update').css('display', 'none');
         $('.schedule').css('display', 'none');
@@ -1600,7 +1601,7 @@ $('.video-details').ready(function () {
         closeNav()
         $(".calendar-source").detach().appendTo(".append-calendar");
         $('#live').css('display', 'none');
-        $('.live-list').css('display', 'none');
+        
         $('#create-live').css('display', 'block');
         $('#calendar').css('display', 'block');
         $('.schedule').css('display', 'none');
@@ -1622,7 +1623,7 @@ $('.video-details').ready(function () {
         $(".editor-source").detach().appendTo(".form-editor");
         $('.editor-source').css('display', 'block')
         $('#live').css('display', 'none');
-        $('.live-list').css('display', 'none');
+        
         $('#create-live').css('display', 'none');
         $('.schedule').css('display', 'none');
         $('#course-upload').css('display', 'block');
@@ -1644,7 +1645,7 @@ $('.video-details').ready(function () {
         $(".editor-source").detach().appendTo(".series-form-editor");
         $('.editor-source').css('display', 'block')
         $('#live').css('display', 'none');
-        $('.live-list').css('display', 'none');
+        
         $('#create-live').css('display', 'none');
         $('.schedule').css('display', 'none');
         $('#course-upload').css('display', 'none');
@@ -1702,7 +1703,7 @@ $('.video-details').ready(function () {
 
             $('#course-update').css('display', 'block');
             $('#live').css('display', 'none');
-            $('.live-list').css('display', 'none');
+            
             $('#create-live').css('display', 'none');
             $('#live-update').css('display', 'none');
             $('.schedule').css('display', 'none');
@@ -1767,7 +1768,7 @@ $('.video-details').ready(function () {
 
             $('#course-update').css('display', 'block');
             $('#live').css('display', 'none');
-            $('.live-list').css('display', 'none');
+
             $('#create-live').css('display', 'none');
             $('#live-update').css('display', 'none');
             $('.schedule').css('display', 'none');
@@ -1816,7 +1817,7 @@ $('.video-details').ready(function () {
             $('#calendar').css('display', 'none');
             $('.update-schedule-btn').css('display', 'none');
             $('#live').css('display', 'none');
-            $('.live-list').css('display', 'none');
+            
             $('.profile').css('display', 'none');
             $('#create-course').css('display', 'none');
             $('#course-update').css('display', 'none');
@@ -1895,7 +1896,7 @@ $('.video-details').ready(function () {
             $('#course-update').css('display', 'none');
 
             $('#live').css('display', 'none');
-            $('.live-list').css('display', 'none');
+            
             $('#create-live').css('display', 'none');
             $('.schedule').css('display', 'none');
             $('#course-upload').css('display', 'none');
@@ -2068,7 +2069,7 @@ $(document).ready(function () {
             $('#course-update').css('display', 'none');
 
             $('#live').css('display', 'none');
-            $('.live-list').css('display', 'none');
+
             $('#create-live').css('display', 'none');
             $('.schedule').css('display', 'none');
             $('#course-upload').css('display', 'none');
@@ -2149,7 +2150,7 @@ $('.upload-list').ready(function () {
 
 
         $('#live').css('display', 'none');
-        $('.live-list').css('display', 'none');
+
         $('.profile').css('display', 'none');
         
         $('.upload-list').css('display', 'block');

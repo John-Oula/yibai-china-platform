@@ -42,12 +42,6 @@
             fjs.parentNode.insertBefore(js, fjs);
         }(document, 'script', 'facebook-jssdk'));</script>
 
-        <div class="loader p-2 text-center mx-auto shadow-lg center ">
-
-            <img src="../static/loader.gif" width="60" alt="">
-            <small></small>
-
-        </div>
 
 
 
@@ -56,10 +50,277 @@
 
 
         </div>
+
+
+
+
         <div></div>
+        <div class="schedule p-3 text-center">
+            <div class="calendar-container text-center">
+                <form method="POST" data-href="{{ url_for('getUserSchedule',user_id = current_user.id) }}"
+                      id="schedule-form" action="">
+                    <input id="csrf-token" type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+                    <input type="submit" class="mt-3 mx-auto fixed-btn schedule-btn text-light">
+                </form>
+
+            </div>
+            <br>
+            <br>
+            <br>
+
+        </div>
+
+        <div class="update-schedule p-3 text-center">
+            <div class="update-calendar-container">
+                <input type="submit" class="fixed-btn update-schedule-btn text-light">
+            </div>
+
+        </div>
+
+        <div id="create-course">
+
+            <div class="p-3" id="course-upload">
+                <form class="form-upload text-center" id="course" action="" method="POST" enctype="multipart/form-data">
+
+                    <fieldset>
+                        {{ form.hidden_tag() }}
+
+                        {{ form.upload_title.label }} <br>
+                        {{ form.upload_title(class = "input-box-border border border-top-0 border-left-0 border-right-0") }}
+
+                        <br>
+
+                        {{ form.upload_price.label }} <br>
+                        {{ form.upload_price(class = "input-box-border border border-top-0 border-left-0 border-right-0") }}
+                        <br><small>Price in RMB</small>
+                        <br>
+
+                        {{ form.upload_category.label }} <br>
+                        {{ form.upload_category(class = "input-box-border border border-top-0 border-left-0 border-right-0") }}
+                        <br>
+                        <br>
+
+                        {{ form.upload_description.label }} <br>
+                        {{ form.upload_description(class = "description-field input-box-border border border-top-0 border-left-0 border-right-0") }}
+                        <br>
+
+                        <div class="form-editor">
+
+                        </div>
+
+
+                        <div class="">
+                            {{ form.upload_fileName.label }}
+                            {{ form.upload_fileName() }}<br>
+                            <small>Upload an mp4 or mp3 file</small>
+                            <br><br>
+
+                            {{ form.upload_coverImage.label }}
+                            {{ form.upload_coverImage() }}<br>
+
+                        </div>
+                        <br>
+                        {{ form.upload_submit(class="fixed-btn text-light") }}
+                    </fieldset>
+                </form>
+                <br>
+                <br>
+                <br>
+            </div>
+
+            <div class="p-3" id="create-series">
+                <card class="card shadow-lg w-100">
+                    <card class="">
+                        <form id="series-course" class="form-upload text-left" action="" method="POST"
+                              enctype="multipart/form-data">
+                            <fieldset>
+                                {{ seriesForm.hidden_tag() }}
+
+                                <div class="series-div">
+                                    {{ seriesForm.series_title.label }}<br>
+                                    {{ seriesForm.series_title(class = "input-box-border border border-top-0 border-left-0 border-right-0") }}<br>
+                                    {{ seriesForm.series_category.label }}
+                                    {{ seriesForm.series_category(class = "input-box-border border border-top-0 border-left-0 border-right-0") }}
+
+                                    <br>
+                                    {{ seriesForm.series_price.label }} <small>Price in RMB</small><br>
+                                {{ seriesForm.series_price(class = "input-box-border border border-top-0 border-left-0 border-right-0") }}
+                                <br>
+                                    <div class="wrapper">
+                                        <button type="button" class="subtitle">
+                                            {{ episodeForm.subtitle.label }}
+                                            {{ episodeForm.subtitle(class = "input-box-border border border-top-0 border-left-0 border-right-0") }}
+
+                                        </button>
+                                        <div class="content">
+
+                                            {{ episodeForm.fileName.label }}<br>
+                                            {{ episodeForm.fileName() }}<br>
+                                            <small>Upload mp4 or mp3 file</small>
+                                            <br>
+
+                                            {{ seriesForm.series_coverImage.label(class="mt-2") }}<br>
+                                            {{ seriesForm.series_coverImage }}<br>
+                                                <div class="series-form-editor mt-2">
+
+                                                </div>
+                                            {{ episodeForm.description(class = "description-field input-box-border border border-top-0 border-left-0 border-right-0",placeholder="Description") }}
+
+                                        </div>
+
+                                    </div>
+
+
+                                </div>
 
 
 
+
+
+                                <br>
+                                <div class="text-center">
+                                    {{ seriesForm.series_submit(class="fixed-btn  mb-3") }}
+                                </div>
+
+                            </fieldset>
+                        </form>
+
+                    </card>
+                </card>
+
+                <br>
+                <br>
+                <br>
+            </div>
+
+            <div class="p-3" id="create-live">
+
+                <form data-href="{{ url_for('getUserLive',user_id = current_user.id) }}" action=""
+                      class=" text-center session-form" method="POST">
+                    <fieldset>
+                        {{ sessionForm.hidden_tag() }}
+
+                        {{ sessionForm.title.label }} <br>
+                        {{ sessionForm.title(class = "input-box-border border border-top-0 border-left-0 border-right-0") }}
+
+                        <br>
+                        {{ sessionForm.description.label }} <br>
+                        {{ sessionForm.description(class = "description-field input-box-border border border-top-0 border-left-0 border-right-0") }}
+                        <br>
+
+                        {{ sessionForm.category.label }} <br>
+                        {{ sessionForm.category(class = "input-box-border border border-top-0 border-left-0 border-right-0") }}
+                        <br>
+                        <br>
+
+                        <div class="append-calendar"></div>
+
+                        <br>
+                        <br>
+
+                        {{ sessionForm.submit(class="fixed-btn text-light") }}
+                    </fieldset>
+
+                </form>
+
+                <br>
+                <br>
+                <br>
+            </div>
+        </div>
+        <div class="p-3 upload-option">
+            <div class="card big-card shadow-lg" id="single-click">
+                <div class="card-body text-center">
+                    <h6>Single Upload</h6>
+                    <h1>&#10010</h1>
+                </div>
+            </div>
+            <div class="mt-4 card big-card shadow-lg" id="series-click">
+                <div class="card-body text-center">
+                    <h6>Series Upload</h6>
+                    <h1>&#10010</h1>
+                </div>
+            </div>
+
+        </div>
+
+
+        <div id="course-update" class="p-2">
+
+            <br>
+            <br>
+            <br>
+        </div>
+
+        <div id="live-update" class="p-2">
+            <br>
+            <br>
+            <br>
+        </div>
+
+
+        <div id="edit-live">
+            <form action="" class=" text-center " id="update-session-form" method="POST">
+                <fieldset>
+                    <input type="hidden" name="_METHOD" value="PUT"/>
+
+                    {{ UpdateSession.hidden_tag() }}
+
+                    {{ UpdateSession.update_session_title.label }} <br>
+                    {{ UpdateSession.update_session_title(class = "input-box-border border border-top-0 border-left-0 border-right-0") }}
+
+                    <br>
+                    {{ UpdateSession.update_session_description.label }} <br>
+                    {{ UpdateSession.update_session_description(class = "description-field input-box-border border border-top-0 border-left-0 border-right-0") }}
+                    <br>
+
+                    {{ UpdateSession.update_session_category.label }} <br>
+                    {{ UpdateSession.update_session_category(class = "input-box-border border border-top-0 border-left-0 border-right-0") }}
+                    <br>
+                    <br>
+
+                    <div class="append-edit-calendar">
+
+                    </div>
+                    <br>
+
+                    {{ UpdateSession.update_session_submit(class="fixed-btn text-light") }}
+                </fieldset>
+
+            </form>
+            <br>
+            <br>
+            <br>
+        </div>
+        <div id="update-schedule">
+            <div class="row append-edit-schedule no-gutters">
+                <form method="POST" data-href="{{ url_for('getUserSchedule',user_id = current_user.id) }}"
+                      id="update-schedule-form" action="">
+                    <input type="hidden" name="_METHOD" value="PUT"/>
+                    <input id="csrf-token" type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+                    <div class="text-center mt-2"><input type="submit" class="mt-3 mx-auto fixed-btn schedule-btn text-light"></div>
+                </form>
+
+            </div>
+            <br>
+            <br>
+            <br>
+        </div>
+    <div class="series-stats p-2">
+
+    </div>
+    <div class="live-stats p-2">
+
+    </div>
+    <div class="booked-schedule p-2">
+
+    </div>
+    <div class="booked-live p-2">
+
+    </div>
+    <div class="schedule-stats p-2">
+
+    </div>
         <!-- Trigger the modal with a button -->
 
         <!-- Modal -->
@@ -101,16 +362,154 @@
         </div>
 
 
+        <div id="episode-modal" class="modal fade" role="dialog">
+            <div class="modal-dialog">
+
+                <!-- Modal content-->
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    </div>
+                    <div class="modal-body">
+                        <form id="addEpisode" class="form-upload text-left" action="" method="POST"
+                              enctype="multipart/form-data">
+                            <fieldset>
+                                {{ UpdateEpisode.hidden_tag() }}
 
 
+                                {{ UpdateEpisode.update_subtitle.label }}
+
+                                {{ UpdateEpisode.update_subtitle(class = "input-box-border border border-top-0 border-left-0 border-right-0") }}
+
+
+                                {{ UpdateEpisode.update_fileName.label }}<br>
+                                {{ UpdateEpisode.update_fileName() }}<br>
+
+                                {{ UpdateEpisode.update_coverImage.label }}<br>
+                                {{ UpdateEpisode.update_coverImage() }}<br>
+
+                                {{ UpdateEpisode.update_description(class = "description-field input-box-border border border-top-0 border-left-0 border-right-0",placeholder="Description") }}
+
+                                <br>
+                                {{ UpdateEpisode.update_submit }}
+                            </fieldset>
+                        </form>
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+
+        <div id="series-modal" class="modal fade" role="dialog">
+            <div class="modal-dialog">
+
+                <!-- Modal content-->
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    </div>
+                    <div class="modal-body">
+                        <form course-id="" class="form-upload text-center" id="series-update" action="" method="POST"
+                              enctype="multipart/form-data">
+                            <fieldset>
+                                <input type="hidden" name="_METHOD" value="PUT"/>
+                                {{ UpdateSeries.hidden_tag() }}
+
+                                {{ UpdateSeries.update_series_title.label }} <br>
+                                {{ UpdateSeries.update_series_title(class = "input-box-border border border-top-0 border-left-0 border-right-0") }}
+
+                                <br>
+
+                                {{ UpdateSeries.update_series_price.label }} <br>
+                                {{ UpdateSeries.update_series_price(class = "input-box-border border border-top-0 border-left-0 border-right-0") }}
+                                <br>
+                                {{ UpdateSeries.update_series_description }}
+
+                                {{ UpdateSeries.update_series_category.label }} <br>
+                                {{ UpdateSeries.update_series_category(class = "input-box-border border border-top-0 border-left-0 border-right-0") }}
+                                <br>
+                                <br>
+
+                                <div class="update-series-editor">
+
+                                </div>
+
+
+                                <br>
+                                {{ UpdateSeries.update_series_submit(class="fixed-btn text-light") }}
+                            </fieldset>
+                        </form>
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+
+        <div class="editor-source">
+            <div id="editor"></div>
+        </div>
+        <div class="calendar-source text-center">
+
+            <input id="start-time" type="text" name="date-time" value="" class="time-input">
+            <input id="end-time" type="text" name="end-time" value="" class="time-input">
+            <div id="calendar"></div>
+
+
+        </div>
 
         <div class="schedule-container">
             <div class="row append-schedule no-gutters">
 
             </div>
         </div>
+    <div class="checkout">
+
+        <div class="checkout-img-wrapper">
+            <img class="live-img" src="" alt="">
+
+        </div>
+        <div class="p-2">
+            <h5 id="checkout-title"></h5>
+            <h6 class="orangeColor mt-4 mb-4">Payment summary</h6>
+            <h6>Payment method</h6>
+            <p>Alipay</p>
+            <h6 class="mt-3">Total Price</h6>
+            <div class="mt-3">
+                <span>Original price</span>
+                <span class="float-right" id="original-price"></span>
+            </div>
+            <hr/>
+            <div class="mt-4">
+                <span>Total</span>
+                <span class="float-right total-price"></span>
+            </div>
+            <div class="mt-5 " style="
+    font-size: 11px;
+">By completing your purchase you agree to these our Terms of Service
+            </div>
+            <br>
+            <br>
+            <br>
+        </div>
 
 
+        <nav class="video-nav" class="shadow-lg">
+            <h3  class="navLink total-price"></h3>
+            {% if current_user.is_authenticated %}
+                <a class="navLink click-pay" data-href="" href="">
+                    <button class="common-btn">COMPLETE PAYMENT</button>
+                </a>
+            {% else %}
+                <a class="navLink click-pay-login">
+                    <button class="common-btn">COMPLETE PAYMENT</button>
+                </a>
+            {% endif %}
+
+        </nav>
+
+    </div>
     </div>
 
 

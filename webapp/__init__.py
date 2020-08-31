@@ -16,7 +16,7 @@ import random
 import re
 import socket
 from functools import wraps
-
+from alipay import AliPay, ISVAliPay
 from flask_admin.menu import MenuLink
 from flask_share import Share
 from flask_admin import Admin,BaseView, expose
@@ -39,7 +39,7 @@ from flask_admin.contrib.sqla import ModelView
 from flask_admin.contrib.fileadmin import FileAdmin
 import os.path as op
 from wtforms.widgets import TextArea
-from alipay import AliPay, ISVAliPay
+
 
 #from alipaySDK.alipay.aop.api.AlipayClientConfig import AlipayClientConfig
 #from alipaySDK.alipay.aop.api.DefaultAlipayClient import DefaultAlipayClient

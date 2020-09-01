@@ -1536,6 +1536,7 @@ $('.video-details').ready(function () {
 
         $('#create-live').css('display', 'none');
         $('#live-update').css('display', 'none');
+        $('.live-details').css('display', 'none');
         $('.schedule').css('display', 'none');
         $('#course-upload').css('display', 'none');
         $('#create-series').css('display', 'none');

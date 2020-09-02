@@ -1820,10 +1820,10 @@ $('.video-details').ready(function () {
                     $('#unbook-schedule-' + cnt +'.click-unbook').css("display", "none");
 
                 }
+                cnt = cnt+1;
 
 
 
-                cnt = +1;
             });
 
 

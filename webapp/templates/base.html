@@ -132,6 +132,14 @@
           <a id="booked-live" data-href="{{ url_for('getUserBookedLive',user_id = current_user.id) }}"href="#">Booked live Session</a>
           <a id="live-stats" data-href="{{ url_for('getUserBookedLive',user_id = current_user.id) }}"href="#">Stats</a>
       </div>
+      <button id="verifyInfo" class="dropdown-btn">Complete Profile
+          <i class="fa fa-caret-down"></i>
+      </button>
+      <div class="dropdown-container">
+          <a id="complete-profile" href="#">Complete profile</a>
+          <a id="request-verification" data-href="{{ url_for('getUserLive',user_id = current_user.id) }}" href="">Request verification</a>
+   </div>
+
       <button id="logout" class="dropdown-btn" ><a  class="p-0 m-0" href="{{ url_for('logout') }}"><span>Logout</span> </a></button>
 
   {% else %}
@@ -175,7 +183,7 @@
                     data-layout="button_count">
 
     </div>
-    {{ share.create(sites='facebook') }}
+    {{ share.create(sites='facebook,wechat,linkedin,google,twitter',mobile_sites='qq,facebook,wechat,linkedin,google,twitter') }}
     </div>
 
     <script src='../static/packages/core/main.js'></script>

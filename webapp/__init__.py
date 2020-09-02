@@ -347,6 +347,12 @@ class User(db.Model, UserMixin):
             return True
         else:
             return False
+    def in_cart(self,video):
+
+        if current_user in video.user_cart:
+            return True
+        else:
+            return False
 
     def has_bookedLive(self,live):
 
@@ -699,7 +705,7 @@ class Login_form(FlaskForm):
 
 class Verify_form(FlaskForm):
 
-    id_type = StringField('ID type', validators=[Required()])
+    id_type = SelectField('CATEGORY', choices=[('Identity Card','Identity Card'),('Passport','Passport')])
     id_number = StringField('ID number.', validators=[Required()])
     id_document = StringField('ID document', validators=[Required()])
     email = StringField('Email', validators=[Required()])
@@ -707,6 +713,7 @@ class Verify_form(FlaskForm):
     province = StringField('Province', validators=[Required()])
     city = StringField('City', validators=[Required()])
     occupation = StringField('Occupation', validators=[Required()])
+    experience = StringField('Experience', validators=[Required()])
     phone = IntegerField('Phone', validators=[Required()])
 class User_form(FlaskForm):
 
@@ -817,7 +824,7 @@ class Lesson_form(FlaskForm):
 
 class Comment_form(FlaskForm):
     content = StringField()
-    submit = SubmitField('Live')
+    submit = SubmitField('Post')
 
 
 
@@ -995,18 +1002,29 @@ def userDetails():
 
 
 
-@app.route('/addCart')
+@app.route('/addCart',methods=['DELETE', 'GET'])
 @login_required
+@csrf.exempt
 def addCart():
     upload_id = request.args.get('upload_id', type=int)
 
     course = Series.query.filter_by(id=upload_id).first_or_404()
-    course.user_cart.append(current_user)
-    db.session.commit()
+    if request.method == 'GET':
+        course.user_cart.append(current_user)
+        db.session.commit()
 
-    data =jsonify({"id":course.id,"title":course.title,"coverImage":course.coverImage,"price":course.price})
-    print(data)
-    return data
+        data = jsonify({"id": course.id, "title": course.title, "coverImage": course.coverImage, "price": course.price})
+        return data
+    elif request.method == 'DELETE':
+
+        course.user_cart.remove(current_user)
+        db.session.commit()
+        msg = 'removed from cart'
+
+        return msg
+    return '',204
+
+
 
 @app.route('/episodeComment',methods=['POST', 'GET'])
 @login_required
@@ -1034,7 +1052,7 @@ def comment():
     course.comments.append(comment)
     db.session.commit()
     msg = 'Posted successfully'
-    return msg
+    return {'msg':msg,'totalComments':course.comments.count()}
 
 
 
@@ -1707,7 +1725,7 @@ def video():
     l = []
     for v in range(len(videos)):
         data = {'id': videos[i].id, 'title': videos[i].title, 'username': videos[i].user_series.username,
-                'userImg': videos[i].user_series.image_file, 'category': videos[i].category, 'coverImage': videos[i].coverImage,'likes':videos[i].liked.count(),'comments':videos[i].comments.count(),'isSeries':videos[i].is_series()}
+                'userImg': videos[i].user_series.image_file, 'category': videos[i].category, 'price': videos[i].price, 'coverImage': videos[i].coverImage,'likes':videos[i].liked.count(),'comments':videos[i].comments.count(),'isSeries':videos[i].is_series()}
         l.append(data)
 
         i += 1
@@ -1760,7 +1778,7 @@ def videoDetails():
 #        l.append(data)
 
         if current_user.is_authenticated:
-            data.update({'hasLiked': current_user.has_liked(videos)})
+            data.update({'hasLiked': current_user.has_liked(videos),'inCart': current_user.in_cart(videos)})
 
         return jsonify({'result':data})
 
@@ -1770,7 +1788,7 @@ def videoDetails():
         data.update({'relatedVideos': relatedList})
         data.update({'comments': commentsList})
         if current_user.is_authenticated:
-            data.update({'hasLiked':current_user.has_liked(videos)})
+            data.update({'hasLiked': current_user.has_liked(videos),'inCart': current_user.in_cart(videos)})
 
 
         return jsonify({'result':data})
@@ -1792,7 +1810,7 @@ def liveDetails():
         data = {'id': live.id, 'title': live.title,'startTime': live.start_time,'endTime': live.end_time,'date': live.date,'coverImage': live.coverImage,'description':live.description,'category': live.category,'meetingCode':live.meetingCode,'meetingUrl':live.meetingUrl,'hasBooked':False}
     host = {'userId':live.author.id,'host': live.author.username,'userImg': live.author.image_file,'introduction':live.author.introduction,'followers':live.author.followers.count()}
     for s in live.author.available:
-        schedule = {'id': s.id,'date': s.date_available,'time': s.timestamp}
+        schedule = {'id': s.id,'date': s.date_available,'startTime':s.start_time,'endTime':s.start_time,'time': s.timestamp}
         scheduleList.append(schedule)
     data.update({'schedule':scheduleList})
     data.update({'host':host})

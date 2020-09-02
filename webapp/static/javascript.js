@@ -339,7 +339,7 @@ $(document).ready(function () {
 
             $('#book-schedule').css("display", "none");
 
-            $('#unbook-schedule').css("display", "flex");
+            $('unbook-schedule-' + cnt +'').css("display", "flex");
         })
 
 
@@ -587,6 +587,12 @@ $('.live-details').ready(function () {
 
         });
         req.done(function (data) {
+            var obj = data.schedule;
+            var cnt = 0;
+            $.each(obj, function (key, value) {
+                $('.schedule-tab').append('<div class=" text-center p-2 bg-dark text-light schedule-box"><h4>' + value.date + '</h4><span>' + value.startTime + ' - ' + value.endTime + '</span><span class="mt-1"><a id="book-schedule-' + cnt + '" class="click-book" data-href="' + bookUrl + value.id + param  + '"><button   class="fixed-btn" >Book</button></a><a  id="unbook-schedule-' + cnt + '" class="click-unbook" data-href="' + unbookUrl + value.id + param  + '" ><button   class="fixed-btn" >Unbook</button></a></span></div>');
+                cnt=+1
+            });
 
             if (data.hasBooked == true){
                 $('#book').css('display', 'none');
@@ -609,6 +615,8 @@ $('.live-details').ready(function () {
             $('#live-endTime').html(data.endTime);
             $('#live-date').html(data.date);
             $('#live-description').html(data.description);
+            $('#host-username').html(data.host.host);
+            $('#host-introduction').html(data.host.introduction);
             $('img.live-img').attr('src', coverImgUrl + data.coverImage);
             $('img.profilepic').attr('src', userImgUrl + data.host.userImg);
             $('.click-book').attr('data-href', bookUrl + data.id+param);
@@ -690,7 +698,7 @@ $('.live-list').ready(function () {
     $('.share-btn').click(function (e) {
         e.preventDefault();
         $('.fb-share-button').appendTo('.share-logos')
-        $('.fb-share-button').css('display', 'flex');
+        $('.fb-share-button').css('display', 'none');
         $('.share-logos').toggle()
 
 
@@ -886,6 +894,8 @@ $('.video-details').ready(function () {
         req.done(function (data) {
 
             var obj = data.result;
+            $('.addCart').attr('data-href', '/addCart?upload_id=' + obj.id);
+            $('.removeCart').attr('data-href', '/addCart?upload_id=' + obj.id);
                         $('#user-reviews').empty();
             $.each(obj.comments, function (key, value) {
 
@@ -893,6 +903,15 @@ $('.video-details').ready(function () {
                 $('#user-reviews').append('<div><div data-href="" class="profile-pic-wrapper d-inline-flex mr-2 click-pro-pic"><span><img class="profilepic" src="' + userImgSrc + value.proPic + '" alt=""></span></div><small ><strong>' + value.username + '</strong></small><div><small id="user-review">' + value.content + '</small></div></div></div></div>');
 
             });
+            if (obj.inCart === true) {
+                $('.navLink.removeCart').css('display', 'flex');
+
+                $('.navLink.addCart').css('display', 'none');
+            } else if (obj.inCart === false) {
+                $('.navLink.addCart').css('display', 'flex');
+
+                $('.navLink.removeCart').css('display', 'none');
+            }
 
             if (obj.hasLiked === true) {
                 $('#unlike-btn').css('display', 'flex');
@@ -902,10 +921,12 @@ $('.video-details').ready(function () {
                 $('.like-btn').css('display', 'flex');
 
                 $('#unlike-btn').css('display', 'none');
+
             }
+
             $('.profile-pic-wrapper').attr("data-href", userUrl + obj.username);
             $('#comment-form').attr("data-href", commentUrl + obj.id);
-            $('#buy').attr("data-href", courseUrl + obj.id);
+            $('.buy').attr("data-href", courseUrl + obj.id);
             $('#video-title').html(obj.title);
             $('#video-author').html(obj.username);
             $('#video-likes').html(obj.likes);
@@ -929,11 +950,11 @@ $('.video-details').ready(function () {
             if (obj.price == 0) {
                 $('#video-price').css('display', 'none');
                 $('.addCart').css('display', 'none');
-                $('#buy').css('display', 'none');
+                $('.buy').css('display', 'none');
             } else {
                 $('#video-price').css('display', 'flex');
-                $('.addCart').css('display', 'flex');
-                $('#buy').css('display', 'flex');
+
+                $('.buy').css('display', 'flex');
             }
             if (obj.isSeries === true) {
                 $('.like-btn').attr('data-href', '/like/episode' + obj.id);
@@ -1005,7 +1026,7 @@ $('.video-details').ready(function () {
 
                     $('#unlike-btn').css('display', 'none');
             }
-            $('.addCart').attr('data-href', '/addCart?upload_id=' + obj.id);
+
 
 
 
@@ -1043,6 +1064,7 @@ $('.video-details').ready(function () {
         req.done(function (data) {
 
             $('.profile').css('display', 'block');
+            $('.share-logos').css('display', 'none');
             $('#book-schedule-btn').attr('data-href', userUrl + data.username);
             $('#unfollow').attr('data-href', unfollowUrl + "/" + data.username);
             $('#follow').attr('data-href', followUrl + "/" + data.username);
@@ -1371,7 +1393,7 @@ $('.video-details').ready(function () {
                 $.each(data.result, function (key, value) {
 
 
-                    $('.series-stats').append('<card class="mt-2 mb-2 flex-fill flex-row shadow-lg row no-gutters user-course card"><div class="col-3 no-gutters cover-wrapper"><img id="course-img" src="../static/coverImages/' + value.coverImg + '" alt=""></div><div class="col-8 p-2 flex-fill flex-column no-gutters "><h6 id="course-title">' + value.title + '</h6><div id="total-episodes">Episodes : ' + value.totalEpisodes + '</div><span id="course-price">Price : ' + value.price + '</span><nav class="btn-row" ><a   class=" navLink" data-href="addEpisode?series_id=' + value.id + '"  data-toggle="modal" data-target="#episode-modal" href=""><img class="mobile-icon" src="../static/like.svg" alt=""><span class="nav_text">' + value.likes + '</span></a><a class="navLink"   data-toggle="modal" data-target="#myModal" href="" ><img class="mobile-icon" src="../static/commentGrey.svg" alt="" ><span class="nav_text">' + value.totalComments + '</span></a><a class="navLink"><img class="mobile-icon" src="../static/edit.svg" alt="" ><span class="nav_text">views</span></a></nav></div></card></div>');
+                    $('.series-stats').append('<card class="mt-2 mb-2 flex-fill flex-row shadow-lg row no-gutters user-course card"><div class="col-3 no-gutters cover-wrapper"><img id="course-img" src="../static/coverImages/' + value.coverImg + '" alt=""></div><div class="col-8 p-2 flex-fill flex-column no-gutters "><h6 id="course-title">' + value.title + '</h6><div id="total-episodes">Episodes : ' + value.totalEpisodes + '</div><span id="course-price">Price : ' + value.price + '</span><nav class="btn-row" ><a   class=" navLink" data-href="addEpisode?series_id=' + value.id + '"  data-toggle="modal" data-target="#episode-modal" href=""><img class="mobile-icon" src="../static/like.svg" alt=""><span class="nav_text">' + value.likes + '</span></a><a class="navLink"   data-toggle="modal" data-target="#myModal" href="" ><img class="mobile-icon" src="../static/commentGrey.svg" alt="" ><span class="nav_text">' + value.totalComments + '</span></a><a class="navLink"><img class="mobile-icon" src="../static/eye.svg" alt="" width="24" ><span class="nav_text view-text"></span></a></nav></div></card></div>');
 
                 });
 
@@ -1424,7 +1446,7 @@ $('.video-details').ready(function () {
                 $.each(data.result, function (key, value) {
 
 
-                    $('.live-stats').append('<card class="mt-2 mb-2 flex-fill flex-row shadow-lg row no-gutters user-course card"><div class="col-3 no-gutters cover-wrapper"><img id="course-img" src="../static/coverImages/' + value.coverImg + '" alt=""></div><div class="col-8 p-2 flex-fill flex-column no-gutters "><h6 id="course-title">' + value.title + '</h6><div id="total-episodes"> </div><nav class="btn-row" ><a   class=" navLink" data-href="addEpisode?series_id=' + value.id + '"  data-toggle="modal" data-target="#episode-modal" href=""><img class="mobile-icon" src="../static/like.svg" alt=""><span class="nav_text">' + value.likes + '</span></a><a class="navLink"   data-toggle="modal" data-target="#myModal" href="" ><img class="mobile-icon" src="../static/commentGrey.svg" alt="" ><span class="nav_text">' + value.totalComments + '</span></a><a class="navLink"><img class="mobile-icon" src="../static/edit.svg" alt="" ><span class="nav_text">views</span></a></nav></div></card></div>');
+                    $('.live-stats').append('<card class="mt-2 mb-2 flex-fill flex-row shadow-lg row no-gutters user-course card"><div class="col-3 no-gutters cover-wrapper"><img id="course-img" src="../static/coverImages/' + value.coverImg + '" alt=""></div><div class="col-8 p-2 flex-fill flex-column no-gutters "><h6 id="course-title">' + value.title + '</h6><div id="total-episodes"> </div><nav class="btn-row" ><a   class=" navLink" data-href="addEpisode?series_id=' + value.id + '"  data-toggle="modal" data-target="#episode-modal" href=""><img class="mobile-icon" src="../static/like.svg" alt=""><span class="nav_text">' + value.likes + '</span></a><a class="navLink"   data-toggle="modal" data-target="#myModal" href="" ><img class="mobile-icon" src="../static/commentGrey.svg" alt="" ><span class="nav_text">' + value.totalComments + '</span></a><a class="navLink"><img class="mobile-icon" src="../static/eye.svg" width="24" alt="" ><span class="nav_text view-text"></span></a></nav></div></card></div>');
 
                 });
 
@@ -1484,6 +1506,7 @@ $('.video-details').ready(function () {
 
 
                     $('.booked-schedule').append('<div class=" text-center p-2 bg-dark text-light schedule-box"><h4>' + value.date + '</h4><span>' + value.start_time + ' - ' + value.end_time + '</span><div class="row w-100"><div class="w-100 col h-50 text-light text-center d-flex my-green"><a class="p-2 text-light" href="' + value.meetingUrl + '">JOIN</a></div><div class="w-100 col h-50 text-light text-center my-green"><a id="unbook-schedule" class="p-2 text-light d-flex click-unbook" data-href="/unbook/'+value.id+'?type=schedule" href="" >UNBOOK</a></div></div></div></div>');
+
                 });
         });
 
@@ -1777,22 +1800,25 @@ $('.video-details').ready(function () {
         req.done(function (data) {
 
             var details = data.schedule
-
+            var cnt = 0;
             $.each(details, function (key, value) {
-                if (value.hasBooked == true){
-                                    $('.modal-body.append-user-schedule').append('<div class=" text-center p-2 bg-dark text-light schedule-box"><h4>' + value.date + '</h4><span>' + value.startTime + ' - ' + value.endTime + '</span><span class="mt-1"><a id="book-schedule" class="click-book" data-href="' + bookUrl + value.id + param + type + '"><button   class="fixed-btn" >Book</button></a><a  id="book-schedule" class="click-unbook" data-href="' + unbookUrl + value.id + param + type + '" ><button   class="fixed-btn" >Unbook</button></a></span></div>');
+                if (value.hasBooked === true){
+
                     $('.click-book').css('display','none')
                     $('.click-unbook').css('display','flex')
 
-                }
-                else if (value.hasBooked == false){
-                                    $('.modal-body.append-user-schedule').append('<div class=" text-center p-2 bg-dark text-light schedule-box"><h4>' + value.date + '</h4><span>' + value.startTime + ' - ' + value.endTime + '</span><span class="mt-1"><a  id="book-schedule" class="click-book" data-href="' + bookUrl + value.id + param + type + '"><button   class="fixed-btn" >Book</button></a><a id="unbook-schedule"  class="click-unbook" data-href="' + unbookUrl + value.id + param + type + '" ><button   class="fixed-btn" >Unbook</button></a></span></div>');
+
+                } else if (value.hasBooked === false){
 
                     $('.click-book').css('display','flex')
                     $('.click-unbook').css('display','none')
 
                 }
+                $('.modal-body.append-user-schedule').append('<div class=" text-center p-2 bg-dark text-light schedule-box"><h4>' + value.date + '</h4><span>' + value.startTime + ' - ' + value.endTime + '</span><span class="mt-1"><a id="book-schedule-' + cnt +'" class="click-book" data-href="' + bookUrl + value.id + param + type + '"><button   class="fixed-btn" >Book</button></a><a  id="unbook-schedule-' + cnt +'" class="click-unbook-' + cnt +'" data-href="' + unbookUrl + value.id + param + type + '" ><button   class="fixed-btn" >Unbook</button></a></span></div>');
 
+
+
+                cnt = +1;
             });
 
 
@@ -2034,6 +2060,36 @@ $(document).ready(function () {
         });
         req.done(function (data) {
             popover('Added to cart', 'green')
+            $('.removeCart').css('display','flex')
+            $('.addCart').css('display','none')
+
+        });
+    });
+    $('.removeCart').on("click", function (e) {
+        e.preventDefault();
+        var url = $(this).attr("data-href");
+        var videoSrc = "../static/videos/";
+        var userImgSrc = "../static/profile_pics/";
+        var currency = "￥"
+
+        req = $.ajax({
+            url: url,
+            type: 'DELETE',
+            data: {},
+            success: function (data) {
+                console.log(data)
+            }, error: function (error) {
+                console.log(error)
+                console.log("error")
+                popover('Log in to add to cart', 'error')
+
+            }
+
+        });
+        req.done(function (data) {
+            popover(data, 'green')
+            $('.removeCart').css('display','none')
+            $('.addCart').css('display','flex')
 
         });
     });
@@ -2066,14 +2122,16 @@ $(document).ready(function () {
             $.each(data.result, function (key, value) {
 
 
-                $('.cart-list').append('<div class="row"><div class="col-3 no-gutters cover-wrapper"><img class="" id="cart-coverImg" src="' + coverImgSrc + value.coverImage + '" alt=""></div><div class="col-8"><p id="cart-title">' + value.title + '</p><span id="cart-price">' + value.price + '</span></div></div>');
+                $('.cart-list').append('<div class="row"><div class="col-3 buy no-gutters cover-wrapper" ><img class="" id="cart-coverImg" src="' + coverImgSrc + value.coverImage + '" alt="" ></div><div class="col-8"><p id="cart-title">' + value.title + '</p><span id="cart-price">￥' + value.price + '</span></div></div>');
 
             });
 
         });
     });
-    $('#buy').on("click", function (e) {
+    $('.buy').on("click", function (e) {
         e.preventDefault();
+        closeLeftNav()
+        closeNav()
         var url = $(this).attr("data-href");
         var userId = $(this).attr("user-id");
 
@@ -2114,7 +2172,12 @@ $(document).ready(function () {
             $('#create-series').css('display', 'none');
             $('.profile').css('display', 'none');
             $('#create-course').css('display', 'none');
-            
+            $('.my-profile').css('display', 'none');
+            $('.live-list').css('display', 'none');
+            $('.live-details').css('display', 'none');
+            $('.video-list').css('display', 'none');
+            $('.video-details').css('display', 'none');
+
             
             $('#user-profile').css('display', 'none');
             $('.schedule-container').css('display', 'none');
@@ -2442,10 +2505,11 @@ $(document).ready(function () {
 
 
                 var comment = $('#content').val()
+                $('#video-comments').text(data.totalComments)
                 $('#user-reviews').append('<div><div data-href="" class="profile-pic-wrapper d-inline-flex mr-2 click-pro-pic"><span><img class="profilepic" src="' + userImgSrc + currentUserProPic + '" alt=""></span></div><small ><strong>' + currentUserUsername + '</strong></small><div><small id="user-review">' + comment + '</small></div></div></div></div>');
 
 
-                popover(data, 'success')
+                popover(data.msg, 'success')
 
             });
 

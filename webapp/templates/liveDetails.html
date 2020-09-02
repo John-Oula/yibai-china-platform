@@ -81,8 +81,8 @@
                            aria-selected="false">HOST</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" id="schedule-tab" data-toggle="tab" href="#schedule" role="tab"
-                           aria-controls="schedule" aria-selected="false">SCHEDULE</a>
+                        <a class="nav-link" id="schedule-tab" data-toggle="tab" href="#schedule-tab-page" role="tab"
+                           aria-controls="schedule-tab-page" aria-selected="false">SCHEDULE</a>
                     </li>
                 </ul>
                 <div class="tab-content" id="myTabContent">
@@ -91,8 +91,21 @@
                         <p>Description</p>
                         <p id="live-description"></p>
                     </div>
-                    <div class="tab-pane fade" id="host" role="tabpanel" aria-labelledby="host-tab"></div>
-                    <div class="tab-pane fade" id="schedule" role="tabpanel" aria-labelledby="schedule-tab"></div>
+                    <div class="tab-pane fade p-2" id="host" role="tabpanel" aria-labelledby="host-tab">
+                        <div class="d-flex align-items-center">
+                            <div data-href="" class="click-pro-pic user-profile-pic-wrapper mb-3 mr-2 ml-0">
+                        <span><img class="profilepic" src="" alt=""></span>
+
+                    </div>
+                            <span id="host-username" class="bold"></span><br>
+
+                        </div>
+                        <span class="">Introduction</span>
+                        <div id="host-introduction"></div>
+                    </div>
+                    <div class="tab-pane fade schedule-tab row d-flex" id="schedule-tab-page" role="tabpanel" aria-labelledby="schedule-tab-page">
+
+                    </div>
                 </div>
 
                 <div class="p-3">

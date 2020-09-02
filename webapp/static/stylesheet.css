@@ -1169,6 +1169,7 @@ ul.upload-list{
 .comment-box{
     height: 100px;
     width: 600px;
+    border-style: none;
 }
 
 .orange{
@@ -1224,6 +1225,7 @@ p.login-text{
 .bot-nav{
     display: none;
 }
+
 img.corner-design{
     display: none;
 }
@@ -2284,9 +2286,9 @@ div.modal , #episode-modal , #series-modal{
 .share-logos{
 background-color: white;
     width: 50%;
-    position: relative;
+    position: sticky;
     border-radius: 7px;
-    bottom: 40px;
+    bottom: 130px;
     display: none;
 }
 .fb-share-button{
@@ -2336,9 +2338,7 @@ display: none;
     height: 300px;
 }
 
-.click-unbook{
-    display: none;
-}
+
 .live-card{
     margin-bottom: 10px;
 }
@@ -2348,6 +2348,13 @@ display: none;
 #controls{
     position: absolute;
     top: 120px;
+    display: none;
+}
+
+.click-unbook{
+    display: none;
+}
+.navLink.removeCart{
     display: none;
 }
 }

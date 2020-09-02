@@ -2284,12 +2284,16 @@ div.modal , #episode-modal , #series-modal{
 }
 
 .share-logos{
-background-color: white;
+    background-color: white;
     width: 50%;
-    position: sticky;
+    position: absolute;
     border-radius: 7px;
     bottom: 130px;
     display: none;
+
+    z-index: 100;
+    left: 0;
+    right: 0;
 }
 .fb-share-button{
     display: none;

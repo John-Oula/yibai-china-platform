@@ -1804,9 +1804,10 @@ $('.video-details').ready(function () {
         req.done(function (data) {
 
             var details = data.schedule
-            var cnt = 0;
+
             $.each(details, function (key, value) {
-                $('.modal-body.append-user-schedule').append('<div class=" text-center p-2 bg-dark text-light schedule-box"><h4>' + value.date + '</h4><span>' + value.startTime + ' - ' + value.endTime + '</span><span class="mt-1"><a id="book-schedule-' + cnt + '" class="click-book" cnt="'+ cnt +'" data-href="' + bookUrl + value.id + param  + type + '"><button   class="fixed-btn" >Book</button></a><a  id="unbook-schedule-' + cnt + '" cnt="'+ cnt +'" class="click-unbook" data-href="' + unbookUrl + value.id + param  + type + '" ><button   class="fixed-btn" >Unbook</button></a></span></div>');
+                var cnt = value.id;
+                $('.modal-body.append-user-schedule').append('<div class=" text-center p-2 bg-dark text-light schedule-box"><h4>' + value.date + '</h4><span>' + value.startTime + ' - ' + value.endTime + '</span><span class="mt-1"><a id="book-schedule-' + cnt + '" class="click-book" cnt="'+ value.id +'" data-href="' + bookUrl + value.id + param  + type + '"><button   class="fixed-btn" >Book</button></a><a  id="unbook-schedule-' + cnt + '" cnt="'+ value.id +'" class="click-unbook" data-href="' + unbookUrl + value.id + param  + type + '" ><button   class="fixed-btn" >Unbook</button></a></span></div>');
 
                 if (value.hasBooked === true){
 

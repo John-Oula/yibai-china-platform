@@ -2286,7 +2286,7 @@ div.modal , #episode-modal , #series-modal{
 .share-logos{
     background-color: white;
     width: 50%;
-    position: absolute;
+    position: fixed;
     border-radius: 7px;
     bottom: 130px;
     display: none;

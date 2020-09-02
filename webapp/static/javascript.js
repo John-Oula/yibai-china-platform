@@ -314,10 +314,11 @@ $(document).ready(function () {
 
 
     })
-    $('#main').on('click', '#book-schedule.click-book', function (e) {
+    $('#main').on('click', '.click-book', function (e) {
         e.preventDefault();
 
         var bookURL = $(this).attr("data-href");
+        var cnt = $(this).attr("cnt");
 
 
         req = $.ajax({
@@ -337,9 +338,9 @@ $(document).ready(function () {
         req.done(function (data) {
             popover('Booked successfully', 'green')
 
-            $('#book-schedule').css("display", "none");
+            $('#book-schedule-' + cnt +'.click-book').css("display", "none");
 
-            $('unbook-schedule-' + cnt +'').css("display", "flex");
+            $('#unbook-schedule-' + cnt +'.click-unbook').css("display", "flex");
         })
 
 
@@ -371,10 +372,11 @@ $(document).ready(function () {
 
 
     })
-    $('#main').on('click', '#unbook-schedule.click-unbook', function (e) {
+    $('#main').on('click', '.click-unbook', function (e) {
         e.preventDefault();
 
         var unbookURL = $(this).attr("data-href");
+        var cnt = $(this).attr("cnt");
 
 
         req = $.ajax({
@@ -391,9 +393,9 @@ $(document).ready(function () {
 
         });
         req.done(function (data) {
-            $('#book-schedule').css("display", "flex");
+             $('#book-schedule-' + cnt +'.click-book').css("display", "flex");
 
-            $('#unbook-schedule').css("display", "none");
+            $('#unbook-schedule-' + cnt +'.click-unbook').css("display", "none");
         })
 
 
@@ -590,9 +592,11 @@ $('.live-details').ready(function () {
             var obj = data.schedule;
             var cnt = 0;
             $.each(obj, function (key, value) {
+                $('#unbook-schedule-' + cnt +'').css("display", "none");
                 $('.schedule-tab').append('<div class=" text-center p-2 bg-dark text-light schedule-box"><h4>' + value.date + '</h4><span>' + value.startTime + ' - ' + value.endTime + '</span><span class="mt-1"><a id="book-schedule-' + cnt + '" class="click-book" data-href="' + bookUrl + value.id + param  + '"><button   class="fixed-btn" >Book</button></a><a  id="unbook-schedule-' + cnt + '" class="click-unbook" data-href="' + unbookUrl + value.id + param  + '" ><button   class="fixed-btn" >Unbook</button></a></span></div>');
                 cnt=+1
             });
+
 
             if (data.hasBooked == true){
                 $('#book').css('display', 'none');
@@ -680,7 +684,7 @@ $('.live-list').ready(function () {
             $.each(obj, function (key, value) {
 
 
-                $('.live-list').append('<card class="card shadow-lg live-card"  data-href="' + liveUrl + value.id + '" > <card ><a href="' + liveInfoUrl + value.id + '"> <div class="live-img-wrapper"><img class="live-img" src="../static/coverImages/' + value.coverImg + '" alt=""></div> <div class="live-profile-pic-wrapper click-pro-pic"  data-href="' + userUrl + value.host.host + '"><span><a  class="user-profile-pic border-light" href="#"><img class="profilepic"  src="../static/profile_pics/' + value.userImg + '" alt=""></a></span> </div><div class="p-2 row no-gutters"><span class="live-info col-8 flex-content flex-column no-gutters"><span class="live-title">' + value.title + '</span><span class="">Hosted by:' + value.host + ' </span><span class="">Category:' + value.category + '</span><span class=""> </span></span>  <span class="live-info col-4 flex-content flex-column no-gutters">           <span class="text-right">' + value.startTime + '-' + value.endTime + '</span><span class="text-right">' + value.date + '</span>  <div class="circle-icon text-right text-center mt-2  p-2 shadow-sm"> <img class="rounded-circle" src="../static/share.svg" alt=""> </div> </span> </div> </a></card> </card>');
+                $('.live-list').append('<card class="card shadow-lg live-card"  data-href="' + liveUrl + value.id + '" > <card ><a href="' + liveInfoUrl + value.id + '"> <div class="live-img-wrapper"><img class="live-img" src="../static/coverImages/' + value.coverImg + '" alt=""></div> <div class="live-profile-pic-wrapper click-pro-pic"  data-href="' + userUrl + value.host.host + '"><span><a  class="user-profile-pic border-light" href="#"><img class="profilepic"  src="../static/profile_pics/' + value.userImg + '" alt=""></a></span> </div><div class="p-2 row no-gutters"><span class="live-info col-8 flex-content flex-column no-gutters"><span class="live-title">' + value.title + '</span><span class="">Hosted by:' + value.host + ' </span><span class="">Category:' + value.category + '</span><span class=""> </span></span>  <span class="live-info col-4 flex-content flex-column no-gutters">           <span class="text-right">' + value.startTime + '-' + value.endTime + '</span><span class="text-right">' + value.date + '</span>  <div class="circle-icon text-right text-center mt-2  p-2 shadow-sm"> </div> </span> </div> </a></card> </card>');
 
             });
             $('#live').css('display', 'block');
@@ -1802,19 +1806,20 @@ $('.video-details').ready(function () {
             var details = data.schedule
             var cnt = 0;
             $.each(details, function (key, value) {
+                $('.modal-body.append-user-schedule').append('<div class=" text-center p-2 bg-dark text-light schedule-box"><h4>' + value.date + '</h4><span>' + value.startTime + ' - ' + value.endTime + '</span><span class="mt-1"><a id="book-schedule-' + cnt + '" class="click-book" cnt="'+ cnt +'" data-href="' + bookUrl + value.id + param  + type + '"><button   class="fixed-btn" >Book</button></a><a  id="unbook-schedule-' + cnt + '" cnt="'+ cnt +'" class="click-unbook" data-href="' + unbookUrl + value.id + param  + type + '" ><button   class="fixed-btn" >Unbook</button></a></span></div>');
+
                 if (value.hasBooked === true){
 
-                    $('.click-book').css('display','none')
-                    $('.click-unbook').css('display','flex')
+                    $('#book-schedule-' + cnt +'.click-book').css("display", "none");
+                    $('#unbook-schedule-' + cnt +'.click-unbook').css("display", "flex");
 
 
                 } else if (value.hasBooked === false){
 
-                    $('.click-book').css('display','flex')
-                    $('.click-unbook').css('display','none')
+                    $('#book-schedule-' + cnt +'.click-book').css("display", "flex");
+                    $('#unbook-schedule-' + cnt +'.click-unbook').css("display", "none");
 
                 }
-                $('.modal-body.append-user-schedule').append('<div class=" text-center p-2 bg-dark text-light schedule-box"><h4>' + value.date + '</h4><span>' + value.startTime + ' - ' + value.endTime + '</span><span class="mt-1"><a id="book-schedule-' + cnt +'" class="click-book" data-href="' + bookUrl + value.id + param + type + '"><button   class="fixed-btn" >Book</button></a><a  id="unbook-schedule-' + cnt +'" class="click-unbook-' + cnt +'" data-href="' + unbookUrl + value.id + param + type + '" ><button   class="fixed-btn" >Unbook</button></a></span></div>');
 
 
 

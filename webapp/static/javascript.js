@@ -1312,6 +1312,9 @@ $('.video-details').ready(function () {
             url: $(this).attr('data-href'),
             type: 'DELETE',
             data: {},
+            beforeSend: function(){
+                popover('Deleting...','success')
+            },
             success: function (data) {
                 console.log(data)
             }, error: function (error) {
@@ -1377,9 +1380,7 @@ $('.video-details').ready(function () {
             url: $('#update-course').attr('data-href'),
             type: 'GET',
             data: {},
-            beforeSend: function(data){
-                 popover('Deleting...','success')
-            },
+
             success: function (data) {
                 console.log(data)
             }, error: function (error) {
@@ -1879,7 +1880,7 @@ $('.video-details').ready(function () {
 
             $.each(details.bookers, function (key, value) {
 
-                $('.modal-body.append-bookers').append('<div class="  p-2 d-flex align-items-center "><div data-href="" class="click-pro-pic user-profile-pic-wrapper mr-2"><span><img class="profilepic" src="'+ userImgSrc+ value.profPic +'" alt=""></span></div><h6>' + value.username + '</h6></div>');
+                $('.modal-body.append-bookers').append('<div class=" row p-2 d-flex align-items-center "><div data-href="" class=" user-profile-pic-wrapper mr-2"><span><img class="profilepic" src="'+ userImgSrc+ value.profPic +'" alt=""></span></div><h6>' + value.username + '</h6></div>');
 
 
 
@@ -1915,7 +1916,7 @@ $('.video-details').ready(function () {
             }
 
         });
-        $('.modal-body.append-bookers').empty();
+        $('.modal-body.append-live-bookers').empty();
 
         req.done(function (data) {
 
@@ -1923,7 +1924,7 @@ $('.video-details').ready(function () {
 
             $.each(details.bookers, function (key, value) {
 
-                $('.modal-body.append-live-bookers').append('<div class="  p-2 d-flex align-items-center "><div data-href="" class="click-pro-pic user-profile-pic-wrapper mr-2"><span><img class="profilepic" src="'+ userImgSrc+ value.profPic +'" alt=""></span></div><h6>' + value.username + '</h6></div>');
+                $('.modal-body.append-live-bookers').append('<div class="  p-2 d-flex align-items-center "><div data-href="" class=" user-profile-pic-wrapper mr-2"><span><img class="profilepic" src="'+ userImgSrc+ value.profPic +'" alt=""></span></div><h6>' + value.username + '</h6></div>');
 
 
 
@@ -2086,6 +2087,9 @@ $('.video-details').ready(function () {
             url: $('.edit-series').attr('data-href'),
             type: 'DELETE',
             data: {},
+            beforeSend: function(){
+                popover('Deleting...','success')
+            },
             success: function (data) {
                 popover(data, 'success')
             }, error: function (error) {
@@ -2173,6 +2177,7 @@ $(document).ready(function () {
             url: url,
             type: 'DELETE',
             data: {},
+
             success: function (data) {
                 console.log(data)
             }, error: function (error) {
@@ -2399,6 +2404,7 @@ $(document).ready(function () {
                     $('.loader').css('display', 'block')
                      $('.border-btn').css('display','block')
               $('#upload_submit').css('display','none')
+                     popover('Uploading Episode','success')
                 }
             }, enctype: 'multipart/form-data',
             data: new FormData(this),
@@ -2406,6 +2412,7 @@ $(document).ready(function () {
             url: $('.add-ep-btn').attr('data-href'),
             processData: false,
             contentType: false,
+
             error: function (error) {
 
                 popover(error, 'success')
@@ -2437,9 +2444,11 @@ $(document).ready(function () {
                 }
                 $('.loader').css('display', 'block')
                $('.border-btn').css('display','block')
+                 popover('Creating schedule','success')
               $('.schedule-btn').css('display','none')
 
             },
+
             data: new FormData(this),
             type: 'POST',
             url: $('#schedule-form').attr('data-href'),
@@ -2528,6 +2537,9 @@ $(document).ready(function () {
                     xhr.setRequestHeader("X-CSRFToken", csrf_token);
                 }
                 $('.loader').css('display', 'block')
+
+                popover('Creating live session','success')
+
             },
             data: new FormData(this),
             type: 'POST',
@@ -2555,6 +2567,8 @@ $(document).ready(function () {
 
                 }
                 $('.loader').css('display', 'block')
+                popover('Updating Info','success')
+
             },
             error: function (error) {
 

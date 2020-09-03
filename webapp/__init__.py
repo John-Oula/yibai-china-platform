@@ -2616,9 +2616,10 @@ def editSchedule():
         cancelMeeting(meeting_id, current_user.username, 1)
         db.session.delete(schedule)
         db.session.commit()
+        msg = 'Deleted successfully'
 
 
-        return jsonify({'result': 'deleted'})
+        return msg
 
 
 

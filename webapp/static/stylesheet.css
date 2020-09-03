@@ -2282,7 +2282,19 @@ div.modal , #episode-modal , #series-modal{
 .tab-content{
         overflow-wrap: break-word;
 }
+.border-btn{
+    border-width: 2px;
+    border-color: black;
+    background-color: white;
+    color: black;
+    border-radius: 4px;
+    padding: 4px;
+    width: 132px;
+    height: fit-content;
+    border-style: solid;
+    display: none;
 
+}
 .share-logos{
     background-color: white;
     width: 50%;

@@ -1323,7 +1323,7 @@ $('.video-details').ready(function () {
         });
 
         req.done(function (data) {
-
+        popover(data,'success')
 
             $('.schedule').css('display', 'none');
 
@@ -1377,6 +1377,9 @@ $('.video-details').ready(function () {
             url: $('#update-course').attr('data-href'),
             type: 'GET',
             data: {},
+            beforeSend: function(data){
+                 popover('Deleting...','success')
+            },
             success: function (data) {
                 console.log(data)
             }, error: function (error) {
@@ -2306,6 +2309,8 @@ $(document).ready(function () {
                 if (!/^(GET|HEAD|OPTIONS|TRACE)$/i.test(settings.type) && !this.crossDomain) {
                     xhr.setRequestHeader("X-CSRFToken", csrf_token);
                     $('.loader').css('display', 'block')
+                     $('.border-btn').css('display','block')
+              $('#upload_submit').css('display','none')
                 }
             }, enctype: 'multipart/form-data',
             data: new FormData(this),
@@ -2325,6 +2330,8 @@ $(document).ready(function () {
         })
             .done(function (data) {
 
+                     $('.border-btn').css('display','none')
+              $('#upload_submit').css('display','block')
                 popover(data, 'success')
 
             });
@@ -2341,6 +2348,9 @@ $(document).ready(function () {
                     xhr.setRequestHeader("X-CSRFToken", csrf_token);
                 }
                 $('.loader').css('display', 'block')
+               $('.border-btn').css('display','block')
+              $('.schedule-btn').css('display','none')
+
             },
             data: new FormData(this),
             type: 'POST',
@@ -2356,6 +2366,8 @@ $(document).ready(function () {
             .done(function (data) {
 
                 popover(data, 'success')
+                $('.border-btn').css('display','none')
+              $('.schedule-btn').css('display','block')
 
             });
 

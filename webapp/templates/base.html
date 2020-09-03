@@ -238,6 +238,8 @@ var quill = new Quill('#editor', options);
             if (!/^(GET|HEAD|OPTIONS|TRACE)$/i.test(settings.type) && !this.crossDomain) {
                 xhr.setRequestHeader("X-CSRFToken", csrf_token);
                 $('.loader').css('display','block')
+                 $('.border-btn').css('display','block')
+              $('#series_submit').css('display','none')
             }
         },  enctype: 'multipart/form-data',
 			data : new FormData(this),
@@ -259,6 +261,9 @@ var quill = new Quill('#editor', options);
 		.done(function(data) {
 
         popover(data,'success')
+            pageRedirect('/')
+               $('.border-btn').css('display','none')
+              $('#series_submit').css('display','block')
 
 		});
 
@@ -278,6 +283,8 @@ var quill = new Quill('#editor', options);
             if (!/^(GET|HEAD|OPTIONS|TRACE)$/i.test(settings.type) && !this.crossDomain) {
                 xhr.setRequestHeader("X-CSRFToken", csrf_token);
                 $('.loader').css('display','block')
+                $('.border-btn').css('display','block')
+                $('#upload_submit').css('display','none')
             }
         },  enctype: 'multipart/form-data',
 			data : new FormData(this),
@@ -291,8 +298,10 @@ var quill = new Quill('#editor', options);
 
           },
           complete: function () {
-            homepage();
+            pageRedirect('/')
             $('.loader').css('display','none')
+              $('.border-btn').css('display','none')
+              $('#upload_submit').css('display','block')
 
           },
 

@@ -796,6 +796,11 @@ $('.profile').ready(function () {
 
             $('#introduction').html(data.introduction);
             $('#introVideo').val(data.introVideo);
+            $('#fullname').val(data.fullname);
+            $('#username').val(data.username);
+            $('#email').val(data.email);
+            $('#password').val(data.password);
+            $('#status').val(data.status);
 
 
         });
@@ -2588,9 +2593,11 @@ $(document).ready(function () {
                 $('.loader').css('display', 'none')
 
                 var intro = $('#introduction').val()
+
                 $('#my-introduction').html(intro)
                 $('.user-form').css('display', 'none')
                 $('#my-introduction').css('display', 'block')
+                $('#my-proPic').attr('src',userImgSrc+$('#pic').value.split('\\')[2])
 
                 popover(data, 'success')
 

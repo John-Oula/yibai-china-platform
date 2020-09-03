@@ -247,6 +247,7 @@ class User(db.Model, UserMixin):
     id_document = db.Column('id_document', db.String(60), nullable=True)
     nationality = db.Column('nationality', db.String(60), nullable=True)
     occupation = db.Column('occupation', db.String(60), nullable=True)
+    status = db.Column('status', db.String(20), nullable=True)
     email = db.Column('email', db.String(60), nullable=True,unique=True)
     province = db.Column('province', db.String(60), nullable=True)
     city = db.Column('city', db.String(60), nullable=True)
@@ -718,8 +719,14 @@ class Verify_form(FlaskForm):
 class User_form(FlaskForm):
 
     introduction = TextAreaField('Introduction', validators=[Required()])
-    status = StringField('status', validators=[Required()])
+    status = StringField('Status', validators=[Required()])
     introVideo = FileField('Upload an Introduction video')
+    fullname = StringField('Fullname', [validators.Length(min=4,max=15)])
+    username = StringField('Username', [validators.Length(min=4,max=15)])
+    email = StringField('Email', [validators.Length(min=4,max=15)])
+    pic = FileField('Update Profile photo')
+    password = PasswordField('Password', [validators.Length(min=6)])
+
     submit = SubmitField('Submit')
 
 
@@ -933,9 +940,9 @@ def userDetails():
     username = request.args.get('username', type=str)
     user = User.query.filter_by(username=username).first_or_404()
     if current_user.is_anonymous :
-        data = {"id":user.id,"username":user.username,"followers":user.followers.count(),"userImage":user.image_file,"videos":len(user.series),"liveSessions":len(user.posts),"introduction":user.introduction,"Isfollowing":False}
+        data = {"id":user.id,"username":user.username,"followers":user.followers.count(),"userImage":user.image_file,"videos":len(user.series),"liveSessions":len(user.posts),"introduction":user.introduction,"Isfollowing":False,"fullname":current_user.fullname,"status":current_user.status,'email':current_user.email,'IntroVid':current_user.introduction_video}
     else:
-        data = {"id":user.id,"username":user.username,"followers":user.followers.count(),"userImage":user.image_file,"videos":len(user.series),"liveSessions":len(user.posts),"introduction":user.introduction,"Isfollowing":current_user.is_following(user)}
+        data = {"id":user.id,"username":user.username,"followers":user.followers.count(),"userImage":user.image_file,"videos":len(user.series),"liveSessions":len(user.posts),"introduction":user.introduction,"Isfollowing":current_user.is_following(user),"fullname":current_user.fullname,"status":current_user.status,'email':current_user.email,'IntroVid':current_user.introduction_video}
 
     l=[]
     i = 0
@@ -1426,7 +1433,18 @@ def updateInfo():
 #        if form.pic.data:
 #            pic_file = save_pic(form.pic.data)
 #            current_user.image_file = pic_file
+        if form.pic.data:
+            pic_file = save_pic(form.pic.data)
+            current_user.image_file = pic_file
+        if form.introVideo.data:
+            introVid_file = save_pic(form.introVideo.data)
+            current_user.introduction_video = introVid_file
         current_user.introduction = form.introduction.data
+        current_user.fullname = form.fullname.data
+        current_user.username = form.username.data
+        current_user.password = form.password.data
+        current_user.status = form.status.data
+        current_user.email = form.email.data
         if form.introVideo.data == '':
            current_user.introduction_video = current_user.introduction_video
 
@@ -1439,13 +1457,25 @@ def updateInfo():
         if form.pic.data:
             pic_file = save_pic(form.pic.data)
             current_user.image_file = pic_file
+        if form.introVideo.data:
+            introVid_file = save_pic(form.introVideo.data)
+            current_user.introduction_video = introVid_file
         current_user.introduction = form.introduction.data
-        current_user.introVideo = saveFile(form.introVideo.data,'videos')
+        current_user.fullname = form.fullname.data
+        current_user.username = form.username.data
+        current_user.password = form.password.data
+        current_user.status = form.status.data
+        current_user.email = form.email.data
         db.session.commit()
         msg = 'Saved changes'
         return msg
     elif request.method == 'GET':
-        data = {'introduction': current_user.introduction,'introVideo':current_user.introduction_video}
+        data = {"id": current_user.id, "username": current_user.username, "followers": current_user.followers.count(),
+                    "userImage": current_user.image_file, "videos": len(current_user.series), "liveSessions": len(current_user.posts),
+                    "introduction": current_user.introduction,
+                    "fullname": current_user.fullname, "status": current_user.status, 'email': current_user.email,
+                    "password": current_user.password, 'IntroVideo': current_user.introduction_video}
+
         return data
     return '', 204
 @app.route('/verify/<username>',methods=['POST','GET'])
@@ -1627,7 +1657,7 @@ def save_pic(form_pic):
 
     random_hex = binascii.hexlify(os.urandom(8))
     _,f_ext = os.path.splitext(form_pic.filename)
-    pic_fn = random_hex + f_ext
+    pic_fn = str(random_hex) + f_ext
     pic_path = os.path.join(app.root_path,'static/profile_pics',pic_fn)
     output_size = (500,500)
     i = Image.open(form_pic)

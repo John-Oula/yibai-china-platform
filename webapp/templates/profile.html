@@ -59,7 +59,7 @@
                         <div class="col-2 no-gutters">
 
                             <div data-href="" class=" user-profile-pic-wrapper">
-                                <span><img class="profilepic" src="" alt=""></span>
+                                <span><img id="my-proPic" class="profilepic" src="" alt=""></span>
                             </div>
                         </div>
                         <div class="col-3 no-gutters text-center">
@@ -119,16 +119,46 @@
                              aria-labelledby="bio-tab">
                             <p>Introduction</p>
                             <div class="user-intro">
-                                <form data-href="{{ url_for('updateInfo') }}" action="" class=" text-center user-form"
+                                <form data-href="{{ url_for('updateInfo') }}" action="" class="text-center  user-form"
                                       method="POST" enctype="multipart/form-data">
                                     <fieldset>
                                         {{ userForm.hidden_tag() }}
-                                        {{ userForm.introduction( placeholder="Write your introduction here",class = "input-box-border border border-top-0 border-left-0 border-right-0") }}
+                                        {{ userForm.introduction( placeholder="Write your introduction here",class = "form-style  border border-top-0 border-left-0 border-right-0") }}
+                                        <br>
+
+                                        {{ userForm.fullname.label }} <br>
+                                         {{ userForm.fullname(class = "form-style  border border-top-0 border-left-0 border-right-0") }}
+                                        <br>
+                                        <br>
+                                        {{ userForm.username.label }} <br>
+                                        {{ userForm.username(class = "form-style  border border-top-0 border-left-0 border-right-0") }}
+                                        <br>
+                                        <br>
+                                        {{ userForm.status.label }} <br>
+                                        {{ userForm.status(class =  "form-style  border border-top-0 border-left-0 border-right-0") }}
+                                        <br>
+                                        <small>What is your speciality?</small>
+                                        <br>
+                                        <br>
+                                        {{ userForm.email.label }} <br>
+                                        {{ userForm.email(class = " form-style  border border-top-0 border-left-0 border-right-0") }}
+                                        <br>
+                                        <br>
+                                        {{ userForm.password.label }} <br>
+                                        {{ userForm.password(class = "form-style   border border-top-0 border-left-0 border-right-0") }}
+                                        <br>
                                         <br>
                                         {{ userForm.introVideo.label }} <br>
-                                        {{ userForm.introVideo(class = "description-field input-box-border border border-top-0 border-left-0 border-right-0") }}
+                                        {{ userForm.introVideo(class = "  border border-top-0 border-left-0 border-right-0") }}
                                         <br>
-                                        {{ userForm.submit(class="fixed-btn text-light") }}
+                                        <br>
+                                        {{ userForm.pic.label }} <br>
+                                        {{ userForm.pic(class = "form-style   border border-top-0 border-left-0 border-right-0") }}
+                                        <br>
+                                        <br>
+
+
+                                        {{ userForm.submit(class="fixed-btn text-light text-center") }}
                                     </fieldset>
                                 </form>
                             </div>

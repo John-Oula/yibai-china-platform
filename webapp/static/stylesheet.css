@@ -2317,7 +2317,10 @@ div.modal , #episode-modal , #series-modal{
 }
 #introduction{
     width: 100%;
-    height: 250px;
+    height: 87px;
+}
+.form-style{
+    border: 2px solid #b6b6b6 !important;
 }
 .start-btn{
     height: auto;

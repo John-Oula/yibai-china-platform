@@ -2569,6 +2569,11 @@ def editSchedule():
     if request.method == 'GET':
 
         data = {'id': schedule.id,'date': schedule.date_available,'time': schedule.timestamp}
+        bookersList=[]
+        for users in schedule.userSchedule:
+            bookers = {'id': users.id, 'username': users.username, 'profPic': users.image_file}
+            bookersList.append(bookers)
+        data.update({'bookers': bookersList})
 
 
         return jsonify({'result': data})
@@ -2775,6 +2780,7 @@ def getUserSchedule():
         l.append(data)
 
         i+=1
+
 
     print(l)
     if request.method == 'POST':

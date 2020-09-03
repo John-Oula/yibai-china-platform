@@ -1850,6 +1850,50 @@ $('.video-details').ready(function () {
 
 
     });
+    $('#bookers-list').on("click", function (e) {
+        e.preventDefault();
+        $('#bookers-modal').modal('toggle')
+        scheduleUrl = '/userDetails?username=';
+        bookUrl = '/book/';
+        unbookUrl = '/unbook/';
+        param = '?type=';
+        type = 'schedule';
+        req = $.ajax({
+            url: $(this).attr('data-href'),
+            type: 'GET',
+            data: {},
+            success: function (data) {
+                console.log(data)
+            }, error: function (error) {
+                console.log(error)
+                console.log("error")
+
+            }
+
+        });
+        $('.modal-body.append-bookers').empty();
+
+        req.done(function (data) {
+
+            var details = data
+
+            $.each(details, function (key, value) {
+                var cnt = value.id;
+                $('.modal-body.append-bookers').append('<div class="  p-2 "><div data-href="" class="click-pro-pic user-profile-pic-wrapper"><span><img class="profilepic" src="'+ userImgSrc+ value.proPic +'" alt=""></span></div><h6>' + value.username + '</h6></div>');
+
+
+
+
+            });
+
+
+
+
+
+        });
+
+
+    });
 
     $('#edit-schedule').on("click", function (e) {
         e.preventDefault();
@@ -1874,7 +1918,7 @@ $('.video-details').ready(function () {
 
 
             $.each(data.result, function (key, value) {
-                $('.append-schedule').append('<div class=" text-center p-2 bg-dark text-light schedule-box"><h4>' + value.date + '</h4><span>' + value.start_time + ' - ' + value.end_time + '</span><nav class="btn-row" ><a  data-href="' + scheduleUrl + value.id + '" class="edit-schedule text-light navLink" data-toggle="" data-target="" href=""><img src="../static/edit_w.svg" alt=""><span class="nav_text">Edit</span></a><a  data-href="' + scheduleUrl + value.id + '" class="delete-schedule navLink text-light" data-toggle="" data-target="" href="" ><img src="../static/delete_w.svg"  alt=""><span class="nav_text">Delete</span></a></nav><div class="w-100 h-50 text-light text-center my-green"><a class="p-2 text-light" href="' + value.meetingUrl + '">START</a></div></div>');
+                $('.append-schedule').append('<div class=" text-center p-2 bg-dark text-light schedule-box"><h4>' + value.date + '</h4><span>' + value.start_time + ' - ' + value.end_time + '</span><nav class="btn-row" ><a  data-target="#bookers-modal" data-toggle="modal" data-href="' + scheduleUrl + value.id + '" class=" text-light navLink" id="bookers-list" href=""><img src="../static/profileWhite.svg" alt=""><span class="nav_text">Participants</span></a><a  data-href="' + scheduleUrl + value.id + '" class="edit-schedule text-light navLink" data-toggle="" data-target="" href=""><img src="../static/edit_w.svg" alt=""><span class="nav_text">Edit</span></a><a  data-href="' + scheduleUrl + value.id + '" class="delete-schedule navLink text-light" data-toggle="" data-target="" href="" ><img src="../static/delete_w.svg"  alt=""><span class="nav_text">Delete</span></a></nav><div class="w-100 h-50 text-light text-center my-green"><a class="p-2 text-light" href="' + value.meetingUrl + '">START</a></div></div>');
             });
             $('.update-schedule').css('display', 'block');
 

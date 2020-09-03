@@ -2643,6 +2643,11 @@ def editLive():
                 'coverImg': live.coverImage, 'userImg': live.author.image_file,
                 'category': live.category, 'startTime': live.start_time, 'endTime': live.end_time,
                 'date': live.date, 'meetingCode': live.meetingCode}
+        bookersList=[]
+        for users in live.bookers:
+            bookers = {'id': users.id, 'username': users.username, 'profPic': users.image_file}
+            bookersList.append(bookers)
+        data.update({'bookers': bookersList})
         return jsonify({'result': data})
     elif request.method == 'PUT':
             meeting = inquire(live.meetingCode, current_user.username, 1)

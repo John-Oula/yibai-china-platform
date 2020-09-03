@@ -1850,7 +1850,7 @@ $('.video-details').ready(function () {
 
 
     });
-    $('#bookers-list').on("click", function (e) {
+    $('#main').on("click",'#bookers-list', function (e) {
         e.preventDefault();
         $('#bookers-modal').modal('toggle')
         scheduleUrl = '/userDetails?username=';
@@ -1875,11 +1875,55 @@ $('.video-details').ready(function () {
 
         req.done(function (data) {
 
-            var details = data
+            var details = data.result
 
-            $.each(details, function (key, value) {
-                var cnt = value.id;
-                $('.modal-body.append-bookers').append('<div class="  p-2 "><div data-href="" class="click-pro-pic user-profile-pic-wrapper"><span><img class="profilepic" src="'+ userImgSrc+ value.proPic +'" alt=""></span></div><h6>' + value.username + '</h6></div>');
+            $.each(details.bookers, function (key, value) {
+
+                $('.modal-body.append-bookers').append('<div class="  p-2 d-flex align-items-center "><div data-href="" class="click-pro-pic user-profile-pic-wrapper mr-2"><span><img class="profilepic" src="'+ userImgSrc+ value.profPic +'" alt=""></span></div><h6>' + value.username + '</h6></div>');
+
+
+
+
+            });
+
+
+
+
+
+        });
+
+
+    });
+    $('#main').on("click",'#live-bookers-list', function (e) {
+        e.preventDefault();
+        $('#bookers-live-modal').modal('toggle')
+        scheduleUrl = '/userDetails?username=';
+        bookUrl = '/book/';
+        unbookUrl = '/unbook/';
+        param = '?type=';
+        type = 'schedule';
+        req = $.ajax({
+            url: $(this).attr('data-href'),
+            type: 'GET',
+            data: {},
+            success: function (data) {
+                console.log(data)
+            }, error: function (error) {
+                console.log(error)
+                console.log("error")
+
+            }
+
+        });
+        $('.modal-body.append-bookers').empty();
+
+        req.done(function (data) {
+
+            var details = data.result
+
+            $.each(details.bookers, function (key, value) {
+
+                $('.modal-body.append-live-bookers').append('<div class="  p-2 d-flex align-items-center "><div data-href="" class="click-pro-pic user-profile-pic-wrapper mr-2"><span><img class="profilepic" src="'+ userImgSrc+ value.profPic +'" alt=""></span></div><h6>' + value.username + '</h6></div>');
 
 
 
@@ -2002,7 +2046,7 @@ $('.video-details').ready(function () {
 
 //        $('.start-btn').css('display',checkTime(value.startTime));
 
-                $('#live-update').append('<card class="mt-2 mb-2 flex-fill flex-row shadow-lg row no-gutters user-course card live-url" id="' + value.id + '"><div class="col-3 no-gutters cover-wrapper"><img id="course-img" src="' + coverImgSrc + value.coverImg + '" alt=""></div><div class="col-6 p-2 flex-fill flex-column no-gutters "><h6 id="course-title">' + value.title + '</h6><div id="live-date">Date : ' + value.date + '</div><div id="live-time">Time : ' + value.startTime + '-' + value.endTime + '</div></div><div class="col-3"> <div class="start-btn  h-25 text-center "><a class="text-light" href="' + value.room + '"><div class="text-center">START</div></div></a><div class="edit-live h-25 bg-info " ><a  data-href="' + liveUrl + value.id + '" class="text-light edit-live" data-toggle="" data-target="" href=""><div class="text-center">EDIT</div></a></div></div></card>');
+                $('#live-update').append('<card class="mt-2 mb-2 flex-fill flex-row shadow-lg row no-gutters user-course card live-url" id="' + value.id + '"><div class="col-3 no-gutters cover-wrapper"><img id="course-img" src="' + coverImgSrc + value.coverImg + '" alt=""></div><div class="col-6 p-2 flex-fill flex-column no-gutters "><h6 id="course-title">' + value.title + '</h6><div id="live-date">Date : ' + value.date + '</div><div id="live-time">Time : ' + value.startTime + '-' + value.endTime + '</div><nav class="btn-row"><a  data-target="#bookers-live-modal" data-toggle="modal" data-href="' + liveUrl + value.id + '" class="  navLink" id="live-bookers-list" href=""><img src="../static/profile.svg" alt=""><span class="nav_text">Participants</span></a></nav></div><div class="col-3"> <div class="start-btn  h-25 text-center "><a class="text-light" href="' + value.room + '"><div class="text-center">START</div></div></a><div class="edit-live h-25 bg-info " ><a  data-href="' + liveUrl + value.id + '" class="text-light edit-live" data-toggle="" data-target="" href=""><div class="text-center">EDIT</div></a></div></div></card>');
 
             });
             $('#live-update').css('display', 'block');

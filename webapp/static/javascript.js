@@ -1880,7 +1880,7 @@ $('.video-details').ready(function () {
 
             $.each(details.bookers, function (key, value) {
 
-                $('.modal-body.append-bookers').append('<div class=" row p-2 d-flex align-items-center "><div data-href="" class=" user-profile-pic-wrapper mr-2"><span><img class="profilepic" src="'+ userImgSrc+ value.profPic +'" alt=""></span></div><h6>' + value.username + '</h6></div>');
+                $('.modal-body.append-bookers').append('<div class=" p-2 d-flex align-items-center "><div data-href="" class=" user-profile-pic-wrapper mr-2"><span><img class="profilepic" src="'+ userImgSrc+ value.profPic +'" alt=""></span></div><h6>' + value.username + '</h6></div>');
 
 
 

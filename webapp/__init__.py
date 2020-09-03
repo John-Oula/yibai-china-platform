@@ -1002,7 +1002,21 @@ def userDetails():
 #        userReview.update({'users': userList})
 
     data.update({'reviews': reviewList})
+    likedSeriesList = []
+    for v in user.likes:
+        userSeries = {'id':v.id, 'title': v.title, 'price': v.price,
+                'uploader': v.user_series.username, 'coverImg': v.coverImage,
+                'userImg': v.user_series.image_file, 'category': v.category,
+                'totalEpisodes': len(v.episode)}
+        ep = []
 
+        for e in v.episode:
+            episode = {'episodeId': e.id, 'seriesId': e.sub.id, 'subtitle': e.subtitle, 'video': e.upload_ref}
+            ep.append(episode)
+        userSeries.update({'episode': ep})
+        likedSeries = likedSeriesList.append(userSeries)
+        i += 1
+    data.update({'likedSeries': likedSeriesList})
 
 
     return data
@@ -2720,12 +2734,13 @@ def editLive():
         cancelMeeting(meeting_id, current_user.username, 1)
         db.session.delete(live)
         db.session.commit()
+        msg ="Deleted Successfully"
 
 
-        return jsonify({'result': 'deleted'})
+        return msg
 
 
-    return jsonify({'result':'done'})
+    return '',204
 
 @app.route('/editVideo', methods=['POST', 'GET','DELETE'])
 @csrf.exempt

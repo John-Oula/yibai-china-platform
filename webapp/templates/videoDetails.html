@@ -182,84 +182,9 @@
 
         <div></div>
 
-<div class="profile mt-3">
-
-            <div class="row user-profile-info no-gutters">
-                <div class="col-2 no-gutters">
-
-                    <div data-href="" class="click-pro-pic user-profile-pic-wrapper">
-                        <span><img class="profilepic" src="" alt=""></span>
-                    </div>
-                </div>
-                <div class="col-3 no-gutters text-center">
-                    <div id="user-followers"></div>
-
-                    <span>Followers</span>
-                </div>
-                <div class="col-3 no-gutters text-center">
-                    <div id="user-videos"></div>
-                    <span>Videos</span>
-
-                </div>
-                <div class="col-3 no-gutters text-center">
-                    <div id="user-live-sessions">
-                    </div>
-                    <span>Live Sessions</span>
-
-                </div>
-
-            </div>
-            <div id="">
-                <div id="user-username"></div>
-
-            </div>
-
-            <div class="profile-btn text-center">
-      <span>
-           <a id="follow" data-href=""> <button type="button" id="follow-btn" class="fixed-btn">Follow</button></a>
-           <a id="unfollow" data-href=""><button type="button" id="unfollow-btn" class="fixed-btn">Unfollow</button></a>
-
-      </span>
-                <span>
-
-
-
-           <a id="" data-href=""> <button type="button" data-href="" id="book-schedule-btn" class="fixed-btn">Book Schedule</button></a>
-
-     </span>
-
-            </div>
-            <ul class="nav nav-tabs nav-fill" id="myTab" role="tablist">
-                <li class="nav-item">
-                    <a class="nav-link active" id="bio-tab" data-toggle="tab" href="#bio" role="tab" aria-controls="bio"
-                       aria-selected="true">BIO</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" id="contents-tab" data-toggle="tab" href="#contents" role="tab"
-                       aria-controls="contents" aria-selected="false">CONTENTS</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" id="reviews-tab" data-toggle="tab" href="#reviews" role="tab"
-                       aria-controls="reviews" aria-selected="false">REVIEWS</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" id="stats-tab" data-toggle="tab" href="#stats" role="tab" aria-controls="stats"
-                       aria-selected="false">STATS</a>
-                </li>
-            </ul>
-            <div class="tab-content" id="myTabContent">
-                <div class="tab-pane fade show active p-3" id="bio" role="tabpanel" aria-labelledby="bio-tab">
-                    <p>Introduction</p>
-                    <span id="user-introduction"></span>
-                    <p id="video-description"></p>
-                </div>
-                <div class="tab-pane fade" id="contents" role="tabpanel" aria-labelledby="contents-tab"></div>
-                <div class="tab-pane fade" id="reviews" role="tabpanel" aria-labelledby="reviews-tab">
-
-                </div>
-                <div class="tab-pane fade" id="stats" role="tabpanel" aria-labelledby="stats-tab"></div>
-            </div>
-        </div>
+{% block globals %}
+    {{ super() }}
+{% endblock %}
 
         <!-- Trigger the modal with a button -->
 

@@ -1310,48 +1310,7 @@ $('.video-details').ready(function () {
 
 
     });
-    $('.schedule-container').on("click", ".delete-schedule", function (e) {
-        e.preventDefault();
-        closeNav()
-        req = $.ajax({
-            url: $(this).attr('data-href'),
-            type: 'DELETE',
-            data: {},
-            beforeSend: function(){
-                popover('Deleting...','success')
-            },
-            success: function (data) {
-                console.log(data)
-            }, error: function (error) {
-                console.log(error)
-                console.log("error")
 
-            }
-
-        });
-
-        req.done(function (data) {
-        popover(data,'success')
-
-            $('.schedule').css('display', 'none');
-
-
-            $('#calendar').css('display', 'none');
-            $('#edit-live').css('display', 'none');
-            $('#live').css('display', 'none');
-            $('#live-update').css('display', 'none');
-            
-            $('.profile').css('display', 'none');
-            $('#create-course').css('display', 'none');
-            
-            
-            $('#user-profile').css('display', 'none');
-            $('#update-schedule').css('display', 'none');
-            $('.schedule-container').css('display', 'block');
-        });
-
-
-    });
 
     $('#course-create').on("click", function (e) {
         e.preventDefault();
@@ -1787,6 +1746,60 @@ $('.video-details').ready(function () {
 
 
     });
+    $('#liked-course').on("click", function (e) {
+        e.preventDefault();
+        closeNav()
+        userUrl = '/userDetails?user_id='
+        req = $.ajax({
+            url: $(this).attr('data-href'),
+            type: 'GET',
+            data: {},
+            success: function (data) {
+                console.log(data)
+            }, error: function (error) {
+                console.log(error)
+                console.log("error")
+
+            }
+
+        });
+        $('.liked-course-list').empty();
+
+        req.done(function (data) {
+            if (data.length == 0)
+                $('#course-update').append('<p>No contents</p>')
+
+            else
+
+                $.each(data.likedSeries, function (key, value) {
+                    $('.liked-course-list').append('<card class="mt-2 mb-2 flex-fill flex-row shadow-lg row no-gutters user-course card"><div class="col-3 no-gutters cover-wrapper"><img id="course-img" src="../static/coverImages/' + value.coverImg + '" alt=""></div><div class="col-8 p-2 flex-fill flex-column no-gutters "><h6 id="course-title">' + value.title + '</h6><div id="total-episodes">Episodes : ' + value.totalEpisodes + '</div><span id="course-price">Price : ' + value.price + '</span></div></card></div>');
+
+                });
+
+
+            $('#course-update').css('display', 'block');
+            $('#live').css('display', 'none');
+            $('.live-list').css('display', 'none');
+            $('#create-live').css('display', 'none');
+            $('#live-update').css('display', 'none');
+            $('.schedule').css('display', 'none');
+            $('.my-profile').css('display', 'none');
+            $('#course-upload').css('display', 'none');
+            $('#create-series').css('display', 'none');
+            $('.profile').css('display', 'none');
+            $('#create-course').css('display', 'none');
+            $('.video-details').css('display', 'none');
+            $('.upload-list').css('display', 'none');
+            $('.upload-option').css('display', 'none');
+            $('#user-profile').css('display', 'none');
+            $('.live-details').css('display', 'none');
+
+
+
+        });
+
+
+    });
     $('#book-schedule-btn').on("click", function (e) {
         e.preventDefault();
         $('#book-schedule').modal('toggle')
@@ -1968,7 +1981,7 @@ $('.video-details').ready(function () {
 
 
             $.each(data.result, function (key, value) {
-                $('.append-schedule').append('<div class=" text-center p-2 bg-dark text-light schedule-box"><h4>' + value.date + '</h4><span>' + value.start_time + ' - ' + value.end_time + '</span><nav class="btn-row" ><a  data-target="#bookers-modal" data-toggle="modal" data-href="' + scheduleUrl + value.id + '" class=" text-light navLink" id="bookers-list" href=""><img src="../static/profileWhite.svg" alt=""><span class="nav_text">Participants</span></a><a  data-href="' + scheduleUrl + value.id + '" class="edit-schedule text-light navLink" data-toggle="" data-target="" href=""><img src="../static/edit_w.svg" alt=""><span class="nav_text">Edit</span></a><a  data-href="' + scheduleUrl + value.id + '" class="delete-schedule navLink text-light" data-toggle="" data-target="" href="" ><img src="../static/delete_w.svg"  alt=""><span class="nav_text">Delete</span></a></nav><div class="w-100 h-50 text-light text-center my-green"><a class="p-2 text-light" href="' + value.meetingUrl + '">START</a></div></div>');
+                $('.append-schedule').append('<div class=" text-center p-2 bg-dark text-light schedule-box"><h4>' + value.date + '</h4><span>' + value.start_time + ' - ' + value.end_time + '</span><nav class="btn-row" ><a  data-target="#bookers-modal" data-toggle="modal" data-href="' + scheduleUrl + value.id + '" class=" text-light navLink" id="bookers-list" href=""><img src="../static/profileWhite.svg" alt=""><span class="nav_text">Participants</span></a><a  data-href="' + scheduleUrl + value.id + '" class="edit-schedule text-light navLink" data-toggle="" data-target="" href=""><img src="../static/edit_w.svg" alt=""><span class="nav_text">Edit</span></a><a  data-href="' + scheduleUrl + value.id + '" class="delete-schedule navLink text-light" data-toggle="modal" data-target="#delete-schedule-modal" href="" ><img src="../static/delete_w.svg"  alt=""><span class="nav_text">Delete</span></a></nav><div class="w-100 h-50 text-light text-center my-green"><a class="p-2 text-light" href="' + value.meetingUrl + '">START</a></div></div>');
             });
             $('.update-schedule').css('display', 'block');
 
@@ -2052,7 +2065,7 @@ $('.video-details').ready(function () {
 
 //        $('.start-btn').css('display',checkTime(value.startTime));
 
-                $('#live-update').append('<card class="mt-2 mb-2 flex-fill flex-row shadow-lg row no-gutters user-course card live-url" id="' + value.id + '"><div class="col-3 no-gutters cover-wrapper"><img id="course-img" src="' + coverImgSrc + value.coverImg + '" alt=""></div><div class="col-6 p-2 flex-fill flex-column no-gutters "><h6 id="course-title">' + value.title + '</h6><div id="live-date">Date : ' + value.date + '</div><div id="live-time">Time : ' + value.startTime + '-' + value.endTime + '</div><nav class="btn-row"><a  data-target="#bookers-live-modal" data-toggle="modal" data-href="' + liveUrl + value.id + '" class="  navLink" id="live-bookers-list" href=""><img src="../static/profile.svg" alt=""><span class="nav_text">Participants</span></a></nav></div><div class="col-3"> <div class="start-btn  h-25 text-center "><a class="text-light" href="' + value.room + '"><div class="text-center">START</div></div></a><div class="edit-live h-25 bg-info " ><a  data-href="' + liveUrl + value.id + '" class="text-light edit-live" data-toggle="" data-target="" href=""><div class="text-center">EDIT</div></a></div></div></card>');
+                $('#live-update').append('<card class="mt-2 mb-2 flex-fill flex-row shadow-lg row no-gutters user-course card live-url" id="' + value.id + '"><div class="col-3 no-gutters cover-wrapper"><img id="course-img" src="' + coverImgSrc + value.coverImg + '" alt=""></div><div class="col-6 p-2 flex-fill flex-column no-gutters "><h6 id="course-title">' + value.title + '</h6><div id="live-date">Date : ' + value.date + '</div><div id="live-time">Time : ' + value.startTime + '-' + value.endTime + '</div><nav class="btn-row"><a  data-target="#bookers-live-modal" data-toggle="modal" data-href="' + liveUrl + value.id + '" class="  navLink" id="live-bookers-list" href=""><img src="../static/profile.svg" alt=""><span class="nav_text">Participants</span></a></nav></div><div class="col-3"> <div class="start-btn  h-25 text-center "><a class="text-light" href="' + value.room + '"><div class="text-center">START</div></div></a><div class="edit-live h-25 bg-info " ><a  data-href="' + liveUrl + value.id + '" class="text-light edit-live" data-toggle="" data-target="" href=""><div class="text-center">EDIT</div></a></div><div class=" h-25 bg-danger " ><a  data-href="' + liveUrl + value.id + '" class="text-light delete-live"  data-toggle="modal" data-target="#delete-modal" href=""><div class="text-center">DELETE</div></a></div></div></card>');
 
             });
             $('#live-update').css('display', 'block');
@@ -2120,6 +2133,88 @@ $('.video-details').ready(function () {
         $('#create-course').css('display', 'block');
         
         
+        $('#user-profile').css('display', 'none');
+        $('.schedule-container').css('display', 'none');
+
+
+    });
+    $('.yes-live-btn').on("click", function (e) {
+        e.preventDefault();
+        closeNav()
+        liveUrl = '/editLive?live_id='
+        req = $.ajax({
+            url: $('.delete-live').attr('data-href'),
+            type: 'DELETE',
+            data: {},
+            beforeSend: function(){
+                popover('Deleting...','success')
+            },
+            success: function (data) {
+                popover(data, 'success')
+            }, error: function (error) {
+                console.log(error)
+                popover(error, 'error')
+
+            }
+
+        });
+        req.done(function (data) {
+        });
+
+        $('#live-update').css('display', 'block');
+        $('#course-update').css('display', 'block');
+
+
+
+        $('#create-live').css('display', 'none');
+        $('.schedule').css('display', 'none');
+        $('#course-upload').css('display', 'none');
+        $('#create-series').css('display', 'none');
+
+        $('#create-course').css('display', 'block');
+
+
+        $('#user-profile').css('display', 'none');
+        $('.schedule-container').css('display', 'none');
+
+
+    });
+    $('.yes-schedule-btn').on("click", function (e) {
+        e.preventDefault();
+        closeNav()
+        liveUrl = '/editSchedule?schedule_id='
+        req = $.ajax({
+            url: $('.delete-schedule').attr('data-href'),
+            type: 'DELETE',
+            data: {},
+            beforeSend: function(){
+                popover('Deleting...','success')
+            },
+            success: function (data) {
+                popover(data, 'success')
+            }, error: function (error) {
+                console.log(error)
+                popover(error, 'error')
+
+            }
+
+        });
+        req.done(function (data) {
+        });
+
+        $('#live-update').css('display', 'block');
+        $('#course-update').css('display', 'block');
+
+
+
+        $('#create-live').css('display', 'none');
+        $('.schedule').css('display', 'none');
+        $('#course-upload').css('display', 'none');
+        $('#create-series').css('display', 'none');
+
+        $('#create-course').css('display', 'block');
+
+
         $('#user-profile').css('display', 'none');
         $('.schedule-container').css('display', 'none');
 

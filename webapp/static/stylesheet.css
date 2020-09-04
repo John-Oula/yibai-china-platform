@@ -2376,6 +2376,11 @@ display: none;
 .navLink.removeCart{
     display: none;
 }
+
+a:hover{
+    text-decoration: none;
+    color: black;
+}
 }
 
 

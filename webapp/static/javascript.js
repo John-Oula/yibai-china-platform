@@ -1772,12 +1772,12 @@ $('.video-details').ready(function () {
             else
 
                 $.each(data.likedSeries, function (key, value) {
-                    $('.liked-course-list').append('<card class="mt-2 mb-2 flex-fill flex-row shadow-lg row no-gutters user-course card"><div class="col-3 no-gutters cover-wrapper"><img id="course-img" src="../static/coverImages/' + value.coverImg + '" alt=""></div><div class="col-8 p-2 flex-fill flex-column no-gutters "><h6 id="course-title">' + value.title + '</h6><div id="total-episodes">Episodes : ' + value.totalEpisodes + '</div><span id="course-price">Price : ' + value.price + '</span></div></card></div>');
+                    $('.liked-course-list').append('<a href="/videoInfo?videoId='+ value.id +'" class="mt-2 mb-2 flex-fill flex-row text-dark text-decoration-none shadow-lg row no-gutters user-course card"><div class="col-3 no-gutters cover-wrapper"><img id="course-img" src="../static/coverImages/' + value.coverImg + '" alt=""></div><div class="col-8 p-2 flex-fill flex-column no-gutters "><h6 id="course-title">' + value.title + '</h6><div id="total-episodes">Episodes : ' + value.totalEpisodes + '</div><span id="course-price">Price : ' + value.price + '</span></div></a>');
 
                 });
 
 
-            $('#course-update').css('display', 'block');
+            $('#course-update').css('display', 'none');
             $('#live').css('display', 'none');
             $('.live-list').css('display', 'none');
             $('#create-live').css('display', 'none');

@@ -112,7 +112,7 @@
           <a id="course-create" href="">Create course</a>
           <a id="update-course" data-href="{{ url_for('getUserSeries',user_id = current_user.id) }}" href="#">Manage course</a>
           <a href="#">Bought Courses</a>
-          <a id="liked-course" href="#">Liked Courses</a>
+          <a id="liked-course" data-href="{{ url_for('userDetails',username = current_user.username) }}" href="#">Liked Courses</a>
           <a id="series-stats" href="#">Stats</a>
       </div>
             <button id="schedule" class="dropdown-btn">Schedule

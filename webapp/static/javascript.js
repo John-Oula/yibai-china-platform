@@ -983,6 +983,7 @@ $('.video-details').ready(function () {
                 popover('Loading Audio..Please wait','success')
                 wavesurfer.load(audioSrc);
                 wavesurfer.on('ready', function () {
+                    popover('Audio ready to play','success')
                             $('.loader').css('display', 'none')
 
 

@@ -187,28 +187,7 @@ function myFunction() {
 }
 
 $(document).ready(function () {
-    wavesurfer.on('ready', function () {
 
-
-        $('.loader').css('display', 'none')
-
-
-        wavesurfer.play();
-        $('#pause-btn').css('display', 'flex')
-        $('#play-btn').css('display', 'none')
-
-
-        $('#pause-btn').on('click', function () {
-            wavesurfer.pause();
-            $('#play-btn').css('display', 'flex')
-            $('#pause-btn').css('display', 'none')
-        });
-        $('#play-btn').on('click', function () {
-            wavesurfer.play();
-            $('#play-btn').css('display', 'none')
-            $('#pause-btn').css('display', 'flex')
-        });
-    });
 });
 
 
@@ -874,7 +853,7 @@ function closeLeftNav() {
 
 $('.video-details').ready(function () {
 //    $('.upload-list').on("click", '.thumb-wrapper', function (e) {
-        
+
         $('.loader').css('display', 'block');
 //        e.preventDefault();
         var vidParam = $.urlParam('videoId')
@@ -997,15 +976,45 @@ $('.video-details').ready(function () {
             } else if (obj.type === 'audio') {
 
                 $('#audio-file').attr("audioFile", obj.videoRef);
-                $('#episode-subtitle').text(obj.episode.subtitle);
-                $('#controls').css('display', 'flex');
-                $('video').css('display', 'none');
                 $('.course-img').css('display', 'block');
                 $('.course-img').attr("src", coverImgUrl + obj.coverImg);
                 var audioSrc = '/static/videos/' + $('#audio-file').attr('audioFile')
-
-
+                $('#controls').css('display', 'flex');
+                popover('Loading Audio..Please wait','success')
                 wavesurfer.load(audioSrc);
+                wavesurfer.on('ready', function () {
+                            $('.loader').css('display', 'none')
+
+
+                        wavesurfer.play();
+                        $('#pause-btn').css('display', 'flex')
+                        $('#play-btn').css('display', 'none')
+
+
+                        $('#pause-btn').on('click', function () {
+            wavesurfer.pause();
+            $('#play-btn').css('display', 'flex')
+            $('#pause-btn').css('display', 'none')
+        });
+                        $('#play-btn').on('click', function () {
+            wavesurfer.play();
+            $('#play-btn').css('display', 'none')
+            $('#pause-btn').css('display', 'flex')
+        });});
+
+
+
+
+                $('#episode-subtitle').text(obj.episode.subtitle);
+
+
+
+
+
+
+                $('video').css('display', 'none');
+
+
 
             } else if (obj.videoRef == null) {
                 var ep = obj.episode[0];
@@ -1017,7 +1026,7 @@ $('.video-details').ready(function () {
                 $('video').css('display', 'block');
                 $('#episode-subtitle').text(ep.subtitle);
                 $('.video-js').attr("src", videoSrc +obj.episode[0].videoRef);
-                $('#controls').css('display', 'none');
+
                 $('video').css('display', 'block');
                 $('.course-img').css('display', 'none');
                 $('.like-btn').attr('data-href', '/like/episode' + obj.episode[0].episodeId);
@@ -1043,8 +1052,10 @@ $('.video-details').ready(function () {
 
 
 
-        });
     });
+        });
+
+
 
     $('#main').on("click", ".click-pro-pic", function (e) {
          

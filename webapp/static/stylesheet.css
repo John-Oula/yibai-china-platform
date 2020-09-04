@@ -1805,13 +1805,13 @@ ul.upload-list{
     display: flex;
     flex-direction: column;
 }
-.thumb-wrapper{
+.thumb-wrapper,course-img-wrapper{
     height: 200px;
     overflow: hidden;
     position: relative;
 }
 
-.video-feed{
+.video-feed,.course-img{
     width: 100%;
     height: auto;
 

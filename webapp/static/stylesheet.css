@@ -920,7 +920,7 @@ font-style: normal;
 .sidenav {
   width: 16.66%; /* Set the width of the sidebar */
   position: fixed; /* Fixed Sidebar (stay in place on scroll) */
-  z-index: 1; /* Stay on top */
+  z-index: 100; /* Stay on top */
   top: 0; /* Stay at the top */
   left: 0;
   background-color: #E74525; /* Black */
@@ -1398,7 +1398,7 @@ body{
  .sidenav{
   width: 100%; /* Set the width of the sidebar */
   position: fixed; /* Fixed Sidebar (stay in place on scroll) */
-  z-index: 1; /* Stay on top */
+  z-index: 100; /* Stay on top */
   top: 0; /* Stay at the top */
   left: 0;
   background-color: #DCDCDC; /* Black */
@@ -1746,7 +1746,7 @@ body{
     height: 100%;
     width: 0;
     position: fixed;
-    z-index: 1;
+    z-index: 100;
     top: 0;
     left: 0;
     background-color: #111;
@@ -1964,7 +1964,7 @@ a.video{
     height: 100%;
     width: 0;
     position: fixed;
-    z-index: 1;
+    z-index: 100;
     top: 0;
     right: 0;
     background-color: white;

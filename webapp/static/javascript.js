@@ -986,17 +986,12 @@ $('.video-details').ready(function () {
                             $('.loader').css('display', 'none')
 
 
-                        wavesurfer.play();
-                        $('#pause-btn').css('display', 'flex')
-                        $('#play-btn').css('display', 'none')
-
-
-                        $('#pause-btn').on('click', function () {
+        $('#pause-btn').on('click', function () {
             wavesurfer.pause();
             $('#play-btn').css('display', 'flex')
             $('#pause-btn').css('display', 'none')
         });
-                        $('#play-btn').on('click', function () {
+           $('#play-btn').on('click', function () {
             wavesurfer.play();
             $('#play-btn').css('display', 'none')
             $('#pause-btn').css('display', 'flex')

@@ -157,7 +157,8 @@
             <br>
 
             <div>
-                <nav id="comment-nav" class="shadow-lg video-nav">
+                {% if current_user.can(Permission.COMMENT) %}
+                    <nav id="comment-nav" class="shadow-lg video-nav">
                         <span class="text-center p-2 w-100 align-self-center" data-href="">
                         <form action="" data-href="" id="comment-form"><fieldset>
                             {{ commentForm.hidden_tag() }}
@@ -167,6 +168,10 @@
                         </fieldset>
                         </form></span>
                 </nav>
+                {% else %}
+
+
+                {% endif %}
                 <nav id="video-bot-nav"class="shadow-lg video-nav">
                     <h3 id="video-price" class="navLink"></h3>
 

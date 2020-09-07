@@ -105,25 +105,61 @@
 <div id="mySidenav" class="sidenav">
   <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
   {% if current_user.is_authenticated %}
+      {% if current_user.can(Permission.MODERATE) %}
+      <button id="moderate-content" class="dropdown-btn">Moderate Content
+          <i class="fa fa-caret-down"></i>
+      </button>
+          <div class="dropdown-container">
+          <a id="verify-courses" data-href="" href="">Verify Courses</a>
+          <a id="review-comments" data-href="{{ url_for('getUserSchedule',user_id = current_user.id) }}" href="#">Review/Disable comments</a>
+                </div>
+
+          {% else %}
+          {% endif %}
+      {% if current_user.can(Permission.UPLOAD) %}
       <button id="courses" class="dropdown-btn">Courses
           <i class="fa fa-caret-down"></i>
       </button>
+          {% else %}
+          {% endif %}
+
       <div class="dropdown-container">
+      {% if current_user.can(Permission.UPLOAD) %}
           <a id="course-create" href="">Create course</a>
+          {% else %}
+
+          {% endif %}
+
           <a id="update-course" data-href="{{ url_for('getUserSeries',user_id = current_user.id) }}" href="#">Manage course</a>
+          {% if current_user.can(Permission.BUY) %}
           <a href="#">Bought Courses</a>
+              {% else %}
+              {% endif %}
+      {% if current_user.can(Permission.LIKE) %}
           <a id="liked-course" data-href="{{ url_for('userDetails',username = current_user.username) }}" href="#">Liked Courses</a>
+          {% else %}
+          {% endif %}
+      {% if current_user.can(Permission.UPLOAD) %}
           <a id="series-stats" href="#">Stats</a>
+          {% else %}
+          {% endif %}
       </div>
+      {% if current_user.can(Permission.SCHEDULE) %}
             <button id="schedule" class="dropdown-btn">Schedule
           <i class="fa fa-caret-down"></i>
       </button>
+          {% else %}
+          {% endif %}
       <div class="dropdown-container">
+      {% if current_user.can(Permission.SCHEDULE) %}
           <a id="schedule-create" data-href="{{ url_for('getUserSchedule',user_id = current_user.id) }}" href="">Create availability</a>
           <a id="edit-schedule" data-href="{{ url_for('getUserSchedule',user_id = current_user.id) }}" href="#">Manage availability</a>
           <a id="booked-schedule" data-href="{{ url_for('getUserBookedSchedule',user_id = current_user.id) }}" href="#">Booked schedule </a>
           <a id="schedule-stats" data-href="{{ url_for('getUserBookedSchedule',user_id = current_user.id) }}" href="#">Stats</a>
-      </div>
+      {% else %}
+          {% endif %}
+          </div>
+      {% if current_user.can(Permission.LIVE_SESSION) %}
             <button id="liveSession" class="dropdown-btn">Live Sessions
           <i class="fa fa-caret-down"></i>
       </button>
@@ -133,6 +169,8 @@
           <a id="booked-live" data-href="{{ url_for('getUserBookedLive',user_id = current_user.id) }}"href="#">Booked live Session</a>
           <a id="live-stats" data-href="{{ url_for('getUserBookedLive',user_id = current_user.id) }}"href="#">Stats</a>
       </div>
+       {% else %}
+          {% endif %}
       <button id="verifyInfo" class="dropdown-btn">Complete Profile
           <i class="fa fa-caret-down"></i>
       </button>
@@ -588,7 +626,13 @@
         </nav>
 
     </div>
+      {% if current_user.can(Permission.MODERATE) %}
+<div id="verify-list">
 
+</div>
+
+          {% else %}
+          {% endif %}
 {% endblock %}
 
 {% block modal %}
@@ -1049,9 +1093,10 @@ var sound = null;
 
     var wavesurfer = WaveSurfer.create({
     container: '#waveform',
-    waveColor: 'violet',
+    waveColor: 'green ',
     progressColor: 'purple',
     scrollParent: true,
+    backgroundColor: 'none'
     });
 
 

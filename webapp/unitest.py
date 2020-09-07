@@ -11,16 +11,24 @@ class UserModelCase(unittest.TestCase):
         db.drop_all()
         db.create_all()
 
+
+
     def test_functions(self):
-        u1 = User(role=2,username='john', password='thisatest',   fullname='John Oula',id_type='Passport',id_number='AK0123545',nationality='American',occupation='Engineer',email="johnoula@icloud.com",province='Jiangsu',city='Nanjing',phone='133023545797')
-        u2 = User(role=1,username='eliora', password='thisisatest',fullname='Eliora Kwa',id_type='Passport',id_number='AK0123545',nationality='American',occupation='Engineer',email="thisisatest2@gmail.com",province='Jiangsu',city='Nanjing',phone='133023545797')
-        u3 = User(role=0,username='kemal', password='thisisatest',fullname='Kemal ',id_type='Passport',id_number='AK0123545',nationality='American',occupation='Engineer',email="thisisatest3@gmail.com",province='Jiangsu',city='Nanjing',phone='133023545797')
-        u4 = User(role=0,username='maggie', password='thisisatest', fullname='Maggie Ma',id_type='Passport',id_number='AK0123545',nationality='American',occupation='Engineer',email="thisisatest4@gmail.com",province='Jiangsu',city='Nanjing',phone='133023545797')
-        u5 = User(role=0,username='linda', password='thisisatest', fullname='Linda',id_type='Passport',id_number='AK0123545',nationality='American',occupation='Engineer',email="thisisatest5@gmail.com",province='Jiangsu',city='Nanjing',phone='133023545797')
-        u6 = User(role=0,username='keely', password='thisisatest', fullname='Keely',id_type='Passport',id_number='AK0123545',nationality='American',occupation='Engineer',email="thisisatest6@gmail.com",province='Jiangsu',city='Nanjing',phone='133023545797')
-        u7 = User(role=0,username='jony', password='thisisatest', fullname='Jony',id_type='Passport',id_number='AK0123545',nationality='American',occupation='Engineer',email="thisisatest7@gmail.com",province='Jiangsu',city='Nanjing',phone='133023545797')
-        u8 = User(role=0,username='cici', password='thisisatest', fullname='Cici',id_type='Passport',id_number='AK0123545',nationality='American',occupation='Engineer',email="thisisatest8@gmail.com",province='Jiangsu',city='Nanjing',phone='133023545797')
-        u9 = User(role=0,username='nued', password='thisisatest', fullname='Nued',id_type='Passport',id_number='AK0123545',nationality='American',occupation='Engineer',email="thisisatest9@gmail.com",province='Jiangsu',city='Nanjing',phone='133023545797')
+
+        Role.insert_roles()
+
+
+
+
+        u1 = User(username='sudomin', password='thisatest',   fullname='John Oula',id_type='Passport',id_number='AK0123545',nationality='American',occupation='Engineer',email="johnoula@icloud.com",province='Jiangsu',city='Nanjing',phone='133023545797')
+        u2 = User(username='eliora', password='thisisatest',fullname='Eliora Kwa',id_type='Passport',id_number='AK0123545',nationality='American',occupation='Engineer',email="thisisatest2@gmail.com",province='Jiangsu',city='Nanjing',phone='133023545797')
+        u3 = User(username='kemal', password='thisisatest',fullname='Kemal ',id_type='Passport',id_number='AK0123545',nationality='American',occupation='Engineer',email="thisisatest3@gmail.com",province='Jiangsu',city='Nanjing',phone='133023545797')
+        u4 = User(username='maggie', password='thisisatest', fullname='Maggie Ma',id_type='Passport',id_number='AK0123545',nationality='American',occupation='Engineer',email="thisisatest4@gmail.com",province='Jiangsu',city='Nanjing',phone='133023545797')
+        u5 = User(username='linda', password='thisisatest', fullname='Linda',id_type='Passport',id_number='AK0123545',nationality='American',occupation='Engineer',email="thisisatest5@gmail.com",province='Jiangsu',city='Nanjing',phone='133023545797')
+        u6 = User(username='keely', password='thisisatest', fullname='Keely',id_type='Passport',id_number='AK0123545',nationality='American',occupation='Engineer',email="thisisatest6@gmail.com",province='Jiangsu',city='Nanjing',phone='133023545797')
+        u7 = User(username='jony', password='thisisatest', fullname='Jony',id_type='Passport',id_number='AK0123545',nationality='American',occupation='Engineer',email="thisisatest7@gmail.com",province='Jiangsu',city='Nanjing',phone='133023545797')
+        u8 = User(username='cici', password='thisisatest', fullname='Cici',id_type='Passport',id_number='AK0123545',nationality='American',occupation='Engineer',email="thisisatest8@gmail.com",province='Jiangsu',city='Nanjing',phone='133023545797')
+        u9 = User(username='nued', password='thisisatest', fullname='Nued',id_type='Passport',id_number='AK0123545',nationality='American',occupation='Engineer',email="thisisatest9@gmail.com",province='Jiangsu',city='Nanjing',phone='133023545797')
         db.session.add(u1)
         db.session.add(u2)
         db.session.add(u3)
@@ -32,6 +40,27 @@ class UserModelCase(unittest.TestCase):
         db.session.add(u9)
         db.session.commit()
         user_list=User.query.all()
+        self.assertTrue(u1.can(Permission.FOLLOW))
+        self.assertTrue(u1.can(Permission.UPLOAD))
+        self.assertTrue(u1.can(Permission.MODERATE))
+        self.assertTrue(u1.can(Permission.ADMINISTER))
+        r= Role.query.all()
+        print(Role.query.all()[0].name,Role.query.all()[0].id)
+        print(u1.role.permissions)
+        print(u1.can(Permission.UPLOAD))
+        u2.can(Permission.UPLOAD)
+        print(u2.can(Permission.UPLOAD))
+        print(u1.role.name)
+        print(Role.query.all()[1].name,Role.query.all()[1].id)
+        print(Role.query.all()[2].name,Role.query.all()[2].id)
+
+
+        self.assertTrue(u1.is_administrator())
+        self.assertTrue(u2.can(Permission.FOLLOW))
+        self.assertTrue(u2.can(Permission.COMMENT))
+        self.assertTrue(u2.can(Permission.UPLOAD))
+        self.assertFalse(u2.can(Permission.MODERATE))
+        self.assertFalse(u2.can(Permission.ADMINISTER))
 
         p1 = Live(user_id=1, title='tech', description='this is a test ', category='MANDARIN', date='2019-12-4')
         p2 = Live(user_id=2, title='china', description='this is a test', category="CAREER", date='2019-12-3')
@@ -245,41 +274,9 @@ class UserModelCase(unittest.TestCase):
         update()
         print(u1.get_reset_token())
 
-    def test_user_role(self):
-        Role.insert_roles()
-        u = User(email='authentigcation@100chinaguide.com',username= 'cccccc', password='cat')
 
-        self.assertFalse(u.can(Permission.FOLLOW))
-        self.assertTrue(u.can(Permission.COMMENT))
-        self.assertTrue(u.can(Permission.UPLOAD))
-        self.assertFalse(u.can(Permission.MODERATE),msg='Is not admin')
-        self.assertFalse(u.can(Permission.ADMIN),msg='Is not admin')
 
-    def test_moderator_role(self):
-        r = Role.query.filter_by(name='Moderator').first()
-        u = User(email='john@example.com',username= 'cccccc', password='cat', role=r)
-        self.assertTrue(u.can(Permission.FOLLOW))
-        self.assertTrue(u.can(Permission.COMMENT))
-        self.assertTrue(u.can(Permission.UPLOAD))
-        self.assertTrue(u.can(Permission.MODERATE))
-        self.assertFalse(u.can(Permission.ADMIN))
 
-    def test_administrator_role(self):
-        r = Role.query.filter_by(name='Administrator').first()
-        u = User(email='authentication@100chinaguide.com',username= 'cccccc', password='cat', role=r)
-        self.assertTrue(u.can(Permission.FOLLOW))
-        self.assertTrue(u.can(Permission.COMMENT))
-        self.assertTrue(u.can(Permission.UPLOAD))
-        self.assertTrue(u.can(Permission.MODERATE))
-        self.assertTrue(u.can(Permission.ADMIN))
-
-    def test_anonymous_user(self):
-        u = AnonymousUser()
-        self.assertFalse(u.can(Permission.FOLLOW))
-        self.assertFalse(u.can(Permission.COMMENT))
-        self.assertFalse(u.can(Permission.UPLOAD))
-        self.assertFalse(u.can(Permission.MODERATE))
-        self.assertFalse(u.can(Permission.ADMIN))
 
 if __name__ == '__main__':
     unittest.main(verbosity=2)

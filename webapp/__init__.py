@@ -292,7 +292,7 @@ class User(db.Model, UserMixin):
         return self.can(Permission.ADMINISTER)
 
     def is_moderator(self):
-        return self.can(Permission.MODERATOR)
+        return self.can(Permission.MODERATE)
 
 
 

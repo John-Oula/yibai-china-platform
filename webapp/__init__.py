@@ -401,8 +401,7 @@ class Role(db.Model):
                            Permission.COMMENT |
                            Permission.LIVE_SESSION |
                            Permission.SCHEDULE |
-                           Permission.LIVE_SESSION |
-                           Permission.LIVE_SESSION |
+                           Permission.BUY |
                            Permission.UPLOAD, True),
                   'Moderator': (Permission.MODERATE, False),
                   'Administrator': (0xff, False)        }
@@ -1880,7 +1879,11 @@ def liveDetails():
         data = {'id': live.id, 'title': live.title,'startTime': live.start_time,'endTime': live.end_time,'date': live.date,'coverImage': live.coverImage,'description':live.description,'category': live.category,'meetingCode':live.meetingCode,'meetingUrl':live.meetingUrl,'hasBooked':False}
     host = {'userId':live.author.id,'host': live.author.username,'userImg': live.author.image_file,'introduction':live.author.introduction,'followers':live.author.followers.count()}
     for s in live.author.available:
-        schedule = {'id': s.id,'date': s.date_available,'startTime':s.start_time,'endTime':s.start_time,'time': s.timestamp}
+        if current_user.is_authenticated:
+            schedule = {'id': s.id,'date': s.date_available,'startTime':s.start_time,'endTime':s.start_time,'time': s.timestamp,'hasBookedSchedule':current_user.has_booked(s)}
+        else:
+            schedule = {'id': s.id,'date': s.date_available,'startTime':s.start_time,'endTime':s.start_time,'time': s.timestamp,'hasBookedSchedule':False}
+
         scheduleList.append(schedule)
     data.update({'schedule':scheduleList})
     data.update({'host':host})

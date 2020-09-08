@@ -1356,6 +1356,7 @@ $('.video-details').ready(function () {
 
     });
 
+
     $('#series-stats').on("click", function (e) {
         e.preventDefault();
         closeNav()
@@ -2481,10 +2482,15 @@ $('.upload-list').ready(function () {
 
     });
 });
-$('#verify-list').ready(function () {
+    $('#verify-courses').on("click", function (e) {
+
+        e.preventDefault();
+        closeNav()
+
     var arg = 'videoId=';
     var videoUrl = '/videoInfo?' + arg;
     var userUrl = '/userDetails?username='
+    var verifyUrl = '/verifyCourse?videoId='
 
     req = $.ajax({
         url: '/verifyCourseList',
@@ -2501,27 +2507,64 @@ $('#verify-list').ready(function () {
     });
     req.done(function (data) {
         var obj = data.result;
+        $('#verify-list').empty()
         $.each(obj, function (key, value) {
 
+                $('#verify-list').append('<card class="card shadow-lg live-card"  data-href="' + value.id + '" > <card ><a href="'  + value.id + '"> <div class="live-img-wrapper"><img class="live-img" src="../static/coverImages/' + value.coverImage + '" alt=""></div> <div class="live-profile-pic-wrapper click-pro-pic"  data-href="'  + value.username + '"><span><a  class="user-profile-pic border-light" href="#"><img class="profilepic"  src="../static/profile_pics/' + value.userImg + '" alt=""></a></span> </div><div class="p-2 row no-gutters"><span class="live-info col-8 flex-content flex-column no-gutters"><span class="live-title">' + value.title + '</span><span class="">Created by:' + value.username + ' </span><span class="">Type:' + value.status + ' </span><span class="">Category:' + value.category + '</span><span class=""> </span></span>  <span class="live-info col-4 flex-content flex-column no-gutters"></div> </a></card><img src="../static/arrowDown.svg" type="button" class=" d-block mx-auto  extra-info m-2"><div class="content"><div class="text-center"><button class="fixed-btn m-2">Review Videos</button><button class="fixed-btn m-2">User Intro</button></div><div></div><h6>Description</h6><div>'+ value.description+'</div><button type="button" class=" d-block mx-auto fixed-btn extra-info approve-btn" data-href="'+verifyUrl + value.id +'" >Approve</button></div> </card>');
 
-            $('#verify-list').append('<div class="thumb-wrapper" data-href="' + videoUrl + value.id + '"><li><a  class="video"   video-id="' + value.id + '" href="'+ videoUrl + value.id +'"><img class="video-feed"  loading="lazy" src="../static/coverImages/' + value.coverImage + '" alt=""></a></li></div><div class="video-info"><div class="row no-gutters"><div class="col-2 col-sm-2 col-md-2 no-gutters">     <div class="profile-pic-wrapper click-pro-pic"  data-href=" ' + userUrl + value.username + '">     <span><a  class="user-profile-pic"   user-id="" href="#"><img class="profilepic"  src="../static/profile_pics/' + value.userImg + '" alt=""></a></span> </div> </div><div class="col no-gutters"><div class="inner-info"> <div class="flex-fill flex-column">    <h6>' + value.title + '</h6>     <div class="upload-username">' + value.username + '</div>     <span class="upload-username">' + value.category + '</span> <span>     <p class="likes-comments"  class="text-justify text-left " data-likes="">     <span>' + value.likes + '</span>     <img     src="../static/heart.png" alt="" width="16">     <span>' + value.comments + '</span>     <img  src="../static/comment.svg" alt="" width="16"> </p> </span></div>          </div> </div></div></div>');
 
         });
 
 
-        $('#live').css('display', 'none');
 
-        $('.profile').css('display', 'none');
-
-        $('.upload-list').css('display', 'block');
-        $('#user-profile').css('display', 'none');
-        $('#course-upload').css('display', 'none');
-        $('.checkout').css('display', 'none')
 
     });
-});
+    });
+    $('#verify-list').on("click",'.approve-btn', function (e) {
+
+        e.preventDefault();
+        closeNav()
+
+    var arg = 'videoId=';
+    var videoUrl = '/videoInfo?' + arg;
+    var userUrl = '/userDetails?username='
+    var verifyUrl = '/verifyCourse?videoId='
+
+    req = $.ajax({
+        url: $(this).attr('data-href'),
+        type: 'GET',
+        data: {},
+        success: function (data) {
+            console.log(data)
+        }, error: function (error) {
+            console.log(error)
+            console.log("error")
+
+        }
+
+    });
+    req.done(function (data) {
+
+        popover(data,'success')
+
+
+
+    });
+    });
+
 
 $("form#series-course").on('click', '.subtitle', function () {
+
+    $header = $(this);
+    //getting the next element
+    $content = $header.next();
+    //open up the content needed - toggle the slide- if visible, slide up, if not slidedown.
+    $content.slideToggle(500, function () {
+        //execute this after slideToggle is done
+    });
+
+});
+$("#verify-list").on('click', '.extra-info', function () {
 
     $header = $(this);
     //getting the next element

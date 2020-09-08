@@ -881,7 +881,7 @@ class Reset_password(FlaskForm):
     submit = SubmitField('Reset')
 
 
-
+Role.insert_roles()
 
 @app.context_processor
 def inject_permissions():
@@ -1245,6 +1245,7 @@ def signup():
 def register():
     signupForm = Signup_form(request.form)
     if signupForm.validate_on_submit() and request.method == "POST":
+
         hashed_password = hash_password(signupForm.password.data)
         user = User(email=signupForm.email.data,
                     username=signupForm.username.data,
@@ -2498,7 +2499,7 @@ def verifyCourseList():
     l = []
     for v in range(len(videos)):
         data = {'id': videos[i].id, 'title': videos[i].title, 'username': videos[i].user_series.username,
-                'userImg': videos[i].user_series.image_file, 'category': videos[i].category, 'price': videos[i].price, 'coverImage': videos[i].coverImage,'approved': videos[i].approved,'likes':videos[i].liked.count(),'comments':videos[i].comments.count(),'isSeries':videos[i].is_series()}
+                'status':videos[i].status,'description':videos[i].description,'userImg': videos[i].user_series.image_file, 'category': videos[i].category, 'price': videos[i].price, 'coverImage': videos[i].coverImage,'approved': videos[i].approved,'likes':videos[i].liked.count(),'comments':videos[i].comments.count(),'isSeries':videos[i].is_series()}
         l.append(data)
 
         i += 1

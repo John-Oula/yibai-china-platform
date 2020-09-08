@@ -110,7 +110,7 @@
           <i class="fa fa-caret-down"></i>
       </button>
           <div class="dropdown-container">
-          <a id="verify-courses" data-href="" href="">Verify Courses</a>
+          <a id="verify-courses"  data-href="{{ url_for('verifyCourseList') }}"  href="#">Verify Courses</a>
           <a id="review-comments" data-href="{{ url_for('getUserSchedule',user_id = current_user.id) }}" href="#">Review/Disable comments</a>
                 </div>
 
@@ -627,11 +627,18 @@
 
     </div>
       {% if current_user.can(Permission.MODERATE) %}
-<div id="verify-list">
+<div id="verify-list" class="p-2">
 
 </div>
 
           {% else %}
+                  <div class="">
+            <ul class="upload-list">
+
+
+            </ul>
+
+        </div>
           {% endif %}
 {% endblock %}
 

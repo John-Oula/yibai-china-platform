@@ -404,7 +404,8 @@ class Role(db.Model):
                            Permission.BUY |
                            Permission.UPLOAD, True),
                   'Moderator': (Permission.MODERATE, False),
-                  'Administrator': (0xff, False)        }
+                  'Administrator': (0xff, False)
+                  }
         default_role = 'User'
         for r in roles:
             role = Role.query.filter_by(name=r).first()
@@ -668,6 +669,11 @@ class RoleView(BaseView):
         all_users = User.query.all()
         return self.render('admin/live.html',all_users=all_users)
 
+class FunctionView(BaseView):
+    @expose('/')
+    def index(self):
+        return self.render('home.html')
+
 def permission_required(permission):
     def decorator(f):
         @wraps(f)
@@ -688,11 +694,13 @@ admin.add_view(ModelView(Episode, db.session, category="Course"))
 admin.add_view(ModelView(Payment, db.session, category=""))
 admin.add_view(FileAdmin(staticPath, '/static/', name='Files'))
 admin.add_view(RoleView(name="Assign roles", endpoint='roles',category="Roles & Permissions"))
+admin.add_view(FunctionView(name="Dashboard", endpoint='dashboard',category="Hme"))
 admin.add_sub_category(name="Links", parent_name="Course")
 admin.add_sub_category(name="Assign roles", parent_name="Roles & Permissions")
 admin.add_sub_category(name="Create roles", parent_name="Roles & Permissions")
 admin.add_sub_category(name="Create live", parent_name="Live")
 admin.add_link(MenuLink(name='Create live', url='/', category='Live'))
+admin.add_link(MenuLink(name='Home', url='/'))
 admin.add_link(MenuLink(name='Create roles', url='/', category='Roles & Permissions'))
 ### FORMS ###
 
@@ -919,7 +927,7 @@ def home():
     userForm = User_form()
     commentForm = Comment_form()
 
-
+    approvedVideos = Series.query.filter_by(approved=False).all()
 
     loginForm = Login_form()
     if loginForm.validate_on_submit()  and request.method == 'POST':
@@ -946,8 +954,11 @@ def home():
             pass
 
 
-    return render_template('home.html',commentForm=commentForm,userForm = userForm,loginForm = loginForm,signupForm=signupForm,UpdateSession=UpdateSession,UpdateUploads=UpdateUploads,UpdateSeries=UpdateSeries,UpdateEpisode=UpdateEpisode,sessionForm=sessionForm,form=form,page=page,seriesForm=seriesForm,episodeForm=episodeForm)
+    return render_template('home.html',commentForm=commentForm,userForm = userForm,loginForm = loginForm,signupForm=signupForm,UpdateSession=UpdateSession,UpdateUploads=UpdateUploads,UpdateSeries=UpdateSeries,UpdateEpisode=UpdateEpisode,sessionForm=sessionForm,form=form,page=page,seriesForm=seriesForm,episodeForm=episodeForm,approvedVideos=len(approvedVideos))
 
+@app.route('/admin/redirect' ,methods=['POST','GET'])
+def adminRedirect():
+  return redirect(url_for('home'))
 
 @app.route('/liveSession')
 def liveSession():
@@ -2499,8 +2510,9 @@ def verifyCourseList():
     l = []
     for v in range(len(videos)):
         data = {'id': videos[i].id, 'title': videos[i].title, 'username': videos[i].user_series.username,
-                'status':videos[i].status,'description':videos[i].description,'userImg': videos[i].user_series.image_file, 'category': videos[i].category, 'price': videos[i].price, 'coverImage': videos[i].coverImage,'approved': videos[i].approved,'likes':videos[i].liked.count(),'comments':videos[i].comments.count(),'isSeries':videos[i].is_series()}
+                'status':videos[i].status,'description':videos[i].description,'userImg': videos[i].user_series.image_file,'introduction': videos[i].user_series.introduction,'video': videos[i].upload_ref, 'category': videos[i].category, 'price': videos[i].price, 'coverImage': videos[i].coverImage,'approved': videos[i].approved,'likes':videos[i].liked.count(),'comments':videos[i].comments.count(),'isSeries':videos[i].is_series()}
         l.append(data)
+
 
         i += 1
 

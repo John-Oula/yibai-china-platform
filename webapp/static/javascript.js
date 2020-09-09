@@ -2507,13 +2507,19 @@ $('.upload-list').ready(function () {
     });
     req.done(function (data) {
         var obj = data.result;
+
         $('#verify-list').empty()
+
         $.each(obj, function (key, value) {
 
-                $('#verify-list').append('<card class="card shadow-lg live-card"  data-href="' + value.id + '" > <card ><a href="'  + value.id + '"> <div class="live-img-wrapper"><img class="live-img" src="../static/coverImages/' + value.coverImage + '" alt=""></div> <div class="live-profile-pic-wrapper click-pro-pic"  data-href="'  + value.username + '"><span><a  class="user-profile-pic border-light" href="#"><img class="profilepic"  src="../static/profile_pics/' + value.userImg + '" alt=""></a></span> </div><div class="p-2 row no-gutters"><span class="live-info col-8 flex-content flex-column no-gutters"><span class="live-title">' + value.title + '</span><span class="">Created by:' + value.username + ' </span><span class="">Type:' + value.status + ' </span><span class="">Category:' + value.category + '</span><span class=""> </span></span>  <span class="live-info col-4 flex-content flex-column no-gutters"></div> </a></card><img src="../static/arrowDown.svg" type="button" class=" d-block mx-auto  extra-info m-2"><div class="content"><div class="text-center"><button class="fixed-btn m-2">Review Videos</button><button class="fixed-btn m-2">User Intro</button></div><div></div><h6>Description</h6><div>'+ value.description+'</div><button type="button" class=" d-block mx-auto fixed-btn extra-info approve-btn" data-href="'+verifyUrl + value.id +'" >Approve</button></div> </card>');
+                $('#verify-list').append('<card class="card shadow-lg live-card"  data-href="' + value.id + '" > <card ><a href="'  + value.id + '"> <div class="live-img-wrapper"><img class="live-img" src="../static/coverImages/' + value.coverImage + '" alt=""></div> <div class="live-profile-pic-wrapper click-pro-pic"  data-href="'  + value.username + '"><span><a  class="user-profile-pic border-light" href="#"><img class="profilepic"  src="../static/profile_pics/' + value.userImg + '" alt=""></a></span> </div><div class="p-2 row no-gutters"><span class="live-info col-8 flex-content flex-column no-gutters"><span class="live-title">' + value.title + '</span><span class="">Created by:' + value.username + ' </span><span class="">Type:' + value.status + ' </span><span class="">Category:' + value.category + '</span><span class=""> </span></span>  <span class="live-info col-4 flex-content flex-column no-gutters"></div> </a></card><img src="../static/arrowDown.svg" type="button" class=" d-block mx-auto  extra-info m-2"><div class="content"><div class="text-center"><button class="fixed-btn m-2 review-videos-btn" data-target="#review-video-modal" data-toggle="modal">Review Videos</button><button class="fixed-btn m-2 user-intro" data-target="#user-info-modal" data-toggle="modal">User Intro</button></div><div></div><h6>Description</h6><div>'+ value.description+'</div><button type="button" class=" d-block mx-auto fixed-btn extra-info approve-btn" data-href="'+verifyUrl + value.id +'" >Approve</button></div> </card>');
 
-
+                $('.user-intro').attr('data-href','/userDetails?username='+value.username)
+                $('.review-videos-btn').attr('data-href','/videoDetails?videoId='+value.id)
         });
+                $('.approve-card').css('display','none')
+
+
 
 
 
@@ -2546,6 +2552,121 @@ $('.upload-list').ready(function () {
     req.done(function (data) {
 
         popover(data,'success')
+
+
+
+    });
+    });
+    $('#verify-list').on("click",'.review-videos-btn', function (e) {
+
+        e.preventDefault();
+
+
+    req = $.ajax({
+        url: $(this).attr('data-href'),
+        type: 'GET',
+        data: {},
+        success: function (data) {
+            console.log(data)
+        }, error: function (error) {
+            console.log(error)
+            console.log("error")
+
+        }
+
+    });
+    req.done(function (data) {
+        var obj = data.result;
+
+            if (obj.type === 'video') {
+                $('video').attr("src", videoSrc + obj.videoRef);
+                $('video').css('display', 'block');
+                $('#episode-subtitle').text(obj.episode.subtitle);
+
+                $('.video-js').attr("src", videoSrc + obj.videoRef);
+                $('#controls').css('display', 'none');
+                $('video').css('display', 'block');
+                $('.course-img').css('display', 'none');
+            } else if (obj.type === 'audio') {
+
+                $('#audio-file').attr("audioFile", obj.videoRef);
+                $('.course-img').css('display', 'block');
+                $('.course-img').attr("src", coverImgUrl + obj.coverImg);
+                var audioSrc = '/static/videos/' + $('#audio-file').attr('audioFile')
+                $('#controls').css('display', 'flex');
+                popover('Loading Audio..Please wait','success')
+                wavesurfer.load(audioSrc);
+                wavesurfer.on('ready', function () {
+                    popover('Audio ready to play','success')
+                            $('.loader').css('display', 'none')
+
+
+        $('#pause-btn').on('click', function () {
+            wavesurfer.pause();
+            $('#play-btn').css('display', 'flex')
+            $('#pause-btn').css('display', 'none')
+        });
+           $('#play-btn').on('click', function () {
+            wavesurfer.play();
+            $('#play-btn').css('display', 'none')
+            $('#pause-btn').css('display', 'flex')
+        });});
+
+
+
+
+                $('#episode-subtitle').text(obj.episode.subtitle);
+
+
+
+
+
+
+                $('video').css('display', 'none');
+
+
+
+            } else if (obj.videoRef == null) {
+                var ep = obj.episode[0];
+
+
+                $('video').attr("src", videoSrc + obj.episode[0].videoRef);
+
+                $('#video-likes').text(ep.likes);
+                $('video').css('display', 'block');
+                $('#episode-subtitle').text(ep.subtitle);
+                $('.video-js').attr("src", videoSrc +obj.episode[0].videoRef);
+
+                $('video').css('display', 'block');
+                $('.course-img').css('display', 'none');
+                $('.like-btn').attr('data-href', '/like/episode' + obj.episode[0].episodeId);
+                $('#unlike-btn').attr('data-href', '/unlike/episode' + obj.episode[0].episodeId);
+            }
+
+
+
+    });
+    });
+    $('#verify-list').on("click",'.user-intro', function (e) {
+
+        e.preventDefault();
+
+    req = $.ajax({
+        url: $(this).attr('data-href'),
+        type: 'GET',
+        data: {},
+        success: function (data) {
+            console.log(data)
+        }, error: function (error) {
+            console.log(error)
+            console.log("error")
+
+        }
+
+    });
+    req.done(function (data) {
+
+        $('.user-introduction').text(data.introduction)
 
 
 

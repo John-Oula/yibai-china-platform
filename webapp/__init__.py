@@ -821,7 +821,7 @@ class UpdateSession_form(FlaskForm):
 class Upload_form(FlaskForm):
     upload_title = StringField('Title')
     upload_category = SelectField('Category', choices=[('Mandarin','Mandarin'), ('Communication skills', 'Communication skills'), ('Academics', 'Academics'), ('Visa', 'Visa'), ('Living', 'Living'), ('Talent policy', 'Talent policy'), ('Finance & Law', 'Finance & Law'), ('Entrepreneur', 'Entrepreneur'), ('Others', 'Others')],widget=None)
-    upload_description = HiddenField('Description')
+    upload_description = HiddenField('Series Summary')
     upload_price = StringField('Price')
     upload_fileName = FileField('Upload File',validators=[FileRequired()])
     upload_coverImage = FileField('Cover Image')
@@ -841,7 +841,7 @@ class UpdateUploads_form(FlaskForm):
 class Series_form(FlaskForm):
     series_title = StringField('Title')
     series_category = SelectField('Category', choices=[('Mandarin','Mandarin'), ('Communication skills', 'Communication skills'), ('Academics', 'Academics'), ('Visa', 'Visa'), ('Living', 'Living'), ('Talent policy', 'Talent policy'), ('Finance & Law', 'Finance & Law'), ('Entrepreneur', 'Entrepreneur'), ('Others', 'Others')],widget=None)
-    series_description = HiddenField('Description')
+    series_description = HiddenField('Series Summary')
     series_fileName = FileField('Upload File',validators=[FileRequired()])
     series_coverImage = FileField('Cover Image')
     series_price = StringField('Price')
@@ -851,12 +851,12 @@ class Series_form(FlaskForm):
 
 class Episode_form(FlaskForm):
     subtitle = StringField('Subtitle')
-    description = HiddenField('Description')
+    description = HiddenField('Episode Summary')
     fileName = FileField('Upload File',validators=[FileRequired()])
     coverImage = FileField('Cover Image')
 class UpdateEpisode_form(FlaskForm):
     update_subtitle = StringField('Subtitle')
-    update_description = HiddenField('Description')
+    update_description = HiddenField('Episode Summary')
     update_fileName = FileField('Upload File',validators=[FileRequired()])
     update_coverImage = FileField('Cover Image')
     update_submit = SubmitField('Update')
@@ -864,7 +864,7 @@ class UpdateEpisode_form(FlaskForm):
 class UpdateSeries_form(FlaskForm):
     update_series_title = StringField('Title')
     update_series_category = SelectField('Category', choices=[('Mandarin','Mandarin'), ('Communication skills', 'Communication skills'), ('Academics', 'Academics'), ('Visa', 'Visa'), ('Living', 'Living'), ('Talent policy', 'Talent policy'), ('Finance & Law', 'Finance & Law'), ('Entrepreneur', 'Entrepreneur'), ('Others', 'Others')],widget=None)
-    update_series_description = HiddenField('Description')
+    update_series_description = HiddenField('Series Summary')
     update_series_coverImage = FileField('Cover Image')
 
     update_series_price = StringField('Price')
@@ -2448,11 +2448,10 @@ def createCourse():
     seriesForm = Series_form()
     episodeForm = Episode_form()
     if seriesForm.series_price.data == '':
-        seriesForm.series_price.data = int(0)
+        seriesForm.series_price.data =0
         price = seriesForm.series_price.data
     else:
-        seriesForm.series_price.data
-        price = seriesForm.series_price.data
+        int(seriesForm.series_price.data)
     if form.upload_price.data == '':
         form.upload_price.data = 0
     else:
@@ -2461,8 +2460,6 @@ def createCourse():
     if request.method == 'POST' and status == 'single':
 
         amount = int(form.upload_price.data)
-        print(type(amount))
-        print(amount)
         if  amount == 0:
             upload = Series(title=form.upload_title.data,
                             coverImage=saveFile(form.upload_coverImage.data, 'coverImages'),
@@ -2492,21 +2489,42 @@ def createCourse():
 
 
     elif request.method == 'POST' and status == 'series':
-        series = Series(title=seriesForm.series_title.data, description=seriesForm.series_description.data,
-                        coverImage=saveFile(seriesForm.series_coverImage.data,'coverImages'), category=seriesForm.series_category.data,
-                        price=seriesForm.series_price.data,status=status, user_series=current_user)
-        db.session.add(series)
-        db.session.flush()
+        amount =  int(seriesForm.series_price.data)
+        print(type(amount))
+        print(amount)
+        if  amount == 0:
+            series = Series(title=seriesForm.series_title.data, description=seriesForm.series_description.data,
+                            coverImage=saveFile(seriesForm.series_coverImage.data,'coverImages'), category=seriesForm.series_category.data,
+                            price=seriesForm.series_price.data,status=status, user_series=current_user,approved = True)
+            db.session.add(series)
+            db.session.flush()
 
-        episode = Episode(subtitle=episodeForm.subtitle.data, description=episodeForm.description.data,
+            episode = Episode(subtitle=episodeForm.subtitle.data, description=episodeForm.description.data,
                           upload_ref=saveFile(episodeForm.fileName.data,'videos'),
                           user_episode=current_user, sub=series, series_id=series.id)
 
-        db.session.add(episode)
+            db.session.add(episode)
 
-        db.session.commit()
-        msg = 'uploaded succsesfully'
-        return  msg
+            db.session.commit()
+            msg = 'uploaded succsesfully'
+            return  msg
+        elif amount > 0:
+            series = Series(title=seriesForm.series_title.data, description=seriesForm.series_description.data,
+                            coverImage=saveFile(seriesForm.series_coverImage.data,'coverImages'), category=seriesForm.series_category.data,
+                            price=seriesForm.series_price.data,status=status, user_series=current_user,approved = False)
+            db.session.add(series)
+            db.session.flush()
+
+            episode = Episode(subtitle=episodeForm.subtitle.data, description=episodeForm.description.data,
+                          upload_ref=saveFile(episodeForm.fileName.data,'videos'),
+                          user_episode=current_user, sub=series, series_id=series.id)
+
+            db.session.add(episode)
+
+            db.session.commit()
+            msg = 'uploaded succsesfully'
+            return  msg
+
     return '', 204
 
 
@@ -2619,7 +2637,7 @@ def getUserSeries():
         for v in range(len(series)):
             data = {'id': series[i].id, 'title': series[i].title, 'price': series[i].price,
                     'host': series[i].user_series.username, 'coverImg': series[i].coverImage,
-                    'userImg': series[i].user_series.image_file, 'category': series[i].category,
+                    'userImg': series[i].user_series.image_file, 'category': series[i].category,'approved': series[i].approved,
                     'totalEpisodes': len(series[i].episode),'likes': series[i].liked.count(),'totalComments': series[i].comments.count(),'isSeries':series[i].is_series()}
             ep = []
             for e in series[i].episode:

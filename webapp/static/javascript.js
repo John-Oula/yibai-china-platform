@@ -956,7 +956,7 @@ $('.video-details').ready(function () {
 
                 $('.buy').css('display', 'flex');
             }
-            if (obj.isSeries === true) {
+            if (obj.isSeries === true  ) {
                 $('.like-btn').attr('data-href', '/like/episode' + obj.id);
                 $('#unlike-btn').attr('data-href', '/unlike/episode' + obj.id);
                 $('#episode-tab').css('display', 'block');
@@ -1739,13 +1739,19 @@ $('.video-details').ready(function () {
             else
 
                 $.each(data.result, function (key, value) {
+                    if (value.approved === false)
+                        var status = 'Under review'
+                    else if (value.approved === true)
+                        var status = 'Reviewed'
+
                     if (value.isSeries == true)
 
-                        $('#course-update').append('<card class="mt-2 mb-2 flex-fill flex-row shadow-lg row no-gutters user-course card"><div class="col-3 no-gutters cover-wrapper"><img id="course-img" src="../static/coverImages/' + value.coverImg + '" alt=""></div><div class="col-8 p-2 flex-fill flex-column no-gutters "><h6 id="course-title">' + value.title + '</h6><div id="total-episodes">Episodes : ' + value.totalEpisodes + '</div><span id="course-price">Price : ' + value.price + '</span><nav class="btn-row" ><a   class="add-ep-btn navLink" data-href="addEpisode?series_id=' + value.id + '"  data-toggle="modal" data-target="#episode-modal" href=""><img class="mobile-icon" src="../static/add.svg" alt=""><span class="nav_text">Add  Episode</span></a><a class="navLink"   data-toggle="modal" data-target="#myModal" href="" ><img class="mobile-icon" src="../static/delete.svg" alt="" ><span class="nav_text">Delete</span></a><a   data-href="' + seriesUrl + value.id + '" class="edit-series navLink" data-toggle="modal" data-target="#series-modal" href=""><img class="mobile-icon" src="../static/edit.svg" alt="" ><span class="nav_text">Edit</span></a></nav></div></card></div>');
+
+                        $('#course-update').append('<card class="mt-2 mb-2 flex-fill flex-row shadow-lg row no-gutters user-course card"><div class="col-3 no-gutters cover-wrapper"><img id="course-img" src="../static/coverImages/' + value.coverImg + '" alt=""></div><div class="col-8 p-2 flex-fill flex-column no-gutters "><h6 id="course-title">' + value.title + '</h6><div id="total-episodes">Episodes : ' + value.totalEpisodes + '</div><span id="course-price">Price : ' + value.price + '</span><div id="course-status" class="text-info">Status : ' + status + '</div><nav class="btn-row" ><a   class="add-ep-btn navLink" data-href="addEpisode?series_id=' + value.id + '"  data-toggle="modal" data-target="#episode-modal" href=""><img class="mobile-icon" src="../static/add.svg" alt=""><span class="nav_text">Add  Episode</span></a><a class="navLink"   data-toggle="modal" data-target="#myModal" href="" ><img class="mobile-icon" src="../static/delete.svg" alt="" ><span class="nav_text">Delete</span></a><a   data-href="' + seriesUrl + value.id + '" class="edit-series navLink" data-toggle="modal" data-target="#series-modal" href=""><img class="mobile-icon" src="../static/edit.svg" alt="" ><span class="nav_text">Edit</span></a></nav></div></card></div>');
                     else if (value.isSeries == false) {
 
 
-                        $('#course-update').append('<card class="mt-2 mb-2 flex-fill flex-row shadow-lg row no-gutters user-course card"><div class="col-3 no-gutters cover-wrapper"><img id="course-img" src="../static/coverImages/' + value.coverImg + '" alt=""></div><div class="col-8 p-2 flex-fill flex-column no-gutters "><h6 id="course-title">' + value.title + '</h6><div id="total-episodes"></div><span id="course-price">Price : ' + value.price + '</span><nav class="btn-row" ><a class="navLink"   data-toggle="modal" data-target="#myModal" href="" ><img class="mobile-icon" src="../static/delete.svg" alt="" ><span class="nav_text">Delete</span></a><a   data-href="' + seriesUrl + value.id + '" class="edit-series navLink" data-toggle="modal" data-target="#series-modal" href=""><img class="mobile-icon" src="../static/edit.svg" alt="" ><span class="nav_text">Edit</span></a></nav></div></card></div>');
+                        $('#course-update').append('<card class="mt-2 mb-2 flex-fill flex-row shadow-lg row no-gutters user-course card"><div class="col-3 no-gutters cover-wrapper"><img id="course-img" src="../static/coverImages/' + value.coverImg + '" alt=""></div><div class="col-8 p-2 flex-fill flex-column no-gutters "><h6 id="course-title">' + value.title + '</h6><div id="total-episodes"></div><span id="course-price">Price : ' + value.price + '</span><div id="course-status" class="text-info">Status : ' + status + '</div><nav class="btn-row" ><a class="navLink"   data-toggle="modal" data-target="#myModal" href="" ><img class="mobile-icon" src="../static/delete.svg" alt="" ><span class="nav_text">Delete</span></a><a   data-href="' + seriesUrl + value.id + '" class="edit-series navLink" data-toggle="modal" data-target="#series-modal" href=""><img class="mobile-icon" src="../static/edit.svg" alt="" ><span class="nav_text">Edit</span></a></nav></div></card></div>');
 
 
                     }
@@ -2472,12 +2478,14 @@ $('.upload-list').ready(function () {
     });
     req.done(function (data) {
         var obj = data.result;
-        $.each(obj, function (key, value) {
 
+            $.each(obj, function (key, value) {
 
-            $('.upload-list').append('<div class="thumb-wrapper" data-href="' + videoUrl + value.id + '"><li><a  class="video"   video-id="' + value.id + '" href="'+ videoUrl + value.id +'"><img class="video-feed"  loading="lazy" src="../static/coverImages/' + value.coverImage + '" alt=""></a></li></div><div class="video-info"><div class="row no-gutters"><div class="col-2 col-sm-2 col-md-2 no-gutters">     <div class="profile-pic-wrapper click-pro-pic"  data-href=" ' + userUrl + value.username + '">     <span><a  class="user-profile-pic"   user-id="" href="#"><img class="profilepic"  src="../static/profile_pics/' + value.userImg + '" alt=""></a></span> </div> </div><div class="col no-gutters"><div class="inner-info"> <div class="flex-fill flex-column">    <h6>' + value.title + '</h6>     <div class="upload-username">' + value.username + '</div>     <span class="upload-username">' + value.category + '</span> <span>     <p class="likes-comments"  class="text-justify text-left " data-likes="">     <span>' + value.likes + '</span>     <img     src="../static/heart.png" alt="" width="16">     <span>' + value.comments + '</span>     <img  src="../static/comment.svg" alt="" width="16"> </p> </span></div>          </div> </div></div></div>');
+                if (value.approved === true)
+                    $('.upload-list').append('<div class="thumb-wrapper" data-href="' + videoUrl + value.id + '"><li><a  class="video"   video-id="' + value.id + '" href="' + videoUrl + value.id + '"><img class="video-feed"  loading="lazy" src="../static/coverImages/' + value.coverImage + '" alt=""></a></li></div><div class="video-info"><div class="row no-gutters"><div class="col-2 col-sm-2 col-md-2 no-gutters">     <div class="profile-pic-wrapper click-pro-pic"  data-href=" ' + userUrl + value.username + '">     <span><a  class="user-profile-pic"   user-id="" href="#"><img class="profilepic"  src="../static/profile_pics/' + value.userImg + '" alt=""></a></span> </div> </div><div class="col no-gutters"><div class="inner-info"> <div class="flex-fill flex-column">    <h6>' + value.title + '</h6>     <div class="upload-username">' + value.username + '</div>     <span class="upload-username">' + value.category + '</span> <span>     <p class="likes-comments"  class="text-justify text-left " data-likes="">     <span>' + value.likes + '</span>     <img     src="../static/heart.png" alt="" width="16">     <span>' + value.comments + '</span>     <img  src="../static/comment.svg" alt="" width="16"> </p> </span></div>          </div> </div></div></div>');
 
-        });
+            });
+
 
 
         $('#live').css('display', 'none');
@@ -2519,13 +2527,18 @@ $('.upload-list').ready(function () {
 
         $('#verify-list').empty()
 
-        $.each(obj, function (key, value) {
+
+                   $.each(obj, function (key, value) {
 
                 $('#verify-list').append('<card class="card shadow-lg live-card"  data-href="' + value.id + '" > <card ><a href="'  + value.id + '"> <div class="live-img-wrapper"><img class="live-img" src="../static/coverImages/' + value.coverImage + '" alt=""></div> <div class="live-profile-pic-wrapper click-pro-pic"  data-href="'  + value.username + '"><span><a  class="user-profile-pic border-light" href="#"><img class="profilepic"  src="../static/profile_pics/' + value.userImg + '" alt=""></a></span> </div><div class="p-2 row no-gutters"><span class="live-info col-8 flex-content flex-column no-gutters"><span class="live-title">' + value.title + '</span><span class="">Created by:' + value.username + ' </span><span class="">Type:' + value.status + ' </span><span class="">Category:' + value.category + '</span><span class=""> </span></span>  <span class="live-info col-4 flex-content flex-column no-gutters"></div> </a></card><img src="../static/arrowDown.svg" type="button" class=" d-block mx-auto  extra-info m-2"><div class="content"><div class="text-center"><button class="fixed-btn m-2 review-videos-btn" data-target="#review-video-modal" data-toggle="modal">Review Videos</button><button class="fixed-btn m-2 user-intro" data-target="#user-info-modal" data-toggle="modal">User Intro</button></div><div></div><h6>Description</h6><div>'+ value.description+'</div><button type="button" class=" d-block mx-auto fixed-btn extra-info approve-btn" data-href="'+verifyUrl + value.id +'" >Approve</button></div> </card>');
 
                 $('.user-intro').attr('data-href','/userDetails?username='+value.username)
                 $('.review-videos-btn').attr('data-href','/videoDetails?videoId='+value.id)
         });
+
+
+
+
                 $('.approve-card').css('display','none')
 
 

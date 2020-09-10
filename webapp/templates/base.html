@@ -376,6 +376,7 @@
                                 {{ seriesForm.hidden_tag() }}
 
                                 <div class="series-div">
+                                    <h5><strong>Series Info</strong></h5>
                                     {{ seriesForm.series_title.label }}<br>
                                     {{ seriesForm.series_title(class = "input-box-border border border-top-0 border-left-0 border-right-0") }}<br>
                                     {{ seriesForm.series_category.label }}
@@ -385,7 +386,9 @@
                                     {{ seriesForm.series_price.label }} <small>Price in RMB</small><br>
                                 {{ seriesForm.series_price(class = "input-box-border border border-top-0 border-left-0 border-right-0") }}
                                 <br>
+
                                     <div class="wrapper">
+                                        <h5><strong>Episode Info</strong></h5>
                                         <button type="button" class="subtitle">
                                             {{ episodeForm.subtitle.label }}
                                             {{ episodeForm.subtitle(class = "input-box-border border border-top-0 border-left-0 border-right-0") }}
@@ -400,9 +403,12 @@
 
                                             {{ seriesForm.series_coverImage.label(class="mt-2") }}<br>
                                             {{ seriesForm.series_coverImage }}<br>
+                                            {{ episodeForm.description.label }}<br>
+
                                                 <div class="series-form-editor mt-2">
 
                                                 </div>
+                                            <br>
                                             {{ episodeForm.description(class = "description-field input-box-border border border-top-0 border-left-0 border-right-0",placeholder="Description") }}
 
                                         </div>

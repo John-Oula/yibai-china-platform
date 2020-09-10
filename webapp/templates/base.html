@@ -632,7 +632,7 @@
         </nav>
 
     </div>
-      {% if current_user.can(Permission.MODERATE) and   current_user.role_id == 2  %}
+      {% if current_user.can(Permission.MODERATE) and   current_user.role.name == 'Moderator'  %}
           <div class="p-3 approve-card">
             <div class="card big-card shadow-lg" id="single-click">
                 <div class="card-body text-center">
@@ -862,7 +862,7 @@
                                 {{ UpdateEpisode.update_subtitle.label }}
 
                                 {{ UpdateEpisode.update_subtitle(class = "input-box-border border border-top-0 border-left-0 border-right-0") }}
-
+                                <br>
 
                                 {{ UpdateEpisode.update_fileName.label }}<br>
                                 {{ UpdateEpisode.update_fileName() }}<br>
@@ -871,9 +871,9 @@
                                 {{ UpdateEpisode.update_coverImage() }}<br>
 
                                 {{ UpdateEpisode.update_description(class = "description-field input-box-border border border-top-0 border-left-0 border-right-0",placeholder="Description") }}
-
+                                <div class="episode-editor"></div>
                                 <br>
-                                {{ UpdateEpisode.update_submit }}
+                                {{ UpdateEpisode.update_submit(class="fixed-btn") }}
                             </fieldset>
                         </form>
                     </div>
@@ -1032,6 +1032,47 @@ var quill = new Quill('#editor', options);
             pageRedirect('/')
                $('.border-btn').css('display','none')
               $('#series_submit').css('display','block')
+
+		});
+
+		event.preventDefault();
+
+	});
+	$('form#addEpisode').on('submit', function(event) {
+        var csrf_token = $('#csrf_token').attr('value');
+        var html = quill.root.innerHTML;
+    $('#update_description').val( html );
+		$.ajax({
+        beforeSend: function(xhr, settings) {
+            if (!/^(GET|HEAD|OPTIONS|TRACE)$/i.test(settings.type) && !this.crossDomain) {
+                xhr.setRequestHeader("X-CSRFToken", csrf_token);
+                $('.loader').css('display','block')
+                 $('.border-btn').css('display','block')
+              $('#update_submit').css('display','none')
+            }
+        },  enctype: 'multipart/form-data',
+			data : new FormData(this),
+			type : 'POST',
+			url : $('.add-ep-btn').attr('data-href'),
+            processData: false,
+            contentType: false,
+
+          error: function(error){
+
+          popover(error,'success')
+          },
+          complete: function () {
+            $('.loader').css('display','none')
+
+          }
+
+		})
+		.done(function(data) {
+
+        popover(data,'success')
+            pageRedirect('/')
+               $('.border-btn').css('display','none')
+              $('#update_submit').css('display','block')
 
 		});
 

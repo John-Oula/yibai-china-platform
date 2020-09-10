@@ -1355,6 +1355,13 @@ $('.video-details').ready(function () {
         $('.upload-option').css('display', 'block');
 
     });
+    $('#course-update').on("click","a.add-ep-btn", function (e) {
+        e.preventDefault();
+        closeNav()
+        $(".editor-source").detach().appendTo(".episode-editor");
+            $('.editor-source').css('display', 'block')
+
+    });
 
 
     $('#series-stats').on("click", function (e) {
@@ -1724,6 +1731,8 @@ $('.video-details').ready(function () {
         $('#course-update').empty();
 
         req.done(function (data) {
+
+
             if (data.length == 0)
                 $('#course-update').append('<p>No contents</p>')
 
@@ -2716,45 +2725,7 @@ for (i = 0; i < dropdown.length; i++) {
 $(document).ready(function () {
 
 
-    $('form#addEpisode').on('submit', function (event) {
-        var csrf_token = $('#csrf_token').attr('value');
-        $.ajax({
-            beforeSend: function (xhr, settings) {
-                if (!/^(GET|HEAD|OPTIONS|TRACE)$/i.test(settings.type) && !this.crossDomain) {
-                    xhr.setRequestHeader("X-CSRFToken", csrf_token);
-                    $('.loader').css('display', 'block')
-                     $('.border-btn').css('display','block')
-              $('#upload_submit').css('display','none')
-                     popover('Uploading Episode','success')
-                }
-            }, enctype: 'multipart/form-data',
-            data: new FormData(this),
-            type: 'POST',
-            url: $('.add-ep-btn').attr('data-href'),
-            processData: false,
-            contentType: false,
 
-            error: function (error) {
-
-                popover(error, 'success')
-            },
-            complete: function () {
-                $('.loader').css('display', 'none')
-
-            }
-
-        })
-            .done(function (data) {
-
-                     $('.border-btn').css('display','none')
-              $('#upload_submit').css('display','block')
-                popover(data, 'success')
-
-            });
-
-        event.preventDefault();
-
-    });
 
     $('form#schedule-form').on('submit', function (event) {
         var csrf_token = $('#csrf-token').attr('value');

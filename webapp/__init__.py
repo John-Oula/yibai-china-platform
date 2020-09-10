@@ -635,6 +635,13 @@ class Comment(db.Model):
    episode_id = db.Column(db.Integer, db.ForeignKey('episode.id'))
    episodeComment = db.relationship('Episode', secondary=episodeComment,
                                     backref=db.backref('userCommentEpisode', lazy='dynamic'))
+class Approve(db.Model):
+   __tablename__ = 'approve'
+   id = db.Column(db.Integer, primary_key=True)
+   timestamp = db.Column(db.DateTime, index=True, default=datetime.datetime.utcnow)
+   user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+   series_id = db.Column(db.Integer, db.ForeignKey('series.id'))
+   series = db.relationship('Series', backref='series', lazy=True)
 
 
 class Reviews(db.Model):
@@ -849,7 +856,7 @@ class Episode_form(FlaskForm):
     coverImage = FileField('Cover Image')
 class UpdateEpisode_form(FlaskForm):
     update_subtitle = StringField('Subtitle')
-    update_description = TextAreaField('Description')
+    update_description = HiddenField('Description')
     update_fileName = FileField('Upload File',validators=[FileRequired()])
     update_coverImage = FileField('Cover Image')
     update_submit = SubmitField('Update')
@@ -2523,6 +2530,7 @@ def verifyCourseList():
 def verifyCourse():
     videoId= request.args.get('videoId', type=int)
     videos = Series.query.filter_by(id=videoId).first()
+    approve = Approve(series_id=videos.id,series=videos,user_id=current_user.id)
     videos.approved = True
     db.session.commit()
     msg = 'Verified Successfully'
@@ -2998,7 +3006,6 @@ def getUserBookedLive():
 
 
 @app.route('/addEpisode', methods=['POST', 'GET','PUT'])
-@csrf.exempt
 def addEpisode():
     series_id = request.args.get('series_id', type=int)
     series = Series.query.filter_by(id = series_id).first()

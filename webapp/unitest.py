@@ -14,13 +14,15 @@ class UserModelCase(unittest.TestCase):
 
 
     def test_functions(self):
+        pList = [Permission.UPLOAD,Permission.SCHEDULE,Permission.LIVE,Permission.MODERATE]
+        for p in pList:
+            Role.insert_roles('moderator', p)
+        Role.default_role()
 
-        Role.insert_roles()
 
 
 
-
-        u1 = User(username='sudomin', password='thisatest',   fullname='John Oula',id_type='Passport',id_number='AK0123545',nationality='American',occupation='Engineer',email="johnoula@icloud.com",province='Jiangsu',city='Nanjing',phone='133023545797')
+        u1 = User(username='jacky', password='thisatest',   fullname='John Oula',id_type='Passport',id_number='AK0123545',nationality='American',occupation='Engineer',email="johnoula@icloud.com",province='Jiangsu',city='Nanjing',phone='133023545797')
         u2 = User(username='eliora', password='thisisatest',fullname='Eliora Kwa',id_type='Passport',id_number='AK0123545',nationality='American',occupation='Engineer',email="thisisatest2@gmail.com",province='Jiangsu',city='Nanjing',phone='133023545797')
         u3 = User(username='kemal', password='thisisatest',fullname='Kemal ',id_type='Passport',id_number='AK0123545',nationality='American',occupation='Engineer',email="thisisatest3@gmail.com",province='Jiangsu',city='Nanjing',phone='133023545797')
         u4 = User(username='maggie', password='thisisatest', fullname='Maggie Ma',id_type='Passport',id_number='AK0123545',nationality='American',occupation='Engineer',email="thisisatest4@gmail.com",province='Jiangsu',city='Nanjing',phone='133023545797')
@@ -39,11 +41,15 @@ class UserModelCase(unittest.TestCase):
         db.session.add(u8)
         db.session.add(u9)
         db.session.commit()
+        print(u2.role.name)
+        mod = Role.query.filter_by(name = 'moderator').first()
+        u2.role_id = mod.id
+        db.session.commit()
+        print(u2.role.name)
         user_list=User.query.all()
-        self.assertTrue(u1.can(Permission.FOLLOW))
-        self.assertTrue(u1.can(Permission.UPLOAD))
-        self.assertTrue(u1.can(Permission.MODERATE))
-        self.assertTrue(u1.can(Permission.ADMINISTER))
+        self.assertTrue(u2.can(Permission.UPLOAD))
+        self.assertTrue(u2.can(Permission.LIVE))
+        self.assertTrue(u2.can(Permission.SCHEDULE))
         r= Role.query.all()
         print(Role.query.all()[0].name,Role.query.all()[0].id)
         print(u1.role.permissions)
@@ -54,13 +60,6 @@ class UserModelCase(unittest.TestCase):
         print(Role.query.all()[1].name,Role.query.all()[1].id)
         print(Role.query.all()[2].name,Role.query.all()[2].id)
 
-
-        self.assertTrue(u1.is_administrator())
-        self.assertTrue(u2.can(Permission.FOLLOW))
-        self.assertTrue(u2.can(Permission.COMMENT))
-        self.assertTrue(u2.can(Permission.UPLOAD))
-        self.assertFalse(u2.can(Permission.MODERATE))
-        self.assertFalse(u2.can(Permission.ADMINISTER))
 
         p1 = Live(user_id=1, title='tech', description='this is a test ', category='MANDARIN', date='2019-12-4')
         p2 = Live(user_id=2, title='china', description='this is a test', category="CAREER", date='2019-12-3')

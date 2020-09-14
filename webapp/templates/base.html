@@ -132,14 +132,8 @@
           {% endif %}
 
           <a id="update-course" data-href="{{ url_for('getUserSeries',user_id = current_user.id) }}" href="#">Manage course</a>
-          {% if current_user.can(Permission.BUY) %}
           <a href="#">Bought Courses</a>
-              {% else %}
-              {% endif %}
-      {% if current_user.can(Permission.LIKE) %}
           <a id="liked-course" data-href="{{ url_for('userDetails',username = current_user.username) }}" href="#">Liked Courses</a>
-          {% else %}
-          {% endif %}
       {% if current_user.can(Permission.UPLOAD) %}
           <a id="series-stats" href="#">Stats</a>
           {% else %}
@@ -160,7 +154,7 @@
       {% else %}
           {% endif %}
           </div>
-      {% if current_user.can(Permission.LIVE_SESSION) %}
+      {% if current_user.can(Permission.LIVE) %}
             <button id="liveSession" class="dropdown-btn">Live Sessions
           <i class="fa fa-caret-down"></i>
       </button>
@@ -174,7 +168,15 @@
           {% endif %}
             {% if current_user.can(Permission.ADMINISTER) %}
       <button id="admin-panel" class="dropdown-btn" ><a  class="p-0 m-0" href="/admin/"><span>Admin Panel</span> </a></button>
-          {% else %}
+      <button id="liveSession" class="dropdown-btn">Role Managaement
+          <i class="fa fa-caret-down"></i>
+      </button>
+      <div class="dropdown-container">
+          <a id="live-create" href="#">Create Role</a>
+          <a id="update-live" data-href="{{ url_for('getUserLive',user_id = current_user.id) }}" href="">Assign Roles</a>
+          <a id="booked-live" data-href="{{ url_for('getUserBookedLive',user_id = current_user.id) }}"href="#">Manage roles</a>
+      </div>
+            {% else %}
           {% endif %}
       <button id="verifyInfo" class="dropdown-btn">Complete Profile
           <i class="fa fa-caret-down"></i>
@@ -670,6 +672,30 @@
         </div>
           {% endif %}
 {% endblock %}
+      {% if current_user.can(Permission.ADMINISTER) or   current_user.can(Permission.ROLES) %}
+          <div>
+              <form id="create-role" class=" text-left" action="" method="POST"
+                              >
+                            <fieldset>
+     <input type="text" name="title" value="">Role name<br>
+     <input type="checkbox" name="permission" value="0b00000001">upload<br>
+        <input type="checkbox" name="permission" value="0b00000010">live<br>
+        <input type="checkbox" name="permission" value="0b00000100">schedule<br>
+        <input type="checkbox" name="permission" value="0b00001000">moderate<br>
+        <input type="checkbox" name="permission" value="0b00100000">roles<br>
+        <input type="checkbox" name="permission" value="0b10000000">administer<br>
+        <br>
+        <input type="submit" value="Submit now" />
+                            </fieldset>
+              </form>
+          </div>
+          <br>
+          <br>
+          <br>
+
+{% else %}
+
+{% endif %}
 
 {% block modal %}
             <!-- Modal -->

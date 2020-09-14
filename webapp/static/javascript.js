@@ -2834,6 +2834,35 @@ $(document).ready(function () {
         event.preventDefault();
 
     });
+    $('form#create-role').on('submit', function (event) {
+        var csrf_token = $('#csrf-token').attr('value');
+        $.ajax({
+            beforeSend: function (xhr, settings) {
+                if (!/^(GET|HEAD|OPTIONS|TRACE)$/i.test(settings.type) && !this.crossDomain) {
+                    xhr.setRequestHeader("X-CSRFToken", csrf_token);
+                }
+                $('.loader').css('display', 'block')
+            },
+            data: new FormData(this),
+            type: 'POST',
+            url:'/createrole',
+            processData: false,
+            contentType: false,
+            complete: function () {
+                $('.loader').css('display', 'none')
+
+            }
+
+        })
+            .done(function (data) {
+
+                popover(data, 'success')
+
+            });
+
+        event.preventDefault();
+
+    });
     $('form.session-form').on('submit', function (event) {
         var csrf_token = $('#csrf_token').attr('value');
         $.ajax({

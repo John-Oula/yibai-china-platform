@@ -123,7 +123,7 @@ app.config['SECRET_KEY'] = 'Adawug;irwugw79536870635785ty0875y03davvavavdey'
 appID=200000164
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 # set optional bootswatch theme
-app.config['FLASK_ADMIN_SWATCH'] = 'yeti'
+app.config['FLASK_ADMIN_SWATCH'] = 'flatly'
 app.config['WTF_CSRF_ENABLED'] = True
 if get_Host_name_IP('CJAY') == True:
     app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:@qwerty1234!@localhost/postgres'
@@ -281,12 +281,12 @@ class User(db.Model, UserMixin):
         super(User, self).__init__(**kwargs)
         if self.role is None:
             if self.username == app.config['FLASKY_ADMIN']:
-                self.role = Role.query.filter_by(permissions=0xff).first()
+                self.role = Role.query.filter_by(name='Administrator').first()
             if self.role is None:
                 self.role = Role.query.filter_by(default=True).first()
 
-    def can(self, permissions):
-        return self.role is not None and (self.role.permissions & permissions) == permissions
+    def can(self, perm):
+        return self.role is not None and self.role.has_permission(perm)
 
     def is_administrator(self):
         return self.can(Permission.ADMINISTER)
@@ -382,6 +382,19 @@ class AnonymousUser(AnonymousUserMixin):
 
 login_manager.anonymous_user = AnonymousUser
 
+class Permission:
+#    FOLLOW = 0x01
+#    COMMENT = 0x02
+    UPLOAD =   0b00000001
+    LIVE =     0b00000010
+    SCHEDULE = 0b00000100
+    MODERATE = 0b00001000
+    VERIFY =   0b00010000
+    ROLES =    0b00100000
+#    ROLES =    0b01000000
+    ADMINISTER=0b10000000
+#    BUY = 0x32
+#    LIKE = 0x64
 class Role(db.Model):
     __tablename__ = 'role'
     id = db.Column(db.Integer, primary_key=True)
@@ -391,21 +404,19 @@ class Role(db.Model):
     users = db.relationship('User', backref='role', lazy='dynamic')
 
     def __init__(self, **kwargs):
+
         super(Role, self).__init__(**kwargs)
         if self.permissions is None:
             self.permissions = 0
 
     @staticmethod
-    def insert_roles():
-        roles = { 'User': (Permission.FOLLOW |
-                           Permission.COMMENT |
-                           Permission.LIVE_SESSION |
-                           Permission.SCHEDULE |
-                           Permission.BUY |
-                           Permission.UPLOAD, True),
-                  'Moderator': (Permission.MODERATE, False),
-                  'Administrator': (0xff, False)
-                  }
+    def default_role():
+        roles = {
+            'User': [Permission.UPLOAD| Permission.LIVE| Permission.SCHEDULE],
+            'Administrator': [Permission.UPLOAD, Permission.SCHEDULE,
+                              Permission.ADMINISTER, Permission.MODERATE,
+                              Permission.LIVE],
+        }
         default_role = 'User'
         for r in roles:
             role = Role.query.filter_by(name=r).first()
@@ -413,6 +424,24 @@ class Role(db.Model):
                 role = Role(name=r)
             role.reset_permissions()
             for perm in roles[r]:
+                role.add_permission(perm)
+            role.default = (role.name == default_role)
+            db.session.add(role)
+        db.session.commit()
+
+
+    @staticmethod
+    def insert_roles(roleName,permissions):
+        roles = { roleName : [permissions]  }
+        default_role = 'User'
+        for r in roles:
+            role = Role.query.filter_by(name=r).first()
+            print(roles[r])
+            if role is None:
+                role = Role(name=r)
+
+            for perm in roles[r]:
+                print(perm)
                 role.add_permission(perm)
             role.default = (role.name == default_role)
             db.session.add(role)
@@ -433,19 +462,9 @@ class Role(db.Model):
         return self.permissions & perm == perm
 
     def __repr__(self):
-        return '<Role %r>' % self.name
+        return '%r' % self.name
 
-class Permission:
-    FOLLOW = 0x01
-    COMMENT = 0x02
-    UPLOAD = 0x04
-    LIVE_SESSION = 0x06
-    MODERATE = 0x08
-    BUY = 0x10
-    LIKE = 0x12
-    SCHEDULE = 0x12
-    VERIFY = 0x14
-    ADMINISTER = 0x80
+
 
 
 
@@ -692,23 +711,45 @@ def permission_required(permission):
     return decorator
 def admin_required(f):
     return permission_required(Permission.ADMINISTER)(f)
-admin.add_view(ModelView(User, db.session, category="User List"))
-admin.add_view(ModelView(Live, db.session, category="Live"))
-admin.add_view(ModelView(Series, db.session, category="Course"))
-admin.add_view(ModelView(Available, db.session, category="Schedule"))
+class User_form(FlaskForm):
+
+    introduction = TextAreaField('Introduction', validators=[Required()])
+    status = StringField('Status', validators=[Required()])
+    introVideo = FileField('Upload an Introduction video')
+    fullname = StringField('Fullname', [validators.Length(min=4,max=15)])
+    username = StringField('Username', [validators.Length(min=4,max=15)])
+    email = StringField('Email', [validators.Length(min=4,max=15)])
+    pic = FileField('Update Profile photo')
+    password = PasswordField('Password', [validators.Length(min=6)])
+
+    submit = SubmitField('Submit')
+
+class Users(ModelView):
+    can_delete = True
+    page_size = 50
+    column_searchable_list = ['username','fullname']
+    form   = User_form
+    column_exclude_list = ('password','sub_role','image_file','introduction','introduction_video','roles')
+    form_excluded_columns = ('password')
+
+admin.add_view(Users(User, db.session, category="User Management",name="User List"))
+admin.add_view(ModelView(Live, db.session, category="Live Management",name="Live List"))
+admin.add_view(ModelView(Series, db.session, category="Course Management"))
+admin.add_view(ModelView(Available, db.session, category="Schedule Management",name="Schedule List"))
+admin.add_view(ModelView(Payment, db.session, category="Payment Management"))
+
 admin.add_view(ModelView(Comment, db.session, category=""))
-admin.add_view(ModelView(Episode, db.session, category="Course"))
-admin.add_view(ModelView(Payment, db.session, category=""))
-admin.add_view(FileAdmin(staticPath, '/static/', name='Files'))
-admin.add_view(RoleView(name="Assign roles", endpoint='roles',category="Roles & Permissions"))
-admin.add_view(FunctionView(name="Dashboard", endpoint='dashboard',category="Hme"))
-admin.add_sub_category(name="Links", parent_name="Course")
-admin.add_sub_category(name="Assign roles", parent_name="Roles & Permissions")
-admin.add_sub_category(name="Create roles", parent_name="Roles & Permissions")
-admin.add_sub_category(name="Create live", parent_name="Live")
-admin.add_link(MenuLink(name='Create live', url='/', category='Live'))
+admin.add_view(ModelView(Episode, db.session, category="Course Management"))
+admin.add_view(ModelView(Role, db.session, category="Role Management"))
+admin.add_view(FileAdmin(staticPath, '/static/', name='File Management'))
+admin.add_view(RoleView(name="Assign roles", endpoint='roles',category="Roles Management"))
+admin.add_view(FunctionView(name="Dashboard", endpoint='dashboard',category="Dashboard"))
+admin.add_sub_category(name="Links", parent_name="Course Management")
+admin.add_sub_category(name="Assign roles", parent_name="Roles Management")
+admin.add_sub_category(name="Create roles", parent_name="Roles Management")
+admin.add_sub_category(name="Create live", parent_name="Live Management")
 admin.add_link(MenuLink(name='Home', url='/'))
-admin.add_link(MenuLink(name='Create roles', url='/', category='Roles & Permissions'))
+admin.add_link(MenuLink(name='Create roles', url='/', category='Roles Management'))
 ### FORMS ###
 
 class Signup_form(FlaskForm):
@@ -761,18 +802,7 @@ class Verify_form(FlaskForm):
     occupation = StringField('Occupation', validators=[Required()])
     experience = StringField('Experience', validators=[Required()])
     phone = IntegerField('Phone', validators=[Required()])
-class User_form(FlaskForm):
 
-    introduction = TextAreaField('Introduction', validators=[Required()])
-    status = StringField('Status', validators=[Required()])
-    introVideo = FileField('Upload an Introduction video')
-    fullname = StringField('Fullname', [validators.Length(min=4,max=15)])
-    username = StringField('Username', [validators.Length(min=4,max=15)])
-    email = StringField('Email', [validators.Length(min=4,max=15)])
-    pic = FileField('Update Profile photo')
-    password = PasswordField('Password', [validators.Length(min=6)])
-
-    submit = SubmitField('Submit')
 
 
 
@@ -874,11 +904,25 @@ class Lesson_form(FlaskForm):
     title = StringField()
     description = TextAreaField()
 
+
 class Comment_form(FlaskForm):
     content = StringField()
     submit = SubmitField('Post')
 
 
+class MultiCheckboxField(SelectMultipleField):
+    widget = widgets.ListWidget(prefix_label=False)
+    option_widget = widgets.CheckboxInput()
+
+
+class ExampleForm(FlaskForm):
+    choices = MultiCheckboxField('Routes', coerce=int)
+    submit = SubmitField("Set User Choices")
+
+class Role_form(FlaskForm):
+    name = StringField()
+    permissions = MultiCheckboxField('Permissions', choices=[('UPLOAD','UPLOAD'),('LIVE','LIVE'),('SCHEDULE','SCHEDULE'),('MODERATE','MODERATE'),('VERIFY','VERIFY'),('ADMINISTER','ADMINISTER'),('ROLES','ROLES')], coerce=int)
+    submit = SubmitField('Create')
 
 
 class Request_reset(FlaskForm):
@@ -895,8 +939,6 @@ class Reset_password(FlaskForm):
     confirm_password = PasswordField('CONFIRM PASSWORD',[validators.DataRequired(),validators.EqualTo('password',message='Password must much')])
     submit = SubmitField('Reset')
 
-
-Role.insert_roles()
 
 @app.context_processor
 def inject_permissions():
@@ -915,8 +957,9 @@ def forms():
     signupForm = Signup_form()
     userForm = User_form()
     commentForm = Comment_form()
+    roleForm = Role_form()
 
-    return dict(commentForm=commentForm,userForm = userForm,signupForm=signupForm,UpdateSession=UpdateSession,UpdateUploads=UpdateUploads,UpdateSeries=UpdateSeries,UpdateEpisode=UpdateEpisode,sessionForm=sessionForm,form=form,seriesForm=seriesForm,episodeForm=episodeForm)
+    return dict(commentForm=commentForm,roleForm=roleForm,userForm = userForm,signupForm=signupForm,UpdateSession=UpdateSession,UpdateUploads=UpdateUploads,UpdateSeries=UpdateSeries,UpdateEpisode=UpdateEpisode,sessionForm=sessionForm,form=form,seriesForm=seriesForm,episodeForm=episodeForm)
 
 @app.route('/' ,methods=['POST','GET'])
 def home():
@@ -2552,6 +2595,18 @@ def verifyCourse():
     videos.approved = True
     db.session.commit()
     msg = 'Verified Successfully'
+    return msg
+
+@app.route('/createrole', methods=['POST', 'GET'])
+def createRole():
+    roleData = Role_form()
+    name = request.form['title']
+    permList = request.form.getlist('permission')
+    print(permList)
+    for perm in permList:
+        permission =  int(perm,2)
+        Role.insert_roles(name, permission)
+    msg = 'Created Successfully'
     return msg
 
 @app.route('/disableComment', methods=['POST', 'GET'])

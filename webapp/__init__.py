@@ -1204,6 +1204,26 @@ def userDetails():
 
     return data
 
+@app.route('/checkout')
+@csrf.exempt
+def checkout():
+    price = request.args.get('price', type=int)
+    subject = request.args.get('subject', type=str)
+    course_id = request.args.get('course_id', type=int)
+    user = request.args.get('user', type=int)
+    token = binascii.hexlify(os.urandom(32))
+    model = AlipayTradeWapPayModel()
+    model.total_amount = price
+    model.product_code = "QUICK_WAP_WAY"
+    model.subject = subject
+    model.out_trade_no = course_id
+    model.quit_url = "https://www.100chinaguide.com"
+    req = AlipayTradeWapPayRequest(biz_model=model)
+    response = client.sdk_execute(req)
+    print("alipay.trade.app.pay response:" + response)
+    alipayUrl = 'https://openapi.alipay.com/gateway.do?'
+    data = alipayUrl + response
+    return data
 
 
 @app.route('/addCart',methods=['DELETE', 'GET'])

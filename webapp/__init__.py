@@ -35,17 +35,17 @@ from itsdangerous import TimedJSONWebSignatureSerializer as Serializer
 from werkzeug.utils import secure_filename
 from wtforms import *
 from wtforms.validators import Required
-#from flask_admin.contrib.sqla import ModelView
-#from flask_admin.contrib.fileadmin import FileAdmin
-#
-#from wtforms.widgets import TextArea
-#from flask_admin.form import SecureForm
+
 import os.path as op
 from alipay.aop.api.AlipayClientConfig import AlipayClientConfig
 from alipay.aop.api.DefaultAlipayClient import DefaultAlipayClient
 from alipay.aop.api.domain.AlipayTradeWapPayModel import AlipayTradeWapPayModel
 from alipay.aop.api.request.AlipayTradeWapPayRequest import AlipayTradeWapPayRequest
-
+from flask_admin.contrib.sqla import ModelView
+#from flask_admin.contrib.fileadmin import FileAdmin
+#
+#from wtforms.widgets import TextArea
+#from flask_admin.form import SecureForm
 
 app = Flask(__name__)
 
@@ -159,7 +159,7 @@ app.config['FLASKY_ADMIN'] = 'sudomin'
 
 mail = Mail(app)
 
-#admin = Admin(app, name='Management Panel', template_mode='bootstrap3')
+admin = Admin(app, name='Management Panel', template_mode='bootstrap3')
 staticPath = op.join(op.dirname(__file__), 'static')
 
 #class CKTextAreaWidget(TextArea):
@@ -927,22 +927,22 @@ class Reset_password(FlaskForm):
     confirm_password = PasswordField('CONFIRM PASSWORD',[validators.DataRequired(),validators.EqualTo('password',message='Password must much')])
     submit = SubmitField('Reset')
 
-#class Users(ModelView):
-#    can_delete = True
-#    can_view_details = True
+class Users(ModelView):
+    can_delete = True
+    can_view_details = True
 #    form_base_class = SecureForm
-#    page_size = 50
-#    column_searchable_list = ['username','fullname']
-#    column_filters = ['id','username','fullname','nationality','role','series','episode']
-#    column_editable_list = ['role']
-#    form   = User_form
-#    column_hide_backrefs = False
-#    column_display_all_relations = True
-#    create_modal = True
-#    edit_modal = True
-#    column_list = ('image_file','id','username','fullname','nationality','role','series','episode',)
-#    column_exclude_list = ('password','id_document','id_type','sub_role','image_file','introduction','introduction_video','roles')
-#    form_excluded_columns = ('password')
+    page_size = 50
+    column_searchable_list = ['username','fullname']
+    column_filters = ['id','username','fullname','nationality','role','series','episode']
+    column_editable_list = ['role']
+    form   = User_form
+    column_hide_backrefs = False
+    column_display_all_relations = True
+    create_modal = True
+    edit_modal = True
+    column_list = ('image_file','id','username','fullname','nationality','role','series','episode',)
+    column_exclude_list = ('password','id_document','id_type','sub_role','image_file','introduction','introduction_video','roles')
+    form_excluded_columns = ('password')
 #class LiveView(ModelView):
 #    can_edit = False
 #    can_create = False
@@ -1015,7 +1015,7 @@ class Reset_password(FlaskForm):
 #    column_list = ('subtitle','category','views','user_episode','series_id')
 #    form_excluded_columns = ('')
 
-#admin.add_view(Users(User, db.session, category="User Management",name="User List"))
+admin.add_view(Users(User, db.session, category="User Management",name="User List"))
 #admin.add_view(LiveView(Live, db.session, category="Live Management",name="Live List"))
 #admin.add_view(SeriesView(Series, db.session, category="Course Management"))
 #admin.add_view(ScheduleView(Available, db.session, category="Schedule Management",name="Schedule List"))

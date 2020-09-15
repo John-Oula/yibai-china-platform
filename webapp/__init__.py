@@ -39,7 +39,7 @@ from wtforms.validators import Required
 #from flask_admin.contrib.fileadmin import FileAdmin
 import os.path as op
 from wtforms.widgets import TextArea
-from flask_admin.form import SecureForm
+#from flask_admin.form import SecureForm
 
 #from alipaySDK.alipay.aop.api.AlipayClientConfig import AlipayClientConfig
 #from alipaySDK.alipay.aop.api.DefaultAlipayClient import DefaultAlipayClient

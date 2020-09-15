@@ -162,23 +162,23 @@ mail = Mail(app)
 #admin = Admin(app, name='Management Panel', template_mode='bootstrap3')
 staticPath = op.join(op.dirname(__file__), 'static')
 
-class CKTextAreaWidget(TextArea):
-    def __call__(self, field, **kwargs):
-        if kwargs.get('class'):
-            kwargs['class'] += ' ckeditor'
-        else:
-            kwargs.setdefault('class', 'ckeditor')
-        return super(CKTextAreaWidget, self).__call__(field, **kwargs)
-
-class CKTextAreaField(TextAreaField):
-    widget = CKTextAreaWidget()
-
-class MessageAdmin(ModelView):
-    extra_js = ['//cdn.ckeditor.com/4.6.0/standard/ckeditor.js']
-
-    form_overrides = {
-        'description': CKTextAreaField
-    }
+#class CKTextAreaWidget(TextArea):
+#    def __call__(self, field, **kwargs):
+#        if kwargs.get('class'):
+#            kwargs['class'] += ' ckeditor'
+#        else:
+#            kwargs.setdefault('class', 'ckeditor')
+#        return super(CKTextAreaWidget, self).__call__(field, **kwargs)
+#
+#class CKTextAreaField(TextAreaField):
+#    widget = CKTextAreaWidget()
+#
+#class MessageAdmin(ModelView):
+#    extra_js = ['//cdn.ckeditor.com/4.6.0/standard/ckeditor.js']
+#
+#    form_overrides = {
+#        'description': CKTextAreaField
+#    }
 
 @login_manager.user_loader
 def load_user(user_id):

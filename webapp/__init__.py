@@ -35,12 +35,12 @@ from itsdangerous import TimedJSONWebSignatureSerializer as Serializer
 from werkzeug.utils import secure_filename
 from wtforms import *
 from wtforms.validators import Required
-from flask_admin.contrib.sqla import ModelView
-from flask_admin.contrib.fileadmin import FileAdmin
+#from flask_admin.contrib.sqla import ModelView
+#from flask_admin.contrib.fileadmin import FileAdmin
+#
+#from wtforms.widgets import TextArea
+#from flask_admin.form import SecureForm
 import os.path as op
-from wtforms.widgets import TextArea
-from flask_admin.form import SecureForm
-
 from alipay.aop.api.AlipayClientConfig import AlipayClientConfig
 from alipay.aop.api.DefaultAlipayClient import DefaultAlipayClient
 from alipay.aop.api.domain.AlipayTradeWapPayModel import AlipayTradeWapPayModel

@@ -3,21 +3,125 @@
     {{ super() }}
 
     <style>
-.navbar {
+.navbar.navbar-default {
             border-width: 1px;
             border-radius: 0;
 
             border-top: none;
             box-shadow: none;
+        height: 100%;
+    width: 18%;
+    position: fixed;
+    z-index: 100;
+    top: 0;
+    left: 0;
+    background-color: #111;
+    overflow-x: hidden;
+    transition: 0.5s;
+    padding-top: 60px;
+    display: block;
 }
     .container{
         margin: 0px;
         padding: 0px;
         width: 100%;
+        margin-left: 20%;
+        margin-top: 2%;
     }
+    .dropdown-menu {
+	position: absolute;
+	top: 100%;
+	left: 0;
+    z-index: 1000;
+	display: none;
+	float: left;
+	min-width: 160px;
+	padding: 5px 0;
+	margin: 2px 0 0;
+	list-style: none;
+	font-size: 15px;
+	text-align: left;
+	background-color: #ffffff;
+	/* border: 1px solid #cccccc; */
+	border: 1px solid rgba(0,0,0,0.15);
+	border-radius: 4px;
+	-webkit-box-shadow: 0 6px 12px rgba(0,0,0,0.175);
+	box-shadow: 0 6px 12px rgba(0,0,0,0.175);
+	-webkit-background-clip: padding-box;
+	background-clip: padding-box;
+}
+    .navbar-nav {
+	float: left;
+	margin: 0;
+	display: flex;
+	flex-direction: column;
+        font-size: 14px;
+
+}
+    div.container > .admin-form {
+	margin-top: 35px;
+	width: 50%;
+}
+    .table-responsive {
+	overflow-x: auto;
+	width: 75%;
+}
+    thead{
+            background-color: #dfdfdf;
+
+    }
+table a:not(.btn), .table a:not(.btn) {
+	text-decoration: none;
+}
+    .alert {
+	padding: 15px;
+	margin-bottom: 21px;
+	border: 1px solid transparent;
+	border-radius: 4px;
+	width: 30%;
+}
     </style>
+{% endblock %}
+{% block brand %}
+
 {% endblock %}
 
 {% block  body%}
-
+    <div class="d-flex">
+<div class="card text-white bg-primary mb-3" style="max-width: 20rem;">
+  <div class="card-header">Header</div>
+  <div class="card-body">
+    <h4 class="card-title">Primary card title</h4>
+    <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+  </div>
+</div>
+<div class="card text-white bg-success mb-3" style="max-width: 20rem;">
+  <div class="card-header">Header</div>
+  <div class="card-body">
+    <h4 class="card-title">Success card title</h4>
+    <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+  </div>
+</div>
+<div class="card text-white bg-warning mb-3" style="max-width: 20rem;">
+  <div class="card-header">Header</div>
+  <div class="card-body">
+    <h4 class="card-title">Warning card title</h4>
+    <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+  </div>
+</div>
+<div class="card text-white bg-info mb-3" style="max-width: 20rem;">
+  <div class="card-header">Header</div>
+  <div class="card-body">
+    <h4 class="card-title">Info card title</h4>
+    <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+  </div>
+</div>
+<div class="card text-white bg-dark mb-3" style="max-width: 20rem;">
+  <div class="card-header">Header</div>
+  <div class="card-body">
+    <h4 class="card-title">Dark card title</h4>
+    <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+  </div>
+</div>
+</div>
 {% endblock %}

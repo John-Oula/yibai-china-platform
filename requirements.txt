@@ -3,6 +3,7 @@ alipay-sdk-python==3.3.398
 anaconda==0.0.1.1
 anytree==2.8.0
 apple-calendar-integration==0.0.1
+Babel==2.8.0
 bcrypt==3.1.7
 beautifulsoup4==4.7.1
 bleach==3.1.4
@@ -37,6 +38,7 @@ filelock==3.0.12
 filetype==1.0.7
 Flask==1.1.2
 Flask-Admin==1.5.4
+Flask-BabelEx==0.9.4
 Flask-Bcrypt==0.7.1
 Flask-Bleach==0.0.2
 Flask-Blogging==1.2.2
@@ -52,11 +54,13 @@ Flask-Mail==0.9.1
 Flask-Markdown==0.3
 flask-marshmallow==0.10.1
 Flask-Migrate==2.5.3
+flask-mongoengine==0.9.5
 Flask-MySQLdb==0.2.0
 Flask-PageDown==0.2.2
 Flask-Principal==0.4.0
 flask-redis==0.4.0
 Flask-Script==2.0.6
+Flask-Share==0.1.1
 Flask-Sijax==0.4.1
 Flask-SQLAlchemy==2.4.1
 Flask-Uploads==0.2.1
@@ -67,6 +71,7 @@ fontlib==20190831.1
 fspath==20190323
 future==0.17.1
 generate-passwords==0.1.3
+GeoAlchemy2==0.8.4
 glob3==0.0.1
 gnupg==2.3.1
 gunicorn==19.7.1
@@ -91,10 +96,12 @@ MarkupSafe==1.1.1
 marshmallow==3.5.1
 marshmallow-sqlalchemy==0.18.0
 matplotlib==3.0.3
+mongoengine==0.20.0
 mysql==0.0.2
-
+mysql-client==0.0.1
 mysql-connector==2.2.9
 mysqlclient==1.4.6
+nose==1.3.7
 nulltype==2.3.1
 numpy==1.16.2
 options==1.4.10
@@ -119,14 +126,17 @@ pycryptodomex==3.9.4
 pyflakes==2.1.1
 Pygments==2.5.2
 PyJWT==1.7.1
+pymongo==3.11.0
 pyOpenSSL==19.1.0
 pyparsing==2.3.1
 pyperclip==1.7.0
 pyreadline==2.1
 PySocks==1.7.1
+python-alipay-sdk==2.1.0
 python-dateutil==2.6.1
 python-editor==1.0.3
 python-hmac-auth==0.4
+python-secrets==19.12.0
 python-slugify==3.0.6
 pytz==2017.3
 PyYAML==5.3
@@ -138,6 +148,10 @@ requests==2.9.1
 rsa==4.6
 s3transfer==0.3.3
 scikit-learn==0.20.3
+scipy==1.2.1
+scrapy-beautifulsoup==0.0.2
+selenium==3.141.0
+Shapely==1.7.1
 shortuuid==0.5.0
 shutilwhich==1.1.0
 Sijax==0.3.2
@@ -145,6 +159,7 @@ simple-math==1.1.0
 simplemath==1.0
 six==1.10.0
 soupsieve==1.9.1
+speaklater==1.3
 SQLAlchemy==1.3.16
 ssh-import-id==5.5
 stevedore==1.31.0
@@ -155,6 +170,7 @@ text-unidecode==1.3
 tinycss2==1.0.2
 toml==0.10.0
 tox==3.14.3
+twilio==6.35.5
 update==0.0.1
 urllib3==1.13.1
 verboselogs==1.7
@@ -163,6 +179,7 @@ visitor==0.1.3
 webencodings==0.5.1
 WebOb==1.8.5
 Werkzeug==0.16.1
+wtf-peewee==3.0.2
 WTForms==2.3.1
 WTForms-Appengine==0.1
 WTForms-Ext==0.2

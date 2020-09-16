@@ -17,7 +17,15 @@ import re
 import socket
 from functools import wraps
 
+from alipay.aop.api.request.AlipayTradePagePayRequest import AlipayTradePagePayRequest
 
+from alipay.aop.api.domain.SettleInfo import SettleInfo
+
+from alipay.aop.api.domain.SubMerchant import SubMerchant
+
+from alipay.aop.api.domain.SettleDetailInfo import SettleDetailInfo
+
+from alipay.aop.api.domain.AlipayTradePagePayModel import AlipayTradePagePayModel
 from flask_share import Share
 from flask_admin import Admin,BaseView, expose
 #from flask_admin.menu import MenuLink
@@ -41,7 +49,7 @@ from alipay.aop.api.AlipayClientConfig import AlipayClientConfig
 from alipay.aop.api.DefaultAlipayClient import DefaultAlipayClient
 from alipay.aop.api.domain.AlipayTradeWapPayModel import AlipayTradeWapPayModel
 from alipay.aop.api.request.AlipayTradeWapPayRequest import AlipayTradeWapPayRequest
-from flask_admin.contrib.sqla import ModelView
+#from flask_admin.contrib.sqla import ModelView
 #from flask_admin.contrib.fileadmin import FileAdmin
 #
 #from wtforms.widgets import TextArea
@@ -110,6 +118,7 @@ else:
 alipay_client_config = AlipayClientConfig()
 alipay_client_config.server_url = 'https://openapi.alipay.com/gateway.do'
 alipay_client_config.app_id ='2021001182663949'
+
 alipay_client_config.app_private_key = app_private_key_string
 alipay_client_config.alipay_public_key = alipay_public_key_string
 
@@ -637,6 +646,9 @@ class Payment(db.Model):
     id = db.Column('id', db.Integer, primary_key=True)
     order_number = db.Column('order_number', db.String(30))
     amount = db.Column('amount', db.INT)
+    seller_id = db.Column('seller_id', db.INT)
+    sign = db.Column('sign', db.VARCHAR)
+    trade_no = db.Column('trade_no', db.VARCHAR)
     price = db.Column('price', db.INT)
     user_id = db.Column('user_id', db.Integer, db.ForeignKey('user.id'), nullable=False)
     series_id = db.Column('series_id', db.Integer, db.ForeignKey('series.id'), nullable=False)
@@ -927,22 +939,22 @@ class Reset_password(FlaskForm):
     confirm_password = PasswordField('CONFIRM PASSWORD',[validators.DataRequired(),validators.EqualTo('password',message='Password must much')])
     submit = SubmitField('Reset')
 
-class Users(ModelView):
-    can_delete = True
-    can_view_details = True
-#    form_base_class = SecureForm
-    page_size = 50
-    column_searchable_list = ['username','fullname']
-    column_filters = ['id','username','fullname','nationality','role','series','episode']
-    column_editable_list = ['role']
-    form   = User_form
-    column_hide_backrefs = False
-    column_display_all_relations = True
-    create_modal = True
-    edit_modal = True
-    column_list = ('image_file','id','username','fullname','nationality','role','series','episode',)
-    column_exclude_list = ('password','id_document','id_type','sub_role','image_file','introduction','introduction_video','roles')
-    form_excluded_columns = ('password')
+#class Users(ModelView):
+#    can_delete = True
+#    can_view_details = True
+##    form_base_class = SecureForm
+#    page_size = 50
+#    column_searchable_list = ['username','fullname']
+#    column_filters = ['id','username','fullname','nationality','role','series','episode']
+#    column_editable_list = ['role']
+#    form   = User_form
+#    column_hide_backrefs = False
+#    column_display_all_relations = True
+#    create_modal = True
+#    edit_modal = True
+#    column_list = ('image_file','id','username','fullname','nationality','role','series','episode',)
+#    column_exclude_list = ('password','id_document','id_type','sub_role','image_file','introduction','introduction_video','roles')
+#    form_excluded_columns = ('password')
 #class LiveView(ModelView):
 #    can_edit = False
 #    can_create = False
@@ -1015,7 +1027,7 @@ class Users(ModelView):
 #    column_list = ('subtitle','category','views','user_episode','series_id')
 #    form_excluded_columns = ('')
 
-admin.add_view(Users(User, db.session, category="User Management",name="User List"))
+#admin.add_view(Users(User, db.session, category="User Management",name="User List"))
 #admin.add_view(LiveView(Live, db.session, category="Live Management",name="Live List"))
 #admin.add_view(SeriesView(Series, db.session, category="Course Management"))
 #admin.add_view(ScheduleView(Available, db.session, category="Schedule Management",name="Schedule List"))
@@ -1204,6 +1216,8 @@ def userDetails():
 
     return data
 
+
+
 @app.route('/checkout')
 @csrf.exempt
 def checkout():
@@ -1212,20 +1226,30 @@ def checkout():
     course_id = request.args.get('course_id', type=int)
     user = request.args.get('user', type=int)
     token = binascii.hexlify(os.urandom(32))
-    model = AlipayTradeWapPayModel()
-    model.total_amount = price
-    model.product_code = "QUICK_WAP_WAY"
-    model.subject = subject
+    model = AlipayTradePagePayModel()
     model.out_trade_no = course_id
-    model.quit_url = "https://www.100chinaguide.com"
-    req = AlipayTradeWapPayRequest(biz_model=model)
-    response = client.sdk_execute(req)
-    print("alipay.trade.app.pay response:" + response)
+    model.total_amount = price
+    model.subject = subject
+#    model.body = "支付宝测试"
+    model.product_code = "FAST_INSTANT_TRADE_PAY"
+
+    req = AlipayTradePagePayRequest(biz_model=model)
+    req.return_url='https://www.100chinaguide.com/verify_payment'
+    req.notify_url='https://www.100chinaguide.com/notify'
+    # 得到构造的请求，如果http_method是GET，则是一个带完成请求参数的url，如果http_method是POST，则是一段HTML表单片段
+    response = client.page_execute(req, http_method="GET")
+    print("alipay.trade.page.pay response:" + response)
+
     alipayUrl = 'https://openapi.alipay.com/gateway.do?'
     data = alipayUrl + response
+
+
     return data
 
-
+@app.route('/notify',methods=['POST', 'GET'])
+@csrf.exempt
+def notify():
+    return 'success'
 @app.route('/addCart',methods=['DELETE', 'GET'])
 @login_required
 @csrf.exempt
@@ -1543,22 +1567,24 @@ def time():
         start = time.start_time
         x = re.split(r'([T+])', start)
 
-@app.route('/verify_payment/<int:token>')
+@app.route('/verify_payment')
 @login_required
 def verify_payment(token):
     course_id = request.args.get('course_id', type=int)
     user = request.args.get('user', type=str)
-    order_number = request.args.get('user', type=int)
-    amount = request.args.get('amount', type=int)
-    price = request.args.get('price', type=int)
+    order_number = request.args.get('out_trade_no', type=int)
+    amount = request.args.get('total_amount', type=int)
+#    price = request.args.get('price', type=int)
     user_id = request.args.get('user_id', type=int)
+    seller_id = request.args.get('seller_id', type=int)
+    sign = request.args.get('sign', type=str)
 
     course = Series.query.filter_by(id = course_id).first()
-    payment = Payment(order_number=order_number,amount=amount,price=price,user_id=user_id)
+    payment = Payment(order_number=order_number,amount=amount,price=price,user_id=user_id, seller_id =seller_id, sign=sign)
     db.session.add(payment)
     db.session.commit()
 
-    return redirect(url_for('home'))
+    return redirect(url_for('videoInfo',videoId=order_number))
 
 
 

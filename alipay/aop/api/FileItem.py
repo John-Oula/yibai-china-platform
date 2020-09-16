@@ -4,7 +4,7 @@ Created on 2017-12-20
 
 @author: liuqun
 '''
-from alipaySDK.alipay.aop.api.util.CommonUtils import get_mime_type
+from alipay.aop.api.util.CommonUtils import get_mime_type
 
 
 class FileItem(object):

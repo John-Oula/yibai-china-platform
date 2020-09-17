@@ -4,7 +4,7 @@ Created on 2017-12-20
 
 @author: liuqun
 '''
-from alipaySDK.alipay.aop.api.constant.CommonConstants import PYTHON_VERSION_3
+from alipay.aop.api.constant.CommonConstants import PYTHON_VERSION_3
 
 
 def has_value(m, key):

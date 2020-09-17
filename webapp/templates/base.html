@@ -641,37 +641,7 @@
         </nav>
 
     </div>
-      {% if current_user.can(Permission.MODERATE) and   current_user.role.name == 'Moderator'  %}
-          <div class="p-3 approve-card">
-            <div class="card big-card shadow-lg" id="single-click">
-                <div class="card-body text-center">
-                    <h1></h1>
-                    <h6>Approved</h6>
 
-                </div>
-            </div>
-            <div class="mt-4 card big-card shadow-lg" id="series-click">
-                <div class="card-body text-center align-items-center">
-
-                    <h1>{{approvedVideos}}</h1>
-                    <h6>Pending</h6>
-                </div>
-            </div>
-
-        </div>
-<div id="verify-list" class="p-2">
-
-</div>
-
-          {% else %}
-                  <div class="">
-            <ul class="upload-list">
-
-
-            </ul>
-
-        </div>
-          {% endif %}
 {% endblock %}
       {% if current_user.can(Permission.ADMINISTER) or   current_user.can(Permission.ROLES) %}
           <div>

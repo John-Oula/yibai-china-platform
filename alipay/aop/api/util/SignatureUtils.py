@@ -12,8 +12,8 @@ from Crypto.Hash import SHA256
 from Crypto.PublicKey import RSA
 from Crypto.Signature import PKCS1_v1_5
 
-from alipaySDK.alipay.aop.api.constant.CommonConstants import PYTHON_VERSION_3
-from alipaySDK.alipay.aop.api.util.StringUtils import *
+from alipay.aop.api.constant.CommonConstants import PYTHON_VERSION_3
+from alipay.aop.api.util.StringUtils import *
 
 
 # import rsa

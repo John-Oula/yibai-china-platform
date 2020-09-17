@@ -1207,6 +1207,7 @@ def userDetails():
 @app.route('/checkout')
 @csrf.exempt
 def checkout():
+    timeStamp = int(time.time())
     price = request.args.get('price', type=int)
     subject = request.args.get('subject', type=str)
     course_id = request.args.get('course_id', type=int)
@@ -1216,9 +1217,10 @@ def checkout():
     model.total_amount = price
     model.product_code = "QUICK_WAP_WAY"
     model.subject = subject
-    model.out_trade_no = course_id
+    model.out_trade_no = timeStamp + course_id
     model.quit_url = "https://www.100chinaguide.com"
     req = AlipayTradeWapPayRequest(biz_model=model)
+    req.notify_url = 'https://www.100chinaguide.com/verify_payment'
     response = client.sdk_execute(req)
     print("alipay.trade.app.pay response:" + response)
     alipayUrl = 'https://openapi.alipay.com/gateway.do?'
@@ -1543,18 +1545,19 @@ def time():
         start = time.start_time
         x = re.split(r'([T+])', start)
 
-@app.route('/verify_payment/<int:token>')
+@app.route('/verify_payment')
 @login_required
-def verify_payment(token):
+def verify_payment():
     course_id = request.args.get('course_id', type=int)
+    notify_time = request.args.get('notify_time', type=int)
     user = request.args.get('user', type=str)
-    order_number = request.args.get('user', type=int)
-    amount = request.args.get('amount', type=int)
+    order_number = request.args.get('out_trade_no', type=int)
+    amount = request.args.get('total_amount', type=int)
     price = request.args.get('price', type=int)
     user_id = request.args.get('user_id', type=int)
 
     course = Series.query.filter_by(id = course_id).first()
-    payment = Payment(order_number=order_number,amount=amount,price=price,user_id=user_id)
+    payment = Payment(order_number=order_number,amount=amount,price=price,user_id=1)
     db.session.add(payment)
     db.session.commit()
 

@@ -31,9 +31,9 @@
     <title>{% block title %}100CHINAGUIDE{% endblock %}</title>
 <meta property="og:url"           content="https://www.100chinaguide.com" />
 <meta property="og:type"          content="website" />
-<meta property="og:title"         content="100ChinaGuide" />
-<meta property="og:description"   content="Your description" />
-<meta property="og:image"         content="https://www.100chinaguide/static/logo.svg" />
+<meta id="fb-share-title" property="og:title"         content="" />
+<meta id="fb-share-description" property="og:description"   content="" />
+<meta id="fb-share-img" property="og:image"         content="" />
 {{ share.load() }}
 </head>
 {% endblock %}
@@ -936,7 +936,7 @@
     <div class="share-logos mx-auto text-center p-3  shadow-lg">
 
                      <div class="fb-share-button"
-                        data-href="https://www.100chinaguide.com"
+                        data-href=""
                     data-layout="button_count">
 
     </div>
@@ -961,7 +961,6 @@
     <script src='../static/packages/daygrid/main.js'></script>
     <script src='../static/packages/timegrid/main.js'></script>
     <script src='../static/packages/interaction/main.js'></script>
-    <script src="https://vjs.zencdn.net/7.8.2/video.js"></script>
 
 <script
   src="{{ url_for('static',filename='jquery-3.4.1.js') }}" type="text/javascript"

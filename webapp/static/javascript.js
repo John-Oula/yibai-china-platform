@@ -691,10 +691,18 @@ $('.live-list').ready(function () {
 
 //    });
     $('.share-btn').click(function (e) {
+        var fbDesc = $('.share-logos').attr('desc');
+        var fbCoverImg = 'https://www.100chinaguide.com/static/coverImages/' + $('.share-logos').attr('coverImg');;
+        var fbTitle = $('.share-logos').attr('title');
+        var url      = window.location.href;
         e.preventDefault();
+        $('.fb-share-button').attr('data-href',url)
+        $('#fb-share-img').attr('content',fbCoverImg)
+        $('#fb-share-title').attr('content',fbTitle)
+        $('#fb-share-description').attr('content',fbDesc)
         $('.fb-share-button').appendTo('.share-logos')
-        $('.fb-share-button').css('display', 'none');
         $('.share-logos').toggle()
+
 
 
     });
@@ -932,6 +940,9 @@ $('.video-details').ready(function () {
             $('#video-likes').html(obj.likes);
             $('#video-comments').html(obj.totalComments);
             $('#video-description').html(obj.description);
+            $('.share-logos').attr('desc',obj.description);
+            $('.share-logos').attr('title',obj.title);
+            $('.share-logos').attr('coverImg',obj.coverImg);
             $('#video-description img').css('width', '100%');
             $('#video-price').html(currency + obj.price);
             $('#video-price').css("fontSize", "17px");

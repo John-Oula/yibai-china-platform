@@ -121,7 +121,6 @@ app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 app.config['SECRET_KEY'] = 'Adawug;irwugw79536870635785ty0875y03davvavavdey'
 appID=200000164
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-# set optional bootswatch theme
 app.config['FLASK_ADMIN_SWATCH'] = 'flatly'
 app.config['WTF_CSRF_ENABLED'] = True
 if get_Host_name_IP('CJAY') == True:

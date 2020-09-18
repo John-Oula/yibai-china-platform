@@ -1240,14 +1240,14 @@ def checkout():
         print("failed execute")
     else:
         resp = AlipayTradeWapPayResponse()
-        # 解析响应结果
+
         resp.parse_response_content(response_content)
         print(resp.body)
         if resp.is_success():
-            # 如果业务成功，则通过respnse属性获取需要的值
+
             print("get response trade_no:" + resp.out_trade_no)
         else:
-            # 如果业务失败，则从错误码中可以得知错误情况，具体错误码信息可以查看接口文档
+
             print(resp.code + "," + resp.msg + "," + resp.sub_code + "," + resp.sub_msg)
     print("alipay.trade.app.pay response:" + response)
     alipayUrl = 'https://openapi.alipay.com/gateway.do?'

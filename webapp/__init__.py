@@ -158,7 +158,7 @@ app.config['FLASKY_ADMIN'] = 'sudomin'
 
 mail = Mail(app)
 
-#admin = Admin(app, name='Management Panel', template_mode='bootstrap3')
+admin = Admin(app, name='Management Panel', template_mode='bootstrap3')
 staticPath = op.join(op.dirname(__file__), 'static')
 
 #class CKTextAreaWidget(TextArea):

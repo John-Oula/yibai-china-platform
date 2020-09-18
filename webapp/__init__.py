@@ -1016,28 +1016,6 @@ class SeriesView(ModelView):
     column_list = ('title','status','category','views','status','approved','user_series')
     column_exclude_list = ('cover_image','description','upload_ref')
     form_excluded_columns = ('')
-#class EpisodeView(ModelView):
-    can_view_details = True
-    form_base_class = SecureForm
-
-#    column_editable_list = ['approved']
-
-    can_edit = True
-#    inline_models = ['user' ]
-    can_delete = True
-    page_size = 50
-    column_searchable_list = ['subtitle']
-#    column_filters = ['category']
-#    form   = Series_form
-    column_hide_backrefs = False
-    column_display_all_relations = True
-    create_modal = True
-    edit_modal = True
-
-
-    column_list = ('subtitle','category','views','user_episode','series_id')
-    form_excluded_columns = ('')
-
 
 class EpisodeView(ModelView):
     can_edit = True

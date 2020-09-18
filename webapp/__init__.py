@@ -20,7 +20,7 @@ from functools import wraps
 
 from flask_share import Share
 from flask_admin import Admin,BaseView, expose
-#from flask_admin.menu import MenuLink
+from flask_admin.menu import MenuLink
 import filetype
 #from PIL import Image
 from flask import Flask, render_template, url_for, flash, redirect, session, request, jsonify, abort
@@ -35,11 +35,11 @@ from itsdangerous import TimedJSONWebSignatureSerializer as Serializer
 from werkzeug.utils import secure_filename
 from wtforms import *
 from wtforms.validators import Required
-#from flask_admin.contrib.sqla import ModelView
-#from flask_admin.contrib.fileadmin import FileAdmin
-#
-#from wtforms.widgets import TextArea
-#from flask_admin.form import SecureForm
+from flask_admin.contrib.sqla import ModelView
+from flask_admin.contrib.fileadmin import FileAdmin
+
+from wtforms.widgets import TextArea
+from flask_admin.form import SecureForm
 import os.path as op
 from alipay.aop.api.AlipayClientConfig import AlipayClientConfig
 from alipay.aop.api.DefaultAlipayClient import DefaultAlipayClient
@@ -927,111 +927,111 @@ class Reset_password(FlaskForm):
     confirm_password = PasswordField('CONFIRM PASSWORD',[validators.DataRequired(),validators.EqualTo('password',message='Password must much')])
     submit = SubmitField('Reset')
 
-#class Users(ModelView):
-#    can_delete = True
-#    can_view_details = True
-#    form_base_class = SecureForm
-#    page_size = 50
-#    column_searchable_list = ['username','fullname']
-#    column_filters = ['id','username','fullname','nationality','role','series','episode']
-#    column_editable_list = ['role']
-#    form   = User_form
-#    column_hide_backrefs = False
-#    column_display_all_relations = True
-#    create_modal = True
-#    edit_modal = True
-#    column_list = ('image_file','id','username','fullname','nationality','role','series','episode',)
-#    column_exclude_list = ('password','id_document','id_type','sub_role','image_file','introduction','introduction_video','roles')
-#    form_excluded_columns = ('password')
-#class LiveView(ModelView):
-#    can_edit = False
-#    can_create = False
-#    inline_models = ['user' ]
-#    can_delete = True
-#    page_size = 50
-#    column_searchable_list = ['meetingCode','date','title']
-#    column_filters = ['category','date']
-#    form   = Session_form
-#    column_hide_backrefs = False
-#    column_display_all_relations = True
-#
-#
-#    column_list = ('meetingCode','meetingUrl','date','title','category','timestamp','author','status')
-#    column_exclude_list = ('cover_image','description')
-#    form_excluded_columns = ('')
-#class ScheduleView(ModelView):
-#    can_edit = False
-#    can_create = False
-#    inline_models = ['user' ]
-#    can_delete = True
-#    page_size = 50
-#    column_searchable_list = ['meetingCode','date_available']
-#    column_filters = ['date_available']
-#    form   = Session_form
-#    column_hide_backrefs = False
-#    column_display_all_relations = True
-#
-#
-#    column_list = ('meetingCode','meetingUrl','date_available','timestamp','start_time','end_time','author','status')
-#    column_exclude_list = ('cover_image','description')
-#    form_excluded_columns = ('')
-#class SeriesView(ModelView):
-#    can_view_details = True
-#    form_base_class = SecureForm
-#    column_editable_list = ['approved']
-#    can_edit = True
-##    inline_models = ['user' ]
-#    can_delete = True
-#    page_size = 50
-#    column_searchable_list = ['title']
-#    column_filters = ['category','price','status']
-##    form   = Series_form
-#    column_hide_backrefs = False
-#    column_display_all_relations = True
-#    create_modal = True
-#    edit_modal = True
-#
-#
-#    column_list = ('title','status','category','views','status','approved','user_series')
-#    column_exclude_list = ('cover_image','description','upload_ref')
-#    form_excluded_columns = ('')
-##class EpisodeView(ModelView):
-#    can_view_details = True
-#    form_base_class = SecureForm
-##    column_editable_list = ['approved']
-#    can_edit = True
-##    inline_models = ['user' ]
-#    can_delete = True
-#    page_size = 50
-#    column_searchable_list = ['subtitle']
-##    column_filters = ['category']
-##    form   = Series_form
-#    column_hide_backrefs = False
-#    column_display_all_relations = True
-#    create_modal = True
-#    edit_modal = True
-#
-#
-#    column_list = ('subtitle','category','views','user_episode','series_id')
-#    form_excluded_columns = ('')
+class Users(ModelView):
+    can_delete = True
+    can_view_details = True
+    form_base_class = SecureForm
+    page_size = 50
+    column_searchable_list = ['username','fullname']
+    column_filters = ['id','username','fullname','nationality','role','series','episode']
+    column_editable_list = ['role']
+    form   = User_form
+    column_hide_backrefs = False
+    column_display_all_relations = True
+    create_modal = True
+    edit_modal = True
+    column_list = ('image_file','id','username','fullname','nationality','role','series','episode',)
+    column_exclude_list = ('password','id_document','id_type','sub_role','image_file','introduction','introduction_video','roles')
+    form_excluded_columns = ('password')
+class LiveView(ModelView):
+    can_edit = False
+    can_create = False
+    inline_models = ['user' ]
+    can_delete = True
+    page_size = 50
+    column_searchable_list = ['meetingCode','date','title']
+    column_filters = ['category','date']
+    form   = Session_form
+    column_hide_backrefs = False
+    column_display_all_relations = True
 
-#admin.add_view(Users(User, db.session, category="User Management",name="User List"))
-#admin.add_view(LiveView(Live, db.session, category="Live Management",name="Live List"))
-#admin.add_view(SeriesView(Series, db.session, category="Course Management"))
-#admin.add_view(ScheduleView(Available, db.session, category="Schedule Management",name="Schedule List"))
-#admin.add_view(ModelView(Payment, db.session, category="Payment Management"))
-#
-#admin.add_view(ModelView(Comment, db.session, category=""))
-#admin.add_view(ModelView(Approve, db.session, category="Content Management",name="Approve content"))
-#admin.add_view(EpisodeView(Episode, db.session, category="Course Management"))
-#admin.add_view(ModelView(Role, db.session, category="Role Management"))
-#admin.add_view(FileAdmin(staticPath, '/static/', name='File Management'))
-#admin.add_view(RoleView(name="Assign roles", endpoint='roles',category="Roles Management"))
-#admin.add_view(FunctionView(name="Dashboard", endpoint='dashboard',category="Dashboard"))
-#admin.add_sub_category(name="Links", parent_name="Course Management")
-#admin.add_sub_category(name="Assign roles", parent_name="Roles Management")
-#admin.add_sub_category(name="Create roles", parent_name="Roles Management")
-#admin.add_sub_category(name="Create live", parent_name="Live Management")
+
+    column_list = ('meetingCode','meetingUrl','date','title','category','timestamp','author','status')
+    column_exclude_list = ('cover_image','description')
+    form_excluded_columns = ('')
+class ScheduleView(ModelView):
+    can_edit = False
+    can_create = False
+    inline_models = ['user' ]
+    can_delete = True
+    page_size = 50
+    column_searchable_list = ['meetingCode','date_available']
+    column_filters = ['date_available']
+    form   = Session_form
+    column_hide_backrefs = False
+    column_display_all_relations = True
+
+
+    column_list = ('meetingCode','meetingUrl','date_available','timestamp','start_time','end_time','author','status')
+    column_exclude_list = ('cover_image','description')
+    form_excluded_columns = ('')
+class SeriesView(ModelView):
+    can_view_details = True
+    form_base_class = SecureForm
+    column_editable_list = ['approved']
+    can_edit = True
+#    inline_models = ['user' ]
+    can_delete = True
+    page_size = 50
+    column_searchable_list = ['title']
+    column_filters = ['category','price','status']
+#    form   = Series_form
+    column_hide_backrefs = False
+    column_display_all_relations = True
+    create_modal = True
+    edit_modal = True
+
+
+    column_list = ('title','status','category','views','status','approved','user_series')
+    column_exclude_list = ('cover_image','description','upload_ref')
+    form_excluded_columns = ('')
+#class EpisodeView(ModelView):
+    can_view_details = True
+    form_base_class = SecureForm
+#    column_editable_list = ['approved']
+    can_edit = True
+#    inline_models = ['user' ]
+    can_delete = True
+    page_size = 50
+    column_searchable_list = ['subtitle']
+#    column_filters = ['category']
+#    form   = Series_form
+    column_hide_backrefs = False
+    column_display_all_relations = True
+    create_modal = True
+    edit_modal = True
+
+
+    column_list = ('subtitle','category','views','user_episode','series_id')
+    form_excluded_columns = ('')
+
+admin.add_view(Users(User, db.session, category="User Management",name="User List"))
+admin.add_view(LiveView(Live, db.session, category="Live Management",name="Live List"))
+admin.add_view(SeriesView(Series, db.session, category="Course Management"))
+admin.add_view(ScheduleView(Available, db.session, category="Schedule Management",name="Schedule List"))
+admin.add_view(ModelView(Payment, db.session, category="Payment Management"))
+
+admin.add_view(ModelView(Comment, db.session, category=""))
+admin.add_view(ModelView(Approve, db.session, category="Content Management",name="Approve content"))
+admin.add_view(EpisodeView(Episode, db.session, category="Course Management"))
+admin.add_view(ModelView(Role, db.session, category="Role Management"))
+admin.add_view(FileAdmin(staticPath, '/static/', name='File Management'))
+admin.add_view(RoleView(name="Assign roles", endpoint='roles',category="Roles Management"))
+admin.add_view(FunctionView(name="Dashboard", endpoint='dashboard',category="Dashboard"))
+admin.add_sub_category(name="Links", parent_name="Course Management")
+admin.add_sub_category(name="Assign roles", parent_name="Roles Management")
+admin.add_sub_category(name="Create roles", parent_name="Roles Management")
+admin.add_sub_category(name="Create live", parent_name="Live Management")
 @app.context_processor
 def inject_permissions():
     return dict(Permission=Permission)

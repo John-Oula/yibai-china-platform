@@ -65,7 +65,6 @@ def get_Host_name_IP(hostname):
     except:
         print("Unable to get Hostname and IP")
 
-    # Driver code
 
 import requests
 

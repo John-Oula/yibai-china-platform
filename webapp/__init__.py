@@ -258,7 +258,7 @@ class User(db.Model, UserMixin):
     series = db.relationship('Series', backref='user_series', lazy=True)
     episode = db.relationship('Episode', backref='user_episode', lazy=True)
     lesson = db.relationship('Lesson', backref=db.backref('user_lessons'))
-    comments = db.relationship('Comment', backref='author')
+    comments = db.relationship('Comment', backref='author',lazy ='dynamic')
     review = db.relationship('Reviews', backref='user_review')
     skill = db.relationship('Skill',backref='user',secondary=skills)
     available = db.relationship('Available',backref='user',secondary=available,)
@@ -273,7 +273,7 @@ class User(db.Model, UserMixin):
 #                               backref=db.backref('user_review', lazy='dynamic'), lazy='dynamic')
     book = db.relationship('Live', secondary=book,backref=db.backref('bookers'))
     bookSchedule = db.relationship('Available', secondary=bookSchedule,backref=db.backref('userSchedule'))
-    likes = db.relationship('Series', secondary=likes,backref=db.backref('liked'))
+    likes = db.relationship('Series', secondary=likes,backref=db.backref('liked',lazy ='dynamic'))
     likesEpisode = db.relationship('Episode', secondary=likesEpisode,backref=db.backref('userLikedEpisode'))
     cart = db.relationship('Series', secondary=cart,backref='user_cart')
 

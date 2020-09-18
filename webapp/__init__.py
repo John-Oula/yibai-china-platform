@@ -17,15 +17,7 @@ import re
 import socket
 from functools import wraps
 
-from alipay.aop.api.request.AlipayTradePagePayRequest import AlipayTradePagePayRequest
 
-from alipay.aop.api.domain.SettleInfo import SettleInfo
-
-from alipay.aop.api.domain.SubMerchant import SubMerchant
-
-from alipay.aop.api.domain.SettleDetailInfo import SettleDetailInfo
-
-from alipay.aop.api.domain.AlipayTradePagePayModel import AlipayTradePagePayModel
 from flask_share import Share
 from flask_admin import Admin,BaseView, expose
 from flask_admin.menu import MenuLink
@@ -43,25 +35,17 @@ from itsdangerous import TimedJSONWebSignatureSerializer as Serializer
 from werkzeug.utils import secure_filename
 from wtforms import *
 from wtforms.validators import Required
-
-
-
 from flask_admin.contrib.sqla import ModelView
 from flask_admin.contrib.fileadmin import FileAdmin
 
 from wtforms.widgets import TextArea
 from flask_admin.form import SecureForm
-
 import os.path as op
 from alipay.aop.api.AlipayClientConfig import AlipayClientConfig
 from alipay.aop.api.DefaultAlipayClient import DefaultAlipayClient
 from alipay.aop.api.domain.AlipayTradeWapPayModel import AlipayTradeWapPayModel
 from alipay.aop.api.request.AlipayTradeWapPayRequest import AlipayTradeWapPayRequest
-from flask_admin.contrib.sqla import ModelView
-from flask_admin.contrib.fileadmin import FileAdmin
-#
-from wtforms.widgets import TextArea
-from flask_admin.form import SecureForm
+
 
 app = Flask(__name__)
 
@@ -125,7 +109,6 @@ else:
 alipay_client_config = AlipayClientConfig()
 alipay_client_config.server_url = 'https://openapi.alipay.com/gateway.do'
 alipay_client_config.app_id ='2021001182663949'
-
 alipay_client_config.app_private_key = app_private_key_string
 alipay_client_config.alipay_public_key = alipay_public_key_string
 
@@ -652,9 +635,6 @@ class Payment(db.Model):
     id = db.Column('id', db.Integer, primary_key=True)
     order_number = db.Column('order_number', db.String(30))
     amount = db.Column('amount', db.INT)
-    seller_id = db.Column('seller_id', db.INT)
-    sign = db.Column('sign', db.VARCHAR)
-    trade_no = db.Column('trade_no', db.VARCHAR)
     price = db.Column('price', db.INT)
     user_id = db.Column('user_id', db.Integer, db.ForeignKey('user.id'), nullable=False)
     series_id = db.Column('series_id', db.Integer, db.ForeignKey('series.id'), nullable=False)
@@ -945,13 +925,10 @@ class Reset_password(FlaskForm):
     confirm_password = PasswordField('CONFIRM PASSWORD',[validators.DataRequired(),validators.EqualTo('password',message='Password must much')])
     submit = SubmitField('Reset')
 
-
-
-
 class Users(ModelView):
     can_delete = True
     can_view_details = True
-#    form_base_class = SecureForm
+    form_base_class = SecureForm
     page_size = 50
     column_searchable_list = ['username','fullname']
     column_filters = ['id','username','fullname','nationality','role','series','episode']
@@ -1016,8 +993,10 @@ class SeriesView(ModelView):
     column_list = ('title','status','category','views','status','approved','user_series')
     column_exclude_list = ('cover_image','description','upload_ref')
     form_excluded_columns = ('')
-
-class EpisodeView(ModelView):
+#class EpisodeView(ModelView):
+    can_view_details = True
+    form_base_class = SecureForm
+#    column_editable_list = ['approved']
     can_edit = True
 #    inline_models = ['user' ]
     can_delete = True
@@ -1039,7 +1018,7 @@ admin.add_view(LiveView(Live, db.session, category="Live Management",name="Live 
 admin.add_view(SeriesView(Series, db.session, category="Course Management"))
 admin.add_view(ScheduleView(Available, db.session, category="Schedule Management",name="Schedule List"))
 admin.add_view(ModelView(Payment, db.session, category="Payment Management"))
-#
+
 admin.add_view(ModelView(Comment, db.session, category=""))
 admin.add_view(ModelView(Approve, db.session, category="Content Management",name="Approve content"))
 admin.add_view(EpisodeView(Episode, db.session, category="Course Management"))
@@ -1051,7 +1030,6 @@ admin.add_sub_category(name="Links", parent_name="Course Management")
 admin.add_sub_category(name="Assign roles", parent_name="Roles Management")
 admin.add_sub_category(name="Create roles", parent_name="Roles Management")
 admin.add_sub_category(name="Create live", parent_name="Live Management")
-
 @app.context_processor
 def inject_permissions():
     return dict(Permission=Permission)
@@ -1224,8 +1202,6 @@ def userDetails():
 
     return data
 
-
-
 @app.route('/checkout')
 @csrf.exempt
 def checkout():
@@ -1235,39 +1211,21 @@ def checkout():
     course_id = request.args.get('course_id', type=int)
     user = request.args.get('user', type=int)
     token = binascii.hexlify(os.urandom(32))
-    model = AlipayTradePagePayModel()
-    model.out_trade_no = course_id
+    model = AlipayTradeWapPayModel()
     model.total_amount = price
+    model.product_code = "QUICK_WAP_WAY"
     model.subject = subject
-
-#    model.body = "支付宝测试"
-    model.product_code = "FAST_INSTANT_TRADE_PAY"
-
-    req = AlipayTradePagePayRequest(biz_model=model)
-    req.return_url='https://www.100chinaguide.com/verify_payment'
-    req.notify_url='https://www.100chinaguide.com/notify'
-    # 得到构造的请求，如果http_method是GET，则是一个带完成请求参数的url，如果http_method是POST，则是一段HTML表单片段
-    response = client.page_execute(req, http_method="GET")
-    print("alipay.trade.page.pay response:" + response)
-
-
     model.out_trade_no = timeStamp + course_id
     model.quit_url = "https://www.100chinaguide.com"
     req = AlipayTradeWapPayRequest(biz_model=model)
     req.notify_url = 'https://www.100chinaguide.com/verify_payment'
     response = client.sdk_execute(req)
     print("alipay.trade.app.pay response:" + response)
-
     alipayUrl = 'https://openapi.alipay.com/gateway.do?'
     data = alipayUrl + response
-
-
     return data
 
-@app.route('/notify',methods=['POST', 'GET'])
-@csrf.exempt
-def notify():
-    return 'success'
+
 @app.route('/addCart',methods=['DELETE', 'GET'])
 @login_required
 @csrf.exempt
@@ -1593,25 +1551,15 @@ def verify_payment():
     user = request.args.get('user', type=str)
     order_number = request.args.get('out_trade_no', type=int)
     amount = request.args.get('total_amount', type=int)
-
-#    price = request.args.get('price', type=int)
-
     price = request.args.get('price', type=int)
-
     user_id = request.args.get('user_id', type=int)
-    seller_id = request.args.get('seller_id', type=int)
-    sign = request.args.get('sign', type=str)
 
     course = Series.query.filter_by(id = course_id).first()
-
-    payment = Payment(order_number=order_number,amount=amount,price=price,user_id=user_id, seller_id =seller_id, sign=sign)
-
     payment = Payment(order_number=order_number,amount=amount,price=price,user_id=1)
-
     db.session.add(payment)
     db.session.commit()
 
-    return redirect(url_for('videoInfo',videoId=order_number))
+    return redirect(url_for('home'))
 
 
 

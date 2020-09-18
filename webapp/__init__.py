@@ -993,7 +993,7 @@ class SeriesView(ModelView):
     column_list = ('title','status','category','views','status','approved','user_series')
     column_exclude_list = ('cover_image','description','upload_ref')
     form_excluded_columns = ('')
-#class EpisodeView(ModelView):
+class EpisodeView(ModelView):
     can_view_details = True
     form_base_class = SecureForm
 #    column_editable_list = ['approved']

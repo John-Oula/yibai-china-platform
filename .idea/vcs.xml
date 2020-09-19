@@ -3,6 +3,7 @@
   <component name="VcsDirectoryMappings">
     <mapping directory="$PROJECT_DIR$" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/WeChat-OAuth2" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/ali/alipay" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/webapp/WeChat-OAuth2" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/webapp/flask-dashboard-coreui" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/wechat" vcs="Git" />

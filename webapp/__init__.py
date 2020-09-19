@@ -17,6 +17,7 @@ import re
 import socket
 import traceback
 from functools import wraps
+from urllib.parse import urlsplit, parse_qs
 
 
 from flask_share import Share
@@ -48,7 +49,8 @@ from alipay.aop.api.domain.AlipayTradeWapPayModel import AlipayTradeWapPayModel
 from alipay.aop.api.request.AlipayTradeWapPayRequest import AlipayTradeWapPayRequest
 from alipay.aop.api.response.AlipayTradeWapPayResponse import AlipayTradeWapPayResponse
 
-
+from pay.alipay import AliPay, ISVAliPay
+from pay.alipay.utils import AliPayConfig
 app = Flask(__name__)
 
 authentication= 'authentication@100chinaguide.com'
@@ -92,6 +94,16 @@ else:
     app_public_key_cert_string = open("/var/www/App/certs/appCertPublicKey_2021001182663949.crt").read()
     alipay_root_cert_string = open("/var/www/App/certs/alipayRootCert.crt").read()
     alipay_public_key_cert_string = open("/var/www/App/certs/alipayCertPublicKey_RSA2.crt").read()
+alipay = AliPay(
+    appid="2021001182663949",
+    app_notify_url="https://www.100chinaguide.com/verify_payment",  # the default notify path
+    app_private_key_string=app_private_key_string,
+    # alipay public key, do not use your own public key!
+    alipay_public_key_string=alipay_public_key_string,
+    sign_type="RSA2", # RSA or RSA2
+    debug=True,  # False by default
+    config=AliPayConfig(timeout=15)  # optional, request timeout
+)
 
 #if get_Host_name_IP('CJAY') == True:
 #    app_private_key_string = open("/Users/ASUS/Desktop/webApp/keys/appPrivateKey.txt").read()
@@ -115,7 +127,6 @@ alipay_client_config.app_private_key = app_private_key_string
 alipay_client_config.alipay_public_key = alipay_public_key_string
 
 client = DefaultAlipayClient(alipay_client_config=alipay_client_config, logger=logger)
-
 
 
 UPLOAD_FOLDER = "/videos"
@@ -1222,36 +1233,53 @@ def checkout():
     course_id = request.args.get('course_id', type=int)
     user = request.args.get('user', type=int)
     token = binascii.hexlify(os.urandom(32))
-    model = AlipayTradeWapPayModel()
-    model.total_amount = price
-    model.product_code = "QUICK_WAP_WAY"
-    model.subject = subject
-    model.out_trade_no = timeStamp + course_id
-    model.quit_url = "https://www.100chinaguide.com"
-    req = AlipayTradeWapPayRequest(biz_model=model)
-    req.notify_url = 'https://www.100chinaguide.com/verify_payment'
-    response = client.sdk_execute(req)
-    response_content = response
-    try:
-        response_content = client.execute(request)
-    except Exception as e:
-        print(traceback.format_exc())
-    if not response_content:
-        print("failed execute")
-    else:
-        resp = AlipayTradeWapPayResponse()
-
-        resp.parse_response_content(response_content)
-        print(resp.body)
-        if resp.is_success():
-
-            print("get response trade_no:" + resp.out_trade_no)
-        else:
-
-            print(resp.code + "," + resp.msg + "," + resp.sub_code + "," + resp.sub_msg)
-    print("alipay.trade.app.pay response:" + response)
+    # Pay via WAP, open this url in your browser: https://openapi.alipay.com/gateway.do? + order_string
+    order_string = alipay.api_alipay_trade_wap_pay(
+        out_trade_no=str(timeStamp + course_id),
+        total_amount=price,
+        subject=subject,
+        return_url="https://www.100chinaguide.com",
+        notify_url="https://www.100chinaguide.com/verify_payment"  # this is optional
+    )
+#    model = AlipayTradeWapPayModel()
+#    model.total_amount = price
+#    model.product_code = "QUICK_WAP_WAY"
+#    model.subject = subject
+#    model.out_trade_no = timeStamp + course_id
+#    model.quit_url = "https://www.100chinaguide.com"
+#    req = AlipayTradeWapPayRequest(biz_model=model)
+#    req.notify_url = 'https://www.100chinaguide.com/verify_payment'
+#    response = client.sdk_execute(req)
+#    print("alipay.trade.app.pay response:" + response)
+#
     alipayUrl = 'https://openapi.alipay.com/gateway.do?'
-    data = alipayUrl + response
+#    data = alipayUrl + response
+    data = alipayUrl + order_string
+    print(data)
+#    query = urlsplit(data).query
+#    params = parse_qs(query)
+#    dict(params)
+#    respDict = {k: v[0] for k, v in params.items()}
+#
+#    response_content = respDict
+#    try:
+#        response_content = respDict
+#    except Exception as e:
+#        print(traceback.format_exc())
+#    if not response_content:
+#        print("failed execute")
+#    else:
+#        resp = AlipayTradeWapPayResponse()
+#
+#        resp.parse_response_content(response_content)
+#        print(resp.body)
+#        if resp.is_success():
+#
+#            print("get response trade_no:" + resp.out_trade_no)
+#        else:
+#
+#            print(resp.code + "," + resp.msg + "," + resp.sub_code + "," + resp.sub_msg)
+
     return data
 
 
@@ -1573,8 +1601,11 @@ def time():
         x = re.split(r'([T+])', start)
 
 @app.route('/verify_payment')
-@login_required
 def verify_payment():
+    data = request.form.to_dict()
+    print(data)
+
+    signature = data.pop("sign")
     course_id = request.args.get('course_id', type=int)
     notify_time = request.args.get('notify_time', type=int)
     user = request.args.get('user', type=str)

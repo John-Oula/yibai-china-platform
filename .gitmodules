@@ -1,0 +1,6 @@
+[submodule "ali/ali/alipay"]
+	path = ali/ali/alipay
+	url = https://github.com/fzlee/alipay.git
+[submodule "pay"]
+	path = pay
+	url = https://github.com/fzlee/alipay.git

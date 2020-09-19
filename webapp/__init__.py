@@ -1231,24 +1231,7 @@ def checkout():
     req = AlipayTradeWapPayRequest(biz_model=model)
     req.notify_url = 'https://www.100chinaguide.com/verify_payment'
     response = client.sdk_execute(req)
-    response_content = response
-    try:
-        response_content = client.execute(request)
-    except Exception as e:
-        print(traceback.format_exc())
-    if not response_content:
-        print("failed execute")
-    else:
-        resp = AlipayTradeWapPayResponse()
 
-        resp.parse_response_content(response_content)
-        print(resp.body)
-        if resp.is_success():
-
-            print("get response trade_no:" + resp.out_trade_no)
-        else:
-
-            print(resp.code + "," + resp.msg + "," + resp.sub_code + "," + resp.sub_msg)
     print("alipay.trade.app.pay response:" + response)
     alipayUrl = 'https://openapi.alipay.com/gateway.do?'
     data = alipayUrl + response

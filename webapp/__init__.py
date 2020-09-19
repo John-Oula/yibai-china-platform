@@ -43,14 +43,9 @@ from flask_admin.contrib.fileadmin import FileAdmin
 from wtforms.widgets import TextArea
 from flask_admin.form import SecureForm
 import os.path as op
-from alipay.aop.api.AlipayClientConfig import AlipayClientConfig
-from alipay.aop.api.DefaultAlipayClient import DefaultAlipayClient
-from alipay.aop.api.domain.AlipayTradeWapPayModel import AlipayTradeWapPayModel
-from alipay.aop.api.request.AlipayTradeWapPayRequest import AlipayTradeWapPayRequest
-from alipay.aop.api.response.AlipayTradeWapPayResponse import AlipayTradeWapPayResponse
 
-from pay.alipay import AliPay, ISVAliPay
-from pay.alipay.utils import AliPayConfig
+from alipay import AliPay, ISVAliPay
+from alipay.utils import AliPayConfig
 app = Flask(__name__)
 
 authentication= 'authentication@100chinaguide.com'
@@ -120,13 +115,13 @@ alipay = AliPay(
 #    alipay_root_cert_string = open("/var/www/App/certs/alipayRootCert.crt").read()
 #    alipay_public_key_cert_string = open("/var/www/App/certs/alipayCertPublicKey_RSA2.crt").read()
 #
-alipay_client_config = AlipayClientConfig()
-alipay_client_config.server_url = 'https://openapi.alipay.com/gateway.do'
-alipay_client_config.app_id ='2021001182663949'
-alipay_client_config.app_private_key = app_private_key_string
-alipay_client_config.alipay_public_key = alipay_public_key_string
+#alipay_client_config = AlipayClientConfig()
+#alipay_client_config.server_url = 'https://openapi.alipay.com/gateway.do'
+#alipay_client_config.app_id ='2021001182663949'
+#alipay_client_config.app_private_key = app_private_key_string
+#alipay_client_config.alipay_public_key = alipay_public_key_string
 
-client = DefaultAlipayClient(alipay_client_config=alipay_client_config, logger=logger)
+#client = DefaultAlipayClient(alipay_client_config=alipay_client_config, logger=logger)
 
 
 UPLOAD_FOLDER = "/videos"

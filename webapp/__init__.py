@@ -15,6 +15,7 @@ import os
 import random
 import re
 import socket
+import traceback
 from functools import wraps
 
 
@@ -45,6 +46,7 @@ from alipay.aop.api.AlipayClientConfig import AlipayClientConfig
 from alipay.aop.api.DefaultAlipayClient import DefaultAlipayClient
 from alipay.aop.api.domain.AlipayTradeWapPayModel import AlipayTradeWapPayModel
 from alipay.aop.api.request.AlipayTradeWapPayRequest import AlipayTradeWapPayRequest
+from alipay.aop.api.response.AlipayTradeWapPayResponse import AlipayTradeWapPayResponse
 
 
 app = Flask(__name__)
@@ -256,24 +258,24 @@ class User(db.Model, UserMixin):
     series = db.relationship('Series', backref='user_series', lazy=True)
     episode = db.relationship('Episode', backref='user_episode', lazy=True)
     lesson = db.relationship('Lesson', backref=db.backref('user_lessons'))
-    comments = db.relationship('Comment', backref='author', lazy='dynamic')
-    review = db.relationship('Reviews', backref='user_review', lazy='dynamic')
-    skill = db.relationship('Skill',backref='user',secondary=skills,lazy ='dynamic')
-    available = db.relationship('Available',backref='user',secondary=available,lazy ='dynamic')
+    comments = db.relationship('Comment', backref='author',lazy ='dynamic')
+    review = db.relationship('Reviews', backref='user_review')
+    skill = db.relationship('Skill',backref='user',secondary=skills)
+    available = db.relationship('Available',backref='user',secondary=available,)
     exp = db.relationship('Experience',backref='user',secondary=experiences,lazy ='dynamic')
     followed = db.relationship('User', secondary=followers,
                                primaryjoin=(followers.c.follower_id == id),
                                secondaryjoin=(followers.c.followed_id == id),
-                               backref=db.backref('followers', lazy='dynamic'), lazy='dynamic')
+                               backref=db.backref('followers'))
 #    followed = db.relationship('User', secondary=review,
 #                               primaryjoin=(review.c.reviewer_id == id),
 #                               secondaryjoin=(review.c.reviewed_id == id),
 #                               backref=db.backref('user_review', lazy='dynamic'), lazy='dynamic')
     book = db.relationship('Live', secondary=book,backref=db.backref('bookers'))
-    bookSchedule = db.relationship('Available', secondary=bookSchedule,backref=db.backref('userSchedule', lazy='dynamic'))
-    likes = db.relationship('Series', secondary=likes,backref=db.backref('liked', lazy='dynamic'))
-    likesEpisode = db.relationship('Episode', secondary=likesEpisode,backref=db.backref('userLikedEpisode', lazy='dynamic'))
-    cart = db.relationship('Series', secondary=cart,backref='user_cart', lazy='dynamic')
+    bookSchedule = db.relationship('Available', secondary=bookSchedule,backref=db.backref('userSchedule'))
+    likes = db.relationship('Series', secondary=likes,backref=db.backref('liked',lazy ='dynamic'))
+    likesEpisode = db.relationship('Episode', secondary=likesEpisode,backref=db.backref('userLikedEpisode'))
+    cart = db.relationship('Series', secondary=cart,backref='user_cart')
 
     def __init__(self, **kwargs):
         super(User, self).__init__(**kwargs)
@@ -472,11 +474,15 @@ class Skill(db.Model):
     __tablename__ = 'skill'
     id = db.Column('id', db.Integer, primary_key=True)
     skill_title = db.Column(db.String(20),unique=True)
+    def __repr__(self):
+        return '%r' % self.skill_title
 
 class Experience(db.Model):
     __tablename__ = 'experience'
     id = db.Column('id', db.Integer, primary_key=True)
     exp_title = db.Column(db.String(40),unique=True)
+    def __repr__(self):
+        return '%r' % self.exp_title
 
 class Available(db.Model):
     __tablename__ = 'availableStatus'
@@ -489,6 +495,8 @@ class Available(db.Model):
     meetingUrl = db.Column('meetingUrl', db.VARCHAR)
     meetingCode = db.Column('MeetingCode', db.BigInteger, nullable=True)
     price = db.Column('price', db.Integer)
+    def __repr__(self):
+        return '%r' % self.date_available
 
 class Live(db.Model):
     __tablename__ = 'post'
@@ -508,7 +516,8 @@ class Live(db.Model):
     start_time = db.Column("Start Time", db.String, nullable=True)
     end_time = db.Column('End time', db.String, nullable=True)
     lesson = db.relationship('Lesson', backref=db.backref('lessons'))
-
+    def __repr__(self):
+        return '%r' % self.title
 
 
 class Lesson(db.Model):
@@ -639,7 +648,8 @@ class Payment(db.Model):
     user_id = db.Column('user_id', db.Integer, db.ForeignKey('user.id'), nullable=False)
     series_id = db.Column('series_id', db.Integer, db.ForeignKey('series.id'), nullable=False)
 
-
+    def __repr__(self):
+        return '%r' % self.order_number
 
 
 
@@ -662,7 +672,7 @@ class Comment(db.Model):
                                     backref=db.backref('userCommentEpisode', lazy='dynamic'))
 
    def __repr__(self):
-       return '%r' % self.content
+       return '%r' % self.id
 
 class Approve(db.Model):
    __tablename__ = 'approve'
@@ -672,7 +682,8 @@ class Approve(db.Model):
    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
    series_id = db.Column(db.Integer, db.ForeignKey('series.id'))
    series = db.relationship('Series', backref='series', lazy=True)
-
+   def __repr__(self):
+       return '%r' % self.id
 
 class Reviews(db.Model):
    __tablename__ = 'reviews'
@@ -1220,6 +1231,24 @@ def checkout():
     req = AlipayTradeWapPayRequest(biz_model=model)
     req.notify_url = 'https://www.100chinaguide.com/verify_payment'
     response = client.sdk_execute(req)
+    response_content = response
+    try:
+        response_content = client.execute(request)
+    except Exception as e:
+        print(traceback.format_exc())
+    if not response_content:
+        print("failed execute")
+    else:
+        resp = AlipayTradeWapPayResponse()
+
+        resp.parse_response_content(response_content)
+        print(resp.body)
+        if resp.is_success():
+
+            print("get response trade_no:" + resp.out_trade_no)
+        else:
+
+            print(resp.code + "," + resp.msg + "," + resp.sub_code + "," + resp.sub_msg)
     print("alipay.trade.app.pay response:" + response)
     alipayUrl = 'https://openapi.alipay.com/gateway.do?'
     data = alipayUrl + response

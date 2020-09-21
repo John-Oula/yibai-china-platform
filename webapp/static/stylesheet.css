@@ -1401,8 +1401,8 @@ p.likes{
         height: 60px;
     }
 
-    .thumb-wrapper,.course-img-wrapper{
-        height: fit-content;
+    .thumb-wrapper,course-img-wrapper{
+        height: 200px;
         overflow: hidden;
         position: relative;
         margin: 0.5%;
@@ -1426,7 +1426,7 @@ p.likes{
     }
     .video-feed{
         width: 337px;
-        height: 150px;
+        height: auto;
     }
     video{
         width: 1000px;
@@ -1937,8 +1937,8 @@ p.likes{
         display: flex;
         flex-direction: column;
     }
-    .thumb-wrapper, .course-img-wrapper {
-        height: fit-content;
+    .thumb-wrapper, course-img-wrapper {
+
         overflow: hidden;
         position: relative;
     }

@@ -9,7 +9,7 @@
 
 
 {% block background %}
-    <body class="home">
+    <body>
 {% endblock %}
 
 
@@ -50,9 +50,9 @@
 
         <div class="video-details">
             <div>
-                <div class="thumb-wrapper ">
+                <div class=" ">
                     <li>
-                        <video class="video-feed " autoplay  preload="auto" video-id="" controls="" type="video/mp4" src=""
+                        <video class="" autoplay  preload="auto" video-id="" controls="" type="video/mp4" src=""
                                alt=""></video>
                     </li>
                     <li><div class="course-img-wrapper" ><img class="course-img"  loading="lazy" src="" alt=""></div></li>
@@ -107,9 +107,7 @@
                 </div>
                 <p video-title="" id="video-title"></p>
                 <span id="video-author"></span>
-            </div>
-
-            <nav class="btn-row">
+                            <nav class="btn-row">
                 <a class="navLink  like-btn" data-href=""><img class="mobile-icon" src="../static/unlike.svg"
                                                                alt=""><span class="nav_text">Like</span></a>
                 <a class="navLink " data-href="" id="unlike-btn"><img class="mobile-icon" src="../static/like.svg"
@@ -133,6 +131,9 @@
                        aria-controls="comments" aria-selected="false">REVIEWS</a>
                 </li>
             </ul>
+            </div>
+
+
             <div class="tab-content" id="myTabContent">
                 <div class="tab-pane fade show active p-3" id="home" role="tabpanel" aria-labelledby="home-tab">
                     <p>Summary</p>

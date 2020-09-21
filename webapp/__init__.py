@@ -52,7 +52,7 @@ from alipay.aop.api.response.AlipayTradeWapPayResponse import AlipayTradeWapPayR
 app = Flask(__name__)
 
 authentication= 'authentication@100chinaguide.com'
-csrf = CSRFProtect(app)
+
 # IP address
 def get_Host_name_IP(hostname):
     try:
@@ -124,7 +124,8 @@ app.config['SECRET_KEY'] = 'Adawug;irwugw79536870635785ty0875y03davvavavdey'
 appID=200000164
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['FLASK_ADMIN_SWATCH'] = 'flatly'
-app.config['WTF_CSRF_ENABLED'] = True
+app.config['WTF_CSRF_ENABLED'] = False
+csrf = CSRFProtect(app)
 if get_Host_name_IP('CJAY') == True:
     app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:@qwerty1234!@localhost/postgres'
 else:
@@ -258,11 +259,11 @@ class User(db.Model, UserMixin):
     series = db.relationship('Series', backref='user_series', lazy=True)
     episode = db.relationship('Episode', backref='user_episode', lazy=True)
     lesson = db.relationship('Lesson', backref=db.backref('user_lessons'))
-    comments = db.relationship('Comment', backref='author',lazy ='dynamic')
+    comments = db.relationship('Comment', backref='author',lazy =True)
     review = db.relationship('Reviews', backref='user_review')
     skill = db.relationship('Skill',backref='user',secondary=skills)
     available = db.relationship('Available',backref='user',secondary=available,)
-    exp = db.relationship('Experience',backref='user',secondary=experiences,lazy ='dynamic')
+    experience = db.relationship('Experience', backref='user', secondary=experiences, lazy =True)
     followed = db.relationship('User', secondary=followers,
                                primaryjoin=(followers.c.follower_id == id),
                                secondaryjoin=(followers.c.followed_id == id),
@@ -372,7 +373,7 @@ class User(db.Model, UserMixin):
             followers.c.follower_id == self.id)
         own = Upload.query.filter_by(user_id=self.id)
         return followed.union(own).order_by(Upload.timestamp.desc())
-    def __repr__(self):
+    def __str__(self):
         return '%r' % self.username
 
 
@@ -463,7 +464,7 @@ class Role(db.Model):
     def has_permission(self, perm):
         return self.permissions & perm == perm
 
-    def __repr__(self):
+    def __str__(self):
         return '%r' % self.name
 
 
@@ -474,14 +475,14 @@ class Skill(db.Model):
     __tablename__ = 'skill'
     id = db.Column('id', db.Integer, primary_key=True)
     skill_title = db.Column(db.String(20),unique=True)
-    def __repr__(self):
+    def __str__(self):
         return '%r' % self.skill_title
 
 class Experience(db.Model):
     __tablename__ = 'experience'
     id = db.Column('id', db.Integer, primary_key=True)
     exp_title = db.Column(db.String(40),unique=True)
-    def __repr__(self):
+    def __str__(self):
         return '%r' % self.exp_title
 
 class Available(db.Model):
@@ -495,7 +496,7 @@ class Available(db.Model):
     meetingUrl = db.Column('meetingUrl', db.VARCHAR)
     meetingCode = db.Column('MeetingCode', db.BigInteger, nullable=True)
     price = db.Column('price', db.Integer)
-    def __repr__(self):
+    def __str__(self):
         return '%r' % self.date_available
 
 class Live(db.Model):
@@ -516,7 +517,7 @@ class Live(db.Model):
     start_time = db.Column("Start Time", db.String, nullable=True)
     end_time = db.Column('End time', db.String, nullable=True)
     lesson = db.relationship('Lesson', backref=db.backref('lessons'))
-    def __repr__(self):
+    def __str__(self):
         return '%r' % self.title
 
 
@@ -566,7 +567,7 @@ class Series(db.Model):
     payment = db.relationship('Payment', backref='userPayment', lazy='dynamic')
     comments = db.relationship('Comment', backref='series', lazy='dynamic')
     episode = db.relationship('Episode', backref='sub', lazy=True)
-    def __repr__(self):
+    def __str__(self):
         return '%r' % self.title
 
 
@@ -610,7 +611,7 @@ class Episode(db.Model):
 
     transcript_ref = db.Column('transcript_ref', db.VARCHAR)
     auido_ref = db.Column('auido_ref', db.VARCHAR)
-    def __repr__(self):
+    def __str__(self):
         return '%r' % self.subtitle
 
 #    def __init__ (self, id,subtitle,views, category, description, upload_ref, transcript_ref,auido_ref ,user_id,series_id):
@@ -648,7 +649,7 @@ class Payment(db.Model):
     user_id = db.Column('user_id', db.Integer, db.ForeignKey('user.id'), nullable=False)
     series_id = db.Column('series_id', db.Integer, db.ForeignKey('series.id'), nullable=False)
 
-    def __repr__(self):
+    def __str__(self):
         return '%r' % self.order_number
 
 
@@ -671,7 +672,7 @@ class Comment(db.Model):
    episodeComment = db.relationship('Episode', secondary=episodeComment,
                                     backref=db.backref('userCommentEpisode', lazy='dynamic'))
 
-   def __repr__(self):
+   def __str__(self):
        return '%r' % self.id
 
 class Approve(db.Model):
@@ -682,7 +683,7 @@ class Approve(db.Model):
    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
    series_id = db.Column(db.Integer, db.ForeignKey('series.id'))
    series = db.relationship('Series', backref='series', lazy=True)
-   def __repr__(self):
+   def __str__(self):
        return '%r' % self.id
 
 class Reviews(db.Model):
@@ -735,12 +736,12 @@ def admin_required(f):
     return permission_required(Permission.ADMINISTER)(f)
 class User_form(FlaskForm):
 
-    introduction = TextAreaField('Introduction', validators=[Required()])
-    status = StringField('Status', validators=[Required()])
+    introduction = TextAreaField('Introduction')
+    status = StringField('Status')
     introVideo = FileField('Upload an Introduction video')
     fullname = StringField('Fullname', [validators.Length(min=4,max=15)])
     username = StringField('Username', [validators.Length(min=4,max=15)])
-    email = StringField('Email', [validators.Length(min=4,max=15)])
+    email = StringField('Email', [validators.Length(min=4,max=25)])
     pic = FileField('Update Profile photo')
     password = PasswordField('Password', [validators.Length(min=6)])
 
@@ -939,7 +940,7 @@ class Reset_password(FlaskForm):
 class Users(ModelView):
     can_delete = True
     can_view_details = True
-    form_base_class = SecureForm
+#    form_base_class = SecureForm
     page_size = 50
     column_searchable_list = ['username','fullname']
     column_filters = ['id','username','fullname','nationality','role','series','episode']
@@ -949,10 +950,13 @@ class Users(ModelView):
     column_display_all_relations = True
     create_modal = True
     edit_modal = True
-    column_list = ('image_file','id','username','fullname','nationality','role','series','episode',)
+    #form_columns = ('email')
+
+    column_list = ('image_file','id','username','fullname','nationality','role')
     column_exclude_list = ('password','id_document','id_type','sub_role','image_file','introduction','introduction_video','roles')
-    form_excluded_columns = ('password')
+    form_excluded_columns = ['password','username']
 class LiveView(ModelView):
+    can_view_details = True
     can_edit = False
     can_create = False
     inline_models = ['user' ]
@@ -970,6 +974,7 @@ class LiveView(ModelView):
     form_excluded_columns = ('')
 class ScheduleView(ModelView):
     can_edit = False
+    can_view_details = True
     can_create = False
     inline_models = ['user' ]
     can_delete = True
@@ -1023,6 +1028,25 @@ class EpisodeView(ModelView):
 
     column_list = ('subtitle','category','views','user_episode','series_id')
     form_excluded_columns = ('')
+class CommentView(ModelView):
+    can_view_details = True
+    form_base_class = SecureForm
+    column_editable_list = ['disabled']
+    can_edit = False
+    can_create = False
+#    inline_models = ['disabled' ]
+    can_delete = True
+    page_size = 50
+    column_searchable_list = ['id','disabled']
+    column_filters = ['id','disabled']
+#    form   = Series_form
+    column_hide_backrefs = False
+    column_display_all_relations = True
+
+
+
+    column_list = ('id','content','disabled','timestamp','author')
+    form_excluded_columns = ('')
 
 admin.add_view(Users(User, db.session, category="User Management",name="User List"))
 admin.add_view(LiveView(Live, db.session, category="Live Management",name="Live List"))
@@ -1030,7 +1054,7 @@ admin.add_view(SeriesView(Series, db.session, category="Course Management"))
 admin.add_view(ScheduleView(Available, db.session, category="Schedule Management",name="Schedule List"))
 admin.add_view(ModelView(Payment, db.session, category="Payment Management"))
 
-admin.add_view(ModelView(Comment, db.session, category="Comment Management"))
+admin.add_view(CommentView(Comment, db.session, category="Comment Management"))
 admin.add_view(ModelView(Approve, db.session, category="Content Management",name="Approve content"))
 admin.add_view(EpisodeView(Episode, db.session, category="Course Management"))
 admin.add_view(ModelView(Role, db.session, category="Role Management"))
@@ -1214,7 +1238,7 @@ def userDetails():
     return data
 
 @app.route('/checkout')
-@csrf.exempt
+
 def checkout():
     timeStamp = int(time.time())
     price = request.args.get('price', type=int)
@@ -1240,7 +1264,7 @@ def checkout():
 
 @app.route('/addCart',methods=['DELETE', 'GET'])
 @login_required
-@csrf.exempt
+
 def addCart():
     upload_id = request.args.get('upload_id', type=int)
 
@@ -2857,7 +2881,7 @@ def getEpisode():
     return jsonify({'result':data})
 
 @app.route('/editSeries', methods=['POST', 'GET','DELETE','PUT'])
-@csrf.exempt
+
 def editSeries():
     series_id = request.args.get('series_id', type=int)
     series = Series.query.filter_by(id = series_id).first()
@@ -2910,7 +2934,7 @@ def editSeries():
     return jsonify({'result':l})
 
 @app.route('/editSchedule', methods=['POST', 'GET','DELETE','PUT'])
-@csrf.exempt
+
 def editSchedule():
     schedule_id = request.args.get('schedule_id', type=int)
     user_id = request.args.get('user_id', type=int)
@@ -2984,7 +3008,7 @@ def editSchedule():
     return jsonify({'result':l})
 
 @app.route('/editLive', methods=['POST','PUT', 'GET','DELETE'])
-@csrf.exempt
+
 def editLive():
     live_id = request.args.get('live_id', type=int)
     live = Live.query.filter_by(id = live_id).first()
@@ -3052,7 +3076,7 @@ def editLive():
     return '',204
 
 @app.route('/editVideo', methods=['POST', 'GET','DELETE'])
-@csrf.exempt
+
 def editVideo():
     video_id = request.args.get('video_id', type=int)
     videos = Upload.query.filter_by(id = video_id).first()

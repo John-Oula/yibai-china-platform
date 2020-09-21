@@ -1938,7 +1938,7 @@ p.likes{
         flex-direction: column;
     }
     .thumb-wrapper, course-img-wrapper {
-
+        height: 200px;
         overflow: hidden;
         position: relative;
     }

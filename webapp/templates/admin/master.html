@@ -3,6 +3,15 @@
     {{ super() }}
 
     <style>
+    @media screen and (max-width: 768px){
+.container{
+        margin: 0px;
+        padding: 0px;
+        width: 100%;
+
+    }
+    }
+@media screen and (min-width: 768px){
 .navbar.navbar-default {
             border-width: 1px;
             border-radius: 0;
@@ -82,7 +91,7 @@ table a:not(.btn), .table a:not(.btn) {
 }
     .navbar-header {
 
-}
+}}
     </style>
 {% endblock %}
 

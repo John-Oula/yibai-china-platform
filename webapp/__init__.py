@@ -2750,7 +2750,7 @@ def createCourse():
 
             episode = Episode(subtitle=episodeForm.subtitle.data, description=episodeForm.description.data,
                           upload_ref=saveFile(episodeForm.fileName.data,'videos'),
-                          created_by=current_user, sub=series, series_id=series.id)
+                          created_by=current_user, series=series, series_id=series.id)
 
             db.session.add(episode)
 
@@ -2766,7 +2766,7 @@ def createCourse():
 
             episode = Episode(subtitle=episodeForm.subtitle.data, description=episodeForm.description.data,
                           upload_ref=saveFile(episodeForm.fileName.data,'videos'),
-                          created_by=current_user, sub=series, series_id=series.id)
+                          created_by=current_user, series=series, series_id=series.id)
 
             db.session.add(episode)
 
@@ -3294,7 +3294,7 @@ def addEpisode():
     episodeForm = UpdateEpisode_form()
     episode = Episode(subtitle=episodeForm.update_subtitle.data, description=episodeForm.update_description.data,
                       upload_ref=saveFile(episodeForm.update_fileName.data,'videos'),
-                      created_by=current_user, sub=series, series_id=series.id)
+                      created_by=current_user, series=series, series_id=series.id)
     db.session.add(episode)
     series.status = 'series'
     db.session.commit()

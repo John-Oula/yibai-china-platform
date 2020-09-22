@@ -33,6 +33,7 @@ from flask_wtf import FlaskForm
 from flask_wtf.csrf import CSRFProtect
 from flask_wtf.file import FileRequired
 from itsdangerous import TimedJSONWebSignatureSerializer as Serializer
+from markupsafe import Markup
 from werkzeug.utils import secure_filename
 from wtforms import *
 from wtforms.validators import Required
@@ -241,7 +242,7 @@ class User(db.Model, UserMixin):
     fullname = db.Column('fullname', db.String(20))
     username = db.Column('username', db.String(20), unique=True, nullable=True)
     password = db.Column('password',db.String(500), nullable=False)
-    image_file = db.Column(db.String(60), nullable=False, default='default.jpg')
+    profile_photo = db.Column(db.String(60), nullable=False, default='default.jpg')
     introduction = db.Column('introduction', db.String(500), nullable=True)
     introduction_video = db.Column('introduction_video', db.String(60), nullable=True)
     id_type = db.Column('id_type', db.String(60), nullable=True)
@@ -950,7 +951,9 @@ class Reset_password(FlaskForm):
     submit = SubmitField('Reset')
 
 class Users(ModelView):
+#    list_template = 'list.html'
     can_delete = True
+    details_modal = True
     can_view_details = True
 #    form_base_class = SecureForm
     page_size = 50
@@ -964,9 +967,16 @@ class Users(ModelView):
     edit_modal = True
     #form_columns = ('email')
 
-    column_list = ('image_file','id','username','fullname','nationality','role')
-    column_exclude_list = ('password','id_document','id_type','sub_role','image_file','introduction','introduction_video','roles')
+    column_list = ('id','profile_photo','username','fullname','nationality','role')
+    column_exclude_list = ('password','id_document','id_type','sub_role','introduction','introduction_video','roles')
     form_excluded_columns = ['password','username']
+    def _list_thumbnail(view, context, model, name):
+
+        return Markup('<div class="user-profile-pic" style=""><img src="%s" width="30"class="profilepic img-circle"></div>' % url_for('static',filename='profile_pics/'+ model.profile_photo))
+
+    column_formatters = {
+        'profile_photo': _list_thumbnail
+    }
 class LiveView(ModelView):
     can_view_details = True
     can_edit = False
@@ -1002,6 +1012,7 @@ class ScheduleView(ModelView):
     column_exclude_list = ('cover_image','description')
     form_excluded_columns = ('')
 class SeriesView(ModelView):
+
     can_view_details = True
     form_base_class = SecureForm
     column_editable_list = ['approved']
@@ -1018,9 +1029,10 @@ class SeriesView(ModelView):
     edit_modal = True
 
 
-    column_list = ('title','status','category','views','approved','created_by')
+    column_list = ('title','status','category','views','approved','created_by','')
     column_exclude_list = ('cover_image','description','upload_ref')
     form_excluded_columns = ('')
+
 class EpisodeView(ModelView):
     can_view_details = True
     form_base_class = SecureForm
@@ -1154,7 +1166,7 @@ def liveSession():
     i = 0
     l = []
     for v in range(len(videos)):
-        data ={'id':videos[i].id,'title':videos[i].title,'host':videos[i].author.username,'coverImg': videos[i].coverImage,'userImg':videos[i].author.image_file,'category':videos[i].category,'startTime':videos[i].start_time,'endTime':videos[i].end_time,'date':videos[i].date,'meetingCode':videos[i].meetingCode}
+        data ={'id':videos[i].id,'title':videos[i].title,'host':videos[i].author.username,'coverImg': videos[i].coverImage,'userImg':videos[i].author.profile_photo,'category':videos[i].category,'startTime':videos[i].start_time,'endTime':videos[i].end_time,'date':videos[i].date,'meetingCode':videos[i].meetingCode}
         l.append(data)
 
         i+=1
@@ -1168,16 +1180,16 @@ def userDetails():
     username = request.args.get('username', type=str)
     user = User.query.filter_by(username=username).first_or_404()
     if current_user.is_anonymous :
-        data = {"id":user.id,"username":user.username,"followers":user.followers.count(),"userImage":user.image_file,"videos":len(user.series),"liveSessions":len(user.posts),"introduction":user.introduction,"Isfollowing":False,"fullname":user.fullname,"status":user.status,'email':user.email,'IntroVid':user.introduction_video}
+        data = {"id":user.id,"username":user.username,"followers":user.followers.count(),"userImage":user.profile_photo,"videos":len(user.series),"liveSessions":len(user.posts),"introduction":user.introduction,"Isfollowing":False,"fullname":user.fullname,"status":user.status,'email':user.email,'IntroVid':user.introduction_video}
     else:
-        data = {"id":user.id,"username":user.username,"followers":user.followers.count(),"userImage":user.image_file,"videos":len(user.series),"liveSessions":len(user.posts),"introduction":user.introduction,"Isfollowing":current_user.is_following(user),"fullname":current_user.fullname,"status":current_user.status,'email':current_user.email,'IntroVid':current_user.introduction_video}
+        data = {"id":user.id,"username":user.username,"followers":user.followers.count(),"userImage":user.profile_photo,"videos":len(user.series),"liveSessions":len(user.posts),"introduction":user.introduction,"Isfollowing":current_user.is_following(user),"fullname":current_user.fullname,"status":current_user.status,'email':current_user.email,'IntroVid':current_user.introduction_video}
 
     l=[]
     i = 0
     for v in user.series:
         userSeries = {'id':v.id, 'title': v.title, 'price': v.price,
                 'uploader': v.created_by.username, 'coverImg': v.coverImage,
-                'userImg': v.created_by.image_file, 'category': v.category,
+                'userImg': v.created_by.profile_photo, 'category': v.category,
                 'totalEpisodes': len(v.episode)}
         ep = []
         episodeList = user.series
@@ -1192,14 +1204,14 @@ def userDetails():
     for live in user.posts:
         userLive = {'id':live.id, 'title': live.title,
                 'host': live.author.username, 'coverImg': live.coverImage,
-                'userImg': live.author.image_file, 'category': live.category}
+                'userImg': live.author.profile_photo, 'category': live.category}
         liveList.append(userLive)
     data.update({'live': liveList})
     videoList = []
     for video in user.series:
         userVideos = {'id': video.id, 'title': video.title, 'price': video.price,'description':video.description,
                     'host': video.created_by.username, 'coverImg': video.coverImage,
-                    'userImg': video.created_by.image_file, 'category': video.category,
+                    'userImg': video.created_by.profile_photo, 'category': video.category,
                     'totalEpisodes': len(video.episode)}
         videoList.append(userVideos)
     data.update({'videosList': videoList})
@@ -1234,7 +1246,7 @@ def userDetails():
     for v in user.likes:
         userSeries = {'id':v.id, 'title': v.title, 'price': v.price,
                 'uploader': v.created_by.username, 'coverImg': v.coverImage,
-                'userImg': v.created_by.image_file, 'category': v.category,
+                'userImg': v.created_by.profile_photo, 'category': v.category,
                 'totalEpisodes': len(v.episode)}
         ep = []
 
@@ -1571,12 +1583,12 @@ def dashboard(username):
 #       f.write(str(post_dict),)
 #       f.close()
     my_posts = len(current_user.posts)
-    image_file = url_for('static', filename ='profile_pics/' + current_user.image_file)
+    profile_photo = url_for('static', filename ='profile_pics/' + current_user.profile_photo)
 
     seriesId = Series.query.all()
     for seriesId in seriesId:
         seriesIdNum = int(seriesId.id) + 1
-    return render_template('Dashboard.html',seriesIdNum=seriesIdNum,uploads= uploads,user=user,my_posts=my_posts,book_posts=book_posts,total_users=total_users,user_role=user_role,all_users=all_users,user_posts = user_posts,image_file=image_file)
+    return render_template('Dashboard.html',seriesIdNum=seriesIdNum,uploads= uploads,user=user,my_posts=my_posts,book_posts=book_posts,total_users=total_users,user_role=user_role,all_users=all_users,user_posts = user_posts,profile_photo=profile_photo)
 
 def reverse_admin():
     user = User.query.filter_by(role=1).first()
@@ -1664,7 +1676,7 @@ def assign_badge(id):
 @app.route('/settings/<username>',methods=['GET','POST'])
 @login_required
 def settings(username):
-    image_file = url_for('static', filename ='profile_pics/' + current_user.image_file)
+    profile_photo = url_for('static', filename ='profile_pics/' + current_user.profile_photo)
     user_role = current_user.role
     all_users = User.query.all()
     user = User.query.filter_by(username=username).first_or_404()
@@ -1675,7 +1687,7 @@ def settings(username):
     if request.method == 'POST':
         if form.pic.data:
             pic_file = save_pic(form.pic.data)
-            current_user.image_file = pic_file
+            current_user.profile_photo = pic_file
         current_user.username = form.username.data
         current_user.password = hash_password(form.password.data)
         current_user.email = form.email.data
@@ -1686,7 +1698,7 @@ def settings(username):
         form.username.data = current_user.username
         form.password.data = current_user.password
         form.email.data = current_user.email
-    return render_template('SETTINGS.html',seriesIdNum=seriesIdNum,user=user,all_users = all_users,user_role=user_role,form=form,image_file=image_file)
+    return render_template('SETTINGS.html',seriesIdNum=seriesIdNum,user=user,all_users = all_users,user_role=user_role,form=form,profile_photo=profile_photo)
 
 
 @app.route('/updateInfo',methods=['GET','POST','PUT'])
@@ -1699,10 +1711,10 @@ def updateInfo():
     if request.method == 'POST':
 #        if form.pic.data:
 #            pic_file = save_pic(form.pic.data)
-#            current_user.image_file = pic_file
+#            current_user.profile_photo = pic_file
         if form.pic.data:
             pic_file = save_pic(form.pic.data)
-            current_user.image_file = pic_file
+            current_user.profile_photo = pic_file
         if form.introVideo.data:
             introVid_file = save_pic(form.introVideo.data)
             current_user.introduction_video = introVid_file
@@ -1723,7 +1735,7 @@ def updateInfo():
     elif request.method == 'PUT':
         if form.pic.data:
             pic_file = save_pic(form.pic.data)
-            current_user.image_file = pic_file
+            current_user.profile_photo = pic_file
         if form.introVideo.data:
             introVid_file = save_pic(form.introVideo.data)
             current_user.introduction_video = introVid_file
@@ -1738,7 +1750,7 @@ def updateInfo():
         return msg
     elif request.method == 'GET':
         data = {"id": current_user.id, "username": current_user.username, "followers": current_user.followers.count(),
-                    "userImage": current_user.image_file, "videos": len(current_user.series), "liveSessions": len(current_user.posts),
+                    "userImage": current_user.profile_photo, "videos": len(current_user.series), "liveSessions": len(current_user.posts),
                     "introduction": current_user.introduction,
                     "fullname": current_user.fullname, "status": current_user.status, 'email': current_user.email,
                     "password": current_user.password, 'IntroVideo': current_user.introduction_video}
@@ -1749,7 +1761,7 @@ def updateInfo():
 @login_required
 def verify(username):
     form = Verify_form()
-    image_file = url_for('static', filename='profile_pics/' + current_user.image_file)
+    profile_photo = url_for('static', filename='profile_pics/' + current_user.profile_photo)
     user = User.query.filter_by(username=username).first_or_404()
     if request.method == 'POST':
         current_user.id_type = form.id_type.data
@@ -1762,7 +1774,7 @@ def verify(username):
         current_user.phone = form.phone.data
         db.session.commit()
         return redirect(url_for('user_profile',username=current_user.username))
-    return render_template('VERIFY.html',image_file=image_file,form=form,user=user)
+    return render_template('VERIFY.html',profile_photo=profile_photo,form=form,user=user)
 
 
 
@@ -1781,7 +1793,7 @@ def  logout():
 def user_profile(username):
 
     user = User.query.filter_by(username=username).first_or_404()
-    image_file = url_for('static', filename ='profile_pics/' + current_user.image_file)
+    profile_photo = url_for('static', filename ='profile_pics/' + current_user.profile_photo)
     followed_posts=Live.query.join(followers, (followers.c.followed_id == Live.user_id)).all()
 
     all_posts = Live.query.all()
@@ -1798,14 +1810,14 @@ def user_profile(username):
 
 
 
-    return render_template('sessions.html', seriesIdNum=seriesIdNum,posts=posts, postNum=postNum, followed_posts=followed_posts, user=user, user_role=user_role, all_users=all_users, all_posts = all_posts, author=author, image_file = image_file)
+    return render_template('sessions.html', seriesIdNum=seriesIdNum,posts=posts, postNum=postNum, followed_posts=followed_posts, user=user, user_role=user_role, all_users=all_users, all_posts = all_posts, author=author, profile_photo = profile_photo)
 
 @app.route('/<username>')
 @login_required
 def my_profile(username):
 
     user = User.query.filter_by(username=username).first_or_404()
-    image_file = url_for('static', filename ='profile_pics/' + current_user.image_file)
+    profile_photo = url_for('static', filename ='profile_pics/' + current_user.profile_photo)
     followed_posts=Live.query.join(followers, (followers.c.followed_id == Live.user_id)).all()
 
     all_posts = Live.query.all()
@@ -1821,14 +1833,14 @@ def my_profile(username):
 
 
 
-    return render_template('USER.html',seriesIdNum=seriesIdNum,postNum=postNum,followed_posts=followed_posts,user=user,user_role=user_role,all_users=all_users,all_posts = all_posts,author=author, image_file = image_file)
+    return render_template('USER.html',seriesIdNum=seriesIdNum,postNum=postNum,followed_posts=followed_posts,user=user,user_role=user_role,all_users=all_users,all_posts = all_posts,author=author, profile_photo = profile_photo)
 
 @app.route('/feed/<username>')
 @login_required
 def feed(username):
 
     user = User.query.filter_by(username=username).first_or_404()
-    image_file = url_for('static', filename ='profile_pics/' + current_user.image_file)
+    profile_photo = url_for('static', filename ='profile_pics/' + current_user.profile_photo)
 #    followed_posts=Live.query.join(followers, (followers.c.followed_id == Live.user_id)).all()
     suggestUser = User.query.filter_by(id=3).first_or_404()
     form = Upload_form()
@@ -1845,7 +1857,7 @@ def feed(username):
 
 
 
-    return render_template('feed.html',form=form,suggestUser=suggestUser,seriesIdNum=seriesIdNum,followed_posts=followed_posts,user=user,user_role=user_role,all_users=all_users,author=author, image_file = image_file)
+    return render_template('feed.html',form=form,suggestUser=suggestUser,seriesIdNum=seriesIdNum,followed_posts=followed_posts,user=user,user_role=user_role,all_users=all_users,author=author, profile_photo = profile_photo)
 
 
 #TRAINER PROFILE FUNCTIONS
@@ -1861,7 +1873,7 @@ def feed(username):
 def user(username):
 
     user = User.query.filter_by(username=username).first_or_404()
-    image_file = url_for('static', filename ='profile_pics/' + user.image_file)
+    profile_photo = url_for('static', filename ='profile_pics/' + user.profile_photo)
     suggestUser = User.query.filter_by(id=3).first_or_404()
 
     all_posts = Live.query.all()
@@ -1873,7 +1885,7 @@ def user(username):
 #    uploads = url_for('static', filename='videos/' + current_user.uploads)
 #    followed_posts = Live.query(User).join(Live)
 #    print(followed_posts)
-    return render_template('USER_BASE.html',suggestUser=suggestUser,seriesIdNum=seriesIdNum,user=user,image_file=image_file,all_posts=all_posts,all_lessons = all_lessons)
+    return render_template('USER_BASE.html',suggestUser=suggestUser,seriesIdNum=seriesIdNum,user=user,profile_photo=profile_photo,all_posts=all_posts,all_lessons = all_lessons)
 
 
 def followerCount(user):
@@ -1947,7 +1959,7 @@ def discover(username):
     session['username'] = current_user.username
     username= session['username']
     # Profile pic
-    image_file = url_for('static', filename='profile_pics/' + current_user.image_file)
+    profile_photo = url_for('static', filename='profile_pics/' + current_user.profile_photo)
 
     # Permission
     user_role = current_user.role
@@ -1964,7 +1976,7 @@ def discover(username):
         seriesIdNum = int(seriesId.id) + 1
 
 #    uploads = send_from_directory(directory='videos',filename='videos')
-    return render_template('Discover.html',user=user,page=page,seriesIdNum=seriesIdNum,seriesInfo=seriesInfo,episodes=episodes,series=series,uploads=uploads,user_role=user_role,image_file=image_file)
+    return render_template('Discover.html',user=user,page=page,seriesIdNum=seriesIdNum,seriesInfo=seriesInfo,episodes=episodes,series=series,uploads=uploads,user_role=user_role,profile_photo=profile_photo)
 
 @app.route('/book/<int:id>')
 @login_required
@@ -2022,7 +2034,7 @@ def video():
     l = []
     for v in range(len(videos)):
         data = {'id': videos[i].id, 'title': videos[i].title, 'username': videos[i].created_by.username,
-                'userImg': videos[i].created_by.image_file, 'category': videos[i].category, 'price': videos[i].price, 'coverImage': videos[i].coverImage,'approved': videos[i].approved,'likes':videos[i].liked.count(),'comments':videos[i].comments.count(),'isSeries':videos[i].is_series()}
+                'userImg': videos[i].created_by.profile_photo, 'category': videos[i].category, 'price': videos[i].price, 'coverImage': videos[i].coverImage,'approved': videos[i].approved,'likes':videos[i].liked.count(),'comments':videos[i].comments.count(),'isSeries':videos[i].is_series()}
         l.append(data)
 
         i += 1
@@ -2042,12 +2054,12 @@ def videoDetails():
         data = {'id': r.id, 'coverImg': r.coverImage, 'title': r.title, 'isSeries': r.is_series(),
                 'videoRef': r.upload_ref, 'type': r.fileType(), 'description': r.description,
                 'price': r.price, 'userId': r.created_by.id, 'username': r.created_by.username,
-                'userImg': r.created_by.image_file, 'category': r.category, 'likes': r.liked.count(),
+                'userImg': r.created_by.profile_photo, 'category': r.category, 'likes': r.liked.count(),
                 'comments': r.comments.count()}
         relatedList.append(data)
 
     for c in videos.comments:
-        data= {'id':c.id,'content':c.content,'timestamp':c.timestamp,'username':c.author.username,'proPic':c.author.image_file,'userId':c.author.id}
+        data= {'id':c.id,'content':c.content,'timestamp':c.timestamp,'username':c.author.username,'proPic':c.author.profile_photo,'userId':c.author.id}
         commentsList.append(data)
 
     if videos.is_series() == True:
@@ -2055,7 +2067,7 @@ def videoDetails():
         l = []
 
 
-        data ={'id': videos.id,'coverImg':videos.coverImage, 'title': videos.title,'isSeries':videos.is_series(),'videoRef':videos.upload_ref,'type':videos.fileType(),'description':videos.description,'price':videos.price,'userId':videos.created_by.id,'username': videos.created_by.username,'userImg': videos.created_by.image_file, 'category': videos.category,'likes':videos.liked.count(),'comments':videos.comments.count()}
+        data ={'id': videos.id,'coverImg':videos.coverImage, 'title': videos.title,'isSeries':videos.is_series(),'videoRef':videos.upload_ref,'type':videos.fileType(),'description':videos.description,'price':videos.price,'userId':videos.created_by.id,'username': videos.created_by.username,'userImg': videos.created_by.profile_photo, 'category': videos.category,'likes':videos.liked.count(),'comments':videos.comments.count()}
         ep = []
         for e in videos.episode:
             if current_user.is_authenticated:
@@ -2076,7 +2088,7 @@ def videoDetails():
 
     elif videos.is_series() == False:
 
-        data = {'id': videos.id, 'title': videos.title,'coverImg':videos.coverImage,'isSeries':videos.is_series(),'videoRef':videos.upload_ref,'type':videos.fileType(),'description':videos.description,'price':videos.price,'userId':videos.created_by.id,'username': videos.created_by.username,'userImg': videos.created_by.image_file, 'category': videos.category,'likes':videos.liked.count(),'totalComments':videos.comments.count()}
+        data = {'id': videos.id, 'title': videos.title,'coverImg':videos.coverImage,'isSeries':videos.is_series(),'videoRef':videos.upload_ref,'type':videos.fileType(),'description':videos.description,'price':videos.price,'userId':videos.created_by.id,'username': videos.created_by.username,'userImg': videos.created_by.profile_photo, 'category': videos.category,'likes':videos.liked.count(),'totalComments':videos.comments.count()}
         data.update({'relatedVideos': relatedList})
         data.update({'comments': commentsList})
         if current_user.is_authenticated:
@@ -2100,7 +2112,7 @@ def liveDetails():
         data = {'id': live.id, 'title': live.title,'startTime': live.start_time,'endTime': live.end_time,'date': live.date,'coverImage': live.coverImage,'description':live.description,'category': live.category,'meetingCode':live.meetingCode,'meetingUrl':live.meetingUrl,'hasBooked':current_user.has_bookedLive(live)}
     else:
         data = {'id': live.id, 'title': live.title,'startTime': live.start_time,'endTime': live.end_time,'date': live.date,'coverImage': live.coverImage,'description':live.description,'category': live.category,'meetingCode':live.meetingCode,'meetingUrl':live.meetingUrl,'hasBooked':False}
-    host = {'userId':live.author.id,'host': live.author.username,'userImg': live.author.image_file,'introduction':live.author.introduction,'followers':live.author.followers.count()}
+    host = {'userId':live.author.id,'host': live.author.username,'userImg': live.author.profile_photo,'introduction':live.author.introduction,'followers':live.author.followers.count()}
     for s in live.author.available:
         if current_user.is_authenticated:
             schedule = {'id': s.id,'date': s.date_available,'startTime':s.start_time,'endTime':s.start_time,'time': s.timestamp,'hasBookedSchedule':current_user.has_booked(s)}
@@ -2385,7 +2397,7 @@ def meetingInfo(username,meetingcode,post_id):
         meetingStart = datetime.fromtimestamp(int(item['start_time'])).strftime('%H:%M')
         meetingEnd = datetime.fromtimestamp(int(item['end_time'])).strftime('%H:%M')
     user = User.query.filter_by(username=username).first_or_404()
-    image_file = url_for('static', filename ='profile_pics/' + current_user.image_file)
+    profile_photo = url_for('static', filename ='profile_pics/' + current_user.profile_photo)
     followed_posts=Live.query.join(followers, (followers.c.followed_id == Live.user_id)).all()
 
     all_posts = Live.query.all()
@@ -2398,7 +2410,7 @@ def meetingInfo(username,meetingcode,post_id):
     for seriesId in seriesId:
         seriesIdNum = int(seriesId.id) + 1
 
-    return render_template('meeting.html',seriesIdNum=seriesIdNum,meetingStart=meetingStart,meetingEnd=meetingEnd,meetingTitle=meetingTitle,postId=postId,meetingUrl=meetingUrl,meeting_id=meeting_id,meetingcode=meetingcode,followed_posts=followed_posts,user=user,user_role=user_role,all_users=all_users,all_posts = all_posts,author=author, image_file = image_file)
+    return render_template('meeting.html',seriesIdNum=seriesIdNum,meetingStart=meetingStart,meetingEnd=meetingEnd,meetingTitle=meetingTitle,postId=postId,meetingUrl=meetingUrl,meeting_id=meeting_id,meetingcode=meetingcode,followed_posts=followed_posts,user=user,user_role=user_role,all_users=all_users,all_posts = all_posts,author=author, profile_photo = profile_photo)
 
 @app.route('/cancel/<int:meetingId>Code<int:meetingcode>',methods=['GET','POST'])
 @login_required
@@ -2416,7 +2428,7 @@ def cancel_meeting(meetingId,meetingcode):
 @login_required
 def modify_meeting(username,meetingId,post_id):
     user = User.query.filter_by(username=username).first_or_404()
-    image_file = url_for('static', filename='profile_pics/' + current_user.image_file)
+    profile_photo = url_for('static', filename='profile_pics/' + current_user.profile_photo)
     user_role = current_user.role
     lesson_form = Lesson_form()
     form = Session_form()
@@ -2458,12 +2470,12 @@ def modify_meeting(username,meetingId,post_id):
 
 
         return redirect(url_for('meetingInfo', meetingcode=meetingCode, username=current_user.username,post_id=post_id))
-    return render_template('modify.html',seriesIdNum=seriesIdNum,user=user,user_role = user_role,form=form,verify_form=verify_form,lesson_form=lesson_form,image_file=image_file)
+    return render_template('modify.html',seriesIdNum=seriesIdNum,user=user,user_role = user_role,form=form,verify_form=verify_form,lesson_form=lesson_form,profile_photo=profile_photo)
 @app.route('/create/<username>',methods=['GET','POST'])
 @login_required
 def create(username):
     user = User.query.filter_by(username=username).first_or_404()
-    image_file = url_for('static', filename ='profile_pics/' + current_user.image_file)
+    profile_photo = url_for('static', filename ='profile_pics/' + current_user.profile_photo)
     user_role = current_user.role
     lesson_form = Lesson_form()
     form = Session_form()
@@ -2500,13 +2512,13 @@ def create(username):
         db.session.commit()
 
         return redirect(url_for('meetingInfo',meetingcode=meetingCode,username=current_user.username,post_id=post.id))
-    return render_template('CREATE1.html',seriesIdNum=seriesIdNum,user=user,user_role = user_role,form=form,verify_form=verify_form,lesson_form=lesson_form,image_file=image_file)
+    return render_template('CREATE1.html',seriesIdNum=seriesIdNum,user=user,user_role = user_role,form=form,verify_form=verify_form,lesson_form=lesson_form,profile_photo=profile_photo)
 
 @app.route('/available/<username>',methods=['GET','POST'])
 @login_required
 def available(username):
     user = User.query.filter_by(username=username).first_or_404()
-    image_file = url_for('static', filename ='profile_pics/' + current_user.image_file)
+    profile_photo = url_for('static', filename ='profile_pics/' + current_user.profile_photo)
     user_role = current_user.role
 
     verify_form = Verify_form()
@@ -2537,7 +2549,7 @@ def available(username):
         db.session.commit()
 
         return redirect(url_for('my_profile',username=current_user.username))
-    return render_template('available.html',seriesIdNum=seriesIdNum,user=user,user_role = user_role,form=form,verify_form=verify_form,image_file=image_file)
+    return render_template('available.html',seriesIdNum=seriesIdNum,user=user,user_role = user_role,form=form,verify_form=verify_form,profile_photo=profile_photo)
 
 
 def fileRef(name):
@@ -2581,7 +2593,7 @@ def token_hex(nbytes):
 @app.route('/quickuploads/<username>',methods=['POST','GET'])
 @login_required
 def quickupload(username):
-    image_file = url_for('static', filename ='profile_pics/' + current_user.image_file)
+    profile_photo = url_for('static', filename ='profile_pics/' + current_user.profile_photo)
     user_role = current_user.role
     user = User.query.filter_by(username=username).first_or_404()
     form = Upload_form()
@@ -2609,7 +2621,7 @@ def quickupload(username):
 
             return redirect(url_for('discover', username = current_user.username))
         return render_template('quickUpload.html', user=user, seriesIdNum=seriesIdNum, user_role=user_role, form=form,
-                               image_file=image_file)
+                               profile_photo=profile_photo)
 
     else:
         if request.method == 'POST':
@@ -2628,7 +2640,7 @@ def quickupload(username):
 
             db.session.commit()
             redirect(url_for('discover', username = current_user.username))
-        return render_template('quickUpload.html',user=user,seriesIdNum=seriesIdNum,user_role=user_role,form =form,image_file=image_file)
+        return render_template('quickUpload.html',user=user,seriesIdNum=seriesIdNum,user_role=user_role,form =form,profile_photo=profile_photo)
 
 def saveFile(fileData,location):
     file = secure_filename(fileData.filename)
@@ -2739,7 +2751,7 @@ def verifyCourseList():
     l = []
     for v in range(len(videos)):
         data = {'id': videos[i].id, 'title': videos[i].title, 'username': videos[i].created_by.username,
-                'status':videos[i].status,'description':videos[i].description,'userImg': videos[i].created_by.image_file,'introduction': videos[i].created_by.introduction,'video': videos[i].upload_ref, 'category': videos[i].category, 'price': videos[i].price, 'coverImage': videos[i].coverImage,'approved': videos[i].approved,'likes':videos[i].liked.count(),'comments':videos[i].comments.count(),'isSeries':videos[i].is_series()}
+                'status':videos[i].status,'description':videos[i].description,'userImg': videos[i].created_by.profile_photo,'introduction': videos[i].created_by.introduction,'video': videos[i].upload_ref, 'category': videos[i].category, 'price': videos[i].price, 'coverImage': videos[i].coverImage,'approved': videos[i].approved,'likes':videos[i].liked.count(),'comments':videos[i].comments.count(),'isSeries':videos[i].is_series()}
         l.append(data)
 
 
@@ -2802,7 +2814,7 @@ def getSeries():
     l = []
 
     for v in range(len(series)):
-        data ={'id':series[i].id,'title':series[i].title,'host':series[i].created_by.username,'coverImg': series[i].coverImage,'userImg':series[i].created_by.image_file,'category':series[i].category}
+        data ={'id':series[i].id,'title':series[i].title,'host':series[i].created_by.username,'coverImg': series[i].coverImage,'userImg':series[i].created_by.profile_photo,'category':series[i].category}
         ep = []
         for e in series[i].episode:
             episode = {'episodeId':e.id,'seriesId':e.sub.id,'subtitle':e.subtitle}
@@ -2826,7 +2838,7 @@ def getUploads():
     l = []
 
     for v in range(len(video)):
-        data ={'id':video[i].id,'title':video[i].title,'host':video[i].created_by.username,'coverImg': video[i].coverImage,'userImg':video[i].created_by.image_file,'category':video[i].category}
+        data ={'id':video[i].id,'title':video[i].title,'host':video[i].created_by.username,'coverImg': video[i].coverImage,'userImg':video[i].created_by.profile_photo,'category':video[i].category}
         l.append(data)
         print(data)
 
@@ -2853,7 +2865,7 @@ def getUserSeries():
         for v in range(len(series)):
             data = {'id': series[i].id, 'title': series[i].title, 'price': series[i].price,
                     'host': series[i].created_by.username, 'coverImg': series[i].coverImage,
-                    'userImg': series[i].created_by.image_file, 'category': series[i].category,'approved': series[i].approved,
+                    'userImg': series[i].created_by.profile_photo, 'category': series[i].category,'approved': series[i].approved,
                     'totalEpisodes': len(series[i].episode),'likes': series[i].liked.count(),'totalComments': series[i].comments.count(),'isSeries':series[i].is_series()}
             ep = []
             for e in series[i].episode:
@@ -2887,7 +2899,7 @@ def getEpisode():
         data = {'id': episode.id, 'seriesId': episode.sub.id,'type':episode.fileType(), 'subtitle': episode.subtitle, 'video': episode.upload_ref,'description': episode.description,'hasLikedEpisode': False,'likes':episode.userLikedEpisode.count()}
     commentList = []
 #    for c in episode.userCommentEpisode:
-#        data= {'id':c.id,'content':c.content,'timestamp':c.timestamp,'username':c.author.username,'proPic':c.author.image_file,'userId':c.author.id}
+#        data= {'id':c.id,'content':c.content,'timestamp':c.timestamp,'username':c.author.username,'proPic':c.author.profile_photo,'userId':c.author.id}
 #        commentList.append(data)
     data.update({'comments':commentList})
     return jsonify({'result':data})
@@ -2907,7 +2919,7 @@ def editSeries():
         for s in seriesList:
             data = {'id': s.id, 'title': s.title, 'price': s.price,'description':s.description,
                     'host': s.created_by.username, 'coverImg': s.coverImage,
-                    'userImg': s.created_by.image_file, 'category': s.category,
+                    'userImg': s.created_by.profile_photo, 'category': s.category,
                     'totalEpisodes': len(s.episode)}
             ep = []
             for e in seriesList[i].episode:
@@ -2960,7 +2972,7 @@ def editSchedule():
         data = {'id': schedule.id,'date': schedule.date_available,'time': schedule.timestamp}
         bookersList=[]
         for users in schedule.userSchedule:
-            bookers = {'id': users.id, 'username': users.username, 'profPic': users.image_file}
+            bookers = {'id': users.id, 'username': users.username, 'profPic': users.profile_photo}
             bookersList.append(bookers)
         data.update({'bookers': bookersList})
 
@@ -3029,12 +3041,12 @@ def editLive():
     if request.method == 'GET':
 
         data = {'id': live.id, 'title': live.title,'description': live.description, 'host': live.author.username,
-                'coverImg': live.coverImage, 'userImg': live.author.image_file,
+                'coverImg': live.coverImage, 'userImg': live.author.profile_photo,
                 'category': live.category, 'startTime': live.start_time, 'endTime': live.end_time,
                 'date': live.date, 'meetingCode': live.meetingCode}
         bookersList=[]
         for users in live.bookers:
-            bookers = {'id': users.id, 'username': users.username, 'profPic': users.image_file}
+            bookers = {'id': users.id, 'username': users.username, 'profPic': users.profile_photo}
             bookersList.append(bookers)
         data.update({'bookers': bookersList})
         return jsonify({'result': data})
@@ -3097,7 +3109,7 @@ def editVideo():
     if request.method == 'GET':
         data = {'id': videos.id, 'title': videos.title, 'videoRef': videos.upload_ref, 'description': videos.description,
              'price': videos.price, 'userId': videos.uploader.id, 'username': videos.uploader.username,
-             'userImg': videos.uploader.image_file, 'category': videos.category, 'likes': videos.liked.count(),
+             'userImg': videos.uploader.profile_photo, 'category': videos.category, 'likes': videos.liked.count(),
              'comments': videos.comments.count()}
 
         return jsonify({'result': data})
@@ -3129,7 +3141,7 @@ def getUserLive():
     i = 0
     l = []
     for v in range(len(series)):
-        data ={'id':series[i].id,'title':series[i].title,'description':series[i].description,'host':series[i].author.username,'coverImg': series[i].coverImage,'userImg':series[i].author.image_file,'category':series[i].category,'startTime':series[i].start_time,'endTime':series[i].end_time,'date':series[i].date,'meetingCode':series[i].meetingCode,'room':series[i].meetingUrl}
+        data ={'id':series[i].id,'title':series[i].title,'description':series[i].description,'host':series[i].author.username,'coverImg': series[i].coverImage,'userImg':series[i].author.profile_photo,'category':series[i].category,'startTime':series[i].start_time,'endTime':series[i].end_time,'date':series[i].date,'meetingCode':series[i].meetingCode,'room':series[i].meetingUrl}
         l.append(data)
 
         i+=1
@@ -3263,20 +3275,20 @@ def addEpisode():
 @app.route('/uploads/<username>',methods=['POST','GET'])
 @login_required
 def upload(username):
-    image_file = url_for('static', filename ='profile_pics/' + current_user.image_file)
+    profile_photo = url_for('static', filename ='profile_pics/' + current_user.profile_photo)
     user_role = current_user.role
     user = User.query.filter_by(username=username).first_or_404()
     seriesId = Series.query.all()
     for seriesId in seriesId:
         seriesIdNum = int(seriesId.id) + 1
 
-        return render_template('UPLOADS.html',user=user,user_role=user_role,seriesIdNum=seriesIdNum,image_file=image_file)
+        return render_template('UPLOADS.html',user=user,user_role=user_role,seriesIdNum=seriesIdNum,profile_photo=profile_photo)
 
 
 @app.route('/series_uploads/<int:id>id<username>',methods=['POST','GET'])
 @login_required
 def series_upload(username,id):
-    image_file = url_for('static', filename ='profile_pics/' + current_user.image_file)
+    profile_photo = url_for('static', filename ='profile_pics/' + current_user.profile_photo)
     user_role = current_user.role
     user = User.query.filter_by(username=username).first_or_404()
     seriesForm = Series_form()
@@ -3312,7 +3324,7 @@ def series_upload(username,id):
 
             db.session.commit()
             return redirect(url_for('discover', username = current_user.username))
-        return render_template('seriesUpload.html',user=user,seriesIdNum=seriesIdNum,user_role=user_role,form =form,seriesForm=seriesForm,episodeForm=episodeForm,image_file=image_file)
+        return render_template('seriesUpload.html',user=user,seriesIdNum=seriesIdNum,user_role=user_role,form =form,seriesForm=seriesForm,episodeForm=episodeForm,profile_photo=profile_photo)
 
     else:
         if request.method == 'POST':
@@ -3331,13 +3343,13 @@ def series_upload(username,id):
 
             db.session.commit()
             return redirect(url_for('discover', username = current_user.username))
-        return render_template('seriesUpload.html',user=user,seriesIdNum=seriesIdNum,user_role=user_role,form =form,seriesForm=seriesForm,episodeForm=episodeForm,image_file=image_file)
+        return render_template('seriesUpload.html',user=user,seriesIdNum=seriesIdNum,user_role=user_role,form =form,seriesForm=seriesForm,episodeForm=episodeForm,profile_photo=profile_photo)
 
 
 @app.route('/lesson<int:id><username>', methods=['POST','GET'])
 @login_required
 def lesson(username,id):
-    image_file = url_for('static', filename ='profile_pics/' + current_user.image_file)
+    profile_photo = url_for('static', filename ='profile_pics/' + current_user.profile_photo)
 
     user = User.query.filter_by(username=username).first_or_404()
     form = Lesson_form()
@@ -3352,17 +3364,17 @@ def lesson(username,id):
 
 
 
-    return render_template('LESSON.html',user=user,post=post,form=form,image_file=image_file)
+    return render_template('LESSON.html',user=user,post=post,form=form,profile_photo=profile_photo)
 
 @app.route('/userview/<username>',methods=['GET','POST'])
 @login_required
 def userview(username):
-    image_file = url_for('static', filename ='profile_pics/' + current_user.image_file)
+    profile_photo = url_for('static', filename ='profile_pics/' + current_user.profile_photo)
     user_role = current_user.role
     all_users = User.query.all()
     user = User.query.filter_by(username=username).first_or_404()
 
-    return render_template('USER_VIEW.html',user=user,all_users = all_users,user_role=user_role,image_file=image_file)
+    return render_template('USER_VIEW.html',user=user,all_users = all_users,user_role=user_role,profile_photo=profile_photo)
 
 
 
@@ -3373,11 +3385,11 @@ def userview(username):
 @app.route('/superadminview',methods=['GET','POST'])
 @login_required
 def superview():
-    image_file = url_for('static', filename ='profile_pics/' + current_user.image_file)
+    profile_photo = url_for('static', filename ='profile_pics/' + current_user.profile_photo)
     user_role = current_user.role
     all_users = User.query.all()
 
-    return render_template('USER_VIEW.html',user=user,all_users = all_users,user_role=user_role,image_file=image_file)
+    return render_template('USER_VIEW.html',user=user,all_users = all_users,user_role=user_role,profile_photo=profile_photo)
 
 #session role
 @app.route('/session_admin/<int:id>',methods=['GET','POST'])
@@ -3386,11 +3398,11 @@ def session_admin(id):
     user = User.query.filter_by(id=id).first_or_404()
     all_posts = Live.query.all()
 
-    image_file = url_for('static', filename ='profile_pics/' + current_user.image_file)
+    profile_photo = url_for('static', filename ='profile_pics/' + current_user.profile_photo)
     user_role = current_user.role
     all_users = User.query.all()
 
-    return render_template('session_admin.html',user=user,all_users = all_users,all_posts=all_posts,user_role=user_role,image_file=image_file)
+    return render_template('session_admin.html',user=user,all_users = all_users,all_posts=all_posts,user_role=user_role,profile_photo=profile_photo)
 
 @app.route('/session_view/<int:id>',methods=['GET','POST'])
 @login_required
@@ -3398,11 +3410,11 @@ def session_view(id):
     session_post = Live.query.filter_by(id=id).first()
     user = User.query.filter_by(id=id).first_or_404()
     comments = Comment.query.all()
-    image_file = url_for('static', filename ='profile_pics/' + current_user.image_file)
+    profile_photo = url_for('static', filename ='profile_pics/' + current_user.profile_photo)
     user_role = current_user.role
     all_users = User.query.all()
 
-    return render_template('session_view.html',session_post=session_post,comments=comments,video=video,user=user,all_users = all_users,user_role=user_role,image_file=image_file)
+    return render_template('session_view.html',session_post=session_post,comments=comments,video=video,user=user,all_users = all_users,user_role=user_role,profile_photo=profile_photo)
 
 @app.route('/session_verify/<int:id>',methods=['GET','POST'])
 @login_required
@@ -3427,11 +3439,11 @@ def session_unverify(id):
 def video_admin(id):
     user = User.query.filter_by(id=id).first_or_404()
     uploads  = Series.query.all()
-    image_file = url_for('static', filename ='profile_pics/' + current_user.image_file)
+    profile_photo = url_for('static', filename ='profile_pics/' + current_user.profile_photo)
     user_role = current_user.role
     all_users = User.query.all()
 
-    return render_template('video_admin.html',uploads=uploads,user=user,all_users = all_users,user_role=user_role,image_file=image_file)
+    return render_template('video_admin.html',uploads=uploads,user=user,all_users = all_users,user_role=user_role,profile_photo=profile_photo)
 
 @app.route('/video/<upload_ref>',methods=['GET','POST'])
 @login_required
@@ -3439,48 +3451,48 @@ def video_view(upload_ref):
     video = Upload.query.filter_by(upload_ref=upload_ref).first()
     user = User.query.all()
     comments = Comment.query.all()
-    image_file = url_for('static', filename ='profile_pics/' + current_user.image_file)
+    profile_photo = url_for('static', filename ='profile_pics/' + current_user.profile_photo)
     user_role = current_user.role
     all_users = User.query.all()
 
-    return render_template('video_view.html',comments=comments,video=video,user=user,all_users = all_users,user_role=user_role,image_file=image_file)
+    return render_template('video_view.html',comments=comments,video=video,user=user,all_users = all_users,user_role=user_role,profile_photo=profile_photo)
 
 @app.route('/dashboard',methods=['GET','POST'])
 @login_required
 def video_admin_dashboard():
     total_videos = Upload.query.all()
     comments = Comment.query.all()
-    image_file = url_for('static', filename ='profile_pics/' + current_user.image_file)
+    profile_photo = url_for('static', filename ='profile_pics/' + current_user.profile_photo)
     total_users = User.query.all()
 
-    return render_template('video_admin_dashboard.html',comments=comments,total_videos=len(total_videos),user=user,total_users = len(total_users) ,image_file=image_file)
+    return render_template('video_admin_dashboard.html',comments=comments,total_videos=len(total_videos),user=user,total_users = len(total_users) ,profile_photo=profile_photo)
 
 @app.route('/admin/payment/<int:id>',methods=['GET','POST'])
 @login_required
 def payment_admin():
-    image_file = url_for('static', filename ='profile_pics/' + current_user.image_file)
+    profile_photo = url_for('static', filename ='profile_pics/' + current_user.profile_photo)
     user_role = current_user.role
     all_users = User.query.all()
 
-    return render_template('Payment_admin.html',user=user,all_users = all_users,user_role=user_role,image_file=image_file)
+    return render_template('Payment_admin.html',user=user,all_users = all_users,user_role=user_role,profile_photo=profile_photo)
 
 @app.route('/admin/info_admin/<int:id>',methods=['GET','POST'])
 @login_required
 def info_admin():
-    image_file = url_for('static', filename ='profile_pics/' + current_user.image_file)
+    profile_photo = url_for('static', filename ='profile_pics/' + current_user.profile_photo)
     user_role = current_user.role
     all_users = User.query.all()
 
-    return render_template('Information_admin.html',user=user,all_users = all_users,user_role=user_role,image_file=image_file)
+    return render_template('Information_admin.html',user=user,all_users = all_users,user_role=user_role,profile_photo=profile_photo)
 
 @app.route('/admin/badge/<int:id>',methods=['GET','POST'])
 @login_required
 def badge_admin():
-    image_file = url_for('static', filename ='profile_pics/' + current_user.image_file)
+    profile_photo = url_for('static', filename ='profile_pics/' + current_user.profile_photo)
     user_role = current_user.role
     all_users = User.query.all()
 
-    return render_template('Badge_admin.html',user=user,all_users = all_users,user_role=user_role,image_file=image_file)
+    return render_template('Badge_admin.html',user=user,all_users = all_users,user_role=user_role,profile_photo=profile_photo)
 
 
 

@@ -549,8 +549,8 @@ class Upload(db.Model):
     price = db.Column('price', db.Integer)
     upload_ref = db.Column('upload_ref', db.VARCHAR)
     coverImage = db.Column('coverImage', db.VARCHAR)
-    transcript_ref = db.Column('transcript_ref', db.VARCHAR)
-    auido_ref = db.Column('auido_ref', db.VARCHAR)
+    
+    
     timestamp = db.Column(db.DateTime, default=datetime.datetime.utcnow)
     user_id = db.Column('user_id', db.Integer, db.ForeignKey('user.id'), nullable=True)
 
@@ -574,7 +574,7 @@ class Series(db.Model):
     user_id = db.Column('user_id', db.Integer, db.ForeignKey('user.id'), nullable=False)
     payment = db.relationship('Payment', backref='paid_by', lazy='dynamic')
     comments = db.relationship('Comment', backref='series', lazy='dynamic')
-    episode = db.relationship('Episode', backref='sub', lazy=True)
+    episode = db.relationship('Episode', backref='series', lazy=True)
     def __str__(self):
         prop = self.title
         return prop.replace("u'", "'")
@@ -618,8 +618,8 @@ class Episode(db.Model):
     series_id = db.Column(db.Integer,db.ForeignKey('series.id'))
 
 
-    transcript_ref = db.Column('transcript_ref', db.VARCHAR)
-    auido_ref = db.Column('auido_ref', db.VARCHAR)
+    
+    
     def __str__(self):
         prop = self.subtitle
         return prop.replace("u'", "'")
@@ -1029,12 +1029,39 @@ class SeriesView(ModelView):
     edit_modal = True
 
 
-    column_list = ('title','status','category','views','approved','created_by','')
-    column_exclude_list = ('cover_image','description','upload_ref')
+    column_list = ('title','status','category','views','approved','created_by','upload_ref','coverImage',)
+    column_exclude_list = ('description')
     form_excluded_columns = ('')
+    def _list_thumbnail(view, context, model, name):
+        if not model.upload_ref:
+            return ''
 
+        return Markup('<video src="%s" controls width="20"></video>' % url_for('static',filename='videos/'+ model.upload_ref))
+    def video(view, context, model, name):
+        if not model.upload_ref:
+            return ''
+
+        return Markup('<video src="%s" controls width="400"></video>' % url_for('static',filename='videos/'+ model.upload_ref))
+    def _img_thumbnail(view, context, model, name):
+        if not model.coverImage :
+            return ''
+        if not model.upload_ref:
+            return ''
+
+        return Markup('<div class="thumb-wrapper"  ><a class="video"  href="%s"><img class="video-feed"  width="80"src="%s"></a>' %( url_for('static',filename='videos/'+ model.upload_ref),url_for('static',filename='coverImages/'+ model.coverImage)))
+    column_descriptions = dict(coverImage='Click on the cover image to watch the video')
+    column_formatters_detail = {
+        'upload_ref': video,
+    }
+    details_modal = True
+    column_formatters = {
+        'upload_ref': _list_thumbnail,
+        'coverImage': _img_thumbnail
+    }
+    column_details_exclude_list = ('liked','user_cart','comments','payment')
 class EpisodeView(ModelView):
     can_view_details = True
+    details_modal = True
     form_base_class = SecureForm
 #    column_editable_list = ['approved']
     can_edit = True
@@ -1052,6 +1079,15 @@ class EpisodeView(ModelView):
 
     column_list = ('subtitle','category','views','created_by','series_id')
     form_excluded_columns = ('')
+    def video(view, context, model, name):
+        if not model.upload_ref:
+            return ''
+
+        return Markup('<video src="%s" controls width="400"></video>' % url_for('static',filename='videos/'+ model.upload_ref))
+    column_formatters_detail = {
+        'upload_ref':video
+    }
+    column_details_exclude_list = ('liked','userLikedEpisode','userCommentEpisode')
 class CommentView(ModelView):
     can_view_details = True
     form_base_class = SecureForm
@@ -1194,7 +1230,7 @@ def userDetails():
         ep = []
         episodeList = user.series
         for e in v.episode:
-            episode = {'episodeId': e.id, 'seriesId': e.sub.id, 'subtitle': e.subtitle, 'video': e.upload_ref}
+            episode = {'episodeId': e.id, 'seriesId': e.series.id, 'subtitle': e.subtitle, 'video': e.upload_ref}
             ep.append(episode)
         userSeries.update({'episode': ep})
         series = l.append(userSeries)
@@ -1251,7 +1287,7 @@ def userDetails():
         ep = []
 
         for e in v.episode:
-            episode = {'episodeId': e.id, 'seriesId': e.sub.id, 'subtitle': e.subtitle, 'video': e.upload_ref}
+            episode = {'episodeId': e.id, 'seriesId': e.series.id, 'subtitle': e.subtitle, 'video': e.upload_ref}
             ep.append(episode)
         userSeries.update({'episode': ep})
         likedSeries = likedSeriesList.append(userSeries)
@@ -2071,9 +2107,9 @@ def videoDetails():
         ep = []
         for e in videos.episode:
             if current_user.is_authenticated:
-                episode = {'episodeId':e.id,'seriesId':e.sub.id,'subtitle':e.subtitle,'description':e.description,'videoRef':e.upload_ref,'hasLikedEpisode': current_user.has_likedEpisode(e),'likes':e.userLikedEpisode.count()}
+                episode = {'episodeId':e.id,'seriesId':e.series.id,'subtitle':e.subtitle,'description':e.description,'videoRef':e.upload_ref,'hasLikedEpisode': current_user.has_likedEpisode(e),'likes':e.userLikedEpisode.count()}
             else:
-                episode = {'episodeId':e.id,'seriesId':e.sub.id,'subtitle':e.subtitle,'description':e.description,'videoRef':e.upload_ref,'hasLikedEpisode': False,'likes':e.userLikedEpisode.count()}
+                episode = {'episodeId':e.id,'seriesId':e.series.id,'subtitle':e.subtitle,'description':e.description,'videoRef':e.upload_ref,'hasLikedEpisode': False,'likes':e.userLikedEpisode.count()}
             ep.append(episode)
 
         data.update({'episode':ep})
@@ -2604,8 +2640,7 @@ def quickupload(username):
     if get_Host_name_IP('CJAY') == True:
         if request.method == 'POST':
             videoFile = request.files['video-file']
-            audioFile = request.files['audio-file']
-            transcriptFile = request.files['transcript-file']
+
 
             file_hex = token_hex(8)
             _, f_ext = os.path.splitext(videoFile.filename)
@@ -2626,8 +2661,6 @@ def quickupload(username):
     else:
         if request.method == 'POST':
             videoFile = request.files['video-file']
-            audioFile = request.files['audio-file']
-            transcriptFile = request.files['transcript-file']
 
 
             file_hex = token_hex(8)
@@ -2817,7 +2850,7 @@ def getSeries():
         data ={'id':series[i].id,'title':series[i].title,'host':series[i].created_by.username,'coverImg': series[i].coverImage,'userImg':series[i].created_by.profile_photo,'category':series[i].category}
         ep = []
         for e in series[i].episode:
-            episode = {'episodeId':e.id,'seriesId':e.sub.id,'subtitle':e.subtitle}
+            episode = {'episodeId':e.id,'seriesId':e.series.id,'subtitle':e.subtitle}
             ep.append(episode)
 
         data.update({'episode':ep})
@@ -2869,7 +2902,7 @@ def getUserSeries():
                     'totalEpisodes': len(series[i].episode),'likes': series[i].liked.count(),'totalComments': series[i].comments.count(),'isSeries':series[i].is_series()}
             ep = []
             for e in series[i].episode:
-                episode = {'episodeId': e.id, 'seriesId': e.sub.id, 'subtitle': e.subtitle, 'video': e.upload_ref}
+                episode = {'episodeId': e.id, 'seriesId': e.series.id, 'subtitle': e.subtitle, 'video': e.upload_ref}
                 ep.append(episode)
 
             data.update({'episode': ep})
@@ -2894,9 +2927,9 @@ def getEpisode():
     episode_id = request.args.get('episode_id', type=int)
     episode = Episode.query.filter_by(id = episode_id).first()
     if current_user.is_authenticated:
-        data = {'id': episode.id, 'seriesId': episode.sub.id,'type':episode.fileType(), 'subtitle': episode.subtitle, 'video': episode.upload_ref,'description': episode.description,'hasLikedEpisode': current_user.has_likedEpisode(episode),'likes':episode.userLikedEpisode.count()}
+        data = {'id': episode.id, 'seriesId': episode.series.id,'type':episode.fileType(), 'subtitle': episode.subtitle, 'video': episode.upload_ref,'description': episode.description,'hasLikedEpisode': current_user.has_likedEpisode(episode),'likes':episode.userLikedEpisode.count()}
     else:
-        data = {'id': episode.id, 'seriesId': episode.sub.id,'type':episode.fileType(), 'subtitle': episode.subtitle, 'video': episode.upload_ref,'description': episode.description,'hasLikedEpisode': False,'likes':episode.userLikedEpisode.count()}
+        data = {'id': episode.id, 'seriesId': episode.series.id,'type':episode.fileType(), 'subtitle': episode.subtitle, 'video': episode.upload_ref,'description': episode.description,'hasLikedEpisode': False,'likes':episode.userLikedEpisode.count()}
     commentList = []
 #    for c in episode.userCommentEpisode:
 #        data= {'id':c.id,'content':c.content,'timestamp':c.timestamp,'username':c.author.username,'proPic':c.author.profile_photo,'userId':c.author.id}
@@ -2923,7 +2956,7 @@ def editSeries():
                     'totalEpisodes': len(s.episode)}
             ep = []
             for e in seriesList[i].episode:
-                episode = {'episodeId': e.id, 'seriesId': e.sub.id,'description':e.description, 'subtitle': e.subtitle, 'video': e.upload_ref}
+                episode = {'episodeId': e.id, 'seriesId': e.series.id,'description':e.description, 'subtitle': e.subtitle, 'video': e.upload_ref}
                 ep.append(episode)
 
             data.update({'episode': ep})
@@ -3299,17 +3332,12 @@ def series_upload(username,id):
     if get_Host_name_IP('CJAY') == True:
         if request.method == 'POST':
             videoFile = request.files['video-file']
-            audioFile = request.files['audio-file']
-            transcriptFile = request.files['transcript-file']
+
 
             if videoFile is not None:
                 videoPath = fileRef(videoFile)
 
-            if audioFile is not None:
-                audioPath = fileRef(audioFile)
 
-            if transcriptFile is not None :
-                transcriptPath = fileRef(transcriptFile)
 
 
 
@@ -3319,7 +3347,7 @@ def series_upload(username,id):
             db.session.add(series)
 
             episode = Episode(subtitle=episodeForm.subtitle.data, description=episodeForm.description.data,
-                              upload_ref=videoPath,transcript_ref= transcriptPath,auido_ref=audioPath,created_by=current_user, series_id=id)
+                              upload_ref=videoPath,created_by=current_user, series_id=id)
             db.session.add(episode)
 
             db.session.commit()
@@ -3330,15 +3358,15 @@ def series_upload(username,id):
         if request.method == 'POST':
 
             videoPath = fileRefServer('video-file')
-            audioPath = fileRefServer('audio-file')
-            transcriptPath = fileRefServer('transcript-file')
+            
+            
             #        upload = Upload(title=form.title.data,description=form.description.data,category=form.category.data,price= form.price.data,upload_ref=path,uploader=current_user)
             series = Series(title=seriesForm.title.data, description=seriesForm.description.data,
                             category=seriesForm.category.data, price=seriesForm.price.data, created_by=current_user)
             db.session.add(series)
             db.session.flush()
             episode = Episode(subtitle=episodeForm.subtitle.data, description=episodeForm.description.data,
-                              upload_ref=videoPath,auido_ref = audioPath,transcript_ref=transcriptPath, created_by=current_user, series_id=id)
+                              upload_ref=videoPath, created_by=current_user, series_id=id)
             db.session.add(episode)
 
             db.session.commit()

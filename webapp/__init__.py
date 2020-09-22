@@ -970,6 +970,7 @@ class Users(ModelView):
     column_list = ('id','profile_photo','username','fullname','nationality','role')
     column_exclude_list = ('password','id_document','id_type','sub_role','introduction','introduction_video','roles')
     form_excluded_columns = ['password','username']
+    column_details_exclude_list = ('password','comments','sub_role','lesson','uploads','review','available','cart','roles','followed','bookSchedule','likes','likesEpisode','book','series','episode','posts')
     def _list_thumbnail(view, context, model, name):
 
         return Markup('<div class="user-profile-pic" style=""><img src="%s" width="30"class="profilepic img-circle"></div>' % url_for('static',filename='profile_pics/'+ model.profile_photo))

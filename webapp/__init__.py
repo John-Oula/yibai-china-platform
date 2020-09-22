@@ -1050,9 +1050,16 @@ class SeriesView(ModelView):
             return ''
 
         return Markup('<div class="thumb-wrapper"  ><a class="video"  href="%s"><img class="video-feed"  width="80"src="%s"></a>' %( url_for('static',filename='videos/'+ model.upload_ref),url_for('static',filename='coverImages/'+ model.coverImage)))
+
+    def description(view, context, model, name):
+        if not model.description:
+            return ''
+
+        return Markup('<div class="container-fluid"  >'+ model.description + '</div>')
     column_descriptions = dict(coverImage='Click on the cover image to watch the video')
     column_formatters_detail = {
         'upload_ref': video,
+        'description': description
     }
     details_modal = True
     column_formatters = {

@@ -268,7 +268,7 @@ class User(db.Model, UserMixin):
     followed = db.relationship('User', secondary=followers,
                                primaryjoin=(followers.c.follower_id == id),
                                secondaryjoin=(followers.c.followed_id == id),
-                               backref=db.backref('followers'))
+                               backref=db.backref('followers',lazy='dynamic'), lazy='dynamic')
 #    followed = db.relationship('User', secondary=review,
 #                               primaryjoin=(review.c.reviewer_id == id),
 #                               secondaryjoin=(review.c.reviewed_id == id),

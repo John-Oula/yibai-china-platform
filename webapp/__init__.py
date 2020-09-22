@@ -374,7 +374,8 @@ class User(db.Model, UserMixin):
         own = Upload.query.filter_by(user_id=self.id)
         return followed.union(own).order_by(Upload.timestamp.desc())
     def __str__(self):
-        return str(self.username).decode('utf-8')
+        prop = self.username
+        return prop.replace("u'", "'")
 
 
 

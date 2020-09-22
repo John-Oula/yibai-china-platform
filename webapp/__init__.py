@@ -2112,14 +2112,15 @@ def videoDetails():
                 episode = {'episodeId':e.id,'seriesId':e.series.id,'subtitle':e.subtitle,'description':e.description,'videoRef':e.upload_ref,'hasLikedEpisode': False,'likes':e.userLikedEpisode.count()}
             ep.append(episode)
 
+
         data.update({'episode':ep})
         data.update({'relatedVideos': relatedList})
 
 #        l.append(data)
-
+        print(data)
         if current_user.is_authenticated:
             data.update({'hasLiked': current_user.has_liked(videos),'inCart': current_user.in_cart(videos)})
-
+        print(data)
         return jsonify({'result':data})
 
     elif videos.is_series() == False:
@@ -2722,7 +2723,7 @@ def createCourse():
 
             return msg
         elif amount > 0 :
-            upload = Series(title=form.upload_title.data,
+            upload = Series(title=form.upload_title.data,status=status,
                             coverImage=saveFile(form.upload_coverImage.data, 'coverImages'),
                             description=form.upload_description.data, category=form.upload_category.data,
                             price=str(form.upload_price.data), upload_ref=saveFile(form.upload_fileName.data, 'videos'),
@@ -2742,7 +2743,7 @@ def createCourse():
         print(type(amount))
         print(amount)
         if  amount == 0:
-            series = Series(title=seriesForm.series_title.data, description=seriesForm.series_description.data,
+            series = Series(title=seriesForm.series_title.data, description=seriesForm.series_description.data,status=status,
                             coverImage=saveFile(seriesForm.series_coverImage.data,'coverImages'), category=seriesForm.series_category.data,
                             price=seriesForm.series_price.data, created_by=current_user,approved = True)
             db.session.add(series)

@@ -186,9 +186,7 @@ function myFunction() {
     }
 }
 
-$(document).ready(function () {
 
-});
 
 
 $(document).ready(function () {

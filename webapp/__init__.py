@@ -256,8 +256,8 @@ class User(db.Model, UserMixin):
     phone = db.Column('phone', db.BIGINT(), nullable=True)
     posts = db.relationship('Live', backref='author', lazy=True)
     uploads = db.relationship('Upload', backref='uploader', lazy=True)
-    series = db.relationship('Series', backref='user_series', lazy=True)
-    episode = db.relationship('Episode', backref='user_episode', lazy=True)
+    series = db.relationship('Series', backref='created_by', lazy=True)
+    episode = db.relationship('Episode', backref='created_by', lazy=True)
     lesson = db.relationship('Lesson', backref=db.backref('user_lessons'))
     comments = db.relationship('Comment', backref='author',lazy =True)
     review = db.relationship('Reviews', backref='user_review')
@@ -467,7 +467,8 @@ class Role(db.Model):
         return self.permissions & perm == perm
 
     def __str__(self):
-        return '%r' % self.name
+        prop = self.name
+        return prop.replace("u'", "'")
 
 
 
@@ -478,14 +479,16 @@ class Skill(db.Model):
     id = db.Column('id', db.Integer, primary_key=True)
     skill_title = db.Column(db.String(20),unique=True)
     def __str__(self):
-        return '%r' % self.skill_title
+        prop = self.skill_title
+        return prop.replace("u'", "'")
 
 class Experience(db.Model):
     __tablename__ = 'experience'
     id = db.Column('id', db.Integer, primary_key=True)
     exp_title = db.Column(db.String(40),unique=True)
     def __str__(self):
-        return '%r' % self.exp_title
+        prop = self.exp_title
+        return prop.replace("u'", "'")
 
 class Available(db.Model):
     __tablename__ = 'availableStatus'
@@ -499,7 +502,8 @@ class Available(db.Model):
     meetingCode = db.Column('MeetingCode', db.BigInteger, nullable=True)
     price = db.Column('price', db.Integer)
     def __str__(self):
-        return '%r' % self.date_available
+        prop = self.date_available
+        return prop.replace("u'", "'")
 
 class Live(db.Model):
     __tablename__ = 'post'
@@ -520,7 +524,8 @@ class Live(db.Model):
     end_time = db.Column('End time', db.String, nullable=True)
     lesson = db.relationship('Lesson', backref=db.backref('lessons'))
     def __str__(self):
-        return '%r' % self.title
+        prop = self.title
+        return prop.replace("u'", "'")
 
 
 class Lesson(db.Model):
@@ -566,11 +571,12 @@ class Series(db.Model):
     approved = db.Column('approved', db.Boolean, default=True)
     timestamp = db.Column(db.DateTime, default=datetime.datetime.utcnow)
     user_id = db.Column('user_id', db.Integer, db.ForeignKey('user.id'), nullable=False)
-    payment = db.relationship('Payment', backref='userPayment', lazy='dynamic')
+    payment = db.relationship('Payment', backref='paid_by', lazy='dynamic')
     comments = db.relationship('Comment', backref='series', lazy='dynamic')
     episode = db.relationship('Episode', backref='sub', lazy=True)
     def __str__(self):
-        return '%r' % self.title
+        prop = self.title
+        return prop.replace("u'", "'")
 
 
 
@@ -614,7 +620,8 @@ class Episode(db.Model):
     transcript_ref = db.Column('transcript_ref', db.VARCHAR)
     auido_ref = db.Column('auido_ref', db.VARCHAR)
     def __str__(self):
-        return '%r' % self.subtitle
+        prop = self.subtitle
+        return prop.replace("u'", "'")
 
 #    def __init__ (self, id,subtitle,views, category, description, upload_ref, transcript_ref,auido_ref ,user_id,series_id):
 #        self.id = id
@@ -652,7 +659,8 @@ class Payment(db.Model):
     series_id = db.Column('series_id', db.Integer, db.ForeignKey('series.id'), nullable=False)
 
     def __str__(self):
-        return '%r' % self.order_number
+        prop = self.order_number
+        return prop.replace("u'", "'")
 
 
 
@@ -675,7 +683,8 @@ class Comment(db.Model):
                                     backref=db.backref('userCommentEpisode', lazy='dynamic'))
 
    def __str__(self):
-       return '%r' % self.id
+       prop = str(self.id)
+       return prop.replace("u'", "'")
 
 class Approve(db.Model):
    __tablename__ = 'approve'
@@ -686,7 +695,8 @@ class Approve(db.Model):
    series_id = db.Column(db.Integer, db.ForeignKey('series.id'))
    series = db.relationship('Series', backref='series', lazy=True)
    def __str__(self):
-       return '%r' % self.id
+       prop = self.id
+       return prop.replace("u'", "'")
 
 class Reviews(db.Model):
    __tablename__ = 'reviews'
@@ -988,7 +998,7 @@ class ScheduleView(ModelView):
     column_display_all_relations = True
 
 
-    column_list = ('meetingCode','meetingUrl','date_available','timestamp','start_time','end_time','author','status')
+    column_list = ('meetingCode','meetingUrl','date_available','timestamp','start_time','end_time','user')
     column_exclude_list = ('cover_image','description')
     form_excluded_columns = ('')
 class SeriesView(ModelView):
@@ -1000,7 +1010,7 @@ class SeriesView(ModelView):
     can_delete = True
     page_size = 50
     column_searchable_list = ['title']
-    column_filters = ['category','price','status']
+    column_filters = ['category','price','approved']
 #    form   = Series_form
     column_hide_backrefs = False
     column_display_all_relations = True
@@ -1008,7 +1018,7 @@ class SeriesView(ModelView):
     edit_modal = True
 
 
-    column_list = ('title','status','category','views','status','approved','user_series')
+    column_list = ('title','status','category','views','approved','created_by')
     column_exclude_list = ('cover_image','description','upload_ref')
     form_excluded_columns = ('')
 class EpisodeView(ModelView):
@@ -1028,7 +1038,7 @@ class EpisodeView(ModelView):
     edit_modal = True
 
 
-    column_list = ('subtitle','category','views','user_episode','series_id')
+    column_list = ('subtitle','category','views','created_by','series_id')
     form_excluded_columns = ('')
 class CommentView(ModelView):
     can_view_details = True
@@ -1166,8 +1176,8 @@ def userDetails():
     i = 0
     for v in user.series:
         userSeries = {'id':v.id, 'title': v.title, 'price': v.price,
-                'uploader': v.user_series.username, 'coverImg': v.coverImage,
-                'userImg': v.user_series.image_file, 'category': v.category,
+                'uploader': v.created_by.username, 'coverImg': v.coverImage,
+                'userImg': v.created_by.image_file, 'category': v.category,
                 'totalEpisodes': len(v.episode)}
         ep = []
         episodeList = user.series
@@ -1188,8 +1198,8 @@ def userDetails():
     videoList = []
     for video in user.series:
         userVideos = {'id': video.id, 'title': video.title, 'price': video.price,'description':video.description,
-                    'host': video.user_series.username, 'coverImg': video.coverImage,
-                    'userImg': video.user_series.image_file, 'category': video.category,
+                    'host': video.created_by.username, 'coverImg': video.coverImage,
+                    'userImg': video.created_by.image_file, 'category': video.category,
                     'totalEpisodes': len(video.episode)}
         videoList.append(userVideos)
     data.update({'videosList': videoList})
@@ -1223,8 +1233,8 @@ def userDetails():
     likedSeriesList = []
     for v in user.likes:
         userSeries = {'id':v.id, 'title': v.title, 'price': v.price,
-                'uploader': v.user_series.username, 'coverImg': v.coverImage,
-                'userImg': v.user_series.image_file, 'category': v.category,
+                'uploader': v.created_by.username, 'coverImg': v.coverImage,
+                'userImg': v.created_by.image_file, 'category': v.category,
                 'totalEpisodes': len(v.episode)}
         ep = []
 
@@ -2011,8 +2021,8 @@ def video():
     i = 0
     l = []
     for v in range(len(videos)):
-        data = {'id': videos[i].id, 'title': videos[i].title, 'username': videos[i].user_series.username,
-                'userImg': videos[i].user_series.image_file, 'category': videos[i].category, 'price': videos[i].price, 'coverImage': videos[i].coverImage,'approved': videos[i].approved,'likes':videos[i].liked.count(),'comments':videos[i].comments.count(),'isSeries':videos[i].is_series()}
+        data = {'id': videos[i].id, 'title': videos[i].title, 'username': videos[i].created_by.username,
+                'userImg': videos[i].created_by.image_file, 'category': videos[i].category, 'price': videos[i].price, 'coverImage': videos[i].coverImage,'approved': videos[i].approved,'likes':videos[i].liked.count(),'comments':videos[i].comments.count(),'isSeries':videos[i].is_series()}
         l.append(data)
 
         i += 1
@@ -2031,8 +2041,8 @@ def videoDetails():
 
         data = {'id': r.id, 'coverImg': r.coverImage, 'title': r.title, 'isSeries': r.is_series(),
                 'videoRef': r.upload_ref, 'type': r.fileType(), 'description': r.description,
-                'price': r.price, 'userId': r.user_series.id, 'username': r.user_series.username,
-                'userImg': r.user_series.image_file, 'category': r.category, 'likes': r.liked.count(),
+                'price': r.price, 'userId': r.created_by.id, 'username': r.created_by.username,
+                'userImg': r.created_by.image_file, 'category': r.category, 'likes': r.liked.count(),
                 'comments': r.comments.count()}
         relatedList.append(data)
 
@@ -2045,7 +2055,7 @@ def videoDetails():
         l = []
 
 
-        data ={'id': videos.id,'coverImg':videos.coverImage, 'title': videos.title,'isSeries':videos.is_series(),'videoRef':videos.upload_ref,'type':videos.fileType(),'description':videos.description,'price':videos.price,'userId':videos.user_series.id,'username': videos.user_series.username,'userImg': videos.user_series.image_file, 'category': videos.category,'likes':videos.liked.count(),'comments':videos.comments.count()}
+        data ={'id': videos.id,'coverImg':videos.coverImage, 'title': videos.title,'isSeries':videos.is_series(),'videoRef':videos.upload_ref,'type':videos.fileType(),'description':videos.description,'price':videos.price,'userId':videos.created_by.id,'username': videos.created_by.username,'userImg': videos.created_by.image_file, 'category': videos.category,'likes':videos.liked.count(),'comments':videos.comments.count()}
         ep = []
         for e in videos.episode:
             if current_user.is_authenticated:
@@ -2066,7 +2076,7 @@ def videoDetails():
 
     elif videos.is_series() == False:
 
-        data = {'id': videos.id, 'title': videos.title,'coverImg':videos.coverImage,'isSeries':videos.is_series(),'videoRef':videos.upload_ref,'type':videos.fileType(),'description':videos.description,'price':videos.price,'userId':videos.user_series.id,'username': videos.user_series.username,'userImg': videos.user_series.image_file, 'category': videos.category,'likes':videos.liked.count(),'totalComments':videos.comments.count()}
+        data = {'id': videos.id, 'title': videos.title,'coverImg':videos.coverImage,'isSeries':videos.is_series(),'videoRef':videos.upload_ref,'type':videos.fileType(),'description':videos.description,'price':videos.price,'userId':videos.created_by.id,'username': videos.created_by.username,'userImg': videos.created_by.image_file, 'category': videos.category,'likes':videos.liked.count(),'totalComments':videos.comments.count()}
         data.update({'relatedVideos': relatedList})
         data.update({'comments': commentsList})
         if current_user.is_authenticated:
@@ -2659,7 +2669,7 @@ def createCourse():
                             coverImage=saveFile(form.upload_coverImage.data, 'coverImages'),
                             description=form.upload_description.data, category=form.upload_category.data, status=status,
                             price=str(form.upload_price.data), upload_ref=saveFile(form.upload_fileName.data, 'videos'),
-                            user_series=current_user,approved = True)
+                            created_by=current_user,approved = True)
             db.session.add(upload)
 
             db.session.commit()
@@ -2669,9 +2679,9 @@ def createCourse():
         elif amount > 0 :
             upload = Series(title=form.upload_title.data,
                             coverImage=saveFile(form.upload_coverImage.data, 'coverImages'),
-                            description=form.upload_description.data, category=form.upload_category.data, status=status,
+                            description=form.upload_description.data, category=form.upload_category.data,
                             price=str(form.upload_price.data), upload_ref=saveFile(form.upload_fileName.data, 'videos'),
-                            user_series=current_user,approved=False)
+                            created_by=current_user,approved=False)
             db.session.add(upload)
 
             db.session.commit()
@@ -2689,13 +2699,13 @@ def createCourse():
         if  amount == 0:
             series = Series(title=seriesForm.series_title.data, description=seriesForm.series_description.data,
                             coverImage=saveFile(seriesForm.series_coverImage.data,'coverImages'), category=seriesForm.series_category.data,
-                            price=seriesForm.series_price.data,status=status, user_series=current_user,approved = True)
+                            price=seriesForm.series_price.data, created_by=current_user,approved = True)
             db.session.add(series)
             db.session.flush()
 
             episode = Episode(subtitle=episodeForm.subtitle.data, description=episodeForm.description.data,
                           upload_ref=saveFile(episodeForm.fileName.data,'videos'),
-                          user_episode=current_user, sub=series, series_id=series.id)
+                          created_by=current_user, sub=series, series_id=series.id)
 
             db.session.add(episode)
 
@@ -2705,13 +2715,13 @@ def createCourse():
         elif amount > 0:
             series = Series(title=seriesForm.series_title.data, description=seriesForm.series_description.data,
                             coverImage=saveFile(seriesForm.series_coverImage.data,'coverImages'), category=seriesForm.series_category.data,
-                            price=seriesForm.series_price.data,status=status, user_series=current_user,approved = False)
+                            price=seriesForm.series_price.data, created_by=current_user,approved = False)
             db.session.add(series)
             db.session.flush()
 
             episode = Episode(subtitle=episodeForm.subtitle.data, description=episodeForm.description.data,
                           upload_ref=saveFile(episodeForm.fileName.data,'videos'),
-                          user_episode=current_user, sub=series, series_id=series.id)
+                          created_by=current_user, sub=series, series_id=series.id)
 
             db.session.add(episode)
 
@@ -2728,8 +2738,8 @@ def verifyCourseList():
     i = 0
     l = []
     for v in range(len(videos)):
-        data = {'id': videos[i].id, 'title': videos[i].title, 'username': videos[i].user_series.username,
-                'status':videos[i].status,'description':videos[i].description,'userImg': videos[i].user_series.image_file,'introduction': videos[i].user_series.introduction,'video': videos[i].upload_ref, 'category': videos[i].category, 'price': videos[i].price, 'coverImage': videos[i].coverImage,'approved': videos[i].approved,'likes':videos[i].liked.count(),'comments':videos[i].comments.count(),'isSeries':videos[i].is_series()}
+        data = {'id': videos[i].id, 'title': videos[i].title, 'username': videos[i].created_by.username,
+                'status':videos[i].status,'description':videos[i].description,'userImg': videos[i].created_by.image_file,'introduction': videos[i].created_by.introduction,'video': videos[i].upload_ref, 'category': videos[i].category, 'price': videos[i].price, 'coverImage': videos[i].coverImage,'approved': videos[i].approved,'likes':videos[i].liked.count(),'comments':videos[i].comments.count(),'isSeries':videos[i].is_series()}
         l.append(data)
 
 
@@ -2792,7 +2802,7 @@ def getSeries():
     l = []
 
     for v in range(len(series)):
-        data ={'id':series[i].id,'title':series[i].title,'host':series[i].user_series.username,'coverImg': series[i].coverImage,'userImg':series[i].user_series.image_file,'category':series[i].category}
+        data ={'id':series[i].id,'title':series[i].title,'host':series[i].created_by.username,'coverImg': series[i].coverImage,'userImg':series[i].created_by.image_file,'category':series[i].category}
         ep = []
         for e in series[i].episode:
             episode = {'episodeId':e.id,'seriesId':e.sub.id,'subtitle':e.subtitle}
@@ -2816,7 +2826,7 @@ def getUploads():
     l = []
 
     for v in range(len(video)):
-        data ={'id':video[i].id,'title':video[i].title,'host':video[i].user_series.username,'coverImg': video[i].coverImage,'userImg':video[i].user_series.image_file,'category':video[i].category}
+        data ={'id':video[i].id,'title':video[i].title,'host':video[i].created_by.username,'coverImg': video[i].coverImage,'userImg':video[i].created_by.image_file,'category':video[i].category}
         l.append(data)
         print(data)
 
@@ -2842,8 +2852,8 @@ def getUserSeries():
 
         for v in range(len(series)):
             data = {'id': series[i].id, 'title': series[i].title, 'price': series[i].price,
-                    'host': series[i].user_series.username, 'coverImg': series[i].coverImage,
-                    'userImg': series[i].user_series.image_file, 'category': series[i].category,'approved': series[i].approved,
+                    'host': series[i].created_by.username, 'coverImg': series[i].coverImage,
+                    'userImg': series[i].created_by.image_file, 'category': series[i].category,'approved': series[i].approved,
                     'totalEpisodes': len(series[i].episode),'likes': series[i].liked.count(),'totalComments': series[i].comments.count(),'isSeries':series[i].is_series()}
             ep = []
             for e in series[i].episode:
@@ -2896,8 +2906,8 @@ def editSeries():
 
         for s in seriesList:
             data = {'id': s.id, 'title': s.title, 'price': s.price,'description':s.description,
-                    'host': s.user_series.username, 'coverImg': s.coverImage,
-                    'userImg': s.user_series.image_file, 'category': s.category,
+                    'host': s.created_by.username, 'coverImg': s.coverImage,
+                    'userImg': s.created_by.image_file, 'category': s.category,
                     'totalEpisodes': len(s.episode)}
             ep = []
             for e in seriesList[i].episode:
@@ -3239,7 +3249,7 @@ def addEpisode():
     episodeForm = UpdateEpisode_form()
     episode = Episode(subtitle=episodeForm.update_subtitle.data, description=episodeForm.update_description.data,
                       upload_ref=saveFile(episodeForm.update_fileName.data,'videos'),
-                      user_episode=current_user, sub=series, series_id=series.id)
+                      created_by=current_user, sub=series, series_id=series.id)
     db.session.add(episode)
     series.status = 'series'
     db.session.commit()
@@ -3293,11 +3303,11 @@ def series_upload(username,id):
 
 
             series = Series(title=seriesForm.title.data, description=seriesForm.description.data,
-                            category=seriesForm.category.data, price=seriesForm.price.data, user_series=current_user)
+                            category=seriesForm.category.data, price=seriesForm.price.data, created_by=current_user)
             db.session.add(series)
 
             episode = Episode(subtitle=episodeForm.subtitle.data, description=episodeForm.description.data,
-                              upload_ref=videoPath,transcript_ref= transcriptPath,auido_ref=audioPath,user_episode=current_user, series_id=id)
+                              upload_ref=videoPath,transcript_ref= transcriptPath,auido_ref=audioPath,created_by=current_user, series_id=id)
             db.session.add(episode)
 
             db.session.commit()
@@ -3312,11 +3322,11 @@ def series_upload(username,id):
             transcriptPath = fileRefServer('transcript-file')
             #        upload = Upload(title=form.title.data,description=form.description.data,category=form.category.data,price= form.price.data,upload_ref=path,uploader=current_user)
             series = Series(title=seriesForm.title.data, description=seriesForm.description.data,
-                            category=seriesForm.category.data, price=seriesForm.price.data, user_series=current_user)
+                            category=seriesForm.category.data, price=seriesForm.price.data, created_by=current_user)
             db.session.add(series)
             db.session.flush()
             episode = Episode(subtitle=episodeForm.subtitle.data, description=episodeForm.description.data,
-                              upload_ref=videoPath,auido_ref = audioPath,transcript_ref=transcriptPath, user_episode=current_user, series_id=id)
+                              upload_ref=videoPath,auido_ref = audioPath,transcript_ref=transcriptPath, created_by=current_user, series_id=id)
             db.session.add(episode)
 
             db.session.commit()

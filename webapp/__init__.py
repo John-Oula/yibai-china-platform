@@ -1315,7 +1315,7 @@ def checkout():
     user = request.args.get('user', type=int)
     token = binascii.hexlify(os.urandom(32))
     model = AlipayTradeWapPayModel()
-    model.total_amount = price
+    model.total_amount = 0.1
     model.product_code = "QUICK_WAP_WAY"
     model.subject = subject
     model.out_trade_no = timeStamp + course_id
@@ -1650,20 +1650,25 @@ def time():
 @app.route('/verify_payment')
 @login_required
 def verify_payment():
-    course_id = request.args.get('course_id', type=int)
-    notify_time = request.args.get('notify_time', type=int)
-    user = request.args.get('user', type=str)
-    order_number = request.args.get('out_trade_no', type=int)
-    amount = request.args.get('total_amount', type=int)
-    price = request.args.get('price', type=int)
-    user_id = request.args.get('user_id', type=int)
+    data = request.args
 
-    course = Series.query.filter_by(id = course_id).first()
-    payment = Payment(order_number=order_number,amount=amount,price=price,user_id=1)
-    db.session.add(payment)
-    db.session.commit()
+    if   data["trade_status"] in ("TRADE_SUCCESS", "TRADE_FINISHED"):
+        payment = Payment(order_number='456345', amount=1, price=1, user_id=1)
+        db.session.add(payment)
+        db.session.commit()
 
-    return redirect(url_for('home'))
+    # course_id = request.args.get('course_id', type=int)
+    # notify_time = request.args.get('notify_time', type=int)
+    # user = request.args.get('user', type=str)
+    # order_number = request.args.get('out_trade_no', type=int)
+    # amount = request.args.get('total_amount', type=int)
+    # price = request.args.get('price', type=int)
+    # user_id = request.args.get('user_id', type=int)
+    #
+    # course = Series.query.filter_by(id = course_id).first()
+
+
+    return '',204
 
 
 

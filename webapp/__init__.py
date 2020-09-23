@@ -1647,8 +1647,7 @@ def time():
         start = time.start_time
         x = re.split(r'([T+])', start)
 
-@app.route('/verify_payment')
-@login_required
+@app.route('/verify_payment',methods=['POST'])
 def verify_payment():
     data = request.args
 

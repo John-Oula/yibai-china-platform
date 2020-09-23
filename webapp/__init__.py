@@ -1655,8 +1655,8 @@ def time():
 
 @app.route('/verify_payment',methods=['GET','POST'])
 def verify_payment():
-    data = request.args
-    ali = Ali(description=data)
+    data = request.args.to_dict()
+    ali = Ali(description=str(data))
     db.session.add(ali)
     db.session.commit()
     if data:

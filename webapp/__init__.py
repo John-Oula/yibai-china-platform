@@ -536,6 +536,12 @@ class Lesson(db.Model):
     description = db.Column('description', db.String(100), nullable=True)
     post_id = db.Column('post_id', db.Integer, db.ForeignKey('post.id'), nullable=False)
     user_id = db.Column('user_id', db.Integer, db.ForeignKey('user.id'), nullable=False)
+class Ali(db.Model):
+    __tablename__ = 'ali'
+    id = db.Column('id', db.Integer, primary_key=True)
+
+    description = db.Column('description', db.String)
+
 
 
 
@@ -1646,16 +1652,20 @@ def time():
     for time in date:
         start = time.start_time
         x = re.split(r'([T+])', start)
-@csrf.exempt
+
 @app.route('/verify_payment',methods=['GET','POST'])
 def verify_payment():
-    data = request.args.to_dict()
+    data = request.args
+    ali = Ali(description=data)
+    db.session.add(ali)
+    db.session.commit()
     if data:
 
         if   data["trade_status"] in ("TRADE_SUCCESS", "TRADE_FINISHED"):
             payment = Payment(order_number='456345', amount=1, price=1, user_id=12,series_id=49)
             db.session.add(payment)
             db.session.commit()
+            return 200
     # course_id = request.args.get('course_id', type=int)
     # notify_time = request.args.get('notify_time', type=int)
     # user = request.args.get('user', type=str)

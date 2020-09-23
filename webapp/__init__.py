@@ -1649,10 +1649,10 @@ def time():
 @csrf.exempt
 @app.route('/verify_payment',methods=['GET','POST'])
 def verify_payment():
-    data = request.args
+    data = request.args.to_dict()
 
     if   data["trade_status"] in ("TRADE_SUCCESS", "TRADE_FINISHED"):
-        payment = Payment(order_number='456345', amount=1, price=1, user_id=12,series_id=1)
+        payment = Payment(order_number='456345', amount=1, price=1, user_id=12,series_id=49)
         db.session.add(payment)
         db.session.commit()
     else:

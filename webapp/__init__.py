@@ -1327,6 +1327,7 @@ def checkout():
     model.product_code = "QUICK_WAP_WAY"
     model.subject = subject
     model.out_trade_no = timeStamp + course_id
+    model.passback_params ='out_trade_no%3D254254278765'+str(timeStamp + course_id)
     model.quit_url = "https://www.100chinaguide.com"
     req = AlipayTradeWapPayRequest(biz_model=model)
     req.notify_url = 'https://www.100chinaguide.com/verify_payment'

@@ -1326,7 +1326,7 @@ def checkout():
     user = request.args.get('user', type=int)
     token = binascii.hexlify(os.urandom(32))
     model = AlipayTradeWapPayModel()
-    model.total_amount = 0.01
+    model.total_amount = price
     model.product_code = "QUICK_WAP_WAY"
     model.subject = subject
     model.out_trade_no = str(timeStamp + course_id)

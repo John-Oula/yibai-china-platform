@@ -663,7 +663,11 @@ class Payment(db.Model):
     id = db.Column('id', db.Integer, primary_key=True)
     order_number = db.Column('order_number', db.String(30))
     amount = db.Column('amount', db.INT)
-    price = db.Column('price', db.INT)
+    status = db.Column('status', db.String)
+    payment_time = db.Column('payment_time', db.VARCHAR)
+    notify_time = db.Column('notify_time', db.VARCHAR)
+    timestamp = db.Column(db.DateTime, default=datetime.datetime.utcnow)
+
     user_id = db.Column('user_id', db.Integer, db.ForeignKey('user.id'), nullable=False)
     series_id = db.Column('series_id', db.Integer, db.ForeignKey('series.id'), nullable=False)
 
@@ -1314,7 +1318,6 @@ def userDetails():
     return data
 
 @app.route('/checkout')
-
 def checkout():
     timeStamp = int(time.time())
     price = request.args.get('price', type=int)
@@ -1327,7 +1330,7 @@ def checkout():
     model.product_code = "QUICK_WAP_WAY"
     model.subject = subject
     model.out_trade_no = str(timeStamp + course_id)
-    model.passback_params ='out_trade_no%3D'+str(timeStamp + course_id)
+    model.passback_params ='series_id%3D'+str(course_id)+'%26'+ 'user_id%3D'+ str(current_user.id)
     model.quit_url = "https://www.100chinaguide.com"
     req = AlipayTradeWapPayRequest(biz_model=model)
     req.notify_url = 'https://www.100chinaguide.com/verify_payment'
@@ -1658,16 +1661,30 @@ def time():
 
 @app.route('/verify_payment',methods=['GET','POST'])
 def verify_payment():
-    url=request.form.to_dict()
-    print(url)
-    data = request.args.to_dict()
-    ali = Ali(description=url)
-    db.session.add(ali)
-    db.session.commit()
+
+    data = request.form.to_dict()
     if data:
 
         if   data["trade_status"] in ("TRADE_SUCCESS", "TRADE_FINISHED"):
-            payment = Payment(order_number='456345', amount=1, price=1, user_id=12,series_id=49)
+            out_trade_no=data['out_trade_no']
+
+            status = data["trade_status"]
+            notify_time = data["trade_status"]
+            subject = data["subject"]
+            total_amount = data["total_amount"]
+            buyer_logon_id = data["buyer_logon_id"]
+            gmt_create = data["gmt_create"]
+            passback_params = data["passback_params"]
+
+            notify_time = data["notify_time"]
+
+            for param in passback_params:
+                user_id = param['user_id']
+                user_id.split('=')[1]
+
+                series_id = param['series_id']
+                series_id.split('=')[1]
+            payment = Payment(order_number=out_trade_no,payment_time =gmt_create,status=status,notify_time=notify_time, amount=total_amount, user_id=user_id,series_id=series_id)
             db.session.add(payment)
             db.session.commit()
             return 200

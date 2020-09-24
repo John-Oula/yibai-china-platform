@@ -1663,10 +1663,7 @@ def time():
 def verify_payment():
 
     data = request.form.to_dict()
-    print(data)
-    ali = Ali(description=str(data))
-    db.session.add(ali)
-    db.session.commit()
+
     if data:
 
         if   data["trade_status"] in ("TRADE_SUCCESS", "TRADE_FINISHED"):
@@ -1678,13 +1675,12 @@ def verify_payment():
             total_amount = data["total_amount"]
             buyer_logon_id = data["buyer_logon_id"]
             gmt_create = data["gmt_create"]
-            passback_params = data["passback_params"]
+
 
             notify_time = data["notify_time"]
-            for key, value in passback_params.items():
-                print(key, value)
-
-
+            passback_params = data["passback_params"]
+            series_id=passback_params.split('&')[0].split('=')[1]
+            user_id=passback_params.split('&')[1].split('=')[1]
             payment = Payment(order_number=out_trade_no,payment_time =gmt_create,status=status,notify_time=notify_time, amount=total_amount, user_id=int(user_id),series_id=int(series_id))
             db.session.add(payment)
             db.session.commit()

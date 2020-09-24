@@ -580,7 +580,7 @@ class Series(db.Model):
     approved = db.Column('approved', db.Boolean, default=True)
     timestamp = db.Column(db.DateTime, default=datetime.datetime.utcnow)
     user_id = db.Column('user_id', db.Integer, db.ForeignKey('user.id'), nullable=False)
-    payment = db.relationship('Payment', backref='paid_by', lazy='dynamic')
+    payment = db.relationship('Payment', backref='title', lazy='dynamic')
     comments = db.relationship('Comment', backref='series', lazy='dynamic')
     episode = db.relationship('Episode', backref='series', lazy=True)
     def __str__(self):

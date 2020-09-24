@@ -1679,12 +1679,12 @@ def verify_payment():
             notify_time = data["notify_time"]
 
             for param in passback_params:
-                user_id = param['user_id']
+                user_id = param[0]
                 user_id.split('=')[1]
 
-                series_id = param['series_id']
+                series_id = param[1]
                 series_id.split('=')[1]
-            payment = Payment(order_number=out_trade_no,payment_time =gmt_create,status=status,notify_time=notify_time, amount=total_amount, user_id=user_id,series_id=series_id)
+            payment = Payment(order_number=out_trade_no,payment_time =gmt_create,status=status,notify_time=notify_time, amount=total_amount, user_id=int(user_id),series_id=int(series_id))
             db.session.add(payment)
             db.session.commit()
             return 200

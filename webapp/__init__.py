@@ -47,6 +47,8 @@ from alipay.aop.api.AlipayClientConfig import AlipayClientConfig
 from alipay.aop.api.DefaultAlipayClient import DefaultAlipayClient
 from alipay.aop.api.domain.AlipayTradeWapPayModel import AlipayTradeWapPayModel
 from alipay.aop.api.request.AlipayTradeWapPayRequest import AlipayTradeWapPayRequest
+from alipay.aop.api.request.AlipayTradeQueryRequest import AlipayTradeQueryModel
+from alipay.aop.api.request.AlipayTradeQueryRequest import AlipayTradeQueryRequest
 from alipay.aop.api.response.AlipayTradeWapPayResponse import AlipayTradeWapPayResponse
 
 
@@ -1655,8 +1657,10 @@ def time():
 
 @app.route('/verify_payment',methods=['GET','POST'])
 def verify_payment():
+    url=request.url
+    print(url)
     data = request.args.to_dict()
-    ali = Ali(description=str(data))
+    ali = Ali(description=url)
     db.session.add(ali)
     db.session.commit()
     if data:

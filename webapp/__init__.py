@@ -1681,7 +1681,7 @@ def verify_payment():
             passback_params = data["passback_params"]
             series_id=passback_params.split('&')[0].split('=')[1]
             user_id=passback_params.split('&')[1].split('=')[1]
-            payment = Payment(order_number=out_trade_no,payment_time =gmt_create,status=status,notify_time=notify_time, amount=total_amount, user_id=int(user_id),series_id=int(series_id))
+            payment = Payment(order_number=out_trade_no,payment_time =gmt_create,status=status,notify_time=notify_time, amount=int(total_amount), user_id=int(user_id),series_id=int(series_id))
             db.session.add(payment)
             db.session.commit()
             return 200

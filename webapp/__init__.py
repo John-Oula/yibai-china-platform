@@ -2997,7 +2997,7 @@ def getUserBoughtSeries():
         l = []
 
         for v in range(len(series)):
-            data = {'id': series[i].id, 'title': series[i].title.title, 'price': series[i].title.price,
+            data = {'id': series[i].title.id, 'title': series[i].title.title, 'price': series[i].title.price,
                  'coverImg': series[i].title.coverImage,
                      'category': series[i].title.category}
             l.append(data)

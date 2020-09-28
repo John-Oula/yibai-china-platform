@@ -89,7 +89,13 @@ li.nav-item{
     font-size: 14px;
     color: white;
 }
+audio{
+    position: absolute;
+    top: 100px;
+    left: 0;
+    right: 0;
 
+}
 .upper-text-dark{
     color: #444444;
     font-size: 35px;
@@ -1952,8 +1958,10 @@ p.likes{
         margin-left: 0px;
     }
     video{
-        display: none;
-    }
+
+        width: 100%;
+        height: 250px;
+}
 
     .thumb-wrapper li{
         margin-top: 0px;
@@ -2367,7 +2375,6 @@ p.likes{
         overflow-x: auto;
     }
     #unlike-btn{
-        display: none;
     }
     #progressBar
     {
@@ -2491,7 +2498,7 @@ p.likes{
         display: none;
     }
     .navLink.removeCart{
-        display: none;
+
     }
 
     a:hover{

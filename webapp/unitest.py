@@ -1,6 +1,6 @@
 from datetime import datetime, timedelta
 import unittest
-from webapp import app, Series, Episode, Skill, Available, follow, Reviews, Role, Permission
+from webapp import app, Series, Episode, Skill, Available, follow, Reviews, Role, Permission, Payment
 from webapp import User, Live, Lesson, db, Comment, likes, Upload
 from flask import jsonify
 import psycopg2
@@ -127,10 +127,12 @@ class UserModelCase(unittest.TestCase):
             print(r.user_review.username)
 
 
-        s1 = Series(user_id=1, title='tech', description='this is a test ', category='MANDARIN',status='single', timestamp='2019-12-4')
-        s2 = Series(user_id=1, title='tech', description='this is a test ', category='MANDARIN',status='series', timestamp='2019-12-4')
+        s1 = Series(user_id=1,price=0, title='tech', description='this is a test ', category='MANDARIN',status='single', timestamp='2019-12-4')
+        s2 = Series(user_id=1,price=1, title='tech', description='this is a test ', category='MANDARIN',status='series', timestamp='2019-12-4')
+        pay1 = Payment(user_id=9,order_number=2324432,series_id=2,amount=1.0,status='paid')
         db.session.add(s1)
         db.session.add(s2)
+        db.session.add(pay1)
         db.session.commit()
 
         e1 = Episode(user_id=1, subtitle='subtitle=tech', description='this is a test ',upload_ref='c66bc66048db6fb0.mp4' , series_id=1,timestamp='2019-12-4')

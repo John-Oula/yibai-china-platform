@@ -227,12 +227,14 @@ available = db.Table('available',
 )
 episodeComment = db.Table('episodeComment',
     db.Column('comment_id', db.Integer, db.ForeignKey('comment.id')),
-    db.Column('episode_id', db.Integer, db.ForeignKey('episode.id')),
-
-)
+    db.Column('episode_id', db.Integer, db.ForeignKey('episode.id')))
 cart = db.Table('cart',
                 db.Column('user_id', db.Integer, db.ForeignKey('user.id')),
                 db.Column('course_id', db.Integer, db.ForeignKey('series.id')))
+
+order = db.Table('order',
+                db.Column('user_id', db.Integer, db.ForeignKey('user.id')),
+                db.Column('series_id', db.Integer, db.ForeignKey('series.id')))
 
 class User(db.Model, UserMixin):
     __tablename__ = 'user'
@@ -278,8 +280,10 @@ class User(db.Model, UserMixin):
     book = db.relationship('Live', secondary=book,backref=db.backref('bookers'))
     bookSchedule = db.relationship('Available', secondary=bookSchedule,backref=db.backref('userSchedule'))
     likes = db.relationship('Series', secondary=likes,backref=db.backref('liked',lazy ='dynamic'))
-    likesEpisode = db.relationship('Episode', secondary=likesEpisode,backref=db.backref('userLikedEpisode'))
+    order = db.relationship('Series', secondary=order,backref=db.backref('paid',lazy ='dynamic'))
+    likesEpisode = db.relationship('Episode', secondary=likesEpisode,backref=db.backref('userLikedEpisode',lazy ='dynamic'))
     cart = db.relationship('Series', secondary=cart,backref='user_cart')
+
 
     def __init__(self, **kwargs):
         super(User, self).__init__(**kwargs)
@@ -563,7 +567,22 @@ class Upload(db.Model):
     user_id = db.Column('user_id', db.Integer, db.ForeignKey('user.id'), nullable=True)
 
 
+class Payment(db.Model):
+    __tablename__ = 'payment'
+    id = db.Column('id', db.Integer, primary_key=True)
+    order_number = db.Column('order_number', db.String(30))
+    amount = db.Column('amount', db.FLOAT)
+    status = db.Column('status', db.String)
+    payment_time = db.Column('payment_time', db.VARCHAR)
+    notify_time = db.Column('notify_time', db.VARCHAR)
+    timestamp = db.Column(db.DateTime, default=datetime.datetime.utcnow)
 
+    user_id = db.Column('user_id', db.Integer, db.ForeignKey('user.id'), nullable=False)
+    series_id = db.Column('series_id', db.Integer, db.ForeignKey('series.id'), nullable=False)
+
+    def __str__(self):
+        prop = self.order_number
+        return prop.replace("u'", "'")
 
 
 class Series(db.Model):
@@ -587,8 +606,11 @@ class Series(db.Model):
         prop = self.title
         return prop.replace("u'", "'")
 
+    def series_markup(self):
+        return Markup(self.description)
 
-
+    def episode_markup(self):
+        return Markup(self.description)
 
     def is_series(self):
         if self.status == 'single':
@@ -658,22 +680,7 @@ class Episode(db.Model):
         else:
             return 'Error loading content'
 
-class Payment(db.Model):
-    __tablename__ = 'payment'
-    id = db.Column('id', db.Integer, primary_key=True)
-    order_number = db.Column('order_number', db.String(30))
-    amount = db.Column('amount', db.FLOAT)
-    status = db.Column('status', db.String)
-    payment_time = db.Column('payment_time', db.VARCHAR)
-    notify_time = db.Column('notify_time', db.VARCHAR)
-    timestamp = db.Column(db.DateTime, default=datetime.datetime.utcnow)
 
-    user_id = db.Column('user_id', db.Integer, db.ForeignKey('user.id'), nullable=False)
-    series_id = db.Column('series_id', db.Integer, db.ForeignKey('series.id'), nullable=False)
-
-    def __str__(self):
-        prop = self.order_number
-        return prop.replace("u'", "'")
 
 
 
@@ -1488,8 +1495,22 @@ def profilePage():
 
 @app.route('/videoInfo')
 def videoInfo():
+    id = request.args.get('videoId')
+    series = Series.query.filter_by(id=id).first()
+    #    if series.episode:
+        # for episode in series.episode:
+        #     if current_user.is_authenticated:
+        #        defaultEpisode= {'id': episode.id, 'seriesId': episode.series.id,'type':episode.fileType(), 'subtitle': episode.subtitle, 'video': episode.upload_ref,'description': episode.description,'hasLikedEpisode': current_user.has_likedEpisode(episode),'likes':episode.userLikedEpisode.count()}
+        #     else:
+        #         defaultEpisode = {'id': episode.id, 'seriesId': episode.series.id, 'type': episode.fileType(),
+        #                           'subtitle': episode.subtitle, 'video': episode.upload_ref,
+        #                           'description': episode.description,
+        #                           'hasLikedEpisode': False,
+        #                           'likes': episode.userLikedEpisode.count()}
+
     commentForm = Comment_form()
-    return render_template('videoDetails.html',commentForm=commentForm)
+
+    return render_template('videoDetails.html',series=series,commentForm=commentForm)
 
 def hash_password(password):
     """Hash a password for storing."""
@@ -1660,6 +1681,7 @@ def time():
         x = re.split(r'([T+])', start)
 
 @app.route('/verify_payment',methods=['GET','POST'])
+@csrf.exempt
 def verify_payment():
 
     data = request.form.to_dict()
@@ -1682,7 +1704,11 @@ def verify_payment():
             series_id=passback_params.split('&')[0].split('=')[1]
             user_id=passback_params.split('&')[1].split('=')[1]
             payment = Payment(order_number=out_trade_no,payment_time =gmt_create,status=status,notify_time=notify_time, amount=total_amount, user_id=int(user_id),series_id=int(series_id))
+            db.session.flush()
             db.session.add(payment)
+            series = Series.query.filter_by(id=payment.series_id)
+            series.paid.append(current_user)
+
             db.session.commit()
             return 200
     # course_id = request.args.get('course_id', type=int)
@@ -2963,6 +2989,33 @@ def getUserSeries():
 
 
     return jsonify({'result':l})
+
+@app.route('/getUserBoughtSeries', methods=[ 'GET'])
+def getUserBoughtSeries():
+    user_id = request.args.get('user_id', type=int)
+
+    series = Payment.query.filter_by(user_id = user_id).order_by(Payment.timestamp.desc()).all()
+
+
+
+
+    if request.method == 'GET':
+        i = 0
+        l = []
+
+        for v in range(len(series)):
+            data = {'id': series[i].id, 'title': series[i].title.title, 'price': series[i].title.price,
+                 'coverImg': series[i].title.coverImage,
+                     'category': series[i].title.category}
+            l.append(data)
+            print(data)
+
+            i += 1
+
+
+
+    return jsonify({'result':l})
+
 
 @app.route('/getEpisode', methods=['POST', 'GET','PUT'])
 def getEpisode():

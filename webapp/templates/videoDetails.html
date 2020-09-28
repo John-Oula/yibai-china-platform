@@ -24,7 +24,7 @@
 {% block body %}
 
     <div id="main">
-    <div id="currentUser" username="{{ current_user.username }}" propic="{{ current_user.image_file }}" ></div>
+        <div id="currentUser" username="{{ current_user.username }}" propic="{{ current_user.image_file }}"></div>
 
         {% if current_user.is_authenticated %}
             <span class="uId" user-Id="{{ current_user.id }}"></span>
@@ -41,62 +41,103 @@
             js.src = "https://connect.facebook.net/en_US/sdk.js#xfbml=1&version=v3.0";
             fjs.parentNode.insertBefore(js, fjs);
         }(document, 'script', 'facebook-jssdk'));</script>
-
-
-
-
-
-
+{% if current_user in series.paid  or series.price == 0%}
 
         <div class="video-details">
             <div>
+            {% if series.is_series() == false %}
                 <div class=" ">
+                {% if series.fileType() == 'video' %}
                     <li>
-                        <video class="" autoplay  preload="auto" video-id="" controls="" type="video/mp4" src=""
+                        <video class="" preload="auto" video-id="" controls="" type="video/mp4"
+                               src="../static/videos/{{ series.upload_ref }}"
                                alt=""></video>
                     </li>
-                    <li><div class="course-img-wrapper" ><img class="course-img"  loading="lazy" src="" alt=""></div></li>
+                    {% elif series.fileType() == 'audio' %}
+                    <li>
+                        <div class="course-img-wrapper"><img class="course-img" loading="lazy" src="../static/coverImages/{{ series.coverImage }}" alt=""></div>
+                    </li>
+                    <li>
+                        <div id="waveform"></div>
+                        <div id="audio-file" audioFile=""></div>
+                        <audio class="mx-auto d-block shadow-lg" controls>
+                            <source src="../static/videos/{{ series.upload_ref }}" type="audio/mpeg">
+                        </audio>
+
+                    </li>
+                    {% else %}
+                    <small class="text-center">{{ series.fileType() }}</small>
+                    {% endif %}
+                </div>
+            {% elif series.is_series() == true %}
+
+                         <div class=" ">
+                         {% if series.episode[0].fileType() == 'video' %}
+                    <li>
+                        <video class="" preload="auto" video-id="" controls="" type="video/mp4"
+
+
+
+
+
+
+                               src="../static/videos/{{ series.episode[0].upload_ref }}"
+                               alt=""></video>
+                    </li>
+                             {% elif series.episode[0].fileType() == 'audio' %}
+                    <li>
+                        <div class="course-img-wrapper"><img class="course-img" loading="lazy" src="" alt=""></div>
+                    </li>
                     <li>
                         <div id="waveform"></div>
                         <div id="audio-file" audioFile=""></div>
 
-
-
+                        <audio class="mx-auto d-block shadow-lg" controls>
+                            <source src="../static/videos/{{series.episode[0].upload_ref }}" type="audio/mpeg">
+                        </audio>
 
                     </li>
+                             {% else %}
+                             <small>{{ series.fileType() }}</small>
+                             {% endif %}
                 </div>
+            {% endif %}
 
                 <div class="video-info">
                     <nav id="controls" class="btn-row ">
-                            <a class="navLink " data-href=""><img class="mobile-icon" src="../static/step-backward.svg"
-                                                                  alt=""></a>
-                            <a class="navLink " id="play-btn"><img class="mobile-icon" src="../static/play.svg" alt=""></a>
-                            <a class="navLink " id="pause-btn"><img class="mobile-icon" src="../static/pause.svg"
-                                                                    alt=""></a>
-                            <a class="navLink " href=""><img class="mobile-icon" src="../static/step-forward.svg"
-                                                             alt=""></a>
+                        <a class="navLink " data-href=""><img class="mobile-icon" src="../static/step-backward.svg"
+                                                              alt=""></a>
+                        <a class="navLink " id="play-btn"><img class="mobile-icon" src="../static/play.svg" alt=""></a>
+                        <a class="navLink " id="pause-btn"><img class="mobile-icon" src="../static/pause.svg"
+                                                                alt=""></a>
+                        <a class="navLink " href=""><img class="mobile-icon" src="../static/step-forward.svg"
+                                                         alt=""></a>
 
-                        </nav>
-                    <h6 id="video-title"></h6>
-                    <small id="episode-subtitle"></small>
+                    </nav>
+                    <h6 id="video-title">{{ series.title }}</h6>
+                    {% if series.is_series() == true %}
+                        <small id="episode-subtitle">{{series.episode[0].subtitle}}</small>
+                    {% else %}
+                    {% endif %}
                     <div class="row no-gutters">
-                        <div class="col-2 col-sm-2 col-md-2 no-gutters">
+                        <div class="col-1 col-sm-1 col-md-1 no-gutters">
                             <div data-href="" class="profile-pic-wrapper click-pro-pic">
-                                <span><img class="profilepic" alt=""></span>
+                                <span><img class="profilepic" alt=""
+                                           src="../static/profile_pics/{{ series.created_by.profile_photo }}"></span>
                             </div>
                         </div>
 
                         <div class="col no-gutters">
-                            <div class="inner-info">
+                            <div class="inner-info ml-2">
 
 
-                                <span id="video-author"></span>
+                                <span id="video-author">{{ series.created_by.username }}</span>
                                 <span></span>
 
-                                <span class="likes-comments" class="text-justify text-left "><span
-                                        id="video-likes"></span>
+                                <span class="likes-comments text-justify text-left"><span
+                                        id="video-likes">{{ series.liked.count() }}</span>
             <img src="../static/heart.png" alt="" width="16">
-            <span id="video-comments"></span>
+            <span id="video-comments">{{ series.comments.count() }}</span>
             <img src="../static/comment.svg" alt="" width="16">
         </span>
 
@@ -107,93 +148,314 @@
                 </div>
                 <p video-title="" id="video-title"></p>
                 <span id="video-author"></span>
-                            <nav class="btn-row">
-                <a class="navLink  like-btn" data-href=""><img class="mobile-icon" src="../static/unlike.svg"
-                                                               alt=""><span class="nav_text">Like</span></a>
-                <a class="navLink " data-href="" id="unlike-btn"><img class="mobile-icon" src="../static/like.svg"
-                                                                      alt=""><span class="nav_text">Unlike</span></a>
-                <a class="navLink comment"><img class="mobile-icon" src="../static/commentGrey.svg" height="20"
-                                             alt=""><span class="nav_text">Comment</span></a>
+                <nav class="btn-row">
+                    {% if current_user in series.liked %}
+                        <a class="navLink  like-btn" style="display: none"
+                           data-href="{{ url_for('like',id=series.id) }}"><img class="mobile-icon"
+                                                                               src="../static/unlike.svg"
+                                                                               alt=""><span class="nav_text">Like</span></a>
 
-            </nav>
+                        <a class="navLink " data-href="{{ url_for('unlike',id=series.id) }}" id="unlike-btn"><img
+                                class="mobile-icon" src="../static/like.svg"
+                                alt=""><span class="nav_text">Unlike</span></a>
+                    {% else %}
+                        <a class="navLink  like-btn" data-href="{{ url_for('like',id=series.id) }}"><img
+                                class="mobile-icon" src="../static/unlike.svg"
+                                alt=""><span class="nav_text">Like</span></a>
+                        <a class="navLink " style="display: none" data-href="{{ url_for('unlike',id=series.id) }}"
+                           id="unlike-btn"><img class="mobile-icon" src="../static/like.svg"
+                                                alt=""><span class="nav_text">Unlike</span></a>
 
-            <ul class="nav nav-tabs nav-fill" id="myTab" role="tablist">
-                <li class="nav-item">
-                    <a class="nav-link active" id="home-tab" data-toggle="tab" href="#home" role="tab"
-                       aria-controls="home" aria-selected="true">ABOUT</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" video-id="" id="episode-tab" data-toggle="tab" href="#episode" role="tab"
-                       aria-controls="episode" aria-selected="false">CONTENTS</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" id="comments-tab" data-toggle="tab" href="#comments" role="tab"
-                       aria-controls="comments" aria-selected="false">REVIEWS</a>
-                </li>
-            </ul>
+                    {% endif %}
+                    <a class="navLink comment"><img class="mobile-icon" src="../static/commentGrey.svg" height="20"
+                                                    alt=""><span class="nav_text">Comment</span></a>
+
+                </nav>
+
+                <ul class="nav nav-tabs nav-fill" id="myTab" role="tablist">
+                    <li class="nav-item">
+                        <a class="nav-link active" id="home-tab" data-toggle="tab" href="#home" role="tab"
+                           aria-controls="home" aria-selected="true">ABOUT</a>
+                    </li>
+                    {% if series.is_series() == true %}
+                        <li class="nav-item">
+                            <a class="nav-link" video-id="" id="episode-tab" data-toggle="tab" href="#episode"
+                               role="tab"
+                               aria-controls="episode" aria-selected="false">CONTENTS</a>
+                        </li>
+                    {% else %}
+
+                    {% endif %}
+                    <li class="nav-item">
+                        <a class="nav-link" id="comments-tab" data-toggle="tab" href="#comments" role="tab"
+                           aria-controls="comments" aria-selected="false">REVIEWS</a>
+                    </li>
+                </ul>
             </div>
 
 
             <div class="tab-content" id="myTabContent">
                 <div class="tab-pane fade show active p-3" id="home" role="tabpanel" aria-labelledby="home-tab">
-                    <p>Summary</p>
-                    <p id="video-description"></p>
+                    {% if series.is_series() == true %}
+                        <p>Summary</p>
+                        <p id="video-description">{{ series.series_markup() }}</p>
 
-                    <p>Episode Summary</p>
-                    <p id="episode-description"></p>
+                        <p>Episode Summary</p>
+                        <p id="episode-description">{{ series.episode[0].description }}</p>
+                    {% elif series.is_series() == false %}
+                        <p>Summary</p>
+                        <p id="video-description">{{ series.episode_markup() }}</p>
+
+
+                    {% endif %}
                 </div>
                 <div class="tab-pane fade" id="episode" role="tabpanel" aria-labelledby="episode-tab">
 
+                    {% for episode in series.episode %}
+                        <div class="card shadow-sm click-episode"
+                             data-href="{{ url_for('getEpisode',episode_id=episode.id) }}">
+                            <div class="p-2"><span><img src="../static/play.svg" alt="" width="12"><span
+                                    id="episode-title" class="mr-2 ml-5"> {{episode.subtitle}} </span><span
+                                    id="episode-duration"></span></span></div>
+                        </div>
+                    {% endfor %}
 
                 </div>
                 <div class="tab-pane fade p-3" id="comments" role="tabpanel" aria-labelledby="comments-tab">
-                <div id="user-reviews"></div>
+                    <div id="user-reviews">
+                        {% for comment in series.comments %}
+                            <div>
+                                <div data-href=""
+                                     class="profile-pic-wrapper d-inline-flex mr-2 click-pro-pic"><span><img
+                                        class="profilepic"
+                                        src="../static/profile_pics/{{ comment.author.profile_photo }}" alt=""></span>
+                                </div>
+                                <small><strong>{{ comment.author.username }}</strong></small>
+                                <div><small id="user-review">{{ comment.content }}</small></div>
+                            </div>
+                        {% endfor %}
+                    </div>
                 </div>
-            <div class="p-3">
-                <h6>Related videos</h6>
+            </div>
+        </div>
+    {% else %}
+    <div class="course-details">
+                <div class="live-details-img-wrapper">
+                    <img class="live-img" src="../static/coverImages/{{ series.coverImg }}" alt="">
+
+                </div>
+
+                <div class="live-profile-pic-wrapper click-pro-pic" data-href="">
+                    <span><a class="user-profile-pic border-light" href="#"><img class="profilepic" src="../static/profile_pics/{{ series.created_by.profile_photo }}"
+                                                                                 alt=""></a></span>
+                </div>
+
+                <div class="p-2 row no-gutters">
+                <span class="live-info col-8 flex-content flex-column no-gutters">
+                                    <span class="live-title"></span>
+
+                    <h5 class="">{{series.title}}</h5>
+                    {% if series.is_series() == true %}
+
+                        <span class="">Episodes:{{ series.episode | count }} <span id="live-date"></span> </span>
+                {% else %}
+
+                        {% endif %}
+                        </span>
+
+
+                    <span class="live-info col-4 flex-content flex-column no-gutters">
+
+                    <button data-href="" href="" id="profile-btn" class="fixed-btn click-pro-pic">Preview video</button>
+                </span>
+                </div>
+                <ul class="nav nav-tabs nav-fill" id="myTab" role="tablist">
+                    <li class="nav-item">
+                        <a class="nav-link active" id="home-tab" data-toggle="tab" href="#home" role="tab"
+                           aria-controls="home" aria-selected="true">ABOUT</a>
+                    </li>
+                    {% if series.is_series() == true %}
+                        <li class="nav-item">
+                            <a class="nav-link" video-id="" id="episode-tab" data-toggle="tab" href="#episode"
+                               role="tab"
+                               aria-controls="episode" aria-selected="false">CONTENTS</a>
+                        </li>
+                    {% else %}
+
+                    {% endif %}
+                    <li class="nav-item">
+                        <a class="nav-link" id="comments-tab" data-toggle="tab" href="#comments" role="tab"
+                           aria-controls="comments" aria-selected="false">REVIEWS</a>
+                    </li>
+                </ul>
+
+            <div class="tab-content" id="myTabContent">
+                <div class="tab-pane fade show active p-3" id="home" role="tabpanel" aria-labelledby="home-tab">
+                    {% if series.is_series() == true %}
+                        <p>Summary</p>
+                        <p id="video-description">{{ series.series_markup() }}</p>
+
+                        <p>Episode Summary</p>
+                        <p id="episode-description"></p>
+                    {% elif series.is_series() == false %}
+                        <p>Summary</p>
+                        <p id="video-description">{{ series.episode_markup() }}</p>
+
+
+                    {% endif %}
+                </div>
+                <div class="tab-pane fade" id="episode" role="tabpanel" aria-labelledby="episode-tab">
+
+                    {% for episode in series.episode %}
+                        <div class="card shadow-sm click-episode"
+                             data-href="{{ url_for('getEpisode',episode_id=episode.id) }}">
+                            <div class="p-2"><span><img src="../static/play.svg" alt="" width="12"><span
+                                    id="episode-title" class="mr-2 ml-5"> {{episode.subtitle}} </span><span
+                                    id="episode-duration"></span></span></div>
+                        </div>
+                    {% endfor %}
+
+                </div>
+                <div class="tab-pane fade p-3" id="comments" role="tabpanel" aria-labelledby="comments-tab">
+                    <div id="user-reviews">
+                        {% for comment in series.comments %}
+                            <div>
+                                <div data-href=""
+                                     class="profile-pic-wrapper d-inline-flex mr-2 click-pro-pic"><span><img
+                                        class="profilepic"
+                                        src="../static/profile_pics/{{ comment.author.profile_photo }}" alt=""></span>
+                                </div>
+                                <small><strong>{{ comment.author.username }}</strong></small>
+                                <div><small id="user-review">{{ comment.content }}</small></div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+
+
+
+    </div>
+
+
+
+                <nav id="video-bot-nav" class="shadow-lg video-nav">
+                {% if series.price > 0 %}
+                    <h3 id="video-price" class="navLink"><span class=" bold text-success">￥{{ series.price }}</span>
+                    </h3>
+
+                    {% if current_user in series.user_cart %}
+                        <a style="display: none" class="navLink addCart"
+                           data-href="{{ url_for('addCart',upload_id=series.id) }}"><img class="mobile-icon"
+                                                                                         src="../static/addCart.svg"
+                                                                                         alt=""></a>
+                        <a style="display: flex" class="navLink removeCart" data-href="{{ url_for('addCart',upload_id=series.id) }}"><img
+                                class="mobile-icon" src="../static/addCartGreen.svg" alt=""></a>
+                    {% else %}
+                        <a style="display: flex" class="navLink addCart" data-href="{{ url_for('addCart',upload_id=series.id) }}"><img
+                                class="mobile-icon" src="../static/addCart.svg" alt=""></a>
+                        <a style="display: none" class="navLink removeCart"
+                           data-href="{{ url_for('addCart',upload_id=series.id) }}"><img class="mobile-icon"
+                                                                                         src="../static/addCartGreen.svg"
+                                                                                         alt=""></a>
+
+                    {% endif %}
+
+                    <a class="navLink share-btn"><img class="mobile-icon" src="../static/share.svg" alt=""></a>
+                    <a class="navLink buy" user-id="{{ current_user.id }}">
+                        <button class="common-btn">BUY NOW</button>
+
+                    </a>
+                {% else %}
+                    <a class="navLink share-btn"><img class="mobile-icon" src="../static/share.svg" alt=""></a>
+
+                {% endif %}
+            </nav>
+
+    {% endif %}
+
+        <div class="checkout">
+
+            <div class="checkout-img-wrapper">
+                <img class="live-img" src="" alt="">
 
             </div>
-            <br>
-            <br>
-            <br>
+            <div class="p-2">
+                <h5 id="checkout-title"></h5>
+                <h6 class="orangeColor mt-4 mb-4">Payment summary</h6>
+                <h6>Payment method</h6>
+                <p>Alipay</p>
+                <h6 class="mt-3">Total Price</h6>
+                <div class="mt-3">
+                    <span>Original price</span>
+                    <span class="float-right" id="original-price">￥{{ series.price }}</span>
+                </div>
+                <hr/>
+                <div class="mt-4">
+                    <span>Total</span>
+                    <span class="float-right total-price">￥{{ series.price }}</span>
+                </div>
+                <div class="mt-5 " style="
+    font-size: 11px;
+">By completing your purchase you agree to these our Terms of Service
+                </div>
+                <br>
+                <br>
+                <br>
+            </div>
 
-            <div>
-                    <nav id="comment-nav" class="shadow-lg video-nav">
+
+            <nav class="video-nav" class="shadow-lg">
+                <h3 class="navLink total-price">￥{{ series.price }}</h3>
+                {% if current_user.is_authenticated %}
+                    <a class="navLink click-pay"
+                       data-href="{{ url_for('checkout',price=series.price,subject=series.title,course_id=series.id) }}"
+                       href="">
+                        <button class="common-btn">COMPLETE PAYMENT</button>
+                    </a>
+                {% else %}
+                    <a class="navLink click-pay-login">
+                        <button class="common-btn">COMPLETE PAYMENT</button>
+                    </a>
+                {% endif %}
+
+            </nav>
+
+        </div>
+        <div class="p-3">
+            <h6>Related videos</h6>
+
+        </div>
+        <br>
+        <br>
+        <br>
+
+        <div>
+            <nav id="comment-nav" class="shadow-lg video-nav">
                         <span class="text-center p-2 w-100 align-self-center" data-href="">
-                        <form action="" data-href="" id="comment-form"><fieldset>
+                        <form action="" data-href="{{ url_for('comment',series_id=series.id) }}" id="comment-form"><fieldset>
                             {{ commentForm.hidden_tag() }}
                             {{ commentForm.content(class="comment-input",placeholder='Comment...') }}
                             {{ commentForm.submit(class="comment-btn") }}
 
                         </fieldset>
                         </form></span>
-                </nav>
+            </nav>
 
 
-                <nav id="video-bot-nav"class="shadow-lg video-nav">
-                    <h3 id="video-price" class="navLink"></h3>
-
-
-                    <a class="navLink addCart" data-href=""><img class="mobile-icon" src="../static/addCart.svg" alt=""></a>
-                    <a class="navLink removeCart" data-href=""><img class="mobile-icon" src="../static/addCartGreen.svg" alt=""></a>
-                    <a class="navLink share-btn"><img class="mobile-icon" src="../static/share.svg" alt=""></a>
-                    <a class="navLink buy"  data-href="" user-id="{{ current_user.id }}">
-                        <button class="common-btn">BUY NOW</button>
-                    </a>
-                </nav>
-            </div>
         </div>
-        </div>
+    </div>
+    </div>
 
-        <div></div>
-
-
-
-        <!-- Trigger the modal with a button -->
+    <div></div>
 
 
 
-            </div>
+    <!-- Trigger the modal with a button -->
+
+
+
+    </div>
 
 
 

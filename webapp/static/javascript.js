@@ -869,208 +869,208 @@ function closeLeftNav() {
 }
 
 
-$('.video-details').ready(function () {
-//    $('.upload-list').on("click", '.thumb-wrapper', function (e) {
-
-        $('.loader').css('display', 'block');
-//        e.preventDefault();
-        var vidParam = $.urlParam('videoId')
-        var url = '/videoDetails?videoId='+vidParam;
-        var videoSrc = "../static/videos/";
-        var userImgSrc = "../static/profile_pics/";
-        var userUrl = "/userDetails?username=";
-        var courseUrl = "/editSeries?series_id=";
-        var commentUrl = "/comment?series_id=";
-        var currency = "￥";
-        var coverImgUrl = '../static/coverImages/';
-
-        req = $.ajax({
-            url: url,
-            type: 'GET',
-            data: {},
-            success: function (data) {
-                console.log(data)
-            }, error: function (error) {
-                console.log(error)
-                console.log("error")
-
-            }
-
-        });
-        req.done(function (data) {
-
-            var obj = data.result;
-            $('.addCart').attr('data-href', '/addCart?upload_id=' + obj.id);
-            $('.removeCart').attr('data-href', '/addCart?upload_id=' + obj.id);
-                        $('#user-reviews').empty();
-            $.each(obj.comments, function (key, value) {
-
-
-                $('#user-reviews').append('<div><div data-href="" class="profile-pic-wrapper d-inline-flex mr-2 click-pro-pic"><span><img class="profilepic" src="' + userImgSrc + value.proPic + '" alt=""></span></div><small ><strong>' + value.username + '</strong></small><div><small id="user-review">' + value.content + '</small></div></div></div></div>');
-
-            });
-            if (obj.inCart === true) {
-                $('.navLink.removeCart').css('display', 'flex');
-
-                $('.navLink.addCart').css('display', 'none');
-            } else if (obj.inCart === false) {
-                $('.navLink.addCart').css('display', 'flex');
-
-                $('.navLink.removeCart').css('display', 'none');
-            }
-
-            if (obj.hasLiked === true) {
-                $('#unlike-btn').css('display', 'flex');
-
-                $('.like-btn').css('display', 'none');
-            } else if (obj.hasLiked === false) {
-                $('.like-btn').css('display', 'flex');
-
-                $('#unlike-btn').css('display', 'none');
-
-            }
-
-            $('.profile-pic-wrapper').attr("data-href", userUrl + obj.username);
-            $('#comment-form').attr("data-href", commentUrl + obj.id);
-            $('.buy').attr("data-href", courseUrl + obj.id);
-            $('#video-title').html(obj.title);
-            $('#video-author').html(obj.username);
-            $('#video-likes').html(obj.likes);
-            $('#video-comments').html(obj.totalComments);
-            $('#video-description').html(obj.description);
-            $('.share-logos').attr('desc',obj.description);
-            $('.share-logos').attr('title',obj.title);
-            $('.share-logos').attr('coverImg',obj.coverImg);
-            $('#video-description img').css('width', '100%');
-            $('#video-price').html(currency + obj.price);
-            $('#video-price').css("fontSize", "17px");
-            $('img.profilepic').attr("src", userImgSrc + obj.userImg);
-            $('#user-profile').css('display', 'none');
-            $('.checkout').css('display', 'none')
-            $('#comment-nav').css('display', 'none')
-            $('#course-update').css('display', 'none')
-
-            $('.schedule').css('display', 'none')
-            $('#video-bot-nav').css('display', 'flex')
-            $('#create-series').css('display', 'none');
-            $('.video-details').css('display', 'flex');
-            $('.loader').css('display', 'none');
-            $('#episode').empty();
-            if (obj.price == 0) {
-                $('#video-price').css('display', 'none');
-                $('.addCart').css('display', 'none');
-                $('.buy').css('display', 'none');
-            } else {
-                $('#video-price').css('display', 'flex');
-
-                $('.buy').css('display', 'flex');
-            }
-            if (obj.isSeries === true  ) {
-                $('.like-btn').attr('data-href', '/like/episode' + obj.id);
-                $('#unlike-btn').attr('data-href', '/unlike/episode' + obj.id);
-                $('#episode-tab').css('display', 'block');
-                $('#episode-subtitle').css('display', 'block');
-
-                $.each(obj.episode, function (key, value) {
-
-                    $('#episode').append('<div class="card shadow-sm click-episode" data-href="/getEpisode?episode_id=' + value.episodeId + '" ><div class="p-2"><span><img src="../static/play.svg" alt="" width="12"><span id="episode-title" class="mr-2 ml-5">' + value.subtitle + '</span><span id="episode-duration"></span></span></div></div>')
-
-                });
-            } else if (obj.isSeries === false) {
-                $('.like-btn').attr('data-href', '/like/video' + obj.id);
-                $('#unlike-btn').attr('data-href', '/unlike/video' + obj.id);
-
-                $('#episode-tab').css('display', 'none');
-                $('#episode-subtitle').css('display', 'none');
-
-
-            }
-            if (obj.type === 'video') {
-                $('video').attr("src", videoSrc + obj.videoRef);
-                $('video').css('display', 'block');
-                $('#episode-subtitle').text(obj.episode.subtitle);
-
-                $('.video-js').attr("src", videoSrc + obj.videoRef);
-                $('#controls').css('display', 'none');
-                $('video').css('display', 'block');
-                $('.course-img').css('display', 'none');
-            } else if (obj.type === 'audio') {
-
-                $('#audio-file').attr("audioFile", obj.videoRef);
-                $('.course-img').css('display', 'block');
-                $('.course-img').attr("src", coverImgUrl + obj.coverImg);
-                var audioSrc = '/static/videos/' + $('#audio-file').attr('audioFile')
-                $('#controls').css('display', 'flex');
-                popover('Loading Audio..Please wait','success')
-                wavesurfer.load(audioSrc);
-                wavesurfer.on('ready', function () {
-                    popover('Audio ready to play','success')
-                            $('.loader').css('display', 'none')
-
-
-        $('#pause-btn').on('click', function () {
-            wavesurfer.pause();
-            $('#play-btn').css('display', 'flex')
-            $('#pause-btn').css('display', 'none')
-        });
-           $('#play-btn').on('click', function () {
-            wavesurfer.play();
-            $('#play-btn').css('display', 'none')
-            $('#pause-btn').css('display', 'flex')
-        });});
-
-
-
-
-                $('#episode-subtitle').text(obj.episode.subtitle);
-
-
-
-
-
-
-                $('video').css('display', 'none');
-
-
-
-            } else if (obj.videoRef == null) {
-                var ep = obj.episode[0];
-
-
-                $('video').attr("src", videoSrc + obj.episode[0].videoRef);
-
-                $('#video-likes').text(ep.likes);
-                $('video').css('display', 'block');
-                $('#episode-subtitle').text(ep.subtitle);
-                $('.video-js').attr("src", videoSrc +obj.episode[0].videoRef);
-
-                $('video').css('display', 'block');
-                $('.course-img').css('display', 'none');
-                $('.like-btn').attr('data-href', '/like/episode' + obj.episode[0].episodeId);
-                $('#unlike-btn').attr('data-href', '/unlike/episode' + obj.episode[0].episodeId);
-            }
-
-
-
-            if (data.result.episode[0].hasLikedEpisode === true) {
-                    $('#unlike-btn').css('display', 'flex');
-
-                    $('.like-btn').css('display', 'none');
-            }   else if (data.result.episode[0].hasLikedEpisode === false) {
-                    $('.like-btn').css('display', 'flex');
-
-                    $('#unlike-btn').css('display', 'none');
-            }
-
-
-
-
-
-
-
-
-    });
-        });
+// $('.video-details').ready(function () {
+// //    $('.upload-list').on("click", '.thumb-wrapper', function (e) {
+//
+//         $('.loader').css('display', 'block');
+// //        e.preventDefault();
+//         var vidParam = $.urlParam('videoId')
+//         var url = '/videoDetails?videoId='+vidParam;
+//         var videoSrc = "../static/videos/";
+//         var userImgSrc = "../static/profile_pics/";
+//         var userUrl = "/userDetails?username=";
+//         var courseUrl = "/editSeries?series_id=";
+//         var commentUrl = "/comment?series_id=";
+//         var currency = "￥";
+//         var coverImgUrl = '../static/coverImages/';
+//
+//         req = $.ajax({
+//             url: url,
+//             type: 'GET',
+//             data: {},
+//             success: function (data) {
+//                 console.log(data)
+//             }, error: function (error) {
+//                 console.log(error)
+//                 console.log("error")
+//
+//             }
+//
+//         });
+//         req.done(function (data) {
+//
+//             var obj = data.result;
+//             $('.addCart').attr('data-href', '/addCart?upload_id=' + obj.id);
+//             $('.removeCart').attr('data-href', '/addCart?upload_id=' + obj.id);
+//                         $('#user-reviews').empty();
+//             $.each(obj.comments, function (key, value) {
+//
+//
+//                 $('#user-reviews').append('<div><div data-href="" class="profile-pic-wrapper d-inline-flex mr-2 click-pro-pic"><span><img class="profilepic" src="' + userImgSrc + value.proPic + '" alt=""></span></div><small ><strong>' + value.username + '</strong></small><div><small id="user-review">' + value.content + '</small></div></div></div></div>');
+//
+//             });
+//             if (obj.inCart === true) {
+//                 $('.navLink.removeCart').css('display', 'flex');
+//
+//                 $('.navLink.addCart').css('display', 'none');
+//             } else if (obj.inCart === false) {
+//                 $('.navLink.addCart').css('display', 'flex');
+//
+//                 $('.navLink.removeCart').css('display', 'none');
+//             }
+//
+//             if (obj.hasLiked === true) {
+//                 $('#unlike-btn').css('display', 'flex');
+//
+//                 $('.like-btn').css('display', 'none');
+//             } else if (obj.hasLiked === false) {
+//                 $('.like-btn').css('display', 'flex');
+//
+//                 $('#unlike-btn').css('display', 'none');
+//
+//             }
+//
+//             $('.profile-pic-wrapper').attr("data-href", userUrl + obj.username);
+//             $('#comment-form').attr("data-href", commentUrl + obj.id);
+//             $('.buy').attr("data-href", courseUrl + obj.id);
+//             $('#video-title').html(obj.title);
+//             $('#video-author').html(obj.username);
+//             $('#video-likes').html(obj.likes);
+//             $('#video-comments').html(obj.totalComments);
+//             $('#video-description').html(obj.description);
+//             $('.share-logos').attr('desc',obj.description);
+//             $('.share-logos').attr('title',obj.title);
+//             $('.share-logos').attr('coverImg',obj.coverImg);
+//             $('#video-description img').css('width', '100%');
+//             $('#video-price').html(currency + obj.price);
+//             $('#video-price').css("fontSize", "17px");
+//             $('img.profilepic').attr("src", userImgSrc + obj.userImg);
+//             $('#user-profile').css('display', 'none');
+//             $('.checkout').css('display', 'none')
+//             $('#comment-nav').css('display', 'none')
+//             $('#course-update').css('display', 'none')
+//
+//             $('.schedule').css('display', 'none')
+//             $('#video-bot-nav').css('display', 'flex')
+//             $('#create-series').css('display', 'none');
+//             $('.video-details').css('display', 'flex');
+//             $('.loader').css('display', 'none');
+//             $('#episode').empty();
+//             if (obj.price == 0) {
+//                 $('#video-price').css('display', 'none');
+//                 $('.addCart').css('display', 'none');
+//                 $('.buy').css('display', 'none');
+//             } else {
+//                 $('#video-price').css('display', 'flex');
+//
+//                 $('.buy').css('display', 'flex');
+//             }
+//             if (obj.isSeries === true  ) {
+//                 $('.like-btn').attr('data-href', '/like/episode' + obj.id);
+//                 $('#unlike-btn').attr('data-href', '/unlike/episode' + obj.id);
+//                 $('#episode-tab').css('display', 'block');
+//                 $('#episode-subtitle').css('display', 'block');
+//
+//                 $.each(obj.episode, function (key, value) {
+//
+//                     $('#episode').append('<div class="card shadow-sm click-episode" data-href="/getEpisode?episode_id=' + value.episodeId + '" ><div class="p-2"><span><img src="../static/play.svg" alt="" width="12"><span id="episode-title" class="mr-2 ml-5">' + value.subtitle + '</span><span id="episode-duration"></span></span></div></div>')
+//
+//                 });
+//             } else if (obj.isSeries === false) {
+//                 $('.like-btn').attr('data-href', '/like/video' + obj.id);
+//                 $('#unlike-btn').attr('data-href', '/unlike/video' + obj.id);
+//
+//                 $('#episode-tab').css('display', 'none');
+//                 $('#episode-subtitle').css('display', 'none');
+//
+//
+//             }
+//             if (obj.type === 'video') {
+//                 $('video').attr("src", videoSrc + obj.videoRef);
+//                 $('video').css('display', 'block');
+//                 $('#episode-subtitle').text(obj.episode.subtitle);
+//
+//                 $('.video-js').attr("src", videoSrc + obj.videoRef);
+//                 $('#controls').css('display', 'none');
+//                 $('video').css('display', 'block');
+//                 $('.course-img').css('display', 'none');
+//             } else if (obj.type === 'audio') {
+//
+//                 $('#audio-file').attr("audioFile", obj.videoRef);
+//                 $('.course-img').css('display', 'block');
+//                 $('.course-img').attr("src", coverImgUrl + obj.coverImg);
+//                 var audioSrc = '/static/videos/' + $('#audio-file').attr('audioFile')
+//                 $('#controls').css('display', 'flex');
+//                 popover('Loading Audio..Please wait','success')
+//                 wavesurfer.load(audioSrc);
+//                 wavesurfer.on('ready', function () {
+//                     popover('Audio ready to play','success')
+//                             $('.loader').css('display', 'none')
+//
+//
+//         $('#pause-btn').on('click', function () {
+//             wavesurfer.pause();
+//             $('#play-btn').css('display', 'flex')
+//             $('#pause-btn').css('display', 'none')
+//         });
+//            $('#play-btn').on('click', function () {
+//             wavesurfer.play();
+//             $('#play-btn').css('display', 'none')
+//             $('#pause-btn').css('display', 'flex')
+//         });});
+//
+//
+//
+//
+//                 $('#episode-subtitle').text(obj.episode.subtitle);
+//
+//
+//
+//
+//
+//
+//                 $('video').css('display', 'none');
+//
+//
+//
+//             } else if (obj.videoRef == null) {
+//                 var ep = obj.episode[0];
+//
+//
+//                 $('video').attr("src", videoSrc + obj.episode[0].videoRef);
+//
+//                 $('#video-likes').text(ep.likes);
+//                 $('video').css('display', 'block');
+//                 $('#episode-subtitle').text(ep.subtitle);
+//                 $('.video-js').attr("src", videoSrc +obj.episode[0].videoRef);
+//
+//                 $('video').css('display', 'block');
+//                 $('.course-img').css('display', 'none');
+//                 $('.like-btn').attr('data-href', '/like/episode' + obj.episode[0].episodeId);
+//                 $('#unlike-btn').attr('data-href', '/unlike/episode' + obj.episode[0].episodeId);
+//             }
+//
+//
+//
+//             if (data.result.episode[0].hasLikedEpisode === true) {
+//                     $('#unlike-btn').css('display', 'flex');
+//
+//                     $('.like-btn').css('display', 'none');
+//             }   else if (data.result.episode[0].hasLikedEpisode === false) {
+//                     $('.like-btn').css('display', 'flex');
+//
+//                     $('#unlike-btn').css('display', 'none');
+//             }
+//
+//
+//
+//
+//
+//
+//
+//
+//     });
+//         });
 
 
 
@@ -1423,6 +1423,61 @@ $('.video-details').ready(function () {
             $('.upload-option').css('display', 'none');
             $('#user-profile').css('display', 'none');
             $('.series-stats').css('display', 'block');
+
+
+        });
+    });
+    $('#bought-courses').on("click", function (e) {
+        e.preventDefault();
+        closeNav()
+        req = $.ajax({
+            url: $(this).attr('data-href'),
+            type: 'GET',
+            data: {},
+
+            success: function (data) {
+                console.log(data)
+            }, error: function (error) {
+                console.log(error)
+                console.log("error")
+
+            }
+
+        });
+        $('.bought-courses').empty();
+
+        req.done(function (data) {
+            console.log(data.length)
+            if (data.length == 0)
+                $('.bought-courses').append('<p>No contents</p>')
+
+            else
+                $.each(data.result, function (key, value) {
+
+
+                    $('.bought-courses').append('<a href="/videoInfo?videoId='+ value.id +'" class="mt-2 mb-2 flex-fill flex-row text-dark text-decoration-none shadow-lg row no-gutters user-course card"><div class="col-3 no-gutters cover-wrapper"><img id="course-img" src="../static/coverImages/' + value.coverImg + '" alt=""></div><div class="col-8 p-2 flex-fill flex-column no-gutters "><h6 id="course-title">' + value.title + '</h6><span id="course-price">Price : ' + value.price + '</span></div></a>');
+
+                });
+
+
+            $('#course-update').css('display', 'none');
+            $('#live').css('display', 'none');
+            $('.live-list').css('display', 'none');
+            $('.live-details').css('display', 'none');
+
+            $('#create-live').css('display', 'none');
+            $('#live-update').css('display', 'none');
+            $('.schedule').css('display', 'none');
+            $('#course-upload').css('display', 'none');
+            $('#create-series').css('display', 'none');
+            $('.my-profile').css('display', 'none');
+            $('#create-course').css('display', 'none');
+            $('.video-details').css('display', 'none');
+            $('.upload-list').css('display', 'none');
+            $('.upload-option').css('display', 'none');
+            $('#user-profile').css('display', 'none');
+            $('.series-stats').css('display', 'none');
+            $('.bought-courses').css('display', 'block');
 
 
         });
@@ -2400,12 +2455,12 @@ $(document).ready(function () {
         req.done(function (data) {
             var checkoutUrl = "/checkout?price=" + data.price + "&subject=" + data.title + "&course_id=" + data.id + "&user=" + userId;
             $('.checkout').css('display', 'block')
-            $('.total-price').text(currency + data.price)
+            $('.course-details').css('display', 'none')
+
             $('.navLink.total-price').css('font-size', '1.5rem')
-            $('.click-pay').attr('data-href', checkoutUrl)
+//            $('.click-pay').attr('data-href', checkoutUrl)
             $('.live-img').attr('src', coverImgSrc + data.coverImg)
-            $('#original-price').text(currency + data.price)
-            $('#checkout-title').text(data.title)
+//            $('#checkout-title').text(data.title)
             $('#live-update').css('display', 'none');
             $('#course-update').css('display', 'none');
 
@@ -2423,7 +2478,7 @@ $(document).ready(function () {
             $('.video-list').css('display', 'none');
             $('.video-details').css('display', 'none');
 
-            
+
             $('#user-profile').css('display', 'none');
             $('.schedule-container').css('display', 'none');
 
@@ -2471,7 +2526,7 @@ $('.upload-list').ready(function () {
     var arg = 'videoId=';
     var videoUrl = '/videoInfo?' + arg;
     var userUrl = '/userDetails?username='
-
+    var currency = "￥"
     req = $.ajax({
         url: '/videos',
         type: 'GET',
@@ -2491,7 +2546,7 @@ $('.upload-list').ready(function () {
             $.each(obj, function (key, value) {
 
                 if (value.approved === true)
-                    $('.upload-list').append('<div class="video-container"><div class="thumb-wrapper" data-href="' + videoUrl + value.id + '"><li><a class="video" video-id="' + value.id + '" href="' + videoUrl + value.id + '"><img class="video-feed" loading="lazy" src="../static/coverImages/' + value.coverImage + '"></a></li></div><div class="video-info">     <div class="row no-gutters">     <div class="col-2 col-sm-2 col-md-2 no-gutters">     <div class="profile-pic-wrapper click-pro-pic" data-href=" ' + userUrl + value.username + '">     <span><a class="user-profile-pic" user-id="" href="#"><img class="profilepic" src="../static/profile_pics/' + value.userImg + '" alt=""></a></span></div> </div>     <div class="col no-gutters">     <div class="inner-info">     <div class="flex-fill flex-column"><h6>' + value.title + '</h6>     <div class="upload-username">' + value.username + '</div>     <span class="upload-username">' + value.category + '</span> <span><p class="likes-comments" class="text-justify text-left " data-likes=""><span>' + value.likes + '</span><img    class="ml-1 mr-1"     src="../static/heart.png" alt="" width="16"><span>' + value.comments + '</span>     <img         src="../static/comment.svg" alt="" width="16"> </p> </span></div> </div> </div> </div></div></div>');
+                    $('.upload-list').append('<div class="video-container"><div class="thumb-wrapper" data-href="' + videoUrl + value.id + '"><li><a class="video" video-id="' + value.id + '" href="' + videoUrl + value.id + '"><img class="video-feed" loading="lazy" src="../static/coverImages/' + value.coverImage + '"></a></li></div><div class="video-info">     <div class="row no-gutters">     <div class="col-2 col-sm-2 col-md-2 no-gutters">     <div class="profile-pic-wrapper click-pro-pic" data-href=" ' + userUrl + value.username + '">     <span><a class="user-profile-pic" user-id="" href="#"><img class="profilepic" src="../static/profile_pics/' + value.userImg + '" alt=""></a></span></div> </div>     <div class="col no-gutters">     <div class="inner-info">     <div class="flex-fill flex-column"><span>' + value.title + '</span><h5 class="float-right mr-2 text-success">'+currency+ value.price + '</h5>     <div class="upload-username">' + value.username + '</div>     <div class="upload-username">' + value.category + '</div> <span><p class="likes-comments" class="text-justify text-left " data-likes=""><span>' + value.likes + '</span><img    class="ml-1 mr-1"     src="../static/heart.png" alt="" width="16"><span>' + value.comments + '</span>     <img         src="../static/comment.svg" alt="" width="16"> </p> </span></div> </div> </div> </div></div></div>');
 
             });
 
@@ -2500,7 +2555,7 @@ $('.upload-list').ready(function () {
         $('#live').css('display', 'none');
 
         $('.profile').css('display', 'none');
-        
+
         $('.upload-list').css('display', 'flex');
         $('#user-profile').css('display', 'none');
         $('#course-upload').css('display', 'none');

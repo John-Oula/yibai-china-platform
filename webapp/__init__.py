@@ -1683,43 +1683,35 @@ def time():
 @app.route('/verify_payment',methods=['GET','POST'])
 @csrf.exempt
 def verify_payment():
+    if request.method == 'POST':
 
-    data = request.form.to_dict()
+        data = request.form.to_dict()
 
-    if data:
+        if data:
 
-        if   data["trade_status"] in ("TRADE_SUCCESS", "TRADE_FINISHED"):
-            out_trade_no=data['out_trade_no']
+            if   data["trade_status"] in ("TRADE_SUCCESS", "TRADE_FINISHED"):
+                out_trade_no=data['out_trade_no']
 
-            status = data["trade_status"]
-            notify_time = data["trade_status"]
-            subject = data["subject"]
-            total_amount = data["total_amount"]
-            buyer_logon_id = data["buyer_logon_id"]
-            gmt_create = data["gmt_create"]
+                status = data["trade_status"]
+
+                subject = data["subject"]
+                total_amount = data["total_amount"]
+                buyer_logon_id = data["buyer_logon_id"]
+                gmt_create = data["gmt_create"]
 
 
-            notify_time = data["notify_time"]
-            passback_params = data["passback_params"]
-            series_id=passback_params.split('&')[0].split('=')[1]
-            user_id=passback_params.split('&')[1].split('=')[1]
-            payment = Payment(order_number=out_trade_no,payment_time =gmt_create,status=status,notify_time=notify_time, amount=total_amount, user_id=int(user_id),series_id=int(series_id))
-            db.session.flush()
-            db.session.add(payment)
-            series = Series.query.filter_by(id=payment.series_id)
-            series.paid.append(current_user)
+                notify_time = data["notify_time"]
+                passback_params = data["passback_params"]
+                series_id=passback_params.split('&')[0].split('=')[1]
+                user_id=passback_params.split('&')[1].split('=')[1]
+                payment = Payment(order_number=out_trade_no,payment_time =gmt_create,status=status,notify_time=notify_time, amount=total_amount, user_id=int(user_id),series_id=int(series_id))
+                db.session.flush()
+                db.session.add(payment)
+                series = Series.query.filter_by(id=payment.series_id).first()
+                series.paid.append(current_user)
 
-            db.session.commit()
-            return 200
-    # course_id = request.args.get('course_id', type=int)
-    # notify_time = request.args.get('notify_time', type=int)
-    # user = request.args.get('user', type=str)
-    # order_number = request.args.get('out_trade_no', type=int)
-    # amount = request.args.get('total_amount', type=int)
-    # price = request.args.get('price', type=int)
-    # user_id = request.args.get('user_id', type=int)
-    #
-    # course = Series.query.filter_by(id = course_id).first()
+                db.session.commit()
+                return 'success'
 
 
     return '', 204

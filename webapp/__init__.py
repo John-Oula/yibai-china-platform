@@ -1708,7 +1708,8 @@ def verify_payment():
                 db.session.flush()
                 db.session.add(payment)
                 series = Series.query.filter_by(id=payment.series_id).first()
-                series.paid.append(user_id)
+                user = User.query.filter_by(id=user_id).first()
+                series.paid.append(user)
 
                 db.session.commit()
                 return 200

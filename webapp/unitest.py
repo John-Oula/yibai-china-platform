@@ -1,6 +1,6 @@
 from datetime import datetime, timedelta
 import unittest
-from webapp import app, Series, Episode, Skill, Available, follow, Reviews, Role, Permission, Payment
+from webapp import app, Series, Episode, Skill, Available, follow, Reviews, Role, Permission, Payment, AdminRole
 from webapp import User, Live, Lesson, db, Comment, likes, Upload
 from flask import jsonify
 import psycopg2
@@ -18,6 +18,7 @@ class UserModelCase(unittest.TestCase):
         for p in pList:
             Role.insert_roles('moderator', p)
         Role.default_role()
+        AdminRole.default_role()
 
 
 

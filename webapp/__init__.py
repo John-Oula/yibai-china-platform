@@ -159,7 +159,8 @@ app.config['FLASKY_ADMIN'] = 'authentication@100chinaguide.com'
 app.config['MAIL_PASSWORD'] = 'verify@2020'
 app.config['MAIL_USE_TLS'] = False
 app.config['MAIL_USE_SSL'] = False
-app.config['FLASKY_ADMIN'] = 'sudomin'
+app.config['FLASKY_ADMIN'] = '100sudo'
+app.config['FLASKY_SUPERADMIN'] = 'sudomin'
 
 mail = Mail(app)
 
@@ -241,6 +242,7 @@ class User(db.Model, UserMixin):
     id = db.Column('id', db.Integer, primary_key=True)
     roles = db.Column('roles', db.VARCHAR)
     role_id = db.Column(db.Integer, db.ForeignKey('role.id'))
+    admin_role_id = db.Column(db.Integer, db.ForeignKey('adminrole.id'))
 
     sub_role = db.Column('sub role', db.Integer, default=1)
     fullname = db.Column('fullname', db.String(20))
@@ -292,12 +294,25 @@ class User(db.Model, UserMixin):
                 self.role = Role.query.filter_by(name='Administrator').first()
             if self.role is None:
                 self.role = Role.query.filter_by(default=True).first()
+        if self.adminrole is None:
+            if self.username == app.config['FLASKY_SUPERADMIN']:
+                self.adminrole = AdminRole.query.filter_by(name='superAdmin').first()
+                self.role = Role.query.filter_by(name='Administrator').first()
+
+
+
 
     def can(self, perm):
-        return self.role is not None and self.role.has_permission(perm)
+        if self.role and not self.adminrole:
+            return self.role is not None and self.role.has_permission(perm)
+        elif self.role and self.adminrole:
+            return self.adminrole is not None and self.adminrole.has_permission(perm)
 
     def is_administrator(self):
         return self.can(Permission.ADMINISTER)
+
+    def is_super_administrator(self):
+        return self.can(AdminPermission.SUPERADMIN)
 
     def is_moderator(self):
         return self.can(Permission.MODERATE)
@@ -407,6 +422,17 @@ class Permission:
     ADMINISTER=0b10000000
 #    BUY = 0x32
 #    LIKE = 0x64
+
+class AdminPermission:
+    USER =   0b00000001
+    LIVE =     0b00000010
+    SCHEDULE = 0b00000100
+    PAYMENT = 0b00001000
+    CONTENT =   0b00010000
+    COURSE =    0b00100000
+    ROLES =    0b01000000
+    SUPERADMIN=0b10000000
+
 class Role(db.Model):
     __tablename__ = 'role'
     id = db.Column(db.Integer, primary_key=True)
@@ -477,7 +503,71 @@ class Role(db.Model):
         prop = self.name
         return prop.replace("u'", "'")
 
+class AdminRole(db.Model):
+    __tablename__ = 'adminrole'
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(64), unique=True)
+    default = db.Column(db.Boolean, default=False, index=True)
+    permissions = db.Column(db.Integer)
+    users = db.relationship('User', backref='adminrole', lazy='dynamic')
 
+    def __init__(self, **kwargs):
+
+        super(AdminRole, self).__init__(**kwargs)
+        if self.permissions is None:
+            self.permissions = 0
+
+    @staticmethod
+    def default_role():
+        roles = {
+            'superAdmin': [AdminPermission.USER| AdminPermission.LIVE| AdminPermission.SCHEDULE| AdminPermission.COURSE| AdminPermission.PAYMENT| AdminPermission.CONTENT| AdminPermission.ROLES| AdminPermission.SUPERADMIN],
+        }
+        default_role = 'superAdmin'
+        for r in roles:
+            role = AdminRole.query.filter_by(name=r).first()
+            if role is None:
+                role = AdminRole(name=r)
+            role.reset_permissions()
+            for perm in roles[r]:
+                role.add_permission(perm)
+            role.default = (role.name == default_role)
+            db.session.add(role)
+        db.session.commit()
+
+
+    @staticmethod
+    def insert_roles(roleName,permissions):
+        roles = { roleName : [permissions]  }
+        default_role = 'superAdmin'
+        for r in roles:
+            role = AdminRole.query.filter_by(name=r).first()
+            print(roles[r])
+            if role is None:
+                role = AdminRole(name=r)
+
+            for perm in roles[r]:
+                role.add_permission(perm)
+            role.default = (role.name == default_role)
+            db.session.add(role)
+        db.session.commit()
+
+    def add_permission(self, perm):
+        if not self.has_permission(perm):
+            self.permissions += perm
+
+    def remove_permission(self, perm):
+        if self.has_permission(perm):
+            self.permissions -= perm
+
+    def reset_permissions(self):
+        self.permissions = 0
+
+    def has_permission(self, perm):
+        return self.permissions & perm == perm
+
+    def __str__(self):
+        prop = self.name
+        return prop.replace("u'", "'")
 
 
 
@@ -1708,7 +1798,7 @@ def verify_payment():
                 db.session.flush()
                 db.session.add(payment)
                 series = Series.query.filter_by(id=payment.series_id).first()
-                series.paid.append(current_user)
+                series.paid.append(user_id)
 
                 db.session.commit()
                 return 200
@@ -2872,6 +2962,18 @@ def createRole():
     for perm in permList:
         permission =  int(perm,2)
         Role.insert_roles(name, permission)
+    msg = 'Created Successfully'
+    return msg
+
+@app.route('/createAdminRole', methods=['POST', 'GET'])
+def createAdminRole():
+    roleData = Role_form()
+    name = request.form['title']
+    permList = request.form.getlist('permission')
+    print(permList)
+    for perm in permList:
+        permission =  int(perm,2)
+        AdminRole.insert_roles(name, permission)
     msg = 'Created Successfully'
     return msg
 

@@ -1711,7 +1711,7 @@ def verify_payment():
                 series.paid.append(current_user)
 
                 db.session.commit()
-                return 'success'
+                return 200
 
 
     return '', 204

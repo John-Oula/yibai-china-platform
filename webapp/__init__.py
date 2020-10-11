@@ -128,12 +128,14 @@ appID=200000164
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = True
 app.config['FLASK_ADMIN_SWATCH'] = 'flatly'
 app.config['WTF_CSRF_ENABLED'] = False
-app.config['WHOOSH_BASE'] = '/var/www/App/webapp/static/videos/whoosh'
+
 csrf = CSRFProtect(app)
 
 if get_Host_name_IP('CJAY') == True:
+    app.config['WHOOSH_BASE'] = 'whoosh'
     app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:@qwerty1234!@localhost/postgres'
 else:
+    app.config['WHOOSH_BASE'] = '/var/www/App/webapp/static/videos/whoosh'
     app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://power_user:@poweruserpass@172.16.214.87:5432/100CG'
 
 SecretId = 'JIRMZ6O3Qm5KDwCHsgYnlxatGeXq7dfFcjEk'

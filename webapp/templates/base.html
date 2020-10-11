@@ -3,78 +3,77 @@
 <html lang="en">
 
 {% block head %}
-<head>
+    <head>
 
-    <meta name="viewport" content="width=device-width , initial-scale=1.0" charset="UTF-8">
-    <link rel="stylesheet" href="{{ url_for('static',filename='stylesheet.css') }}">
-    <link rel="stylesheet" href="{{ url_for('static',filename='bootstrap/css/bootstrap.css') }}">
+        <meta name="viewport" content="width=device-width , initial-scale=1.0" charset="UTF-8">
+        <link rel="stylesheet" href="{{ url_for('static',filename='stylesheet.css') }}">
+        <link rel="stylesheet" href="{{ url_for('static',filename='bootstrap/css/bootstrap.css') }}">
 
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
-    <link rel="stylesheet" href="https://use.typekit.net/inv5iwl.css">
-    <link href="https://vjs.zencdn.net/7.8.2/video-js.css" rel="stylesheet" />
-    <link rel="apple-touch-icon" sizes="180x180" href="../static/apple-touch-icon.png">
-    <link rel="icon" type="image/png" sizes="32x32" href="../static/favicon-32x32.png">
-    <link rel="icon" type="image/png" sizes="16x16" href="../static/favicon-16x16.png">
-    <link rel="manifest" href="/site.webmanifest">
-    <link href='../static/packages/core/main.css' rel='stylesheet' />
-    <link href='../static/packages/daygrid/main.css' rel='stylesheet' />
-    <link href='../static/packages/timegrid/main.css' rel='stylesheet' />
-    <link href='../static/packages/interaction/main.js' rel='script' />
-    <link href='../static/packages/bootstrap/main.css' rel='stylesheet' />
-    <link href="//cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
-<link href="//cdn.quilljs.com/1.3.6/quill.bubble.css" rel="stylesheet">
-<link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.css" rel="stylesheet">
-
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
+        <link rel="stylesheet" href="https://use.typekit.net/inv5iwl.css">
+        <link href="https://vjs.zencdn.net/7.8.2/video-js.css" rel="stylesheet"/>
+        <link rel="apple-touch-icon" sizes="180x180" href="../static/apple-touch-icon.png">
+        <link rel="icon" type="image/png" sizes="32x32" href="../static/favicon-32x32.png">
+        <link rel="icon" type="image/png" sizes="16x16" href="../static/favicon-16x16.png">
+        <link rel="manifest" href="/site.webmanifest">
+        <link href='../static/packages/core/main.css' rel='stylesheet'/>
+        <link href='../static/packages/daygrid/main.css' rel='stylesheet'/>
+        <link href='../static/packages/timegrid/main.css' rel='stylesheet'/>
+        <link href='../static/packages/interaction/main.js' rel='script'/>
+        <link href='../static/packages/bootstrap/main.css' rel='stylesheet'/>
+        <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
+        <link href="https://cdn.quilljs.com/1.3.6/quill.bubble.css" rel="stylesheet">
 
 
 
-    <title>{% block title %}100CHINAGUIDE{% endblock %}</title>
-<meta property="og:url"           content="https://www.100chinaguide.com" />
-<meta property="og:type"          content="website" />
-<meta id="fb-share-title" property="og:title"         content="" />
-<meta id="fb-share-description" property="og:description"   content="" />
-<meta id="fb-share-img" property="og:image"         content="" />
-{{ share.load() }}
-</head>
+        <title>{% block title %}100CHINAGUIDE{% endblock %}</title>
+        <meta property="og:url" content="https://www.100chinaguide.com"/>
+        <meta property="og:type" content="website"/>
+        <meta id="fb-share-title" property="og:title" content=""/>
+        <meta id="fb-share-description" property="og:description" content=""/>
+        <meta id="fb-share-img" property="og:image" content=""/>
+        {{ share.load() }}
+    </head>
 {% endblock %}
 
 {% block background %}
-<body >
+    <body>
 {% endblock %}
 {% block nav %}
     <div class="top-navigation">
-<nav class="top-nav navbar shadow-sm  navbar-expand-lg navbar-expand-md navbar-expand-sm navbar-expand-xl  navbar-light">
-  <a class="navbar-brand" href="#"><img src="../static/logo.svg" alt="" width="80"></a>
-      <img class="corner-design" src="../static/corner-design.png" alt="">
+        <nav class="top-nav navbar shadow-sm  navbar-expand-lg navbar-expand-md navbar-expand-sm navbar-expand-xl  navbar-light">
+            <a class="navbar-brand" href="#"><img src="../static/logo.svg" alt="" width="80"></a>
+            <img class="corner-design" src="../static/corner-design.png" alt="">
 
-    <button class="navbar-toggler" type="button" data-target="#navbarTogglerDemo01" data-toggle="collapse" aria-controls="navbarTogglerDemo01" aria-expanded="false" aria-label="Toggle navigation">
-    <span class="navbar-toggler-icon"></span>
-  </button>
-  <div class="collapse navbar-collapse" id="navbarTogglerDemo01">
-    <ul class="navbar-nav  nav-text mr-auto mt-2 mt-lg-0" >
-      <li class="nav-item nav-tag ">
-        <a class="nav-link " href="/" >HOME </a>
-      </li>
+            <button class="navbar-toggler" type="button" data-target="#navbarTogglerDemo01" data-toggle="collapse"
+                    aria-controls="navbarTogglerDemo01" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarTogglerDemo01">
+                <ul class="navbar-nav  nav-text mr-auto mt-2 mt-lg-0">
+                    <li class="nav-item nav-tag ">
+                        <a class="nav-link " href="/">HOME </a>
+                    </li>
 
-      <li class="nav-item nav-tag">
-        <a class="nav-link " href="{{ url_for('live') }}"  >LIVE</a>
-      </li>
+                    <li class="nav-item nav-tag">
+                        <a class="nav-link " href="{{ url_for('live') }}">LIVE</a>
+                    </li>
 
 
-    <li class="nav-item nav-tag">
-        <form action="">
-            <input type="search" id="nav-search">
-        </form>
-      </li>
-    <li class="nav-item nav-tag">
-        <a class="nav-link" href="{{ url_for('signIn') }}"  >LOGIN</a>
-      </li>
-    <li class="nav-item nav-tag">
-        <a class="nav-link" href="{{ url_for('login') }}"><img src="../static/LOG%20IN.png" alt=""></a>
-      </li>
-    </ul>
-  </div>
-</nav>
+                    <li class="nav-item nav-tag">
+                        <form action="">
+                            <input type="search" id="nav-search">
+                        </form>
+                    </li>
+                    <li class="nav-item nav-tag">
+                        <a class="nav-link" href="{{ url_for('signIn') }}">LOGIN</a>
+                    </li>
+                    <li class="nav-item nav-tag">
+                        <a class="nav-link" href="{{ url_for('login') }}"><img src="../static/LOG%20IN.png" alt=""></a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
 
     </div>
 {% endblock %}
@@ -83,130 +82,166 @@
 
 {% block topNav %}
     <div class="mobile-navigation">
-    <div class="">
- <div class="flash-msg shadow-lg p-5"></div>
-     </div>
-    <div class="navbar  shadow-sm navbar-expand-md navbar-expand-xl navbar-expand-sm navbar-expand">
-        <span style="font-size:30px;cursor:pointer" onclick="openNav()">&#9776; </span>
-        <div class="navbar-brand text-center"><img class="" src="../static/logo.svg" alt=""></div>
-    <div class="left-icons">
-        <img src="../static/search-icon.svg" alt="">
-        <img src="../static/filter.svg" alt="">
-        {% if current_user.is_authenticated %}
-                <img class="cart" data-href="{{ url_for('cart',user_id=current_user.id) }}" src="../static/cart.svg" onclick="openLeftNav()" alt="">
-        {% else %}
-            <img class="cart" data-href="" src="../static/cart.svg" onclick="openLeftNav()" alt="">
+        <div class="">
+            <div class="flash-msg shadow-lg p-5"></div>
+        </div>
+        <div class="navbar  shadow-sm navbar-expand-md navbar-expand-xl navbar-expand-sm navbar-expand">
+            <span style="font-size:30px;cursor:pointer" onclick="openNav()">&#9776; </span>
+            <div class="text-center mx-auto">
+                <form class=" text-center" id="search-form" action="" method="POST">
 
-        {% endif %}
-    </div>
-    </div>
+                    <fieldset>
+                        {{ searchForm.hidden_tag() }}
 
-<div id="mySidenav" class="sidenav">
-  <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
-  {% if current_user.is_authenticated %}
-      {% if current_user.can(Permission.MODERATE) %}
-      <button id="moderate-content" class="dropdown-btn">Moderate Content
-          <i class="fa fa-caret-down"></i>
-      </button>
-          <div class="dropdown-container">
-          <a id="verify-courses"  data-href="{{ url_for('verifyCourseList') }}"  href="#">Verify Courses</a>
-          <a id="review-comments" data-href="{{ url_for('getUserSchedule',user_id = current_user.id) }}" href="#">Review/Disable comments</a>
+                        {{ searchForm.search(class="search-form") }} <br>
+
+
+                    </fieldset>
+                </form>
+
+            </div>
+            <div class="navbar-brand text-center mx-auto">
+
+                <img class="logo" src="../static/logo.svg" alt=""></div>
+            <div class="left-icons">
+                <img class="click-search" src="../static/search-icon.svg" alt="">
+                <img src="../static/filter.svg" alt="">
+                {% if current_user.is_authenticated %}
+                    <img class="cart" data-href="{{ url_for('cart',user_id=current_user.id) }}" src="../static/cart.svg"
+                         onclick="openLeftNav()" alt="">
+                {% else %}
+                    <img class="cart" data-href="" src="../static/cart.svg" onclick="openLeftNav()" alt="">
+
+                {% endif %}
+            </div>
+        </div>
+
+        <div id="mySidenav" class="sidenav">
+            <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+            {% if current_user.is_authenticated %}
+                {% if current_user.can(Permission.MODERATE) %}
+                    <button id="moderate-content" class="dropdown-btn">Moderate Content
+                        <i class="fa fa-caret-down"></i>
+                    </button>
+                    <div class="dropdown-container">
+                        <a id="verify-courses" data-href="{{ url_for('verifyCourseList') }}" href="#">Verify Courses</a>
+                        <a id="review-comments" data-href="{{ url_for('getUserSchedule',user_id = current_user.id) }}"
+                           href="#">Review/Disable comments</a>
+                    </div>
+
+                {% else %}
+                {% endif %}
+                {% if current_user.can(Permission.UPLOAD) %}
+                    <button id="courses" class="dropdown-btn">Courses
+                        <i class="fa fa-caret-down"></i>
+                    </button>
+                {% else %}
+                {% endif %}
+
+                <div class="dropdown-container">
+                    {% if current_user.can(Permission.UPLOAD) %}
+                        <a id="course-create" href="">Create course</a>
+                    {% else %}
+
+                    {% endif %}
+
+                    <a id="update-course" data-href="{{ url_for('getUserSeries',user_id = current_user.id) }}" href="#">Manage
+                        course</a>
+                    <a id="bought-courses" data-href="{{ url_for('getUserBoughtSeries',user_id = current_user.id) }}"
+                       href="#">Bought Courses</a>
+                    <a id="liked-course" data-href="{{ url_for('userDetails',username = current_user.username) }}"
+                       href="#">Liked Courses</a>
+                    {% if current_user.can(Permission.UPLOAD) %}
+                        <a id="series-stats" href="#">Stats</a>
+                    {% else %}
+                    {% endif %}
+                </div>
+                {% if current_user.can(Permission.SCHEDULE) %}
+                    <button id="schedule" class="dropdown-btn">Schedule
+                        <i class="fa fa-caret-down"></i>
+                    </button>
+                {% else %}
+                {% endif %}
+                <div class="dropdown-container">
+                    {% if current_user.can(Permission.SCHEDULE) %}
+                        <a id="schedule-create" data-href="{{ url_for('getUserSchedule',user_id = current_user.id) }}"
+                           href="">Create availability</a>
+                        <a id="edit-schedule" data-href="{{ url_for('getUserSchedule',user_id = current_user.id) }}"
+                           href="#">Manage availability</a>
+                        <a id="booked-schedule"
+                           data-href="{{ url_for('getUserBookedSchedule',user_id = current_user.id) }}" href="#">Booked
+                            schedule </a>
+                        <a id="schedule-stats"
+                           data-href="{{ url_for('getUserBookedSchedule',user_id = current_user.id) }}"
+                           href="#">Stats</a>
+                    {% else %}
+                    {% endif %}
+                </div>
+                {% if current_user.can(Permission.LIVE) %}
+                    <button id="liveSession" class="dropdown-btn">Live Sessions
+                        <i class="fa fa-caret-down"></i>
+                    </button>
+                    <div class="dropdown-container">
+                        <a id="live-create" href="#">Create live Session</a>
+                        <a id="update-live" data-href="{{ url_for('getUserLive',user_id = current_user.id) }}" href="">Manage
+                            live Session</a>
+                        <a id="booked-live" data-href="{{ url_for('getUserBookedLive',user_id = current_user.id) }}"
+                           href="#">Booked live Session</a>
+                        <a id="live-stats" data-href="{{ url_for('getUserBookedLive',user_id = current_user.id) }}"
+                           href="#">Stats</a>
+                    </div>
+                {% else %}
+                {% endif %}
+                {% if current_user.can(Permission.ADMINISTER) %}
+                    <button id="admin-panel" class="dropdown-btn"><a class="p-0 m-0"
+                                                                     href="/admin/"><span>Admin Panel</span> </a>
+                    </button>
+                    <button id="liveSession" class="dropdown-btn">Role Managaement
+                        <i class="fa fa-caret-down"></i>
+                    </button>
+                    <div class="dropdown-container">
+                        <a id="live-create" href="#">Create Role</a>
+                        <a id="update-live" data-href="{{ url_for('getUserLive',user_id = current_user.id) }}" href="">Assign
+                            Roles</a>
+                        <a id="booked-live" data-href="{{ url_for('getUserBookedLive',user_id = current_user.id) }}"
+                           href="#">Manage roles</a>
+                    </div>
+                {% else %}
+                {% endif %}
+                <button id="verifyInfo" class="dropdown-btn">Complete Profile
+                    <i class="fa fa-caret-down"></i>
+                </button>
+                <div class="dropdown-container">
+                    <a id="complete-profile" href="#">Complete profile</a>
+                    <a id="request-verification" data-href="{{ url_for('getUserLive',user_id = current_user.id) }}"
+                       href="">Request verification</a>
                 </div>
 
-          {% else %}
-          {% endif %}
-      {% if current_user.can(Permission.UPLOAD) %}
-      <button id="courses" class="dropdown-btn">Courses
-          <i class="fa fa-caret-down"></i>
-      </button>
-          {% else %}
-          {% endif %}
+                <button id="logout" class="dropdown-btn"><a class="p-0 m-0"
+                                                            href="{{ url_for('logout') }}"><span>Logout</span> </a>
+                </button>
 
-      <div class="dropdown-container">
-      {% if current_user.can(Permission.UPLOAD) %}
-          <a id="course-create" href="">Create course</a>
-          {% else %}
-
-          {% endif %}
-
-          <a id="update-course" data-href="{{ url_for('getUserSeries',user_id = current_user.id) }}" href="#">Manage course</a>
-          <a id="bought-courses" data-href="{{ url_for('getUserBoughtSeries',user_id = current_user.id)  }}" href="#">Bought Courses</a>
-          <a id="liked-course" data-href="{{ url_for('userDetails',username = current_user.username) }}" href="#">Liked Courses</a>
-      {% if current_user.can(Permission.UPLOAD) %}
-          <a id="series-stats" href="#">Stats</a>
-          {% else %}
-          {% endif %}
-      </div>
-      {% if current_user.can(Permission.SCHEDULE) %}
-            <button id="schedule" class="dropdown-btn">Schedule
-          <i class="fa fa-caret-down"></i>
-      </button>
-          {% else %}
-          {% endif %}
-      <div class="dropdown-container">
-      {% if current_user.can(Permission.SCHEDULE) %}
-          <a id="schedule-create" data-href="{{ url_for('getUserSchedule',user_id = current_user.id) }}" href="">Create availability</a>
-          <a id="edit-schedule" data-href="{{ url_for('getUserSchedule',user_id = current_user.id) }}" href="#">Manage availability</a>
-          <a id="booked-schedule" data-href="{{ url_for('getUserBookedSchedule',user_id = current_user.id) }}" href="#">Booked schedule </a>
-          <a id="schedule-stats" data-href="{{ url_for('getUserBookedSchedule',user_id = current_user.id) }}" href="#">Stats</a>
-      {% else %}
-          {% endif %}
-          </div>
-      {% if current_user.can(Permission.LIVE) %}
-            <button id="liveSession" class="dropdown-btn">Live Sessions
-          <i class="fa fa-caret-down"></i>
-      </button>
-      <div class="dropdown-container">
-          <a id="live-create" href="#">Create live Session</a>
-          <a id="update-live" data-href="{{ url_for('getUserLive',user_id = current_user.id) }}" href="">Manage live Session</a>
-          <a id="booked-live" data-href="{{ url_for('getUserBookedLive',user_id = current_user.id) }}"href="#">Booked live Session</a>
-          <a id="live-stats" data-href="{{ url_for('getUserBookedLive',user_id = current_user.id) }}"href="#">Stats</a>
-      </div>
-       {% else %}
-          {% endif %}
-            {% if current_user.can(Permission.ADMINISTER) %}
-      <button id="admin-panel" class="dropdown-btn" ><a  class="p-0 m-0" href="/admin/"><span>Admin Panel</span> </a></button>
-      <button id="liveSession" class="dropdown-btn">Role Managaement
-          <i class="fa fa-caret-down"></i>
-      </button>
-      <div class="dropdown-container">
-          <a id="live-create" href="#">Create Role</a>
-          <a id="update-live" data-href="{{ url_for('getUserLive',user_id = current_user.id) }}" href="">Assign Roles</a>
-          <a id="booked-live" data-href="{{ url_for('getUserBookedLive',user_id = current_user.id) }}"href="#">Manage roles</a>
-      </div>
             {% else %}
-          {% endif %}
-      <button id="verifyInfo" class="dropdown-btn">Complete Profile
-          <i class="fa fa-caret-down"></i>
-      </button>
-      <div class="dropdown-container">
-          <a id="complete-profile" href="#">Complete profile</a>
-          <a id="request-verification" data-href="{{ url_for('getUserLive',user_id = current_user.id) }}" href="">Request verification</a>
-   </div>
+                <div class="text-center text-light ">
+                    <p class="align-self-center">Log in on the "Profile" page</p>
+                </div>
+            {% endif %}
+        </div>
 
-      <button id="logout" class="dropdown-btn" ><a  class="p-0 m-0" href="{{ url_for('logout') }}"><span>Logout</span> </a></button>
+        <div id="leftSidenav" class="left-sidenav">
+            <a class="closebtn" onclick="closeLeftNav()">&times;</a>
+            <div class="cart-list p-3">
 
-  {% else %}
-    <div class="text-center text-light ">
-    <p class="align-self-center">Log in on the "Profile" page</p>
+            </div>
+        </div>
     </div>
-    {% endif %}
-</div>
-
-       <div id="leftSidenav" class="left-sidenav">
-  <a class="closebtn" onclick="closeLeftNav()">&times;</a>
-<div class="cart-list p-3">
-
-</div>
-</div>
-</div>
 {% endblock %}
 
 {% block body %}
 
 {% endblock %}
 <div id="main">
-{% block globals %}
+    {% block globals %}
 
         <div class="profile mt-3">
 
@@ -385,8 +420,8 @@
 
                                     <br>
                                     {{ seriesForm.series_price.label }} <small>Price in RMB</small><br>
-                                {{ seriesForm.series_price(class = "input-box-border border border-top-0 border-left-0 border-right-0") }}
-                                <br>
+                                    {{ seriesForm.series_price(class = "input-box-border border border-top-0 border-left-0 border-right-0") }}
+                                    <br>
 
                                     <div class="wrapper">
                                         <h5><strong>Episode Info</strong></h5>
@@ -406,9 +441,9 @@
                                             {{ seriesForm.series_coverImage }}<br>
                                             {{ episodeForm.description.label }}<br>
 
-                                                <div class="series-form-editor mt-2">
+                                            <div class="series-form-editor mt-2">
 
-                                                </div>
+                                            </div>
                                             <br>
                                             {{ episodeForm.description(class = "description-field input-box-border border border-top-0 border-left-0 border-right-0",placeholder="Description") }}
 
@@ -420,15 +455,11 @@
                                 </div>
 
 
-
-
-
                                 <br>
                                 <div class="text-center">
                                     {{ seriesForm.series_submit(class="fixed-btn  mb-3") }}
                                     <button class="border-btn">Submitting</button>
                                 </div>
-
 
 
                             </fieldset>
@@ -549,7 +580,7 @@
                     <input id="csrf-token" type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
                     <div class="text-center mt-2">
                         <input type="submit" class="mt-3 mx-auto fixed-btn schedule-btn text-light">
-                    <button class="border-btn text-center">Submitting</button>
+                        <button class="border-btn text-center">Submitting</button>
                     </div>
                 </form>
 
@@ -558,28 +589,28 @@
             <br>
             <br>
         </div>
-    <div class="series-stats p-2">
+        <div class="series-stats p-2">
 
-    </div>
-    <div class="bought-courses p-2">
+        </div>
+        <div class="bought-courses p-2">
 
-    </div>
-    <div class="live-stats p-2">
+        </div>
+        <div class="live-stats p-2">
 
-    </div>
-    <div class="booked-schedule p-2">
+        </div>
+        <div class="booked-schedule p-2">
 
-    </div>
-    <div class="booked-live p-2">
+        </div>
+        <div class="booked-live p-2">
 
-    </div>
-    <div class="liked-course-list p-2">
+        </div>
+        <div class="liked-course-list p-2">
 
-    </div>
-    <div class="schedule-stats p-2">
+        </div>
+        <div class="schedule-stats p-2">
 
-    </div>
-            <div class="editor-source">
+        </div>
+        <div class="editor-source">
             <div id="editor"></div>
         </div>
         <div class="calendar-source text-center">
@@ -598,34 +629,34 @@
         </div>
 
 
-{% endblock %}
-      {% if current_user.can(Permission.ADMINISTER) or   current_user.can(Permission.ROLES) %}
-          <div>
-              <form id="create-role" class=" text-left" action="" method="POST"
-                              >
-                            <fieldset>
-     <input type="text" name="title" value="">Role name<br>
-     <input type="checkbox" name="permission" value="0b00000001">upload<br>
-        <input type="checkbox" name="permission" value="0b00000010">live<br>
-        <input type="checkbox" name="permission" value="0b00000100">schedule<br>
-        <input type="checkbox" name="permission" value="0b00001000">moderate<br>
-        <input type="checkbox" name="permission" value="0b00100000">roles<br>
-        <input type="checkbox" name="permission" value="0b10000000">administer<br>
+    {% endblock %}
+    {% if current_user.can(Permission.ADMINISTER) or   current_user.can(Permission.ROLES) %}
+        <div>
+            <form id="create-role" class=" text-left" action="" method="POST"
+            >
+                <fieldset>
+                    <input type="text" name="title" value="">Role name<br>
+                    <input type="checkbox" name="permission" value="0b00000001">upload<br>
+                    <input type="checkbox" name="permission" value="0b00000010">live<br>
+                    <input type="checkbox" name="permission" value="0b00000100">schedule<br>
+                    <input type="checkbox" name="permission" value="0b00001000">moderate<br>
+                    <input type="checkbox" name="permission" value="0b00100000">roles<br>
+                    <input type="checkbox" name="permission" value="0b10000000">administer<br>
+                    <br>
+                    <input type="submit" value="Submit now"/>
+                </fieldset>
+            </form>
+        </div>
         <br>
-        <input type="submit" value="Submit now" />
-                            </fieldset>
-              </form>
-          </div>
-          <br>
-          <br>
-          <br>
+        <br>
+        <br>
 
-{% else %}
+    {% else %}
 
-{% endif %}
+    {% endif %}
 
-{% block modal %}
-            <!-- Modal -->
+    {% block modal %}
+        <!-- Modal -->
         <div id="myModal" class="modal fade" role="dialog">
             <div class="modal-dialog">
 
@@ -749,20 +780,22 @@
                     </div>
                     <div class="modal-body ">
                         <div class="thumb-wrapper ">
-                    <li>
-                        <video class="video-feed " autoplay  preload="auto" video-id="" controls="" type="video/mp4" src=""
-                               alt=""></video>
-                    </li>
-                    <li><div class="course-img-wrapper" ><img class="course-img"  loading="lazy" src="" alt=""></div></li>
-                    <li>
-                        <div id="waveform"></div>
-                        <div id="audio-file" audioFile=""></div>
+                            <li>
+                                <video class="video-feed " autoplay preload="auto" video-id="" controls=""
+                                       type="video/mp4" src=""
+                                       alt=""></video>
+                            </li>
+                            <li>
+                                <div class="course-img-wrapper"><img class="course-img" loading="lazy" src="" alt="">
+                                </div>
+                            </li>
+                            <li>
+                                <div id="waveform"></div>
+                                <div id="audio-file" audioFile=""></div>
 
 
-
-
-                    </li>
-                </div>
+                            </li>
+                        </div>
                         <nav id="controls" class="btn-row ">
                             <a class="navLink " data-href=""><img class="mobile-icon" src="../static/step-backward.svg"
                                                                   alt=""></a>
@@ -887,28 +920,37 @@
 
             </div>
         </div>
-{% endblock %}
-{% block bottomNav %}
-    <div class="share-logos mx-auto text-center p-3  shadow-lg">
+    {% endblock %}
+    {% block bottomNav %}
+        <div class="share-logos mx-auto text-center p-3  shadow-lg">
 
-                     <div class="fb-share-button"
-                        data-href=""
-                    data-layout="button_count">
+            <div class="fb-share-button"
+                 data-href=""
+                 data-layout="button_count">
 
-    </div>
-    {{ share.create(sites='facebook,wechat,linkedin,google,twitter',mobile_sites='qq,facebook,wechat,linkedin,google,twitter') }}
-    </div>
-<nav class="bot-nav shadow-lg" >
-    <a class="navLink home-icon" href="{{ url_for('home') }}" data-href="{{ url_for('home') }}"><img class="mobile-icon" src="../static/home.svg" alt=""><span class="nav_text">Home</span></a>
-    <a class="navLink live"  href="{{ url_for('live') }}"><img class="mobile-icon" src="../static/live.svg" alt=""><span class="nav_text">Live</span></a>
-   {% if current_user.is_authenticated %}
-    <a class="navLink profile-nav" data-href="{{ url_for('userDetails', username = current_user.username) }}" href="{{ url_for('profilePage' ,username = current_user.username) }}"><img class="mobile-icon" src="../static/profile.svg" alt=""><span class="nav_text">Profile</span></a>
-{% else %}
-    <a class="navLink profile-nav" href="{{ url_for('profilePage') }}"><img class="mobile-icon" src="../static/profile.svg" alt=""><span class="nav_text">Profile</span></a>
-{% endif %}
-</nav>
+            </div>
+            {{ share.create(sites='facebook,wechat,linkedin,google,twitter',mobile_sites='qq,facebook,wechat,linkedin,google,twitter') }}
+        </div>
+        <nav class="bot-nav shadow-lg">
+            <a class="navLink home-icon" href="{{ url_for('home') }}" data-href="{{ url_for('home') }}"><img
+                    class="mobile-icon" src="../static/home.svg" alt=""><span class="nav_text">Home</span></a>
+            <a class="navLink live" href="{{ url_for('live') }}"><img class="mobile-icon" src="../static/live.svg"
+                                                                      alt=""><span class="nav_text">Live</span></a>
+            {% if current_user.is_authenticated %}
+                <a class="navLink profile-nav"
+                   data-href="{{ url_for('userDetails', username = current_user.username) }}"
+                   href="{{ url_for('profilePage' ,username = current_user.username) }}"><img class="mobile-icon"
+                                                                                              src="../static/profile.svg"
+                                                                                              alt=""><span
+                        class="nav_text">Profile</span></a>
+            {% else %}
+                <a class="navLink profile-nav" href="{{ url_for('profilePage') }}"><img class="mobile-icon"
+                                                                                        src="../static/profile.svg"
+                                                                                        alt=""><span class="nav_text">Profile</span></a>
+            {% endif %}
+        </nav>
 
-{% endblock %}
+    {% endblock %}
 </div>
 {% block script %}
 
@@ -918,289 +960,297 @@
     <script src='../static/packages/timegrid/main.js'></script>
     <script src='../static/packages/interaction/main.js'></script>
 
-<script
-  src="{{ url_for('static',filename='jquery-3.4.1.js') }}" type="text/javascript"
-></script>
-<script src="../static/bootstrap/js/bootstrap.js"></script>
-<script src="{{ url_for('static',filename='jquery-3.3.1.min.js') }}" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script><script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
-<script src="{{ url_for('static',filename='javascript.js') }}" type="text/javascript"></script>
-<script src="//cdn.quilljs.com/1.3.6/quill.js"></script>
-<script src="//cdn.quilljs.com/1.3.6/quill.min.js"></script>    <script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.js"></script>
-<script src="https://res.wx.qq.com/connect/zh_CN/htmledition/js/wxLogin.js"></script>
+    <script
+            src="{{ url_for('static',filename='jquery-3.4.1.js') }}" type="text/javascript"
+    ></script>
+    <script src="../static/bootstrap/js/bootstrap.js"></script>
+    <script src="{{ url_for('static',filename='jquery-3.3.1.min.js') }}"
+            integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+            crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"
+            integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy"
+            crossorigin="anonymous"></script>
+    <script src="{{ url_for('static',filename='javascript.js') }}" type="text/javascript"></script>
+    <script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
+    <script src="https://cdn.quilljs.com/1.3.6/quill.min.js"></script>
+
+    <script src="https://res.wx.qq.com/connect/zh_CN/htmledition/js/wxLogin.js"></script>
     <script>
 
-    var options = {
+        var options = {
 
-  modules: {
-    toolbar: [
-      [{ header: [1, 2, false] }],
-      ['bold', 'italic', 'underline'],
-      ['link', 'blockquote','image', 'code-block'],
-        [{ list: 'ordered' }, { list: 'bullet' }],
-         [{ 'script': 'sub'}, { 'script': 'super' }],      // superscript/subscript
-  [{ 'indent': '-1'}, { 'indent': '+1' }],          // outdent/indent
-  [{ 'direction': 'rtl' }],                         // text direction
-
-
-  [{ 'color': [] }, { 'background': [] }],          // dropdown with defaults from theme
-  [{ 'font': [] }],
-  [{ 'align': [] }],
-
-    ]
-  },
-  placeholder: 'Compose...',
-
-  theme: 'snow'
-};
-var quill = new Quill('#editor', options);
-
-	$('form#series-course').on('submit', function(event) {
-        var csrf_token = $('#csrf_token').attr('value');
-        var html = quill.root.innerHTML;
-    $('#series_description').val( html );
-		$.ajax({
-        beforeSend: function(xhr, settings) {
-            if (!/^(GET|HEAD|OPTIONS|TRACE)$/i.test(settings.type) && !this.crossDomain) {
-                xhr.setRequestHeader("X-CSRFToken", csrf_token);
-                $('.loader').css('display','block')
-                 $('.border-btn').css('display','block')
-              $('#series_submit').css('display','none')
-            }
-        },  enctype: 'multipart/form-data',
-			data : new FormData(this),
-			type : 'POST',
-			url : '/createcourse?status=series',
-            processData: false,
-            contentType: false,
-
-          error: function(error){
-
-          popover(error,'success')
-          },
-          complete: function () {
-            $('.loader').css('display','none')
-
-          }
-
-		})
-		.done(function(data) {
-
-        popover(data,'success')
-            pageRedirect('/')
-               $('.border-btn').css('display','none')
-              $('#series_submit').css('display','block')
-
-		});
-
-		event.preventDefault();
-
-	});
-	$('form#addEpisode').on('submit', function(event) {
-        var csrf_token = $('#csrf_token').attr('value');
-        var html = quill.root.innerHTML;
-    $('#update_description').val( html );
-		$.ajax({
-        beforeSend: function(xhr, settings) {
-            if (!/^(GET|HEAD|OPTIONS|TRACE)$/i.test(settings.type) && !this.crossDomain) {
-                xhr.setRequestHeader("X-CSRFToken", csrf_token);
-                $('.loader').css('display','block')
-                 $('.border-btn').css('display','block')
-              $('#update_submit').css('display','none')
-            }
-        },  enctype: 'multipart/form-data',
-			data : new FormData(this),
-			type : 'POST',
-			url : $('.add-ep-btn').attr('data-href'),
-            processData: false,
-            contentType: false,
-
-          error: function(error){
-
-          popover(error,'success')
-          },
-          complete: function () {
-            $('.loader').css('display','none')
-
-          }
-
-		})
-		.done(function(data) {
-
-        popover(data,'success')
-            pageRedirect('/')
-               $('.border-btn').css('display','none')
-              $('#update_submit').css('display','block')
-
-		});
-
-		event.preventDefault();
-
-	});
-
-	$('form#course').on('submit', function(event) {
- var csrf_token = $('#csrf_token').attr('value');
-   // Populate hidden form on submit
-    var html = quill.root.innerHTML;
-    $('#upload_description').val( html );
+            modules: {
+                toolbar: [
+                    [{header: [1, 2, false]}],
+                    ['bold', 'italic', 'underline'],
+                    ['link', 'blockquote', 'image', 'code-block'],
+                    [{list: 'ordered'}, {list: 'bullet'}],
+                    [{'script': 'sub'}, {'script': 'super'}],      // superscript/subscript
+                    [{'indent': '-1'}, {'indent': '+1'}],          // outdent/indent
+                    [{'direction': 'rtl'}],                         // text direction
 
 
-		$.ajax({
-        beforeSend: function(xhr, settings) {
-            if (!/^(GET|HEAD|OPTIONS|TRACE)$/i.test(settings.type) && !this.crossDomain) {
-                xhr.setRequestHeader("X-CSRFToken", csrf_token);
-                $('.loader').css('display','block')
-                $('.border-btn').css('display','block')
-                $('#upload_submit').css('display','none')
-            }
-        },  enctype: 'multipart/form-data',
-			data : new FormData(this),
-			type : 'POST',
-			url : '/createcourse?status=single',
-            processData: false,
-            contentType: false,
+                    [{'color': []}, {'background': []}],          // dropdown with defaults from theme
+                    [{'font': []}],
+                    [{'align': []}],
 
-        error: function (error) {
-          popover('Error uploading your File','error')
+                ]
+            },
+            placeholder: 'Compose...',
 
-          },
-          complete: function () {
-            pageRedirect('/')
-            $('.loader').css('display','none')
-              $('.border-btn').css('display','none')
-              $('#upload_submit').css('display','block')
+            theme: 'snow'
+        };
+        var quill = new Quill('#editor', options);
 
-          },
+        $('form#series-course').on('submit', function (event) {
+            var csrf_token = $('#csrf_token').attr('value');
+            var html = quill.root.innerHTML;
+            $('#series_description').val(html);
+            $.ajax({
+                beforeSend: function (xhr, settings) {
+                    if (!/^(GET|HEAD|OPTIONS|TRACE)$/i.test(settings.type) && !this.crossDomain) {
+                        xhr.setRequestHeader("X-CSRFToken", csrf_token);
+                        $('.loader').css('display', 'block')
+                        $('.border-btn').css('display', 'block')
+                        $('#series_submit').css('display', 'none')
+                    }
+                }, enctype: 'multipart/form-data',
+                data: new FormData(this),
+                type: 'POST',
+                url: '/createcourse?status=series',
+                processData: false,
+                contentType: false,
 
-		})
-		.done(function(data) {
+                error: function (error) {
 
-        $('.loader').css('display','none')
-            popover(data,'success')
+                    popover(error, 'success')
+                },
+                complete: function () {
+                    $('.loader').css('display', 'none')
+
+                }
+
+            })
+                .done(function (data) {
+
+                    popover(data, 'success')
+                    pageRedirect('/')
+                    $('.border-btn').css('display', 'none')
+                    $('#series_submit').css('display', 'block')
+
+                });
+
+            event.preventDefault();
+
+        });
+        $('form#addEpisode').on('submit', function (event) {
+            var csrf_token = $('#csrf_token').attr('value');
+            var html = quill.root.innerHTML;
+            $('#update_description').val(html);
+            $.ajax({
+                beforeSend: function (xhr, settings) {
+                    if (!/^(GET|HEAD|OPTIONS|TRACE)$/i.test(settings.type) && !this.crossDomain) {
+                        xhr.setRequestHeader("X-CSRFToken", csrf_token);
+                        $('.loader').css('display', 'block')
+                        $('.border-btn').css('display', 'block')
+                        $('#update_submit').css('display', 'none')
+                    }
+                }, enctype: 'multipart/form-data',
+                data: new FormData(this),
+                type: 'POST',
+                url: $('.add-ep-btn').attr('data-href'),
+                processData: false,
+                contentType: false,
+
+                error: function (error) {
+
+                    popover(error, 'success')
+                },
+                complete: function () {
+                    $('.loader').css('display', 'none')
+
+                }
+
+            })
+                .done(function (data) {
+
+                    popover(data, 'success')
+                    pageRedirect('/')
+                    $('.border-btn').css('display', 'none')
+                    $('#update_submit').css('display', 'block')
+
+                });
+
+            event.preventDefault();
+
+        });
+
+        $('form#course').on('submit', function (event) {
+            var csrf_token = $('#csrf_token').attr('value');
+            // Populate hidden form on submit
+            var html = quill.root.innerHTML;
+            $('#upload_description').val(html);
 
 
-		});
+            $.ajax({
+                beforeSend: function (xhr, settings) {
+                    if (!/^(GET|HEAD|OPTIONS|TRACE)$/i.test(settings.type) && !this.crossDomain) {
+                        xhr.setRequestHeader("X-CSRFToken", csrf_token);
+                        $('.loader').css('display', 'block')
+                        $('.border-btn').css('display', 'block')
+                        $('#upload_submit').css('display', 'none')
+                    }
+                }, enctype: 'multipart/form-data',
+                data: new FormData(this),
+                type: 'POST',
+                url: '/createcourse?status=single',
+                processData: false,
+                contentType: false,
 
-		event.preventDefault();
+                error: function (error) {
+                    popover('Error uploading your File', 'error')
 
-	});
-		$('form#series-update').on('submit', function(event) {
-      var csrf_token = $('#csrf_token').attr('value');
-    var html = quill.root.innerHTML;
-    $('#update_series_description').val( html );
+                },
+                complete: function () {
+                    pageRedirect('/')
+                    $('.loader').css('display', 'none')
+                    $('.border-btn').css('display', 'none')
+                    $('#upload_submit').css('display', 'block')
 
+                },
 
-		$.ajax({
-          beforeSend: function(xhr, settings) {
-            if (!/^(GET|HEAD|OPTIONS|TRACE)$/i.test(settings.type) && !this.crossDomain) {
-                xhr.setRequestHeader("X-CSRFToken", csrf_token);
-            }
-            $('.loader').css('display','block')
-        },
-            enctype: 'multipart/form-data',
-			data : new FormData(this),
-			type : 'PUT',
-			url : '/editSeries?series_id='+$(this).attr('course-id'),
-            processData: false,
-            contentType: false,
+            })
+                .done(function (data) {
 
-
-          success: function(response){
-          },
-          error: function (error) {
-          popover('Error uploading your File','error')
-
-          },
-          complete: function () {
-            $('.loader').css('display','none')
-
-          },
+                    $('.loader').css('display', 'none')
+                    popover(data, 'success')
 
 
-		}).done(function(data) {
-		  $('.loader').css('display','none')
+                });
 
-        popover(data.result.msg,'success')
+            event.preventDefault();
 
-		});
+        });
+        $('form#series-update').on('submit', function (event) {
+            var csrf_token = $('#csrf_token').attr('value');
+            var html = quill.root.innerHTML;
+            $('#update_series_description').val(html);
 
-		event.preventDefault();
 
-	});
+            $.ajax({
+                beforeSend: function (xhr, settings) {
+                    if (!/^(GET|HEAD|OPTIONS|TRACE)$/i.test(settings.type) && !this.crossDomain) {
+                        xhr.setRequestHeader("X-CSRFToken", csrf_token);
+                    }
+                    $('.loader').css('display', 'block')
+                },
+                enctype: 'multipart/form-data',
+                data: new FormData(this),
+                type: 'PUT',
+                url: '/editSeries?series_id=' + $(this).attr('course-id'),
+                processData: false,
+                contentType: false,
 
-$('#quill-html').val( html );
+
+                success: function (response) {
+                },
+                error: function (error) {
+                    popover('Error uploading your File', 'error')
+
+                },
+                complete: function () {
+                    $('.loader').css('display', 'none')
+
+                },
+
+
+            }).done(function (data) {
+                $('.loader').css('display', 'none')
+
+                popover(data.result.msg, 'success')
+
+            });
+
+            event.preventDefault();
+
+        });
+
+        $('#quill-html').val(html);
 
     </script>
 
     <script>
         var obj = new WxLogin({
- self_redirect:true,
- id:"login_container",
- appid: "wx67fc65e96be93d6d",
- scope: "snsapi_login",
- redirect_uri: "https%3A%2F%2Fwww.100chinaguide.com%2F",
-  state: "",
- style: "",
- href: ""
- });
+            self_redirect: true,
+            id: "login_container",
+            appid: "wx67fc65e96be93d6d",
+            scope: "snsapi_login",
+            redirect_uri: "https%3A%2F%2Fwww.100chinaguide.com%2F",
+            state: "",
+            style: "",
+            href: ""
+        });
 
     </script>
 
-<script src="https://unpkg.com/wavesurfer.js"></script>
+    <script src="https://unpkg.com/wavesurfer.js"></script>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/howler/2.2.0/howler.js">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/howler/2.2.0/howler.js">
 
-</script>
+    </script>
     <script>
-var sound = null;
-    var audioSrc = '7ad5a4b99fc5275e.mp3'
-    var url = '/static/videos/'+audioSrc+'';
+        var sound = null;
+        var audioSrc = '7ad5a4b99fc5275e.mp3'
+        var url = '/static/videos/' + audioSrc + '';
+
         function playSound(url) {
-        //check if sound is null, if not stop previous sound and unload it
-        if (sound != null) {
-            sound.stop();
-            sound.unload();
-            sound = null;
+            //check if sound is null, if not stop previous sound and unload it
+            if (sound != null) {
+                sound.stop();
+                sound.unload();
+                sound = null;
             }
-        var sound = new Howl({
-        src: [url],
-        autoplay: false,
-        loop: true,
-        volume: 0.5,
-        onend: function() {
-        console.log('Finished!');
-        }
-        });
-        sound.once('load', function(){
-        sound.play();
-        Howler.autoUnlock = false;
-        });
+            var sound = new Howl({
+                src: [url],
+                autoplay: false,
+                loop: true,
+                volume: 0.5,
+                onend: function () {
+                    console.log('Finished!');
+                }
+            });
+            sound.once('load', function () {
+                sound.play();
+                Howler.autoUnlock = false;
+            });
         }
 
-    $('audio').on('click',function () {
-        playSound(url)
-    })
+        $('audio').on('click', function () {
+            playSound(url)
+        })
     </script>
     <script>
 
-    var wavesurfer = WaveSurfer.create({
-    container: '#waveform',
-    waveColor: 'green ',
-    progressColor: 'purple',
-    scrollParent: true,
-    backgroundColor: 'none'
-    });
+        var wavesurfer = WaveSurfer.create({
+            container: '#waveform',
+            waveColor: 'green ',
+            progressColor: 'purple',
+            scrollParent: true,
+            backgroundColor: 'none'
+        });
 
 
     </script>
     <div id="fb-root"></div>
-<script>(function(d, s, id) {
-var js, fjs = d.getElementsByTagName(s)[0];
-if (d.getElementById(id)) return;
-js = d.createElement(s); js.id = id;
-js.src = "https://connect.facebook.net/en_US/sdk.js#xfbml=1&version=v3.0";
-fjs.parentNode.insertBefore(js, fjs);
-}(document, 'script', 'facebook-jssdk'));</script>
+    <script>(function (d, s, id) {
+        var js, fjs = d.getElementsByTagName(s)[0];
+        if (d.getElementById(id)) return;
+        js = d.createElement(s);
+        js.id = id;
+        js.src = "https://connect.facebook.net/en_US/sdk.js#xfbml=1&version=v3.0";
+        fjs.parentNode.insertBefore(js, fjs);
+    }(document, 'script', 'facebook-jssdk'));</script>
 {% endblock %}
 </body>
 </html>

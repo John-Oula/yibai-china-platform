@@ -108,6 +108,10 @@ function update() {
 function homepage() {
 
 
+    
+    
+    
+    
     $('.upload-list').css('display', 'flex');
     $('#user-profile').css('display', 'none');
     $('#course-upload').css('display', 'none');
@@ -181,6 +185,8 @@ function myFunction() {
         x.style.display = "none";
     }
 }
+
+
 
 
 $(document).ready(function () {
@@ -309,9 +315,9 @@ $(document).ready(function () {
         req.done(function (data) {
             popover('Booked successfully', 'green')
 
-            $('#book-schedule-' + cnt + '').css("display", "none");
+            $('#book-schedule-' + cnt +'').css("display", "none");
 
-            $('#unbook-schedule-' + cnt + '').css("display", "flex");
+            $('#unbook-schedule-' + cnt +'').css("display", "flex");
         })
 
 
@@ -364,9 +370,9 @@ $(document).ready(function () {
 
         });
         req.done(function (data) {
-            $('#book-schedule-' + cnt + '.click-book').css("display", "flex");
+             $('#book-schedule-' + cnt +'.click-book').css("display", "flex");
 
-            $('#unbook-schedule-' + cnt + '.click-unbook').css("display", "none");
+            $('#unbook-schedule-' + cnt +'.click-unbook').css("display", "none");
         })
 
 
@@ -537,79 +543,85 @@ $('.live-details').ready(function () {
 //    $('.live-list').on('click', '.live-card', function (e) {
 //        e.preventDefault();
 //        var liveUrl = $(this).attr("data-href");
-    var liveParam = $.urlParam('liveId')
-    var liveUrl = '/liveDetails?liveId=' + liveParam;
-    var userImgUrl = '../static/profile_pics/';
-    var userUrl = '/userDetails?username=';
-    var coverImgUrl = '../static/coverImages/';
-    var bookUrl = '/book/';
-    var unbookUrl = '/unbook/';
-    var param = '?type=schedule';
-    var paramLive = '?type=live';
+        var liveParam = $.urlParam('liveId')
+        var liveUrl = '/liveDetails?liveId=' + liveParam;
+        var userImgUrl = '../static/profile_pics/';
+        var userUrl = '/userDetails?username=';
+        var coverImgUrl = '../static/coverImages/';
+        var bookUrl = '/book/';
+        var unbookUrl = '/unbook/';
+        var param = '?type=schedule';
+        var paramLive = '?type=live';
 
-    req = $.ajax({
-        url: liveUrl,
-        type: 'GET',
-        data: {},
-        success: function (data) {
-            console.log(data)
-        }, error: function (error) {
-            console.log(error)
-            console.log("error")
+        req = $.ajax({
+            url: liveUrl,
+            type: 'GET',
+            data: {},
+            success: function (data) {
+                console.log(data)
+            }, error: function (error) {
+                console.log(error)
+                console.log("error")
 
-        }
-
-    });
-    req.done(function (data) {
-        var obj = data.schedule;
-
-        $.each(obj, function (key, value) {
-            var cntId = value.id;
-
-
-            $('#unbook-schedule-' + cntId + '').css("display", "none");
-            $('.schedule-tab').append('<div class=" text-center p-2 bg-dark text-light schedule-box"><h4>' + value.date + '</h4><span>' + value.startTime + ' - ' + value.endTime + '</span><span class="mt-1"><a cnt="' + value.id + '" id="book-schedule-' + cntId + '" class="click-book" data-href="' + bookUrl + value.id + param + '"><button   class="fixed-btn" >Book</button></a><a cnt="' + value.id + '" id="unbook-schedule-' + cntId + '" class="click-unbook" data-href="' + unbookUrl + value.id + param + '" ><button   class="fixed-btn" >Unbook</button></a></span></div>');
-            if (value.hasBookedSchedule === true) {
-                $('#book-schedule-' + cntId + '').css('display', 'none');
-                $('#unbook-schedule-' + cntId + '').css('display', 'flex');
-            } else if (value.hasBookedSchedule === false) {
-                $('#unbook-schedule-' + cntId + '').css('display', 'none');
-                $('#book-schedule-' + cntId + '').css('display', 'flex');
             }
+
+        });
+        req.done(function (data) {
+            var obj = data.schedule;
+
+            $.each(obj, function (key, value) {
+                var cntId = value.id;
+
+
+                $('#unbook-schedule-' + cntId +'').css("display", "none");
+                $('.schedule-tab').append('<div class=" text-center p-2 bg-dark text-light schedule-box"><h4>' + value.date + '</h4><span>' + value.startTime + ' - ' + value.endTime + '</span><span class="mt-1"><a cnt="'+ value.id +'" id="book-schedule-' + cntId + '" class="click-book" data-href="' + bookUrl + value.id + param  + '"><button   class="fixed-btn" >Book</button></a><a cnt="'+ value.id +'" id="unbook-schedule-' + cntId + '" class="click-unbook" data-href="' + unbookUrl + value.id + param  + '" ><button   class="fixed-btn" >Unbook</button></a></span></div>');
+                if (value.hasBookedSchedule === true){
+                    $('#book-schedule-' + cntId +'').css('display', 'none');
+                    $('#unbook-schedule-' + cntId +'').css('display', 'flex');
+                } else if(value.hasBookedSchedule === false){
+                    $('#unbook-schedule-' + cntId +'').css('display', 'none');
+                    $('#book-schedule-' + cntId +'').css('display', 'flex');
+            }
+            });
+
+
+
+
+
+
+            $('.live-details').css('display', 'block');
+            $('#profile-btn').attr('data-href', userUrl + data.host.host);
+            $('#profile-btn').attr('href', userUrl + data.host.host);
+            $('.live-profile-pic-wrapper').attr('data-href', userUrl + data.host.host);
+            $('.live-title').html(data.title);
+            $('#live-startTime').html(data.startTime);
+            $('#live-endTime').html(data.endTime);
+            $('#live-date').html(data.date);
+            $('#live-description').html(data.description);
+            $('#host-username').html(data.host.host);
+            $('#host-introduction').html(data.host.introduction);
+            $('img.live-img').attr('src', coverImgUrl + data.coverImage);
+            $('img.profilepic').attr('src', userImgUrl + data.host.userImg);
+            $('#book').attr('data-href', bookUrl + data.id+paramLive);
+            $('#unbook').attr('data-href', unbookUrl + data.id+paramLive);
+            $('#live-username').html(data.host.host);
+            if (data.hasBooked === true){
+                    $('#book').css('display', 'none');
+                    $('#unbook').css('display', 'flex');
+
+            }
+
+                else if(data.hasBooked === false){
+                    $('#unbook').css('display', 'none');
+                    $('#book').css('display', 'flex');
+            }
+            
+            $('#user-profile').css('display', 'none');
+            $('.checkout').css('display', 'none')
         });
 
 
-        $('.live-details').css('display', 'block');
-        $('#profile-btn').attr('data-href', userUrl + data.host.host);
-        $('#profile-btn').attr('href', userUrl + data.host.host);
-        $('.live-profile-pic-wrapper').attr('data-href', userUrl + data.host.host);
-        $('.live-title').html(data.title);
-        $('#live-startTime').html(data.startTime);
-        $('#live-endTime').html(data.endTime);
-        $('#live-date').html(data.date);
-        $('#live-description').html(data.description);
-        $('#host-username').html(data.host.host);
-        $('#host-introduction').html(data.host.introduction);
-        $('img.live-img').attr('src', coverImgUrl + data.coverImage);
-        $('img.profilepic').attr('src', userImgUrl + data.host.userImg);
-        $('#book').attr('data-href', bookUrl + data.id + paramLive);
-        $('#unbook').attr('data-href', unbookUrl + data.id + paramLive);
-        $('#live-username').html(data.host.host);
-        if (data.hasBooked === true) {
-            $('#book').css('display', 'none');
-            $('#unbook').css('display', 'flex');
-
-        } else if (data.hasBooked === false) {
-            $('#unbook').css('display', 'none');
-            $('#book').css('display', 'flex');
-        }
-
-        $('#user-profile').css('display', 'none');
-        $('.checkout').css('display', 'none')
     });
-
-
-});
 
 //});
 $('#posts-btn').click(function (e) {
@@ -638,57 +650,57 @@ $('.live-list').ready(function () {
     $('.live-list').css('display', 'block');
 //    $('.live').click(function (e) {
 //        e.preventDefault();
-    var liveUrl = '/liveDetails?liveId=';
-    var liveInfoUrl = '/liveInfo?liveId=';
-    var userUrl = '/userDetails?username='
+        var liveUrl = '/liveDetails?liveId=';
+        var liveInfoUrl = '/liveInfo?liveId=';
+        var userUrl = '/userDetails?username='
 
-    req = $.ajax({
-        url: '/liveSession',
-        type: 'GET',
-        data: {},
-        success: function (data) {
-            console.log(data)
-        }, error: function (error) {
-            console.log(error)
-            console.log("error")
+        req = $.ajax({
+            url: '/liveSession',
+            type: 'GET',
+            data: {},
+            success: function (data) {
+                console.log(data)
+            }, error: function (error) {
+                console.log(error)
+                console.log("error")
 
-        }
-
-    });
-    req.done(function (data) {
-        var obj = data.result;
-//            $('.live-list').empty();
-        $.each(obj, function (key, value) {
-
-
-            $('.live-list').append('<card class="card shadow-lg live-card"  data-href="' + liveUrl + value.id + '" > <card ><a href="' + liveInfoUrl + value.id + '"> <div class="live-img-wrapper"><img class="live-img" src="../static/coverImages/' + value.coverImg + '" alt=""></div> <div class="live-profile-pic-wrapper click-pro-pic"  data-href="' + userUrl + value.host.host + '"><span><a  class="user-profile-pic border-light" href="#"><img class="profilepic"  src="../static/profile_pics/' + value.userImg + '" alt=""></a></span> </div><div class="p-2 row no-gutters"><span class="live-info col-8 flex-content flex-column no-gutters"><span class="live-title">' + value.title + '</span><span class="">Hosted by:' + value.host + ' </span><span class="">Category:' + value.category + '</span><span class=""> </span></span>  <span class="live-info col-4 flex-content flex-column no-gutters">           <span class="text-right">' + value.startTime + '-' + value.endTime + '</span><span class="text-right">' + value.date + '</span>  <div class="circle-icon text-right text-center mt-2  p-2 shadow-sm"> </div> </span> </div> </a></card> </card>');
+            }
 
         });
-        $('#live').css('display', 'block');
-        $('.live-list').css('display', 'block');
+        req.done(function (data) {
+            var obj = data.result;
+//            $('.live-list').empty();
+            $.each(obj, function (key, value) {
 
-        $('.profile').css('display', 'none');
 
+                $('.live-list').append('<card class="card shadow-lg live-card"  data-href="' + liveUrl + value.id + '" > <card ><a href="' + liveInfoUrl + value.id + '"> <div class="live-img-wrapper"><img class="live-img" src="../static/coverImages/' + value.coverImg + '" alt=""></div> <div class="live-profile-pic-wrapper click-pro-pic"  data-href="' + userUrl + value.host.host + '"><span><a  class="user-profile-pic border-light" href="#"><img class="profilepic"  src="../static/profile_pics/' + value.userImg + '" alt=""></a></span> </div><div class="p-2 row no-gutters"><span class="live-info col-8 flex-content flex-column no-gutters"><span class="live-title">' + value.title + '</span><span class="">Hosted by:' + value.host + ' </span><span class="">Category:' + value.category + '</span><span class=""> </span></span>  <span class="live-info col-4 flex-content flex-column no-gutters">           <span class="text-right">' + value.startTime + '-' + value.endTime + '</span><span class="text-right">' + value.date + '</span>  <div class="circle-icon text-right text-center mt-2  p-2 shadow-sm"> </div> </span> </div> </a></card> </card>');
 
-        $('#user-profile').css('display', 'none');
-        $('.checkout').css('display', 'none')
-    });
+            });
+            $('#live').css('display', 'block');
+            $('.live-list').css('display', 'block');
+            
+            $('.profile').css('display', 'none');
+            
+            
+            $('#user-profile').css('display', 'none');
+            $('.checkout').css('display', 'none')
+        });
 
 
 //    });
     $('.share-btn').click(function (e) {
         var fbDesc = $('.share-logos').attr('desc');
-        var fbCoverImg = 'https://www.100chinaguide.com/static/coverImages/' + $('.share-logos').attr('coverImg');
-        ;
+        var fbCoverImg = 'https://www.100chinaguide.com/static/coverImages/' + $('.share-logos').attr('coverImg');;
         var fbTitle = $('.share-logos').attr('title');
-        var url = window.location.href;
+        var url      = window.location.href;
         e.preventDefault();
-        $('.fb-share-button').attr('data-href', url)
-        $('#fb-share-img').attr('content', fbCoverImg)
-        $('#fb-share-title').attr('content', fbTitle)
-        $('#fb-share-description').attr('content', fbDesc)
+        $('.fb-share-button').attr('data-href',url)
+        $('#fb-share-img').attr('content',fbCoverImg)
+        $('#fb-share-title').attr('content',fbTitle)
+        $('#fb-share-description').attr('content',fbDesc)
         $('.fb-share-button').appendTo('.share-logos')
         $('.share-logos').toggle()
+
 
 
     });
@@ -698,50 +710,51 @@ $('.live-list').ready(function () {
 
 $('.profile').ready(function () {
 //    $('.profile-nav').click(function (e) {
-    $('#user-profile').css('display', 'block');
-    $('.loader').css('display', 'none');
-
-
-    var param = $.urlParam('username');
-    var url = '/userDetails?username=' + param;
-
-
-    $('#create-course').css('display', 'none');
-    $('#course-update').css('display', 'none');
-    $('#live-update').css('display', 'none');
-    $('.checkout').css('display', 'none')
-
-    req = $.ajax({
-        url: url,
-        type: 'GET',
-        data: {},
-        success: function (data) {
-            console.log(data)
-        }, error: function (error) {
-            console.log(error)
-            console.log("error")
-
-        }
-
-    });
-    req.done(function (data) {
-
-
-        $('.my-profile').css('display', 'block');
-
-
-        $('#my-username').html(data.username);
-        $('#my-videos').html(data.videos);
-        $('#my-followers').html(data.followers);
-        $('#my-live-sessions').html(data.liveSessions);
-        $('#my-introduction').html(data.introduction);
-        $('.user-form').css('display', 'none');
-        $('img.profilepic').attr("src", userImgSrc + data.userImage);
         $('#user-profile').css('display', 'block');
-        $('#live').css('display', 'none');
+        $('.loader').css('display', 'none');
+        
+        
+        
+        var param = $.urlParam('username');
+        var url = '/userDetails?username='+ param;
+        
+        
+        $('#create-course').css('display', 'none');
+        $('#course-update').css('display', 'none');
+        $('#live-update').css('display', 'none');
+        $('.checkout').css('display', 'none')
 
-        $('.checkout').css('display', 'none');
-        $('.schedule').css('display', 'none');
+        req = $.ajax({
+            url: url,
+            type: 'GET',
+            data: {},
+            success: function (data) {
+                console.log(data)
+            }, error: function (error) {
+                console.log(error)
+                console.log("error")
+
+            }
+
+        });
+        req.done(function (data) {
+
+
+            $('.my-profile').css('display', 'block');
+
+
+            $('#my-username').html(data.username);
+            $('#my-videos').html(data.videos);
+            $('#my-followers').html(data.followers);
+            $('#my-live-sessions').html(data.liveSessions);
+            $('#my-introduction').html(data.introduction);
+            $('.user-form').css('display', 'none');
+            $('img.profilepic').attr("src", userImgSrc + data.userImage);
+            $('#user-profile').css('display', 'block');
+            $('#live').css('display', 'none');
+            
+            $('.checkout').css('display', 'none');
+            $('.schedule').css('display', 'none');
 
 //        });
 
@@ -815,6 +828,8 @@ $('.profile').ready(function () {
         });
     });
 });
+
+
 
 
 function openNav() {
@@ -1058,341 +1073,512 @@ function closeLeftNav() {
 //         });
 
 
-$('#main').on("click", ".click-pro-pic", function (e) {
 
-    e.preventDefault();
-    var url = $(this).attr("data-href");
-    var videoSrc = "../static/videos/";
-    var userImgSrc = "../static/profile_pics/";
-    var currency = "￥";
-    var followUrl = "/follow";
-    var unfollowUrl = "/unfollow";
-    var userUrl = "/userDetails?username=";
+    $('#main').on("click", ".click-pro-pic", function (e) {
+         
+        e.preventDefault();
+        var url = $(this).attr("data-href");
+        var videoSrc = "../static/videos/";
+        var userImgSrc = "../static/profile_pics/";
+        var currency = "￥";
+        var followUrl = "/follow";
+        var unfollowUrl = "/unfollow";
+        var userUrl = "/userDetails?username=";
 
-    req = $.ajax({
-        url: url,
-        type: 'GET',
-        data: {},
-        success: function (data) {
-            console.log(data)
-        }, error: function (error) {
-            console.log(error)
-            console.log("error")
+        req = $.ajax({
+            url: url,
+            type: 'GET',
+            data: {},
+            success: function (data) {
+                console.log(data)
+            }, error: function (error) {
+                console.log(error)
+                console.log("error")
 
-        }
+            }
 
-    });
-    req.done(function (data) {
+        });
+        req.done(function (data) {
 
-        $('.profile').css('display', 'block');
-        $('.share-logos').css('display', 'none');
-        $('#book-schedule-btn').attr('data-href', userUrl + data.username);
-        $('#unfollow').attr('data-href', unfollowUrl + "/" + data.username);
-        $('#follow').attr('data-href', followUrl + "/" + data.username);
-        if (data.Isfollowing === true) {
+            $('.profile').css('display', 'block');
+            $('.share-logos').css('display', 'none');
+            $('#book-schedule-btn').attr('data-href', userUrl + data.username);
+            $('#unfollow').attr('data-href', unfollowUrl + "/" + data.username);
+            $('#follow').attr('data-href', followUrl + "/" + data.username);
+            if (data.Isfollowing === true) {
 
-            $('#unfollow').css('display', 'inline-block');
-            $('#follow').css('display', 'none');
-
-
-        } else {
+                $('#unfollow').css('display', 'inline-block');
+                $('#follow').css('display', 'none');
 
 
-            $('#follow').css('display', 'inline-block');
-            $('#unfollow').css('display', 'none');
+            } else {
 
 
-        }
+                $('#follow').css('display', 'inline-block');
+                $('#unfollow').css('display', 'none');
 
 
-        $('#user-username').html(data.username);
-        $('#user-videos').html(data.videos);
-        $('#user-followers').html(data.followers);
-        $('#user-live-sessions').html(data.liveSessions);
-        $('#user-introduction').html(data.introduction);
-        $('img.profilepic').attr("src", userImgSrc + data.userImage);
-        $('#user-profile').css('display', 'none');
-        $('#live').css('display', 'none');
-
-        $('.checkout').css('display', 'none');
-        $('.live-list').css('display', 'none');
-        $('.upload-list').css('display', 'none');
-        $('.video-details').css('display', 'none');
-        $('.live-details').css('display', 'none');
-
-    });
+            }
 
 
-});
-$('.video-details').on("click", ".click-episode", function (e) {
-    e.preventDefault();
-    var url = $(this).attr("data-href");
-    var videoSrc = "../static/videos/";
-    var userImgSrc = "../static/profile_pics/";
-    var currency = "￥";
-    var followUrl = "/follow";
-    var commentUrl = "/episodeComment?episode_id=";
-    var unfollowUrl = "/unfollow";
-
-    req = $.ajax({
-        url: url,
-        type: 'GET',
-        data: {},
-        success: function (data) {
-            console.log(data)
-        }, error: function (error) {
-            console.log(error)
-            console.log("error")
-
-        }
-
-    });
-    req.done(function (data) {
-
-        var obj = data.result;
-        $('#video-likes').text(obj.likes)
-        $('#video-comments').text(obj.comments)
-        $('#episode-subtitle').text(obj.subtitle)
-        if (obj.hasLikedEpisode == true) {
-            $('#unlike-btn').css('display', 'flex');
-
-            $('.like-btn').css('display', 'none');
-        } else if (obj.hasLikedEpisode == false) {
-            $('.like-btn').css('display', 'flex');
-
-            $('#unlike-btn').css('display', 'none');
-        }
-        $('.like-btn').attr('data-href', '/like/episode' + obj.id);
-        $('#unlike-btn').attr('data-href', '/unlike/episode' + obj.id);
-
-        if (obj.type == 'video') {
-            $('video').attr("src", videoSrc + obj.video);
-            $('video').css('display', 'block');
-            $('.video-js').attr("src", videoSrc + obj.video);
-            $('.audio').css('display', 'none');
-            $('video').css('display', 'block');
-            $('.course-img').css('display', 'none');
-
-        } else if (obj.type == 'audio') {
-            $('source').attr("src", videoSrc + obj.video);
-            $('.audio').css('display', 'block');
-            $('video').css('display', 'none');
-            $('.course-img').css('display', 'block');
-
-        } else if (obj.videoRef == null) {
-            $('.course-img').attr("src", coverImgSrc + obj.coverImg);
-            $('.audio').css('display', 'none');
-            $('.course-img').css('display', 'block');
-            $('video').css('display', 'none');
-        }
-
-
-        $('#user-reviews').empty();
-        $.each(obj.comments, function (key, value) {
-
-
-            $('#user-reviews').append('<div><div data-href="" class="profile-pic-wrapper d-inline-flex mr-2 click-pro-pic"><span><img class="profilepic" src="' + userImgSrc + value.proPic + '" alt=""></span></div><small ><strong>' + value.username + '</strong></small><div><small id="user-review">' + value.content + '</small></div></div></div></div>');
+            $('#user-username').html(data.username);
+            $('#user-videos').html(data.videos);
+            $('#user-followers').html(data.followers);
+            $('#user-live-sessions').html(data.liveSessions);
+            $('#user-introduction').html(data.introduction);
+            $('img.profilepic').attr("src", userImgSrc + data.userImage);
+            $('#user-profile').css('display', 'none');
+            $('#live').css('display', 'none');
+            
+            $('.checkout').css('display', 'none');
+            $('.live-list').css('display', 'none');
+            $('.upload-list').css('display', 'none');
+            $('.video-details').css('display', 'none');
+            $('.live-details').css('display', 'none');
 
         });
 
-        $('#user-profile').css('display', 'none');
-        $('#episode-description').append('<div><span>Episode Summary</span></div>')
-        $('#episode-description').html(obj.description);
-        $('#comment-form').attr("data-href", commentUrl + obj.id);
-        $('.checkout').css('display', 'none')
-
 
     });
+    $('.video-details').on("click", ".click-episode", function (e) {
+        e.preventDefault();
+        var url = $(this).attr("data-href");
+        var videoSrc = "../static/videos/";
+        var userImgSrc = "../static/profile_pics/";
+        var currency = "￥";
+        var followUrl = "/follow";
+        var commentUrl = "/episodeComment?episode_id=";
+        var unfollowUrl = "/unfollow";
+
+        req = $.ajax({
+            url: url,
+            type: 'GET',
+            data: {},
+            success: function (data) {
+                console.log(data)
+            }, error: function (error) {
+                console.log(error)
+                console.log("error")
+
+            }
+
+        });
+        req.done(function (data) {
+
+            var obj = data.result;
+            $('#video-likes').text(obj.likes)
+            $('#video-comments').text(obj.comments)
+            $('#episode-subtitle').text(obj.subtitle)
+            if (obj.hasLikedEpisode == true) {
+                $('#unlike-btn').css('display', 'flex');
+
+                $('.like-btn').css('display', 'none');
+            } else if (obj.hasLikedEpisode == false) {
+                $('.like-btn').css('display', 'flex');
+
+                $('#unlike-btn').css('display', 'none');
+            }
+                $('.like-btn').attr('data-href', '/like/episode' + obj.id);
+                $('#unlike-btn').attr('data-href', '/unlike/episode' + obj.id);
+
+            if (obj.type == 'video') {
+                $('video').attr("src", videoSrc + obj.video);
+                $('video').css('display', 'block');
+                $('.video-js').attr("src", videoSrc + obj.video);
+                $('.audio').css('display', 'none');
+                $('video').css('display', 'block');
+                $('.course-img').css('display', 'none');
+
+            } else if (obj.type == 'audio') {
+                $('source').attr("src", videoSrc + obj.video);
+                $('.audio').css('display', 'block');
+                $('video').css('display', 'none');
+                $('.course-img').css('display', 'block');
+
+            }
+            else if (obj.videoRef == null) {
+                $('.course-img').attr("src", coverImgSrc + obj.coverImg);
+                $('.audio').css('display', 'none');
+                $('.course-img').css('display', 'block');
+                $('video').css('display', 'none');
+            }
+
+            
+              $('#user-reviews').empty();
+            $.each(obj.comments, function (key, value) {
 
 
-});
-
-
-$('#schedule-create').on("click", function (e) {
-    e.preventDefault();
-    closeNav()
-    $('.schedule').css('display', 'block');
-    $(".calendar-source").detach().prependTo("#schedule-form");
-
-
-    $('#calendar').css('display', 'block');
-    $('.schedule-btn').css('display', 'block');
-    $('#live').css('display', 'none');
-    $('.live-list').css('display', 'none');
-    $('.live-details').css('display', 'none');
-
-
-    $('.my-profile').css('display', 'none');
-    $('#create-course').css('display', 'none');
-    $('.video-details').css('display', 'none');
-    $('.upload-list').css('display', 'none');
-    $('#user-profile').css('display', 'none');
-    $('#live-update').css('display', 'none');
-    $('.schedule-container').css('display', 'none');
-    $('.checkout').css('display', 'none')
-    $('.fc-toolbar h2').css('display', 'none')
-    $('#course-update').css('display', 'none');
-    $('.upload-option').css('display', 'none');
-
-
-});
-
-
-$('#live-update').on("click", ".edit-live", function (e) {
-    e.preventDefault();
-    liveUrl = 'editLive?live_id='
-    closeNav()
-    req = $.ajax({
-        url: $(this).attr('data-href'),
-        type: 'GET',
-        data: {},
-        success: function (data) {
-            console.log(data)
-        }, error: function (error) {
-            console.log(error)
-            console.log("error")
-
-        }
-
-    });
-
-    req.done(function (data) {
-        $('#update-session-form').attr('data-href', liveUrl + data.result.id);
-        $('#update_session_title').val(data.result.title);
-        $('#update_session_description').val(data.result.description);
-        $('#update_session_category').val(data.result.category);
-
-        $('.schedule').css('display', 'none');
-        $(".calendar-source").detach().appendTo(".append-edit-calendar");
-        $('.fc-toolbar h2').css('display', 'none')
-
-
-        $('#calendar').css('display', 'block');
-        $('#edit-live').css('display', 'block');
-        $('#live').css('display', 'none');
-        $('#live-update').css('display', 'none');
-
-        $('.profile').css('display', 'none');
-        $('#create-course').css('display', 'none');
-
-
-        $('#user-profile').css('display', 'none');
-        $('.checkout').css('display', 'none')
-    });
-
-
-});
-$('.schedule-container').on("click", ".edit-schedule", function (e) {
-    e.preventDefault();
-    closeNav()
-    req = $.ajax({
-        url: $(this).attr('data-href'),
-        type: 'GET',
-        data: {},
-        success: function (data) {
-            console.log(data)
-        }, error: function (error) {
-            console.log(error)
-            console.log("error")
-
-        }
-
-    });
-
-    req.done(function (data) {
-
-
-        $('.schedule').css('display', 'none');
-        $(".calendar-source").detach().prependTo("#update-schedule-form");
-        $('.fc-toolbar h2').css('display', 'none')
-
-        $('#calendar').css('display', 'block');
-        $('#update-schedule').css('display', 'block');
-        $('#edit-live').css('display', 'none');
-        $('#live').css('display', 'none');
-        $('#live-update').css('display', 'none');
-        $('.my-profile').css('display', 'none');
-        $('#create-course').css('display', 'none');
-
-
-        $('#user-profile').css('display', 'none');
-        $('.schedule-container').css('display', 'none');
-    });
-
-
-});
-
-
-$('#course-create').on("click", function (e) {
-    e.preventDefault();
-    closeNav()
-    $(".editor-source").detach().appendTo(".form-editor");
-    $('.editor-source').css('display', 'none')
-    $('#live').css('display', 'none');
-    $('.live-details').css('display', 'none');
-    $('#create-live').css('display', 'none');
-    $('.schedule').css('display', 'none');
-    $('.live-list').css('display', 'none');
-    $('#course-upload').css('display', 'none');
-    $('#course-update').css('display', 'none');
-    $('#create-series').css('display', 'none');
-    $('.my-profile').css('display', 'none');
-    $('#create-course').css('display', 'none');
-    $('.video-details').css('display', 'none');
-    $('.upload-list').css('display', 'none');
-    $('#user-profile').css('display', 'none');
-
-    $('.schedule-container').css('display', 'none');
-    $('#live-update').css('display', 'none');
-    $('.upload-option').css('display', 'block');
-
-});
-$('#course-update').on("click", "a.add-ep-btn", function (e) {
-    e.preventDefault();
-    closeNav()
-    $(".editor-source").detach().appendTo(".episode-editor");
-    $('.editor-source').css('display', 'block')
-
-});
-
-
-$('#series-stats').on("click", function (e) {
-    e.preventDefault();
-    closeNav()
-    req = $.ajax({
-        url: $('#update-course').attr('data-href'),
-        type: 'GET',
-        data: {},
-
-        success: function (data) {
-            console.log(data)
-        }, error: function (error) {
-            console.log(error)
-            console.log("error")
-
-        }
-
-    });
-    $('.series-stats').empty();
-
-    req.done(function (data) {
-        console.log(data.length)
-        if (data.length == 0)
-            $('#course-update').append('<p>No contents</p>')
-
-        else
-            $.each(data.result, function (key, value) {
-
-
-                $('.series-stats').append('<card class="mt-2 mb-2 flex-fill flex-row shadow-lg row no-gutters user-course card"><div class="col-3 no-gutters cover-wrapper"><img id="course-img" src="../static/coverImages/' + value.coverImg + '" alt=""></div><div class="col-8 p-2 flex-fill flex-column no-gutters "><h6 id="course-title">' + value.title + '</h6><div id="total-episodes">Episodes : ' + value.totalEpisodes + '</div><span id="course-price">Price : ' + value.price + '</span><nav class="btn-row" ><a   class=" navLink" data-href="addEpisode?series_id=' + value.id + '"  data-toggle="modal" data-target="#episode-modal" href=""><img class="mobile-icon" src="../static/like.svg" alt=""><span class="nav_text">' + value.likes + '</span></a><a class="navLink"   data-toggle="modal" data-target="#myModal" href="" ><img class="mobile-icon" src="../static/commentGrey.svg" alt="" ><span class="nav_text">' + value.totalComments + '</span></a><a class="navLink"><img class="mobile-icon" src="../static/eye.svg" alt="" width="24" ><span class="nav_text view-text"></span></a></nav></div></card></div>');
+                $('#user-reviews').append('<div><div data-href="" class="profile-pic-wrapper d-inline-flex mr-2 click-pro-pic"><span><img class="profilepic" src="' + userImgSrc + value.proPic + '" alt=""></span></div><small ><strong>' + value.username + '</strong></small><div><small id="user-review">' + value.content + '</small></div></div></div></div>');
 
             });
+
+            $('#user-profile').css('display', 'none');
+            $('#episode-description').append('<div><span>Episode Summary</span></div>')
+            $('#episode-description').html(obj.description);
+            $('#comment-form').attr("data-href", commentUrl + obj.id);
+            $('.checkout').css('display', 'none')
+
+
+        });
+
+
+    });
+
+
+    $('#schedule-create').on("click", function (e) {
+        e.preventDefault();
+        closeNav()
+        $('.schedule').css('display', 'block');
+        $(".calendar-source").detach().prependTo("#schedule-form");
+
+
+        $('#calendar').css('display', 'block');
+        $('.schedule-btn').css('display', 'block');
+        $('#live').css('display', 'none');
+        $('.live-list').css('display', 'none');
+        $('.live-details').css('display', 'none');
+
+        
+        $('.my-profile').css('display', 'none');
+        $('#create-course').css('display', 'none');
+        $('.video-details').css('display', 'none');
+        $('.upload-list').css('display', 'none');
+        $('#user-profile').css('display', 'none');
+        $('#live-update').css('display', 'none');
+        $('.schedule-container').css('display', 'none');
+        $('.checkout').css('display', 'none')
+        $('.fc-toolbar h2').css('display', 'none')
+        $('#course-update').css('display', 'none');
+        $('.upload-option').css('display', 'none');
+
+
+    });
+
+
+    $('#live-update').on("click", ".edit-live", function (e) {
+        e.preventDefault();
+        liveUrl = 'editLive?live_id='
+        closeNav()
+        req = $.ajax({
+            url: $(this).attr('data-href'),
+            type: 'GET',
+            data: {},
+            success: function (data) {
+                console.log(data)
+            }, error: function (error) {
+                console.log(error)
+                console.log("error")
+
+            }
+
+        });
+
+        req.done(function (data) {
+            $('#update-session-form').attr('data-href', liveUrl + data.result.id);
+            $('#update_session_title').val(data.result.title);
+            $('#update_session_description').val(data.result.description);
+            $('#update_session_category').val(data.result.category);
+
+            $('.schedule').css('display', 'none');
+            $(".calendar-source").detach().appendTo(".append-edit-calendar");
+            $('.fc-toolbar h2').css('display', 'none')
+
+
+            $('#calendar').css('display', 'block');
+            $('#edit-live').css('display', 'block');
+            $('#live').css('display', 'none');
+            $('#live-update').css('display', 'none');
+            
+            $('.profile').css('display', 'none');
+            $('#create-course').css('display', 'none');
+            
+            
+            $('#user-profile').css('display', 'none');
+            $('.checkout').css('display', 'none')
+        });
+
+
+    });
+    $('.schedule-container').on("click", ".edit-schedule", function (e) {
+        e.preventDefault();
+        closeNav()
+        req = $.ajax({
+            url: $(this).attr('data-href'),
+            type: 'GET',
+            data: {},
+            success: function (data) {
+                console.log(data)
+            }, error: function (error) {
+                console.log(error)
+                console.log("error")
+
+            }
+
+        });
+
+        req.done(function (data) {
+
+
+            $('.schedule').css('display', 'none');
+            $(".calendar-source").detach().prependTo("#update-schedule-form");
+            $('.fc-toolbar h2').css('display', 'none')
+
+            $('#calendar').css('display', 'block');
+            $('#update-schedule').css('display', 'block');
+            $('#edit-live').css('display', 'none');
+            $('#live').css('display', 'none');
+            $('#live-update').css('display', 'none');
+            $('.my-profile').css('display', 'none');
+            $('#create-course').css('display', 'none');
+            
+            
+            $('#user-profile').css('display', 'none');
+            $('.schedule-container').css('display', 'none');
+        });
+
+
+    });
+
+
+    $('#course-create').on("click", function (e) {
+        e.preventDefault();
+        closeNav()
+        $(".editor-source").detach().appendTo(".form-editor");
+        $('.editor-source').css('display', 'none')
+        $('#live').css('display', 'none');
+        $('.live-details').css('display', 'none');
+        $('#create-live').css('display', 'none');
+        $('.schedule').css('display', 'none');
+        $('.live-list').css('display', 'none');
+        $('#course-upload').css('display', 'none');
+        $('#course-update').css('display', 'none');
+        $('#create-series').css('display', 'none');
+        $('.my-profile').css('display', 'none');
+        $('#create-course').css('display', 'none');
+        $('.video-details').css('display', 'none');
+        $('.upload-list').css('display', 'none');
+        $('#user-profile').css('display', 'none');
+
+        $('.schedule-container').css('display', 'none');
+        $('#live-update').css('display', 'none');
+        $('.upload-option').css('display', 'block');
+
+    });
+    $('#course-update').on("click","a.add-ep-btn", function (e) {
+        e.preventDefault();
+        closeNav()
+        $(".editor-source").detach().appendTo(".episode-editor");
+            $('.editor-source').css('display', 'block')
+
+    });
+
+
+    $('#series-stats').on("click", function (e) {
+        e.preventDefault();
+        closeNav()
+        req = $.ajax({
+            url: $('#update-course').attr('data-href'),
+            type: 'GET',
+            data: {},
+
+            success: function (data) {
+                console.log(data)
+            }, error: function (error) {
+                console.log(error)
+                console.log("error")
+
+            }
+
+        });
+        $('.series-stats').empty();
+
+        req.done(function (data) {
+            console.log(data.length)
+            if (data.length == 0)
+                $('#course-update').append('<p>No contents</p>')
+
+            else
+                $.each(data.result, function (key, value) {
+
+
+                    $('.series-stats').append('<card class="mt-2 mb-2 flex-fill flex-row shadow-lg row no-gutters user-course card"><div class="col-3 no-gutters cover-wrapper"><img id="course-img" src="../static/coverImages/' + value.coverImg + '" alt=""></div><div class="col-8 p-2 flex-fill flex-column no-gutters "><h6 id="course-title">' + value.title + '</h6><div id="total-episodes">Episodes : ' + value.totalEpisodes + '</div><span id="course-price">Price : ' + value.price + '</span><nav class="btn-row" ><a   class=" navLink" data-href="addEpisode?series_id=' + value.id + '"  data-toggle="modal" data-target="#episode-modal" href=""><img class="mobile-icon" src="../static/like.svg" alt=""><span class="nav_text">' + value.likes + '</span></a><a class="navLink"   data-toggle="modal" data-target="#myModal" href="" ><img class="mobile-icon" src="../static/commentGrey.svg" alt="" ><span class="nav_text">' + value.totalComments + '</span></a><a class="navLink"><img class="mobile-icon" src="../static/eye.svg" alt="" width="24" ><span class="nav_text view-text"></span></a></nav></div></card></div>');
+
+                });
+
+
+            $('#course-update').css('display', 'none');
+            $('#live').css('display', 'none');
+            $('.live-list').css('display', 'none');
+            $('.live-details').css('display', 'none');
+
+            $('#create-live').css('display', 'none');
+            $('#live-update').css('display', 'none');
+            $('.schedule').css('display', 'none');
+            $('#course-upload').css('display', 'none');
+            $('#create-series').css('display', 'none');
+            $('.my-profile').css('display', 'none');
+            $('#create-course').css('display', 'none');
+            $('.video-details').css('display', 'none');
+            $('.upload-list').css('display', 'none');
+            $('.upload-option').css('display', 'none');
+            $('#user-profile').css('display', 'none');
+            $('.series-stats').css('display', 'block');
+
+
+        });
+    });
+    $('#bought-courses').on("click", function (e) {
+        e.preventDefault();
+        closeNav()
+        req = $.ajax({
+            url: $(this).attr('data-href'),
+            type: 'GET',
+            data: {},
+
+            success: function (data) {
+                console.log(data)
+            }, error: function (error) {
+                console.log(error)
+                console.log("error")
+
+            }
+
+        });
+        $('.bought-courses').empty();
+
+        req.done(function (data) {
+            console.log(data.length)
+            if (data.length == 0)
+                $('.bought-courses').append('<p>No contents</p>')
+
+            else
+                $.each(data.result, function (key, value) {
+
+
+                    $('.bought-courses').append('<a href="/videoInfo?videoId='+ value.id +'" class="mt-2 mb-2 flex-fill flex-row text-dark text-decoration-none shadow-lg row no-gutters user-course card"><div class="col-3 no-gutters cover-wrapper"><img id="course-img" src="../static/coverImages/' + value.coverImg + '" alt=""></div><div class="col-8 p-2 flex-fill flex-column no-gutters "><h6 id="course-title">' + value.title + '</h6><span id="course-price">Price : ' + value.price + '</span></div></a>');
+
+                });
+
+
+            $('#course-update').css('display', 'none');
+            $('#live').css('display', 'none');
+            $('.live-list').css('display', 'none');
+            $('.live-details').css('display', 'none');
+
+            $('#create-live').css('display', 'none');
+            $('#live-update').css('display', 'none');
+            $('.schedule').css('display', 'none');
+            $('#course-upload').css('display', 'none');
+            $('#create-series').css('display', 'none');
+            $('.my-profile').css('display', 'none');
+            $('#create-course').css('display', 'none');
+            $('.video-details').css('display', 'none');
+            $('.upload-list').css('display', 'none');
+            $('.upload-option').css('display', 'none');
+            $('#user-profile').css('display', 'none');
+            $('.series-stats').css('display', 'none');
+            $('.bought-courses').css('display', 'block');
+
+
+        });
+    });
+    $('#live-stats').on("click", function (e) {
+        e.preventDefault();
+        closeNav()
+        req = $.ajax({
+            url: $(this).attr('data-href'),
+            type: 'GET',
+            data: {},
+            success: function (data) {
+                console.log(data)
+            }, error: function (error) {
+                console.log(error)
+                console.log("error")
+
+            }
+
+        });
+        $('.live-stats').empty();
+
+        req.done(function (data) {
+            console.log(data.length)
+            if (data.length == 0)
+                $('#course-update').append('<p>No contents</p>')
+
+            else
+                $.each(data.result, function (key, value) {
+
+
+                    $('.live-stats').append('<card class="mt-2 mb-2 flex-fill flex-row shadow-lg row no-gutters user-course card"><div class="col-3 no-gutters cover-wrapper"><img id="course-img" src="../static/coverImages/' + value.coverImg + '" alt=""></div><div class="col-8 p-2 flex-fill flex-column no-gutters "><h6 id="course-title">' + value.title + '</h6><div id="total-episodes"> </div><nav class="btn-row" ><a   class=" navLink" data-href="addEpisode?series_id=' + value.id + '"  data-toggle="modal" data-target="#episode-modal" href=""><img class="mobile-icon" src="../static/like.svg" alt=""><span class="nav_text">' + value.likes + '</span></a><a class="navLink"   data-toggle="modal" data-target="#myModal" href="" ><img class="mobile-icon" src="../static/commentGrey.svg" alt="" ><span class="nav_text">' + value.totalComments + '</span></a><a class="navLink"><img class="mobile-icon" src="../static/eye.svg" width="24" alt="" ><span class="nav_text view-text"></span></a></nav></div></card></div>');
+
+                });
+
+
+            $('#course-update').css('display', 'none');
+            $('#live').css('display', 'none');
+            $('.live-list').css('display', 'none');
+            $('.live-details').css('display', 'none');
+            $('.video-details').css('display', 'none');
+
+            $('#create-live').css('display', 'none');
+            $('#live-update').css('display', 'none');
+            $('.schedule').css('display', 'none');
+            $('#course-upload').css('display', 'none');
+            $('#create-series').css('display', 'none');
+            $('.my-profile').css('display', 'none');
+            $('#create-course').css('display', 'none');
+            $('.video-details').css('display', 'none');
+            $('.upload-list').css('display', 'none');
+            $('.upload-option').css('display', 'none');
+            $('#user-profile').css('display', 'none');
+            $('.series-stats').css('display', 'none');
+            $('.live-stats').css('display', 'block');
+            $('.booked-schedule').css('display', 'none');
+            $('.booked-live').css('display', 'none');
+
+
+        });
+    });
+    $('#booked-schedule').on("click", function (e) {
+        e.preventDefault();
+        closeNav()
+        req = $.ajax({
+            url: $(this).attr('data-href'),
+            type: 'GET',
+            data: {},
+            success: function (data) {
+                console.log(data)
+            }, error: function (error) {
+                console.log(error)
+                console.log("error")
+
+            }
+
+        });
+        $('.booked-schedule').empty();
+
+        req.done(function (data) {
+
+            console.log(data.length)
+            $('.click-unbook').css('display','flex')
+            if (data.length == 0)
+                $('#course-update').append('<p>No contents</p>')
+
+            else
+                $.each(data.result, function (key, value) {
+
+
+                    $('.booked-schedule').append('<div class=" text-center p-2 bg-dark text-light schedule-box"><h4>' + value.date + '</h4><span>' + value.start_time + ' - ' + value.end_time + '</span><div class="row w-100"><div class="w-100 col h-50 text-light text-center d-flex my-green"><a class="p-2 text-light" href="' + value.meetingUrl + '">JOIN</a></div><div class="w-100 col h-50 text-light text-center my-green"><a id="unbook-schedule" class="p-2 text-light d-flex click-unbook" data-href="/unbook/'+value.id+'?type=schedule" href="" >UNBOOK</a></div></div></div></div>');
+
+                });
+        });
 
 
         $('#course-update').css('display', 'none');
         $('#live').css('display', 'none');
         $('.live-list').css('display', 'none');
         $('.live-details').css('display', 'none');
+        $('.video-details').css('display', 'none');
 
         $('#create-live').css('display', 'none');
         $('#live-update').css('display', 'none');
@@ -1409,899 +1595,751 @@ $('#series-stats').on("click", function (e) {
 
 
     });
-});
-$('#bought-courses').on("click", function (e) {
-    e.preventDefault();
-    closeNav()
-    req = $.ajax({
-        url: $(this).attr('data-href'),
-        type: 'GET',
-        data: {},
-
-        success: function (data) {
-            console.log(data)
-        }, error: function (error) {
-            console.log(error)
-            console.log("error")
-
-        }
-
-    });
-    $('.bought-courses').empty();
-
-    req.done(function (data) {
-        console.log(data.length)
-        if (data.length == 0)
-            $('.bought-courses').append('<p>No contents</p>')
-
-        else
-            $.each(data.result, function (key, value) {
-
-
-                $('.bought-courses').append('<a href="/videoInfo?videoId=' + value.id + '" class="mt-2 mb-2 flex-fill flex-row text-dark text-decoration-none shadow-lg row no-gutters user-course card"><div class="col-3 no-gutters cover-wrapper"><img id="course-img" src="../static/coverImages/' + value.coverImg + '" alt=""></div><div class="col-8 p-2 flex-fill flex-column no-gutters "><h6 id="course-title">' + value.title + '</h6><span id="course-price">Price : ' + value.price + '</span></div></a>');
-
-            });
-
-
-        $('#course-update').css('display', 'none');
-        $('#live').css('display', 'none');
-        $('.live-list').css('display', 'none');
-        $('.live-details').css('display', 'none');
-
-        $('#create-live').css('display', 'none');
-        $('#live-update').css('display', 'none');
-        $('.schedule').css('display', 'none');
-        $('#course-upload').css('display', 'none');
-        $('#create-series').css('display', 'none');
-        $('.my-profile').css('display', 'none');
-        $('#create-course').css('display', 'none');
-        $('.video-details').css('display', 'none');
-        $('.upload-list').css('display', 'none');
-        $('.upload-option').css('display', 'none');
-        $('#user-profile').css('display', 'none');
-        $('.series-stats').css('display', 'none');
-        $('.bought-courses').css('display', 'block');
-
-
-    });
-});
-$('#live-stats').on("click", function (e) {
-    e.preventDefault();
-    closeNav()
-    req = $.ajax({
-        url: $(this).attr('data-href'),
-        type: 'GET',
-        data: {},
-        success: function (data) {
-            console.log(data)
-        }, error: function (error) {
-            console.log(error)
-            console.log("error")
-
-        }
-
-    });
-    $('.live-stats').empty();
-
-    req.done(function (data) {
-        console.log(data.length)
-        if (data.length == 0)
-            $('#course-update').append('<p>No contents</p>')
-
-        else
-            $.each(data.result, function (key, value) {
-
-
-                $('.live-stats').append('<card class="mt-2 mb-2 flex-fill flex-row shadow-lg row no-gutters user-course card"><div class="col-3 no-gutters cover-wrapper"><img id="course-img" src="../static/coverImages/' + value.coverImg + '" alt=""></div><div class="col-8 p-2 flex-fill flex-column no-gutters "><h6 id="course-title">' + value.title + '</h6><div id="total-episodes"> </div><nav class="btn-row" ><a   class=" navLink" data-href="addEpisode?series_id=' + value.id + '"  data-toggle="modal" data-target="#episode-modal" href=""><img class="mobile-icon" src="../static/like.svg" alt=""><span class="nav_text">' + value.likes + '</span></a><a class="navLink"   data-toggle="modal" data-target="#myModal" href="" ><img class="mobile-icon" src="../static/commentGrey.svg" alt="" ><span class="nav_text">' + value.totalComments + '</span></a><a class="navLink"><img class="mobile-icon" src="../static/eye.svg" width="24" alt="" ><span class="nav_text view-text"></span></a></nav></div></card></div>');
-
-            });
-
-
-        $('#course-update').css('display', 'none');
-        $('#live').css('display', 'none');
-        $('.live-list').css('display', 'none');
-        $('.live-details').css('display', 'none');
-        $('.video-details').css('display', 'none');
-
-        $('#create-live').css('display', 'none');
-        $('#live-update').css('display', 'none');
-        $('.schedule').css('display', 'none');
-        $('#course-upload').css('display', 'none');
-        $('#create-series').css('display', 'none');
-        $('.my-profile').css('display', 'none');
-        $('#create-course').css('display', 'none');
-        $('.video-details').css('display', 'none');
-        $('.upload-list').css('display', 'none');
-        $('.upload-option').css('display', 'none');
-        $('#user-profile').css('display', 'none');
-        $('.series-stats').css('display', 'none');
-        $('.live-stats').css('display', 'block');
-        $('.booked-schedule').css('display', 'none');
-        $('.booked-live').css('display', 'none');
-
-
-    });
-});
-$('#booked-schedule').on("click", function (e) {
-    e.preventDefault();
-    closeNav()
-    req = $.ajax({
-        url: $(this).attr('data-href'),
-        type: 'GET',
-        data: {},
-        success: function (data) {
-            console.log(data)
-        }, error: function (error) {
-            console.log(error)
-            console.log("error")
-
-        }
-
-    });
-    $('.booked-schedule').empty();
-
-    req.done(function (data) {
-
-        console.log(data.length)
-        $('.click-unbook').css('display', 'flex')
-        if (data.length == 0)
-            $('#course-update').append('<p>No contents</p>')
-
-        else
-            $.each(data.result, function (key, value) {
-
-
-                $('.booked-schedule').append('<div class=" text-center p-2 bg-dark text-light schedule-box"><h4>' + value.date + '</h4><span>' + value.start_time + ' - ' + value.end_time + '</span><div class="row w-100"><div class="w-100 col h-50 text-light text-center d-flex my-green"><a class="p-2 text-light" href="' + value.meetingUrl + '">JOIN</a></div><div class="w-100 col h-50 text-light text-center my-green"><a id="unbook-schedule" class="p-2 text-light d-flex click-unbook" data-href="/unbook/' + value.id + '?type=schedule" href="" >UNBOOK</a></div></div></div></div>');
-
-            });
-    });
-
-
-    $('#course-update').css('display', 'none');
-    $('#live').css('display', 'none');
-    $('.live-list').css('display', 'none');
-    $('.live-details').css('display', 'none');
-    $('.video-details').css('display', 'none');
-
-    $('#create-live').css('display', 'none');
-    $('#live-update').css('display', 'none');
-    $('.schedule').css('display', 'none');
-    $('#course-upload').css('display', 'none');
-    $('#create-series').css('display', 'none');
-    $('.my-profile').css('display', 'none');
-    $('#create-course').css('display', 'none');
-    $('.video-details').css('display', 'none');
-    $('.upload-list').css('display', 'none');
-    $('.upload-option').css('display', 'none');
-    $('#user-profile').css('display', 'none');
-    $('.series-stats').css('display', 'block');
-
-
-});
-$('#booked-live').on("click", function (e) {
-    e.preventDefault();
-    closeNav()
-    req = $.ajax({
-        url: $(this).attr('data-href'),
-        type: 'GET',
-        data: {},
-        success: function (data) {
-            console.log(data)
-        }, error: function (error) {
-            console.log(error)
-            console.log("error")
-
-        }
-
-    });
-    $('.booked-live').empty();
-
-    req.done(function (data) {
-        console.log(data.length)
-        if (data.length == 0)
-            $('#course-update').append('<p>No contents</p>')
-
-        else
-            $.each(data.result, function (key, value) {
-
-
-                $('.booked-live').append('<div class=" text-center p-2 bg-dark text-light schedule-box"><h4 class="flex-wrap">' + value.title + '</h4><h4>' + value.date + '</h4><span>' + value.startTime + ' - ' + value.endTime + '</span><div class="row w-100"><div class=" col h-50 text-light text-center d-flex my-green"><a class="p-2 text-light" href="' + value.meetingUrl + '">JOIN</a></div><div class="w-100 col h-50 text-light text-center my-green"><a id="unbook" class="p-2 text-light d-flex click-unbook" data-href="/unbook/' + value.id + '?type=schedule" href="" >UNBOOK</a></div></div></div></div>');
-            });
-    });
-
-
-    $('#course-update').css('display', 'none');
-    $('#live').css('display', 'none');
-    $('.live-list').css('display', 'none');
-    $('.live-details').css('display', 'none');
-    $('.video-details').css('display', 'none');
-
-    $('#create-live').css('display', 'none');
-    $('#live-update').css('display', 'none');
-    $('.live-details').css('display', 'none');
-    $('.schedule').css('display', 'none');
-    $('#course-upload').css('display', 'none');
-    $('#create-series').css('display', 'none');
-    $('.my-profile').css('display', 'none');
-    $('#create-course').css('display', 'none');
-    $('.video-details').css('display', 'none');
-    $('.upload-list').css('display', 'none');
-    $('.upload-option').css('display', 'none');
-    $('#user-profile').css('display', 'none');
-    $('.series-stats').css('display', 'block');
-
-
-});
-$('#schedule-stats').on("click", function (e) {
-    e.preventDefault();
-    closeNav()
-    req = $.ajax({
-        url: $(this).attr('data-href'),
-        type: 'GET',
-        data: {},
-        success: function (data) {
-            console.log(data)
-        }, error: function (error) {
-            console.log(error)
-            console.log("error")
-
-        }
-
-    });
-    $('.schedule-stats').empty();
-
-    req.done(function (data) {
-        console.log(data.length)
-        if (data.length == 0)
-            $('.schedule-stats').append('<p>No contents</p>')
-
-        else
-            $.each(data.result, function (key, value) {
-
-
-                $('.schedule-stats').append('<div class=" text-center p-2 bg-dark text-light schedule-box"><h4>' + value.date + '</h4><span>' + value.start_time + ' - ' + value.end_time + '</span><nav class="btn-row" ></nav></div>');
-            });
-    });
-
-
-    $('#course-update').css('display', 'none');
-    $('#live').css('display', 'none');
-    $('.live-details').css('display', 'none');
-    $('.video-details').css('display', 'none');
-
-    $('#create-live').css('display', 'none');
-    $('#live-update').css('display', 'none');
-    $('.schedule').css('display', 'none');
-    $('#course-upload').css('display', 'none');
-    $('#create-series').css('display', 'none');
-    $('.my-profile').css('display', 'none');
-    $('#create-course').css('display', 'none');
-    $('.video-details').css('display', 'none');
-    $('.upload-list').css('display', 'none');
-    $('.upload-option').css('display', 'none');
-    $('#user-profile').css('display', 'none');
-    $('.series-stats').css('display', 'none');
-    $('.booked-schedule').css('display', 'none');
-    $('.schedule-stats').css('display', 'block');
-
-
-});
-
-
-$('#live-create').on("click", function (e) {
-    e.preventDefault();
-    closeNav()
-    $(".calendar-source").detach().appendTo(".append-calendar");
-    $('#live').css('display', 'none');
-    $('.live-list').css('display', 'none');
-    $('.video-details').css('display', 'none');
-    $('.live-details').css('display', 'none');
-
-    $('#create-live').css('display', 'block');
-    $('#calendar').css('display', 'block');
-    $('.schedule').css('display', 'none');
-    $('#course-upload').css('display', 'none');
-    $('#create-series').css('display', 'none');
-    $('.my-profile').css('display', 'none');
-    $('#create-course').css('display', 'block');
-    $('.video-details').css('display', 'none');
-
-    $('.upload-list').css('display', 'none');
-    $('#user-profile').css('display', 'none');
-    $('.schedule-container').css('display', 'none');
-    $('#live-update').css('display', 'none');
-    $('.fc-toolbar h2').css('display', 'none')
-
-});
-$('#single-click').on("click", function (e) {
-    e.preventDefault();
-
-    $(".editor-source").detach().appendTo(".form-editor");
-    $('.editor-source').css('display', 'block')
-    $('#live').css('display', 'none');
-
-    $('#create-live').css('display', 'none');
-    $('.schedule').css('display', 'none');
-    $('#course-upload').css('display', 'block');
-    $('#create-series').css('display', 'none');
-    $('.profile').css('display', 'none');
-    $('#create-course').css('display', 'block');
-
-
-    $('#user-profile').css('display', 'none');
-
-    $('.schedule-container').css('display', 'none');
-    $('#live-update').css('display', 'none');
-    $('.upload-option').css('display', 'none');
-
-});
-$('#series-click').on("click", function (e) {
-    e.preventDefault();
-
-    $(".editor-source").detach().appendTo(".series-form-editor");
-    $('.editor-source').css('display', 'block')
-    $('#live').css('display', 'none');
-
-    $('#create-live').css('display', 'none');
-    $('.schedule').css('display', 'none');
-    $('#course-upload').css('display', 'none');
-    $('#create-series').css('display', 'block');
-    $('.profile').css('display', 'none');
-    $('#create-course').css('display', 'block');
-
-
-    $('#user-profile').css('display', 'none');
-
-    $('.schedule-container').css('display', 'none');
-    $('#live-update').css('display', 'none');
-    $('.upload-option').css('display', 'none');
-
-});
-
-$('#update-course').on("click", function (e) {
-    e.preventDefault();
-    closeNav()
-    seriesUrl = '/editSeries?series_id='
-    req = $.ajax({
-        url: $(this).attr('data-href'),
-        type: 'GET',
-        data: {},
-        success: function (data) {
-            console.log(data)
-        }, error: function (error) {
-            console.log(error)
-            console.log("error")
-
-        }
-
-    });
-    $('#course-update').empty();
-
-    req.done(function (data) {
-
-
-        if (data.length == 0)
-            $('#course-update').append('<p>No contents</p>')
-
-        else
-
-            $.each(data.result, function (key, value) {
-                if (value.approved === false)
-                    var status = 'Under review'
-                else if (value.approved === true)
-                    var status = 'Reviewed'
-
-                if (value.isSeries == true)
-
-
-                    $('#course-update').append('<card class="mt-2 mb-2 flex-fill flex-row shadow-lg row no-gutters user-course card"><div class="col-3 no-gutters cover-wrapper"><img id="course-img" src="../static/coverImages/' + value.coverImg + '" alt=""></div><div class="col-8 p-2 flex-fill flex-column no-gutters "><h6 id="course-title">' + value.title + '</h6><div id="total-episodes">Episodes : ' + value.totalEpisodes + '</div><span id="course-price">Price : ' + value.price + '</span><div id="course-status" class="text-info">Status : ' + status + '</div><nav class="btn-row" ><a   class="add-ep-btn navLink" data-href="addEpisode?series_id=' + value.id + '"  data-toggle="modal" data-target="#episode-modal" href=""><img class="mobile-icon" src="../static/add.svg" alt=""><span class="nav_text">Add  Episode</span></a><a class="navLink"   data-toggle="modal" data-target="#myModal" href="" ><img class="mobile-icon" src="../static/delete.svg" alt="" ><span class="nav_text">Delete</span></a><a   data-href="' + seriesUrl + value.id + '" class="edit-series navLink" data-toggle="modal" data-target="#series-modal" href=""><img class="mobile-icon" src="../static/edit.svg" alt="" ><span class="nav_text">Edit</span></a></nav></div></card></div>');
-                else if (value.isSeries == false) {
-
-
-                    $('#course-update').append('<card class="mt-2 mb-2 flex-fill flex-row shadow-lg row no-gutters user-course card"><div class="col-3 no-gutters cover-wrapper"><img id="course-img" src="../static/coverImages/' + value.coverImg + '" alt=""></div><div class="col-8 p-2 flex-fill flex-column no-gutters "><h6 id="course-title">' + value.title + '</h6><div id="total-episodes"></div><span id="course-price">Price : ' + value.price + '</span><div id="course-status" class="text-info">Status : ' + status + '</div><nav class="btn-row" ><a class="navLink"   data-toggle="modal" data-target="#myModal" href="" ><img class="mobile-icon" src="../static/delete.svg" alt="" ><span class="nav_text">Delete</span></a><a   data-href="' + seriesUrl + value.id + '" class="edit-series navLink" data-toggle="modal" data-target="#series-modal" href=""><img class="mobile-icon" src="../static/edit.svg" alt="" ><span class="nav_text">Edit</span></a></nav></div></card></div>');
-
-
-                }
-            });
-
-
-        $('#course-update').css('display', 'block');
-        $('#live').css('display', 'none');
-        $('.live-list').css('display', 'none');
-        $('#create-live').css('display', 'none');
-        $('#live-update').css('display', 'none');
-        $('.schedule').css('display', 'none');
-        $('.my-profile').css('display', 'none');
-        $('#course-upload').css('display', 'none');
-        $('#create-series').css('display', 'none');
-        $('.profile').css('display', 'none');
-        $('#create-course').css('display', 'none');
-        $('.video-details').css('display', 'none');
-        $('.upload-list').css('display', 'none');
-        $('.upload-option').css('display', 'none');
-        $('#user-profile').css('display', 'none');
-        $('.live-details').css('display', 'none');
-
-
-    });
-
-
-});
-$('#liked-course').on("click", function (e) {
-    e.preventDefault();
-    closeNav()
-    userUrl = '/userDetails?user_id='
-    req = $.ajax({
-        url: $(this).attr('data-href'),
-        type: 'GET',
-        data: {},
-        success: function (data) {
-            console.log(data)
-        }, error: function (error) {
-            console.log(error)
-            console.log("error")
-
-        }
-
-    });
-    $('.liked-course-list').empty();
-
-    req.done(function (data) {
-        if (data.length == 0)
-            $('#course-update').append('<p>No contents</p>')
-
-        else
-
-            $.each(data.likedSeries, function (key, value) {
-                $('.liked-course-list').append('<a href="/videoInfo?videoId=' + value.id + '" class="mt-2 mb-2 flex-fill flex-row text-dark text-decoration-none shadow-lg row no-gutters user-course card"><div class="col-3 no-gutters cover-wrapper"><img id="course-img" src="../static/coverImages/' + value.coverImg + '" alt=""></div><div class="col-8 p-2 flex-fill flex-column no-gutters "><h6 id="course-title">' + value.title + '</h6><div id="total-episodes">Episodes : ' + value.totalEpisodes + '</div><span id="course-price">Price : ' + value.price + '</span></div></a>');
-
-            });
-
-
-        $('#course-update').css('display', 'none');
-        $('#live').css('display', 'none');
-        $('.live-list').css('display', 'none');
-        $('#create-live').css('display', 'none');
-        $('#live-update').css('display', 'none');
-        $('.schedule').css('display', 'none');
-        $('.my-profile').css('display', 'none');
-        $('#course-upload').css('display', 'none');
-        $('#create-series').css('display', 'none');
-        $('.profile').css('display', 'none');
-        $('#create-course').css('display', 'none');
-        $('.video-details').css('display', 'none');
-        $('.upload-list').css('display', 'none');
-        $('.upload-option').css('display', 'none');
-        $('#user-profile').css('display', 'none');
-        $('.live-details').css('display', 'none');
-
-
-    });
-
-
-});
-$('#book-schedule-btn').on("click", function (e) {
-    e.preventDefault();
-    $('#book-schedule').modal('toggle')
-    scheduleUrl = '/userDetails?username=';
-    bookUrl = '/book/';
-    unbookUrl = '/unbook/';
-    param = '?type=';
-    type = 'schedule';
-    req = $.ajax({
-        url: $(this).attr('data-href'),
-        type: 'GET',
-        data: {},
-        success: function (data) {
-            console.log(data)
-        }, error: function (error) {
-            console.log(error)
-            console.log("error")
-
-        }
-
-    });
-    $('.modal-body.append-user-schedule').empty();
-
-    req.done(function (data) {
-
-        var details = data.schedule
-
-        $.each(details, function (key, value) {
-            var cntId = value.id;
-            $('.modal-body.append-user-schedule').append('<div class=" text-center p-2 bg-dark text-light schedule-box"><h4>' + value.date + '</h4><span>' + value.startTime + ' - ' + value.endTime + '</span><span class="mt-1"><a id="book-schedule-' + cntId + '" class="click-book" cnt="' + value.id + '" data-href="' + bookUrl + value.id + param + type + '"><button   class="fixed-btn" >Book</button></a><a  id="unbook-schedule-' + cntId + '" cnt="' + value.id + '" class="click-unbook" data-href="' + unbookUrl + value.id + param + type + '" ><button   class="fixed-btn" >Unbook</button></a></span></div>');
-
-            if (value.hasBooked === true) {
-
-                $('#book-schedule-' + cntId + '.click-book').css("display", "none");
-                $('#unbook-schedule-' + cntId + '.click-unbook').css("display", "flex");
-
-
-            } else if (value.hasBooked === false) {
-
-                $('#book-schedule-' + cntId + '.click-book').css("display", "flex");
-                $('#unbook-schedule-' + cntId + '.click-unbook').css("display", "none");
+    $('#booked-live').on("click", function (e) {
+        e.preventDefault();
+        closeNav()
+        req = $.ajax({
+            url: $(this).attr('data-href'),
+            type: 'GET',
+            data: {},
+            success: function (data) {
+                console.log(data)
+            }, error: function (error) {
+                console.log(error)
+                console.log("error")
 
             }
 
+        });
+        $('.booked-live').empty();
 
+        req.done(function (data) {
+            console.log(data.length)
+            if (data.length == 0)
+                $('#course-update').append('<p>No contents</p>')
+
+            else
+                $.each(data.result, function (key, value) {
+
+
+                    $('.booked-live').append('<div class=" text-center p-2 bg-dark text-light schedule-box"><h4 class="flex-wrap">'+ value.title +'</h4><h4>' + value.date + '</h4><span>' + value.startTime + ' - ' + value.endTime + '</span><div class="row w-100"><div class=" col h-50 text-light text-center d-flex my-green"><a class="p-2 text-light" href="' + value.meetingUrl + '">JOIN</a></div><div class="w-100 col h-50 text-light text-center my-green"><a id="unbook" class="p-2 text-light d-flex click-unbook" data-href="/unbook/'+value.id+'?type=schedule" href="" >UNBOOK</a></div></div></div></div>');
+                });
         });
 
 
-        $('#course-update').css('display', 'block');
+        $('#course-update').css('display', 'none');
         $('#live').css('display', 'none');
+        $('.live-list').css('display', 'none');
+        $('.live-details').css('display', 'none');
+        $('.video-details').css('display', 'none');
+
+        $('#create-live').css('display', 'none');
+        $('#live-update').css('display', 'none');
+        $('.live-details').css('display', 'none');
+        $('.schedule').css('display', 'none');
+        $('#course-upload').css('display', 'none');
+        $('#create-series').css('display', 'none');
+        $('.my-profile').css('display', 'none');
+        $('#create-course').css('display', 'none');
+        $('.video-details').css('display', 'none');
+        $('.upload-list').css('display', 'none');
+        $('.upload-option').css('display', 'none');
+        $('#user-profile').css('display', 'none');
+        $('.series-stats').css('display', 'block');
+
+
+    });
+    $('#schedule-stats').on("click", function (e) {
+        e.preventDefault();
+        closeNav()
+        req = $.ajax({
+            url: $(this).attr('data-href'),
+            type: 'GET',
+            data: {},
+            success: function (data) {
+                console.log(data)
+            }, error: function (error) {
+                console.log(error)
+                console.log("error")
+
+            }
+
+        });
+        $('.schedule-stats').empty();
+
+        req.done(function (data) {
+            console.log(data.length)
+            if (data.length == 0)
+                $('.schedule-stats').append('<p>No contents</p>')
+
+            else
+                $.each(data.result, function (key, value) {
+
+
+                    $('.schedule-stats').append('<div class=" text-center p-2 bg-dark text-light schedule-box"><h4>' + value.date + '</h4><span>' + value.start_time + ' - ' + value.end_time + '</span><nav class="btn-row" ></nav></div>');
+                });
+        });
+
+
+        $('#course-update').css('display', 'none');
+        $('#live').css('display', 'none');
+        $('.live-details').css('display', 'none');
+        $('.video-details').css('display', 'none');
 
         $('#create-live').css('display', 'none');
         $('#live-update').css('display', 'none');
         $('.schedule').css('display', 'none');
         $('#course-upload').css('display', 'none');
         $('#create-series').css('display', 'none');
-        $('.profile').css('display', 'block');
-        $('#create-course').css('display', 'block');
-
-
-        $('#user-profile').css('display', 'none');
-
-
-    });
-
-
-});
-$('#main').on("click", '#bookers-list', function (e) {
-    e.preventDefault();
-    $('#bookers-modal').modal('toggle')
-    scheduleUrl = '/userDetails?username=';
-    bookUrl = '/book/';
-    unbookUrl = '/unbook/';
-    param = '?type=';
-    type = 'schedule';
-    req = $.ajax({
-        url: $(this).attr('data-href'),
-        type: 'GET',
-        data: {},
-        success: function (data) {
-            console.log(data)
-        }, error: function (error) {
-            console.log(error)
-            console.log("error")
-
-        }
-
-    });
-    $('.modal-body.append-bookers').empty();
-
-    req.done(function (data) {
-
-        var details = data.result
-
-        $.each(details.bookers, function (key, value) {
-
-            $('.modal-body.append-bookers').append('<div class=" p-2 d-flex align-items-center "><div data-href="" class=" user-profile-pic-wrapper mr-2"><span><img class="profilepic" src="' + userImgSrc + value.profPic + '" alt=""></span></div><h6>' + value.username + '</h6></div>');
-
-
-        });
-
-
-    });
-
-
-});
-$('#main').on("click", '#live-bookers-list', function (e) {
-    e.preventDefault();
-    $('#bookers-live-modal').modal('toggle')
-    scheduleUrl = '/userDetails?username=';
-    bookUrl = '/book/';
-    unbookUrl = '/unbook/';
-    param = '?type=';
-    type = 'schedule';
-    req = $.ajax({
-        url: $(this).attr('data-href'),
-        type: 'GET',
-        data: {},
-        success: function (data) {
-            console.log(data)
-        }, error: function (error) {
-            console.log(error)
-            console.log("error")
-
-        }
-
-    });
-    $('.modal-body.append-live-bookers').empty();
-
-    req.done(function (data) {
-
-        var details = data.result
-
-        $.each(details.bookers, function (key, value) {
-
-            $('.modal-body.append-live-bookers').append('<div class="  p-2 d-flex align-items-center "><div data-href="" class=" user-profile-pic-wrapper mr-2"><span><img class="profilepic" src="' + userImgSrc + value.profPic + '" alt=""></span></div><h6>' + value.username + '</h6></div>');
-
-
-        });
-
-
-    });
-
-
-});
-
-$('#edit-schedule').on("click", function (e) {
-    e.preventDefault();
-    closeNav()
-    scheduleUrl = '/editSchedule?schedule_id='
-    req = $.ajax({
-        url: $(this).attr('data-href'),
-        type: 'GET',
-        data: {},
-        success: function (data) {
-            console.log(data)
-        },
-        error: function (error) {
-            console.log(error)
-            console.log("error")
-
-        }
-
-    });
-    $('.append-schedule').empty();
-    req.done(function (data) {
-
-
-        $.each(data.result, function (key, value) {
-            $('.append-schedule').append('<div class=" text-center p-2 bg-dark text-light schedule-box"><h4>' + value.date + '</h4><span>' + value.start_time + ' - ' + value.end_time + '</span><nav class="btn-row" ><a  data-target="#bookers-modal" data-toggle="modal" data-href="' + scheduleUrl + value.id + '" class=" text-light navLink" id="bookers-list" href=""><img src="../static/profileWhite.svg" alt=""><span class="nav_text">Participants</span></a><a  data-href="' + scheduleUrl + value.id + '" class="edit-schedule text-light navLink" data-toggle="" data-target="" href=""><img src="../static/edit_w.svg" alt=""><span class="nav_text">Edit</span></a><a  data-href="' + scheduleUrl + value.id + '" class="delete-schedule navLink text-light" data-toggle="modal" data-target="#delete-schedule-modal" href="" ><img src="../static/delete_w.svg"  alt=""><span class="nav_text">Delete</span></a></nav><div class="w-100 h-50 text-light text-center my-green"><a class="p-2 text-light" href="' + value.meetingUrl + '">START</a></div></div>');
-        });
-        $('.update-schedule').css('display', 'block');
-
-
-        $('#calendar').css('display', 'none');
-        $('.update-schedule-btn').css('display', 'none');
-        $('#live').css('display', 'none');
-        $('.live-list').css('display', 'none');
-        $('.live-details').css('display', 'none');
-        $('.video-details').css('display', 'none');
-
-        $('.profile').css('display', 'none');
+        $('.my-profile').css('display', 'none');
         $('#create-course').css('display', 'none');
-        $('#course-update').css('display', 'none');
         $('.video-details').css('display', 'none');
         $('.upload-list').css('display', 'none');
+        $('.upload-option').css('display', 'none');
         $('#user-profile').css('display', 'none');
-        $('.schedule-container').css('display', 'block');
+        $('.series-stats').css('display', 'none');
+        $('.booked-schedule').css('display', 'none');
+        $('.schedule-stats').css('display', 'block');
+
+
+    });
+
+
+    $('#live-create').on("click", function (e) {
+        e.preventDefault();
+        closeNav()
+        $(".calendar-source").detach().appendTo(".append-calendar");
+        $('#live').css('display', 'none');
+        $('.live-list').css('display', 'none');
+        $('.video-details').css('display', 'none');
+        $('.live-details').css('display', 'none');
+
+        $('#create-live').css('display', 'block');
+        $('#calendar').css('display', 'block');
+        $('.schedule').css('display', 'none');
+        $('#course-upload').css('display', 'none');
+        $('#create-series').css('display', 'none');
+        $('.my-profile').css('display', 'none');
+        $('#create-course').css('display', 'block');
+        $('.video-details').css('display', 'none');
+        
+        $('.upload-list').css('display', 'none');
+        $('#user-profile').css('display', 'none');
+        $('.schedule-container').css('display', 'none');
+        $('#live-update').css('display', 'none');
+        $('.fc-toolbar h2').css('display', 'none')
+
+    });
+    $('#single-click').on("click", function (e) {
+        e.preventDefault();
+
+        $(".editor-source").detach().appendTo(".form-editor");
+        $('.editor-source').css('display', 'block')
+        $('#live').css('display', 'none');
+        
+        $('#create-live').css('display', 'none');
+        $('.schedule').css('display', 'none');
+        $('#course-upload').css('display', 'block');
+        $('#create-series').css('display', 'none');
+        $('.profile').css('display', 'none');
+        $('#create-course').css('display', 'block');
+        
+        
+        $('#user-profile').css('display', 'none');
+
+        $('.schedule-container').css('display', 'none');
         $('#live-update').css('display', 'none');
         $('.upload-option').css('display', 'none');
-        $('#update-schedule').css('display', 'none');
-        $('.schedule').css('display', 'none');
-        $('.my-profile').css('display', 'none');
 
     });
+    $('#series-click').on("click", function (e) {
+        e.preventDefault();
 
-
-});
-
-$('#course-update').on("click", ".edit-series", function (e) {
-    e.preventDefault();
-    req = $.ajax({
-        url: $(this).attr('data-href'),
-        type: 'GET',
-        data: {},
-        success: function (data) {
-            console.log(data)
-        }, error: function (error) {
-            console.log(error)
-            console.log("error")
-
-        }
-
-    });
-    req.done(function (data) {
-        $(".editor-source").detach().appendTo(".update-series-editor");
+        $(".editor-source").detach().appendTo(".series-form-editor");
         $('.editor-source').css('display', 'block')
-        $('#update_series_title').val(data.title);
-        $('.ql-editor').html(data.description);
-        $('#update_series_price').val(data.price);
-        $('#update_series_category').val(data.category);
-        $('#series-update').attr('course-id', data.id);
-        $('#create-series').css('display', 'none');
+        $('#live').css('display', 'none');
+        
+        $('#create-live').css('display', 'none');
+        $('.schedule').css('display', 'none');
+        $('#course-upload').css('display', 'none');
+        $('#create-series').css('display', 'block');
+        $('.profile').css('display', 'none');
+        $('#create-course').css('display', 'block');
+        
+        
+        $('#user-profile').css('display', 'none');
+
+        $('.schedule-container').css('display', 'none');
+        $('#live-update').css('display', 'none');
+        $('.upload-option').css('display', 'none');
+
+    });
+
+    $('#update-course').on("click", function (e) {
+        e.preventDefault();
+        closeNav()
+        seriesUrl = '/editSeries?series_id='
+        req = $.ajax({
+            url: $(this).attr('data-href'),
+            type: 'GET',
+            data: {},
+            success: function (data) {
+                console.log(data)
+            }, error: function (error) {
+                console.log(error)
+                console.log("error")
+
+            }
+
+        });
+        $('#course-update').empty();
+
+        req.done(function (data) {
+
+
+            if (data.length == 0)
+                $('#course-update').append('<p>No contents</p>')
+
+            else
+
+                $.each(data.result, function (key, value) {
+                    if (value.approved === false)
+                        var status = 'Under review'
+                    else if (value.approved === true)
+                        var status = 'Reviewed'
+
+                    if (value.isSeries == true)
+
+
+                        $('#course-update').append('<card class="mt-2 mb-2 flex-fill flex-row shadow-lg row no-gutters user-course card"><div class="col-3 no-gutters cover-wrapper"><img id="course-img" src="../static/coverImages/' + value.coverImg + '" alt=""></div><div class="col-8 p-2 flex-fill flex-column no-gutters "><h6 id="course-title">' + value.title + '</h6><div id="total-episodes">Episodes : ' + value.totalEpisodes + '</div><span id="course-price">Price : ' + value.price + '</span><div id="course-status" class="text-info">Status : ' + status + '</div><nav class="btn-row" ><a   class="add-ep-btn navLink" data-href="addEpisode?series_id=' + value.id + '"  data-toggle="modal" data-target="#episode-modal" href=""><img class="mobile-icon" src="../static/add.svg" alt=""><span class="nav_text">Add  Episode</span></a><a class="navLink"   data-toggle="modal" data-target="#myModal" href="" ><img class="mobile-icon" src="../static/delete.svg" alt="" ><span class="nav_text">Delete</span></a><a   data-href="' + seriesUrl + value.id + '" class="edit-series navLink" data-toggle="modal" data-target="#series-modal" href=""><img class="mobile-icon" src="../static/edit.svg" alt="" ><span class="nav_text">Edit</span></a></nav></div></card></div>');
+                    else if (value.isSeries == false) {
+
+
+                        $('#course-update').append('<card class="mt-2 mb-2 flex-fill flex-row shadow-lg row no-gutters user-course card"><div class="col-3 no-gutters cover-wrapper"><img id="course-img" src="../static/coverImages/' + value.coverImg + '" alt=""></div><div class="col-8 p-2 flex-fill flex-column no-gutters "><h6 id="course-title">' + value.title + '</h6><div id="total-episodes"></div><span id="course-price">Price : ' + value.price + '</span><div id="course-status" class="text-info">Status : ' + status + '</div><nav class="btn-row" ><a class="navLink"   data-toggle="modal" data-target="#myModal" href="" ><img class="mobile-icon" src="../static/delete.svg" alt="" ><span class="nav_text">Delete</span></a><a   data-href="' + seriesUrl + value.id + '" class="edit-series navLink" data-toggle="modal" data-target="#series-modal" href=""><img class="mobile-icon" src="../static/edit.svg" alt="" ><span class="nav_text">Edit</span></a></nav></div></card></div>');
+
+
+                    }
+                });
+
+
+            $('#course-update').css('display', 'block');
+            $('#live').css('display', 'none');
+            $('.live-list').css('display', 'none');
+            $('#create-live').css('display', 'none');
+            $('#live-update').css('display', 'none');
+            $('.schedule').css('display', 'none');
+            $('.my-profile').css('display', 'none');
+            $('#course-upload').css('display', 'none');
+            $('#create-series').css('display', 'none');
+            $('.profile').css('display', 'none');
+            $('#create-course').css('display', 'none');
+            $('.video-details').css('display', 'none');
+            $('.upload-list').css('display', 'none');
+            $('.upload-option').css('display', 'none');
+            $('#user-profile').css('display', 'none');
+            $('.live-details').css('display', 'none');
+            
+
+
+        });
+
+
+    });
+    $('#liked-course').on("click", function (e) {
+        e.preventDefault();
+        closeNav()
+        userUrl = '/userDetails?user_id='
+        req = $.ajax({
+            url: $(this).attr('data-href'),
+            type: 'GET',
+            data: {},
+            success: function (data) {
+                console.log(data)
+            }, error: function (error) {
+                console.log(error)
+                console.log("error")
+
+            }
+
+        });
+        $('.liked-course-list').empty();
+
+        req.done(function (data) {
+            if (data.length == 0)
+                $('#course-update').append('<p>No contents</p>')
+
+            else
+
+                $.each(data.likedSeries, function (key, value) {
+                    $('.liked-course-list').append('<a href="/videoInfo?videoId='+ value.id +'" class="mt-2 mb-2 flex-fill flex-row text-dark text-decoration-none shadow-lg row no-gutters user-course card"><div class="col-3 no-gutters cover-wrapper"><img id="course-img" src="../static/coverImages/' + value.coverImg + '" alt=""></div><div class="col-8 p-2 flex-fill flex-column no-gutters "><h6 id="course-title">' + value.title + '</h6><div id="total-episodes">Episodes : ' + value.totalEpisodes + '</div><span id="course-price">Price : ' + value.price + '</span></div></a>');
+
+                });
+
+
+            $('#course-update').css('display', 'none');
+            $('#live').css('display', 'none');
+            $('.live-list').css('display', 'none');
+            $('#create-live').css('display', 'none');
+            $('#live-update').css('display', 'none');
+            $('.schedule').css('display', 'none');
+            $('.my-profile').css('display', 'none');
+            $('#course-upload').css('display', 'none');
+            $('#create-series').css('display', 'none');
+            $('.profile').css('display', 'none');
+            $('#create-course').css('display', 'none');
+            $('.video-details').css('display', 'none');
+            $('.upload-list').css('display', 'none');
+            $('.upload-option').css('display', 'none');
+            $('#user-profile').css('display', 'none');
+            $('.live-details').css('display', 'none');
+
+
+
+        });
+
+
+    });
+    $('#book-schedule-btn').on("click", function (e) {
+        e.preventDefault();
+        $('#book-schedule').modal('toggle')
+        scheduleUrl = '/userDetails?username=';
+        bookUrl = '/book/';
+        unbookUrl = '/unbook/';
+        param = '?type=';
+        type = 'schedule';
+        req = $.ajax({
+            url: $(this).attr('data-href'),
+            type: 'GET',
+            data: {},
+            success: function (data) {
+                console.log(data)
+            }, error: function (error) {
+                console.log(error)
+                console.log("error")
+
+            }
+
+        });
+        $('.modal-body.append-user-schedule').empty();
+
+        req.done(function (data) {
+
+            var details = data.schedule
+
+            $.each(details, function (key, value) {
+                var cntId = value.id;
+                $('.modal-body.append-user-schedule').append('<div class=" text-center p-2 bg-dark text-light schedule-box"><h4>' + value.date + '</h4><span>' + value.startTime + ' - ' + value.endTime + '</span><span class="mt-1"><a id="book-schedule-' + cntId + '" class="click-book" cnt="'+ value.id +'" data-href="' + bookUrl + value.id + param  + type + '"><button   class="fixed-btn" >Book</button></a><a  id="unbook-schedule-' + cntId + '" cnt="'+ value.id +'" class="click-unbook" data-href="' + unbookUrl + value.id + param  + type + '" ><button   class="fixed-btn" >Unbook</button></a></span></div>');
+
+                if (value.hasBooked === true){
+
+                    $('#book-schedule-' + cntId +'.click-book').css("display", "none");
+                    $('#unbook-schedule-' + cntId +'.click-unbook').css("display", "flex");
+
+
+                } else if (value.hasBooked === false){
+
+                    $('#book-schedule-' + cntId +'.click-book').css("display", "flex");
+                    $('#unbook-schedule-' + cntId +'.click-unbook').css("display", "none");
+
+                }
+
+
+
+            });
+
+
+            $('#course-update').css('display', 'block');
+            $('#live').css('display', 'none');
+
+            $('#create-live').css('display', 'none');
+            $('#live-update').css('display', 'none');
+            $('.schedule').css('display', 'none');
+            $('#course-upload').css('display', 'none');
+            $('#create-series').css('display', 'none');
+            $('.profile').css('display', 'block');
+            $('#create-course').css('display', 'block');
+            
+            
+            $('#user-profile').css('display', 'none');
+
+
+        });
+
+
+    });
+    $('#main').on("click",'#bookers-list', function (e) {
+        e.preventDefault();
+        $('#bookers-modal').modal('toggle')
+        scheduleUrl = '/userDetails?username=';
+        bookUrl = '/book/';
+        unbookUrl = '/unbook/';
+        param = '?type=';
+        type = 'schedule';
+        req = $.ajax({
+            url: $(this).attr('data-href'),
+            type: 'GET',
+            data: {},
+            success: function (data) {
+                console.log(data)
+            }, error: function (error) {
+                console.log(error)
+                console.log("error")
+
+            }
+
+        });
+        $('.modal-body.append-bookers').empty();
+
+        req.done(function (data) {
+
+            var details = data.result
+
+            $.each(details.bookers, function (key, value) {
+
+                $('.modal-body.append-bookers').append('<div class=" p-2 d-flex align-items-center "><div data-href="" class=" user-profile-pic-wrapper mr-2"><span><img class="profilepic" src="'+ userImgSrc+ value.profPic +'" alt=""></span></div><h6>' + value.username + '</h6></div>');
+
+
+
+
+            });
+
+
+
+
+
+        });
+
+
+    });
+    $('#main').on("click",'#live-bookers-list', function (e) {
+        e.preventDefault();
+        $('#bookers-live-modal').modal('toggle')
+        scheduleUrl = '/userDetails?username=';
+        bookUrl = '/book/';
+        unbookUrl = '/unbook/';
+        param = '?type=';
+        type = 'schedule';
+        req = $.ajax({
+            url: $(this).attr('data-href'),
+            type: 'GET',
+            data: {},
+            success: function (data) {
+                console.log(data)
+            }, error: function (error) {
+                console.log(error)
+                console.log("error")
+
+            }
+
+        });
+        $('.modal-body.append-live-bookers').empty();
+
+        req.done(function (data) {
+
+            var details = data.result
+
+            $.each(details.bookers, function (key, value) {
+
+                $('.modal-body.append-live-bookers').append('<div class="  p-2 d-flex align-items-center "><div data-href="" class=" user-profile-pic-wrapper mr-2"><span><img class="profilepic" src="'+ userImgSrc+ value.profPic +'" alt=""></span></div><h6>' + value.username + '</h6></div>');
+
+
+
+
+            });
+
+
+
+
+
+        });
 
 
     });
 
-});
+    $('#edit-schedule').on("click", function (e) {
+        e.preventDefault();
+        closeNav()
+        scheduleUrl = '/editSchedule?schedule_id='
+        req = $.ajax({
+            url: $(this).attr('data-href'),
+            type: 'GET',
+            data: {},
+            success: function (data) {
+                console.log(data)
+            },
+            error: function (error) {
+                console.log(error)
+                console.log("error")
 
-$('#update-live').on("click", function (e) {
-    e.preventDefault();
-    closeNav()
-    liveUrl = '/editLive?live_id='
-    req = $.ajax({
-        url: $(this).attr('data-href'),
-        type: 'GET',
-        data: {},
-        success: function (data) {
-            console.log(data)
-        }, error: function (error) {
-            console.log(error)
-            console.log("error")
+            }
 
-        }
+        });
+        $('.append-schedule').empty();
+        req.done(function (data) {
+
+
+            $.each(data.result, function (key, value) {
+                $('.append-schedule').append('<div class=" text-center p-2 bg-dark text-light schedule-box"><h4>' + value.date + '</h4><span>' + value.start_time + ' - ' + value.end_time + '</span><nav class="btn-row" ><a  data-target="#bookers-modal" data-toggle="modal" data-href="' + scheduleUrl + value.id + '" class=" text-light navLink" id="bookers-list" href=""><img src="../static/profileWhite.svg" alt=""><span class="nav_text">Participants</span></a><a  data-href="' + scheduleUrl + value.id + '" class="edit-schedule text-light navLink" data-toggle="" data-target="" href=""><img src="../static/edit_w.svg" alt=""><span class="nav_text">Edit</span></a><a  data-href="' + scheduleUrl + value.id + '" class="delete-schedule navLink text-light" data-toggle="modal" data-target="#delete-schedule-modal" href="" ><img src="../static/delete_w.svg"  alt=""><span class="nav_text">Delete</span></a></nav><div class="w-100 h-50 text-light text-center my-green"><a class="p-2 text-light" href="' + value.meetingUrl + '">START</a></div></div>');
+            });
+            $('.update-schedule').css('display', 'block');
+
+
+            $('#calendar').css('display', 'none');
+            $('.update-schedule-btn').css('display', 'none');
+            $('#live').css('display', 'none');
+            $('.live-list').css('display', 'none');
+            $('.live-details').css('display', 'none');
+            $('.video-details').css('display', 'none');
+
+            $('.profile').css('display', 'none');
+            $('#create-course').css('display', 'none');
+            $('#course-update').css('display', 'none');
+            $('.video-details').css('display', 'none');
+            $('.upload-list').css('display', 'none');
+            $('#user-profile').css('display', 'none');
+            $('.schedule-container').css('display', 'block');
+            $('#live-update').css('display', 'none');
+            $('.upload-option').css('display', 'none');
+            $('#update-schedule').css('display', 'none');
+            $('.schedule').css('display', 'none');
+            $('.my-profile').css('display', 'none');
+
+        });
+
 
     });
-    req.done(function (data) {
 
-        $('#live-update').empty();
-        $.each(data.result, function (key, value) {
+    $('#course-update').on("click", ".edit-series", function (e) {
+        e.preventDefault();
+        req = $.ajax({
+            url: $(this).attr('data-href'),
+            type: 'GET',
+            data: {},
+            success: function (data) {
+                console.log(data)
+            }, error: function (error) {
+                console.log(error)
+                console.log("error")
+
+            }
+
+        });
+        req.done(function (data) {
+            $(".editor-source").detach().appendTo(".update-series-editor");
+            $('.editor-source').css('display', 'block')
+            $('#update_series_title').val(data.title);
+            $('.ql-editor').html(data.description);
+            $('#update_series_price').val(data.price);
+            $('#update_series_category').val(data.category);
+            $('#series-update').attr('course-id', data.id);
+            $('#create-series').css('display', 'none');
+
+
+        });
+
+    });
+
+    $('#update-live').on("click", function (e) {
+        e.preventDefault();
+        closeNav()
+        liveUrl = '/editLive?live_id='
+        req = $.ajax({
+            url: $(this).attr('data-href'),
+            type: 'GET',
+            data: {},
+            success: function (data) {
+                console.log(data)
+            }, error: function (error) {
+                console.log(error)
+                console.log("error")
+
+            }
+
+        });
+        req.done(function (data) {
+
+            $('#live-update').empty();
+            $.each(data.result, function (key, value) {
 
 //        $('.start-btn').css('display',checkTime(value.startTime));
 
-            $('#live-update').append('<card class="mt-2 mb-2 flex-fill flex-row shadow-lg row no-gutters user-course card live-url" id="' + value.id + '"><div class="col-3 no-gutters cover-wrapper"><img id="course-img" src="' + coverImgSrc + value.coverImg + '" alt=""></div><div class="col-6 p-2 flex-fill flex-column no-gutters "><h6 id="course-title">' + value.title + '</h6><div id="live-date">Date : ' + value.date + '</div><div id="live-time">Time : ' + value.startTime + '-' + value.endTime + '</div><nav class="btn-row"><a  data-target="#bookers-live-modal" data-toggle="modal" data-href="' + liveUrl + value.id + '" class="  navLink" id="live-bookers-list" href=""><img src="../static/profile.svg" alt=""><span class="nav_text">Participants</span></a></nav></div><div class="col-3"> <div class="start-btn  h-25 text-center "><a class="text-light" href="' + value.room + '"><div class="text-center">START</div></div></a><div class="edit-live h-25 bg-info " ><a  data-href="' + liveUrl + value.id + '" class="text-light edit-live" data-toggle="" data-target="" href=""><div class="text-center">EDIT</div></a></div><div class=" h-25 bg-danger " ><a  data-href="' + liveUrl + value.id + '" class="text-light delete-live"  data-toggle="modal" data-target="#delete-modal" href=""><div class="text-center">DELETE</div></a></div></div></card>');
+                $('#live-update').append('<card class="mt-2 mb-2 flex-fill flex-row shadow-lg row no-gutters user-course card live-url" id="' + value.id + '"><div class="col-3 no-gutters cover-wrapper"><img id="course-img" src="' + coverImgSrc + value.coverImg + '" alt=""></div><div class="col-6 p-2 flex-fill flex-column no-gutters "><h6 id="course-title">' + value.title + '</h6><div id="live-date">Date : ' + value.date + '</div><div id="live-time">Time : ' + value.startTime + '-' + value.endTime + '</div><nav class="btn-row"><a  data-target="#bookers-live-modal" data-toggle="modal" data-href="' + liveUrl + value.id + '" class="  navLink" id="live-bookers-list" href=""><img src="../static/profile.svg" alt=""><span class="nav_text">Participants</span></a></nav></div><div class="col-3"> <div class="start-btn  h-25 text-center "><a class="text-light" href="' + value.room + '"><div class="text-center">START</div></div></a><div class="edit-live h-25 bg-info " ><a  data-href="' + liveUrl + value.id + '" class="text-light edit-live" data-toggle="" data-target="" href=""><div class="text-center">EDIT</div></a></div><div class=" h-25 bg-danger " ><a  data-href="' + liveUrl + value.id + '" class="text-light delete-live"  data-toggle="modal" data-target="#delete-modal" href=""><div class="text-center">DELETE</div></a></div></div></card>');
+
+            });
+            $('#live-update').css('display', 'block');
+            $('#course-update').css('display', 'none');
+            $('.live-details').css('display', 'none');
+            $('.video-details').css('display', 'none');
+            $('#live').css('display', 'none');
+            $('.live-list').css('display', 'none');
+
+            $('#create-live').css('display', 'none');
+            $('.schedule').css('display', 'none');
+            $('#course-upload').css('display', 'none');
+            $('#create-series').css('display', 'none');
+            $('#course-update').css('display', 'none');
+            $('.my-profile').css('display', 'none');
+            $('#create-course').css('display', 'block');
+            $('.video-details').css('display', 'none');
+            $('.upload-list').css('display', 'none');
+            $('.upload-option').css('display', 'none');
+            $('#user-profile').css('display', 'none');
+            $('#edit-live').css('display', 'none');
+            $('.schedule-container').css('display', 'none');
+            $('#create-series').css('display', 'none');
+            $('.live-details').css('display', 'none');
+            
+
 
         });
+
+
+    });
+    $('.yes-btn').on("click", function (e) {
+        e.preventDefault();
+        closeNav()
+        liveUrl = '/editLive?live_id='
+        req = $.ajax({
+            url: $('.edit-series').attr('data-href'),
+            type: 'DELETE',
+            data: {},
+            beforeSend: function(){
+                popover('Deleting...','success')
+            },
+            success: function (data) {
+                popover(data, 'success')
+            }, error: function (error) {
+                console.log(error)
+                popover(error, 'error')
+
+            }
+
+        });
+        req.done(function (data) {
+        });
+
         $('#live-update').css('display', 'block');
-        $('#course-update').css('display', 'none');
-        $('.live-details').css('display', 'none');
-        $('.video-details').css('display', 'none');
-        $('#live').css('display', 'none');
-        $('.live-list').css('display', 'none');
+        $('#course-update').css('display', 'block');
+
+        
+        
+        $('#create-live').css('display', 'none');
+        $('.schedule').css('display', 'none');
+        $('#course-upload').css('display', 'none');
+        $('#create-series').css('display', 'none');
+        
+        $('#create-course').css('display', 'block');
+        
+        
+        $('#user-profile').css('display', 'none');
+        $('.schedule-container').css('display', 'none');
+
+
+    });
+    $('.yes-live-btn').on("click", function (e) {
+        e.preventDefault();
+        closeNav()
+        liveUrl = '/editLive?live_id='
+        req = $.ajax({
+            url: $('.delete-live').attr('data-href'),
+            type: 'DELETE',
+            data: {},
+            beforeSend: function(){
+                popover('Deleting...','success')
+            },
+            success: function (data) {
+                popover(data, 'success')
+            }, error: function (error) {
+                console.log(error)
+                popover(error, 'error')
+
+            }
+
+        });
+        req.done(function (data) {
+        });
+
+        $('#live-update').css('display', 'block');
+        $('#course-update').css('display', 'block');
+
+
 
         $('#create-live').css('display', 'none');
         $('.schedule').css('display', 'none');
         $('#course-upload').css('display', 'none');
         $('#create-series').css('display', 'none');
-        $('#course-update').css('display', 'none');
-        $('.my-profile').css('display', 'none');
+
         $('#create-course').css('display', 'block');
-        $('.video-details').css('display', 'none');
-        $('.upload-list').css('display', 'none');
-        $('.upload-option').css('display', 'none');
+
+
         $('#user-profile').css('display', 'none');
-        $('#edit-live').css('display', 'none');
         $('.schedule-container').css('display', 'none');
+
+
+    });
+    $('.yes-schedule-btn').on("click", function (e) {
+        e.preventDefault();
+        closeNav()
+        liveUrl = '/editSchedule?schedule_id='
+        req = $.ajax({
+            url: $('.delete-schedule').attr('data-href'),
+            type: 'DELETE',
+            data: {},
+            beforeSend: function(){
+                popover('Deleting...','success')
+            },
+            success: function (data) {
+                popover(data, 'success')
+            }, error: function (error) {
+                console.log(error)
+                popover(error, 'error')
+
+            }
+
+        });
+        req.done(function (data) {
+        });
+
+        $('#live-update').css('display', 'block');
+        $('#course-update').css('display', 'block');
+
+
+
+        $('#create-live').css('display', 'none');
+        $('.schedule').css('display', 'none');
+        $('#course-upload').css('display', 'none');
         $('#create-series').css('display', 'none');
-        $('.live-details').css('display', 'none');
+
+        $('#create-course').css('display', 'block');
+
+
+        $('#user-profile').css('display', 'none');
+        $('.schedule-container').css('display', 'none');
+
+
+    });
+    $('.comment').on("click", function (e) {
+        e.preventDefault();
+
+
+        $('#comment-nav').css('display', 'flex');
+        $('#video-bot-nav').toggle();
+
+
+    });
+    $('.click-search').on("click", function (e) {
+        e.preventDefault();
+
+
+
+        $('.logo').toggle();
+        $('#search-form').toggle();
+
 
 
     });
 
 
-});
-$('.yes-btn').on("click", function (e) {
-    e.preventDefault();
-    closeNav()
-    liveUrl = '/editLive?live_id='
-    req = $.ajax({
-        url: $('.edit-series').attr('data-href'),
-        type: 'DELETE',
-        data: {},
-        beforeSend: function () {
-            popover('Deleting...', 'success')
-        },
-        success: function (data) {
-            popover(data, 'success')
-        }, error: function (error) {
-            console.log(error)
-            popover(error, 'error')
-
-        }
-
-    });
-    req.done(function (data) {
-    });
-
-    $('#live-update').css('display', 'block');
-    $('#course-update').css('display', 'block');
-
-
-    $('#create-live').css('display', 'none');
-    $('.schedule').css('display', 'none');
-    $('#course-upload').css('display', 'none');
-    $('#create-series').css('display', 'none');
-
-    $('#create-course').css('display', 'block');
-
-
-    $('#user-profile').css('display', 'none');
-    $('.schedule-container').css('display', 'none');
-
-
-});
-$('.yes-live-btn').on("click", function (e) {
-    e.preventDefault();
-    closeNav()
-    liveUrl = '/editLive?live_id='
-    req = $.ajax({
-        url: $('.delete-live').attr('data-href'),
-        type: 'DELETE',
-        data: {},
-        beforeSend: function () {
-            popover('Deleting...', 'success')
-        },
-        success: function (data) {
-            popover(data, 'success')
-        }, error: function (error) {
-            console.log(error)
-            popover(error, 'error')
-
-        }
-
-    });
-    req.done(function (data) {
-    });
-
-    $('#live-update').css('display', 'block');
-    $('#course-update').css('display', 'block');
-
-
-    $('#create-live').css('display', 'none');
-    $('.schedule').css('display', 'none');
-    $('#course-upload').css('display', 'none');
-    $('#create-series').css('display', 'none');
-
-    $('#create-course').css('display', 'block');
-
-
-    $('#user-profile').css('display', 'none');
-    $('.schedule-container').css('display', 'none');
-
-
-});
-$('.yes-schedule-btn').on("click", function (e) {
-    e.preventDefault();
-    closeNav()
-    liveUrl = '/editSchedule?schedule_id='
-    req = $.ajax({
-        url: $('.delete-schedule').attr('data-href'),
-        type: 'DELETE',
-        data: {},
-        beforeSend: function () {
-            popover('Deleting...', 'success')
-        },
-        success: function (data) {
-            popover(data, 'success')
-        }, error: function (error) {
-            console.log(error)
-            popover(error, 'error')
-
-        }
-
-    });
-    req.done(function (data) {
-    });
-
-    $('#live-update').css('display', 'block');
-    $('#course-update').css('display', 'block');
-
-
-    $('#create-live').css('display', 'none');
-    $('.schedule').css('display', 'none');
-    $('#course-upload').css('display', 'none');
-    $('#create-series').css('display', 'none');
-
-    $('#create-course').css('display', 'block');
-
-
-    $('#user-profile').css('display', 'none');
-    $('.schedule-container').css('display', 'none');
-
-
-});
-$('.comment').on("click", function (e) {
-    e.preventDefault();
-
-
-    $('#comment-nav').css('display', 'flex');
-    $('#video-bot-nav').toggle();
-
-
-});
-$('.click-search').on("click", function (e) {
-    e.preventDefault();
-
-
-    $('.logo').toggle();
-    $('#search-form').toggle();
-
-
-});
 
 
 function pageRedirect(url) {
@@ -2332,8 +2370,8 @@ $(document).ready(function () {
         });
         req.done(function (data) {
             popover('Added to cart', 'green')
-            $('.removeCart').css('display', 'flex')
-            $('.addCart').css('display', 'none')
+            $('.removeCart').css('display','flex')
+            $('.addCart').css('display','none')
 
         });
     });
@@ -2361,8 +2399,8 @@ $(document).ready(function () {
         });
         req.done(function (data) {
             popover(data, 'green')
-            $('.removeCart').css('display', 'none')
-            $('.addCart').css('display', 'flex')
+            $('.removeCart').css('display','none')
+            $('.addCart').css('display','flex')
 
         });
     });
@@ -2516,12 +2554,13 @@ $('.upload-list').ready(function () {
     req.done(function (data) {
         var obj = data.result;
 
-        $.each(obj, function (key, value) {
+            $.each(obj, function (key, value) {
 
-            if (value.approved === true)
-                $('.upload-list').append('<div class="video-container"><div class="thumb-wrapper" data-href="' + videoUrl + value.id + '"><li><a class="video" video-id="' + value.id + '" href="' + videoUrl + value.id + '"><img class="video-feed" loading="lazy" src="../static/coverImages/' + value.coverImage + '"></a></li></div><div class="video-info">     <div class="row no-gutters">     <div class="col-2 col-sm-2 col-md-2 no-gutters">     <div class="profile-pic-wrapper click-pro-pic" data-href=" ' + userUrl + value.username + '">     <span><a class="user-profile-pic" user-id="" href="#"><img class="profilepic" src="../static/profile_pics/' + value.userImg + '" alt=""></a></span></div> </div>     <div class="col no-gutters">     <div class="inner-info">     <div class="flex-fill flex-column"><span>' + value.title + '</span><h5 class="float-right mr-2 text-success">' + currency + value.price + '</h5>     <div class="upload-username">' + value.username + '</div>     <div class="upload-username">' + value.category + '</div> <span><p class="likes-comments" class="text-justify text-left " data-likes=""><span>' + value.likes + '</span><img    class="ml-1 mr-1"     src="../static/heart.png" alt="" width="16"><span>' + value.comments + '</span>     <img         src="../static/comment.svg" alt="" width="16"> </p> </span></div> </div> </div> </div></div></div>');
+                if (value.approved === true)
+                    $('.upload-list').append('<div class="video-container"><div class="thumb-wrapper" data-href="' + videoUrl + value.id + '"><li><a class="video" video-id="' + value.id + '" href="' + videoUrl + value.id + '"><img class="video-feed" loading="lazy" src="../static/coverImages/' + value.coverImage + '"></a></li></div><div class="video-info">     <div class="row no-gutters">     <div class="col-2 col-sm-2 col-md-2 no-gutters">     <div class="profile-pic-wrapper click-pro-pic" data-href=" ' + userUrl + value.username + '">     <span><a class="user-profile-pic" user-id="" href="#"><img class="profilepic" src="../static/profile_pics/' + value.userImg + '" alt=""></a></span></div> </div>     <div class="col no-gutters">     <div class="inner-info">     <div class="flex-fill flex-column"><span>' + value.title + '</span><h5 class="float-right mr-2 text-success">'+currency+ value.price + '</h5>     <div class="upload-username">' + value.username + '</div>     <div class="upload-username">' + value.category + '</div> <span><p class="likes-comments" class="text-justify text-left " data-likes=""><span>' + value.likes + '</span><img    class="ml-1 mr-1"     src="../static/heart.png" alt="" width="16"><span>' + value.comments + '</span>     <img         src="../static/comment.svg" alt="" width="16"> </p> </span></div> </div> </div> </div></div></div>');
 
-        });
+            });
+
 
 
         $('#live').css('display', 'none');
@@ -2535,10 +2574,10 @@ $('.upload-list').ready(function () {
 
     });
 });
-$('#verify-courses').on("click", function (e) {
+    $('#verify-courses').on("click", function (e) {
 
-    e.preventDefault();
-    closeNav()
+        e.preventDefault();
+        closeNav()
 
     var arg = 'videoId=';
     var videoUrl = '/videoInfo?' + arg;
@@ -2564,24 +2603,30 @@ $('#verify-courses').on("click", function (e) {
         $('#verify-list').empty()
 
 
-        $.each(obj, function (key, value) {
+                   $.each(obj, function (key, value) {
 
-            $('#verify-list').append('<card class="card shadow-lg live-card"  data-href="' + value.id + '" > <card ><a href="' + value.id + '"> <div class="live-img-wrapper"><img class="live-img" src="../static/coverImages/' + value.coverImage + '" alt=""></div> <div class="live-profile-pic-wrapper click-pro-pic"  data-href="' + value.username + '"><span><a  class="user-profile-pic border-light" href="#"><img class="profilepic"  src="../static/profile_pics/' + value.userImg + '" alt=""></a></span> </div><div class="p-2 row no-gutters"><span class="live-info col-8 flex-content flex-column no-gutters"><span class="live-title">' + value.title + '</span><span class="">Created by:' + value.username + ' </span><span class="">Type:' + value.status + ' </span><span class="">Category:' + value.category + '</span><span class=""> </span></span>  <span class="live-info col-4 flex-content flex-column no-gutters"></div> </a></card><img src="../static/arrowDown.svg" type="button" class=" d-block mx-auto  extra-info m-2"><div class="content"><div class="text-center"><button class="fixed-btn m-2 review-videos-btn" data-target="#review-video-modal" data-toggle="modal">Review Videos</button><button class="fixed-btn m-2 user-intro" data-target="#user-info-modal" data-toggle="modal">User Intro</button></div><div></div><h6>Description</h6><div>' + value.description + '</div><button type="button" class=" d-block mx-auto fixed-btn extra-info approve-btn" data-href="' + verifyUrl + value.id + '" >Approve</button></div> </card>');
+                $('#verify-list').append('<card class="card shadow-lg live-card"  data-href="' + value.id + '" > <card ><a href="'  + value.id + '"> <div class="live-img-wrapper"><img class="live-img" src="../static/coverImages/' + value.coverImage + '" alt=""></div> <div class="live-profile-pic-wrapper click-pro-pic"  data-href="'  + value.username + '"><span><a  class="user-profile-pic border-light" href="#"><img class="profilepic"  src="../static/profile_pics/' + value.userImg + '" alt=""></a></span> </div><div class="p-2 row no-gutters"><span class="live-info col-8 flex-content flex-column no-gutters"><span class="live-title">' + value.title + '</span><span class="">Created by:' + value.username + ' </span><span class="">Type:' + value.status + ' </span><span class="">Category:' + value.category + '</span><span class=""> </span></span>  <span class="live-info col-4 flex-content flex-column no-gutters"></div> </a></card><img src="../static/arrowDown.svg" type="button" class=" d-block mx-auto  extra-info m-2"><div class="content"><div class="text-center"><button class="fixed-btn m-2 review-videos-btn" data-target="#review-video-modal" data-toggle="modal">Review Videos</button><button class="fixed-btn m-2 user-intro" data-target="#user-info-modal" data-toggle="modal">User Intro</button></div><div></div><h6>Description</h6><div>'+ value.description+'</div><button type="button" class=" d-block mx-auto fixed-btn extra-info approve-btn" data-href="'+verifyUrl + value.id +'" >Approve</button></div> </card>');
 
-            $('.user-intro').attr('data-href', '/userDetails?username=' + value.username)
-            $('.review-videos-btn').attr('data-href', '/videoDetails?videoId=' + value.id)
+                $('.user-intro').attr('data-href','/userDetails?username='+value.username)
+                $('.review-videos-btn').attr('data-href','/videoDetails?videoId='+value.id)
         });
 
 
-        $('.approve-card').css('display', 'none')
+
+
+                $('.approve-card').css('display','none')
+
+
+
+
 
 
     });
-});
-$('#verify-list').on("click", '.approve-btn', function (e) {
+    });
+    $('#verify-list').on("click",'.approve-btn', function (e) {
 
-    e.preventDefault();
-    closeNav()
+        e.preventDefault();
+        closeNav()
 
     var arg = 'videoId=';
     var videoUrl = '/videoInfo?' + arg;
@@ -2603,14 +2648,15 @@ $('#verify-list').on("click", '.approve-btn', function (e) {
     });
     req.done(function (data) {
 
-        popover(data, 'success')
+        popover(data,'success')
+
 
 
     });
-});
-$('#verify-list').on("click", '.review-videos-btn', function (e) {
+    });
+    $('#verify-list').on("click",'.review-videos-btn', function (e) {
 
-    e.preventDefault();
+        e.preventDefault();
 
 
     req = $.ajax({
@@ -2629,71 +2675,78 @@ $('#verify-list').on("click", '.review-videos-btn', function (e) {
     req.done(function (data) {
         var obj = data.result;
 
-        if (obj.type === 'video') {
-            $('video').attr("src", videoSrc + obj.videoRef);
-            $('video').css('display', 'block');
-            $('#episode-subtitle').text(obj.episode.subtitle);
+            if (obj.type === 'video') {
+                $('video').attr("src", videoSrc + obj.videoRef);
+                $('video').css('display', 'block');
+                $('#episode-subtitle').text(obj.episode.subtitle);
 
-            $('.video-js').attr("src", videoSrc + obj.videoRef);
-            $('#controls').css('display', 'none');
-            $('video').css('display', 'block');
-            $('.course-img').css('display', 'none');
-        } else if (obj.type === 'audio') {
+                $('.video-js').attr("src", videoSrc + obj.videoRef);
+                $('#controls').css('display', 'none');
+                $('video').css('display', 'block');
+                $('.course-img').css('display', 'none');
+            } else if (obj.type === 'audio') {
 
-            $('#audio-file').attr("audioFile", obj.videoRef);
-            $('.course-img').css('display', 'block');
-            $('.course-img').attr("src", coverImgUrl + obj.coverImg);
-            var audioSrc = '/static/videos/' + $('#audio-file').attr('audioFile')
-            $('#controls').css('display', 'flex');
-            popover('Loading Audio..Please wait', 'success')
-            wavesurfer.load(audioSrc);
-            wavesurfer.on('ready', function () {
-                popover('Audio ready to play', 'success')
-                $('.loader').css('display', 'none')
-
-
-                $('#pause-btn').on('click', function () {
-                    wavesurfer.pause();
-                    $('#play-btn').css('display', 'flex')
-                    $('#pause-btn').css('display', 'none')
-                });
-                $('#play-btn').on('click', function () {
-                    wavesurfer.play();
-                    $('#play-btn').css('display', 'none')
-                    $('#pause-btn').css('display', 'flex')
-                });
-            });
+                $('#audio-file').attr("audioFile", obj.videoRef);
+                $('.course-img').css('display', 'block');
+                $('.course-img').attr("src", coverImgUrl + obj.coverImg);
+                var audioSrc = '/static/videos/' + $('#audio-file').attr('audioFile')
+                $('#controls').css('display', 'flex');
+                popover('Loading Audio..Please wait','success')
+                wavesurfer.load(audioSrc);
+                wavesurfer.on('ready', function () {
+                    popover('Audio ready to play','success')
+                            $('.loader').css('display', 'none')
 
 
-            $('#episode-subtitle').text(obj.episode.subtitle);
+        $('#pause-btn').on('click', function () {
+            wavesurfer.pause();
+            $('#play-btn').css('display', 'flex')
+            $('#pause-btn').css('display', 'none')
+        });
+           $('#play-btn').on('click', function () {
+            wavesurfer.play();
+            $('#play-btn').css('display', 'none')
+            $('#pause-btn').css('display', 'flex')
+        });});
 
 
-            $('video').css('display', 'none');
 
 
-        } else if (obj.videoRef == null) {
-            var ep = obj.episode[0];
+                $('#episode-subtitle').text(obj.episode.subtitle);
 
 
-            $('video').attr("src", videoSrc + obj.episode[0].videoRef);
 
-            $('#video-likes').text(ep.likes);
-            $('video').css('display', 'block');
-            $('#episode-subtitle').text(ep.subtitle);
-            $('.video-js').attr("src", videoSrc + obj.episode[0].videoRef);
 
-            $('video').css('display', 'block');
-            $('.course-img').css('display', 'none');
-            $('.like-btn').attr('data-href', '/like/episode' + obj.episode[0].episodeId);
-            $('#unlike-btn').attr('data-href', '/unlike/episode' + obj.episode[0].episodeId);
-        }
+
+
+                $('video').css('display', 'none');
+
+
+
+            } else if (obj.videoRef == null) {
+                var ep = obj.episode[0];
+
+
+                $('video').attr("src", videoSrc + obj.episode[0].videoRef);
+
+                $('#video-likes').text(ep.likes);
+                $('video').css('display', 'block');
+                $('#episode-subtitle').text(ep.subtitle);
+                $('.video-js').attr("src", videoSrc +obj.episode[0].videoRef);
+
+                $('video').css('display', 'block');
+                $('.course-img').css('display', 'none');
+                $('.like-btn').attr('data-href', '/like/episode' + obj.episode[0].episodeId);
+                $('#unlike-btn').attr('data-href', '/unlike/episode' + obj.episode[0].episodeId);
+            }
+
 
 
     });
-});
-$('#verify-list').on("click", '.user-intro', function (e) {
+    });
+    $('#verify-list').on("click",'.user-intro', function (e) {
 
-    e.preventDefault();
+        e.preventDefault();
 
     req = $.ajax({
         url: $(this).attr('data-href'),
@@ -2713,8 +2766,9 @@ $('#verify-list').on("click", '.user-intro', function (e) {
         $('.user-introduction').text(data.introduction)
 
 
+
     });
-});
+    });
 
 
 $("form#series-course").on('click', '.subtitle', function () {
@@ -2759,6 +2813,8 @@ for (i = 0; i < dropdown.length; i++) {
 $(document).ready(function () {
 
 
+
+
     $('form#schedule-form').on('submit', function (event) {
         var csrf_token = $('#csrf-token').attr('value');
         $.ajax({
@@ -2767,9 +2823,9 @@ $(document).ready(function () {
                     xhr.setRequestHeader("X-CSRFToken", csrf_token);
                 }
                 $('.loader').css('display', 'block')
-                $('.border-btn').css('display', 'block')
-                popover('Creating schedule', 'success')
-                $('.schedule-btn').css('display', 'none')
+               $('.border-btn').css('display','block')
+                 popover('Creating schedule','success')
+              $('.schedule-btn').css('display','none')
 
             },
 
@@ -2787,8 +2843,8 @@ $(document).ready(function () {
             .done(function (data) {
 
                 popover(data, 'success')
-                $('.border-btn').css('display', 'none')
-                $('.schedule-btn').css('display', 'block')
+                $('.border-btn').css('display','none')
+              $('.schedule-btn').css('display','block')
 
             });
 
@@ -2864,7 +2920,7 @@ $(document).ready(function () {
             },
             data: new FormData(this),
             type: 'POST',
-            url: '/createrole',
+            url:'/createrole',
             processData: false,
             contentType: false,
             complete: function () {
@@ -2891,7 +2947,7 @@ $(document).ready(function () {
                 }
                 $('.loader').css('display', 'block')
 
-                popover('Creating live session', 'success')
+                popover('Creating live session','success')
 
             },
             data: new FormData(this),
@@ -2920,7 +2976,7 @@ $(document).ready(function () {
 
                 }
                 $('.loader').css('display', 'block')
-                popover('Updating Info', 'success')
+                popover('Updating Info','success')
 
             },
             error: function (error) {
@@ -2945,7 +3001,7 @@ $(document).ready(function () {
                 $('#my-introduction').html(intro)
                 $('.user-form').css('display', 'none')
                 $('#my-introduction').css('display', 'block')
-                $('#my-proPic').attr('src', userImgSrc + $('#pic').value.split('\\')[2])
+                $('#my-proPic').attr('src',userImgSrc+$('#pic').value.split('\\')[2])
 
                 popover(data, 'success')
 
@@ -2994,11 +3050,10 @@ $(document).ready(function () {
 
 });
 
-$.urlParam = function (name) {
+$.urlParam = function(name){
     var results = new RegExp('[\?&]' + name + '=([^&#]*)').exec(window.location.href);
-    if (results == null) {
-        return null;
+    if (results==null) {
+       return null;
     }
     return decodeURI(results[1]) || 0;
 }
-

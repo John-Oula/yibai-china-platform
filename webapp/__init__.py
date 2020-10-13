@@ -51,6 +51,7 @@ from alipay.aop.api.request.AlipayTradeQueryRequest import AlipayTradeQueryModel
 from alipay.aop.api.request.AlipayTradeQueryRequest import AlipayTradeQueryRequest
 from alipay.aop.api.response.AlipayTradeWapPayResponse import AlipayTradeWapPayResponse
 import flask_whooshalchemy as wa
+import web
 
 app = Flask(__name__)
 
@@ -1188,6 +1189,8 @@ def forms():
 
 @app.route('/' ,methods=['POST','GET'])
 def home():
+    url = request.url
+    print(url)
     page = request.args.get('page', type=int)
 #    uploads = Upload.query.order_by(Upload.timestamp.desc()).paginate(per_page=4,error_out=False,page=page)
     form = Upload_form()

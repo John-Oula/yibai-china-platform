@@ -29,6 +29,7 @@ from flask_login import login_user, login_required, current_user, logout_user,An
 from flask_mail import Mail, Message
 from flask_migrate import Migrate
 from flask_sqlalchemy import SQLAlchemy
+from flask_whooshee import Whooshee
 from flask_wtf import FlaskForm
 from flask_wtf.csrf import CSRFProtect
 from flask_wtf.file import FileRequired
@@ -80,7 +81,7 @@ logging.basicConfig(
     filemode='a', )
 logger = logging.getLogger('')
 
-
+whooshee = Whooshee(app)
 if get_Host_name_IP('CJAY') == True:
     app_private_key_string = open("/Users/ASUS/Desktop/webApp/keys/appPrivateKey.txt").read()
     alipay_public_key_string = open("/Users/ASUS/Desktop/webApp/keys/alipayPublicKey.txt").read()
@@ -588,11 +589,11 @@ class Payment(db.Model):
         prop = self.order_number
         return prop.replace("u'", "'")
 
-
+@whooshee.register_model('title')
 class Series(db.Model):
 
     __tablename__ = 'series'
-    __searchable__ = ['title']
+#    __searchable__ = ['title']
     id = db.Column('id', db.Integer, primary_key=True)
     title = db.Column('title', db.String(30))
     status = db.Column('status', db.String(7))
@@ -1097,6 +1098,7 @@ class SeriesView(ModelView):
         'coverImage': _img_thumbnail
     }
     column_details_exclude_list = ('liked','user_cart','comments','payment')
+#    wa.whoosh_index(app, Series)
 class EpisodeView(ModelView):
     can_view_details = True
     details_modal = True
@@ -1164,7 +1166,7 @@ admin.add_sub_category(name="Links", parent_name="Course Management")
 #admin.add_sub_category(name="Create roles", parent_name="Roles Management")
 admin.add_sub_category(name="Create live", parent_name="Live Management")
 
-wa.whoosh_index(app, Series)
+
 
 @app.context_processor
 def inject_permissions():
@@ -1441,6 +1443,21 @@ def sent():
     mail.send(msg)
 
     return jsonify({'result':'Success'})
+
+@app.route('/search',methods=['POST','GET'])
+def search():
+    query = request.args.get('q')
+    results = Series.query.whooshee_search(query).all()
+    print(results)
+    l = []
+    for videos in results:
+        data = {'id': videos.id, 'title': videos.title, 'username': videos.created_by.username,
+                'userImg': videos.created_by.profile_photo, 'category': videos.category, 'price': videos.price, 'coverImage': videos.coverImage,'approved': videos.approved,'likes':videos.liked.count(),'comments':videos.comments.count(),'isSeries':videos.is_series()}
+        l.append(data)
+
+
+    return jsonify({'result': l})
+
 
 @app.route('/profile')
 @login_required

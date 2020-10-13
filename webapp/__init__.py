@@ -51,7 +51,7 @@ from alipay.aop.api.request.AlipayTradeQueryRequest import AlipayTradeQueryModel
 from alipay.aop.api.request.AlipayTradeQueryRequest import AlipayTradeQueryRequest
 from alipay.aop.api.response.AlipayTradeWapPayResponse import AlipayTradeWapPayResponse
 import flask_whooshalchemy as wa
-import web
+
 
 app = Flask(__name__)
 

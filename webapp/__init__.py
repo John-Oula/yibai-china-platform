@@ -1780,7 +1780,18 @@ def assign_badge(id):
 
 
 
+@app.route('/search',methods=['POST','GET'])
+def search():
+    query = request.args.get('q')
+    results = Series.query.whoosh_search(query).all()
+    l = []
+    for videos in results:
+        data = {'id': videos.id, 'title': videos.title, 'username': videos.created_by.username,
+                'userImg': videos.created_by.profile_photo, 'category': videos.category, 'price': videos.price, 'coverImage': videos.coverImage,'approved': videos.approved,'likes':videos.liked.count(),'comments':videos.comments.count(),'isSeries':videos.is_series()}
+        l.append(data)
 
+
+    return jsonify({'result': l})
 
 @app.route('/settings/<username>',methods=['GET','POST'])
 @login_required

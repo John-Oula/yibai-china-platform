@@ -1483,14 +1483,18 @@ p.likes{
 }
 
 @media screen and (max-width: 768px){
-
+    .login-btns{
+        margin-top: 40%;
+    }
     body{
         margin: 0 0 55px 0;
     }
     #main{
         display: block;
     }
-
+    #login_container{
+        display: none;
+    }
 
     .bot-nav{
         position: fixed;
@@ -2042,6 +2046,13 @@ p.likes{
     .common-btn{
         border-radius: 4px;
         background-color: #5bb75b;
+        padding: 10px;
+        width: fit-content;
+        border-style: none;
+    }
+    .orange-btn{
+        border-radius: 4px;
+        background-color: #E74525;
         padding: 10px;
         width: fit-content;
         border-style: none;

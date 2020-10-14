@@ -175,14 +175,22 @@
                     <br>
                 </div>
             {% else %}
-                <div class="mx-auto d-block text-center" id="login_container">
+                <div class="mx-auto  text-center" id="login_container">
 
 
                 </div>
-                <div class="text-center">
-                    <small class=""><a href="{{ url_for('signIn') }}" id="login-text" class="">Log in </a>another
-                    way</small><br>
-                    <small class=""><a href="https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx5f367d7de40c6054&redirect_uri=https://www.100chinaguide.com&response_type=code&scope=snsapi_userinfo&state=STATE#wechat_redirect" id="login-text" class="">Log in </a>via wechat</small>
+                <div class="text-center login-btns">
+
+                                        <button class="orange-btn"><a class="text-light"  href="{{ url_for('signIn') }}" id="login-text" class=""><img
+                            src="../static/logo-w.svg" width="24" alt="" class="mr-2">Log in via 100CG </a></button>
+
+                    <br>
+                    <br>
+
+
+                    <button class="common-btn"><a class="text-light" href="https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx5f367d7de40c6054&redirect_uri=https://www.100chinaguide.com&response_type=code&scope=snsapi_userinfo&state=STATE#wechat_redirect" id="login-text" class=""><img
+                            src="../static/wechat-logo.svg" width="24" alt="" class="mr-2">Log in via Wechat </a></button>
+                </div>
                 </div>
 
 

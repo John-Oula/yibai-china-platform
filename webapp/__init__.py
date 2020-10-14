@@ -52,7 +52,8 @@ from alipay.aop.api.request.AlipayTradeQueryRequest import AlipayTradeQueryReque
 from alipay.aop.api.response.AlipayTradeWapPayResponse import AlipayTradeWapPayResponse
 import flask_whooshalchemy as wa
 
-
+wxId = 'wx5f367d7de40c6054'
+wxSecret = ''
 app = Flask(__name__)
 
 authentication= 'authentication@100chinaguide.com'
@@ -248,8 +249,8 @@ class User(db.Model, UserMixin):
     sub_role = db.Column('sub role', db.Integer, default=1)
     fullname = db.Column('fullname', db.String(20))
     username = db.Column('username', db.String(20), unique=True, nullable=True)
-    password = db.Column('password',db.String(500), nullable=False)
-    profile_photo = db.Column(db.String(60), nullable=False, default='default.jpg')
+    password = db.Column('password',db.String(500), nullable=True)
+    profile_photo = db.Column(db.String(60), nullable=True, default='default.jpg')
     introduction = db.Column('introduction', db.String(500), nullable=True)
     introduction_video = db.Column('introduction_video', db.String(60), nullable=True)
     id_type = db.Column('id_type', db.String(60), nullable=True)
@@ -1191,6 +1192,39 @@ def forms():
 def home():
     url = request.url
     print(url)
+    data = request.args.to_dict()
+    if  data:
+        if data['code']:
+            code = data['code']
+
+            req = requests.get(url='https://api.weixin.qq.com/sns/oauth2/access_token?appid=' + str(
+                wxId) + "&secret=" + wxSecret + "&code=" + str(code) + 'grant_type=authorization_code')
+            resp = req.json()
+            access_token = resp['access_token']
+            openid = resp['openid']
+
+            req_user_info = requests.get(
+                url='https://api.weixin.qq.com/sns/userinfo?access_token=' + str(access_token) + "&openid=" + openid)
+            resp_user_info = req.json()
+            username = resp_user_info['nickname']
+            profile_photo = resp_user_info['headimgurl']
+            user = User.query.filter_by(username=username).first()
+            if user:
+                login_user(user)
+                session['known'] = True
+                return redirect(url_for('home'))
+            else:
+                if profile_photo:
+                    user = User(username=username, profile_photo=profile_photo)
+                else:
+                    user = User(username=username)
+                db.session.add(user)
+                db.session.commit()
+                login_user(user)
+
+                return redirect(url_for('home'))
+
+
     page = request.args.get('page', type=int)
 #    uploads = Upload.query.order_by(Upload.timestamp.desc()).paginate(per_page=4,error_out=False,page=page)
     form = Upload_form()
@@ -1595,18 +1629,18 @@ def login():
                 session['known'] = form.username.data
                 display_name = User.query.filter_by(username = form.username.data).first()
                 session['known'] = display_name.id
-                if current_user.role == 1 and current_user.sub_role == 0:
-                    return redirect(url_for('session_admin',id = current_user.id))
-                elif current_user.role == 1 and current_user.sub_role == 1:
-                        return redirect(url_for('video_admin',id = current_user.id))
-                elif current_user.role == 1 and current_user.sub_role == 2:
-                    return redirect(url_for('info_admin',id = current_user.id))
-                elif current_user.role == 1 and current_user.sub_role == 3:
-                    return redirect(url_for('payment_admin',id = current_user.id))
-                elif current_user.role == 1 and current_user.sub_role == 4:
-                    return redirect(url_for('badge_admin',id = current_user.id))
-                else:
-                    return redirect(url_for('user_profile', username=current_user.username))
+                # if current_user.role == 1 and current_user.sub_role == 0:
+                #     return redirect(url_for('session_admin',id = current_user.id))
+                # elif current_user.role == 1 and current_user.sub_role == 1:
+                #         return redirect(url_for('video_admin',id = current_user.id))
+                # elif current_user.role == 1 and current_user.sub_role == 2:
+                #     return redirect(url_for('info_admin',id = current_user.id))
+                # elif current_user.role == 1 and current_user.sub_role == 3:
+                #     return redirect(url_for('payment_admin',id = current_user.id))
+                # elif current_user.role == 1 and current_user.sub_role == 4:
+                #     return redirect(url_for('badge_admin',id = current_user.id))
+                # else:
+                #     return redirect(url_for('user_profile', username=current_user.username))
             else:
                 pass
         return render_template('LOGIN.html', form=form)
@@ -2360,8 +2394,6 @@ def createMeeting(title,fulltime,end_time):
                'X-TC-Nonce': str(num), 'AppId': '200000164', 'X-TC-Signature': signature, 'X-TC-Registered': '0'}
     datas = req_body
     r = requests.post("https://api.meeting.qq.com/v1/meetings", data=datas, headers=headers)
-    print(r.text)
-    print(r.json())
 
     return r.json()
 

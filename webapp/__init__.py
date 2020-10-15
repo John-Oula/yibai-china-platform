@@ -1208,7 +1208,7 @@ def home():
                 url='https://api.weixin.qq.com/sns/userinfo?access_token=' + str(access_token) + "&openid=" + openid+'&lang=en')
             resp_user_info = req_user_info.json()
             print(resp_user_info)
-            username = resp_user_info['nickname']
+            username = resp_user_info['nickname'].encode('latin').decode('utf-8')
             profile_photo = resp_user_info['headimgurl']
             user = User.query.filter_by(username=username).first()
             if user:

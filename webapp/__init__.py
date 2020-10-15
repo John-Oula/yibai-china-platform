@@ -1200,12 +1200,14 @@ def home():
             req = requests.get(url='https://api.weixin.qq.com/sns/oauth2/access_token?appid=' + str(
                 wxId) + "&secret=" + wxSecret + "&code=" + str(code) + '&grant_type=authorization_code')
             resp = req.json()
+            print(resp)
             access_token = resp['access_token']
             openid = resp['openid']
 
             req_user_info = requests.get(
-                url='https://api.weixin.qq.com/sns/userinfo?access_token=' + str(access_token) + "&openid=" + openid)
-            resp_user_info = req.json()
+                url='https://api.weixin.qq.com/sns/userinfo?access_token=' + str(access_token) + "&openid=" + openid+'&lang=en')
+            resp_user_info = req_user_info.json()
+            print(resp_user_info)
             username = resp_user_info['nickname']
             profile_photo = resp_user_info['headimgurl']
             user = User.query.filter_by(username=username).first()

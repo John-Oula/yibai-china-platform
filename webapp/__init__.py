@@ -53,7 +53,7 @@ from alipay.aop.api.response.AlipayTradeWapPayResponse import AlipayTradeWapPayR
 import flask_whooshalchemy as wa
 
 wxId = 'wx5f367d7de40c6054'
-wxSecret = ''
+wxSecret = '2ee66046845980fc293fe881c83faace'
 app = Flask(__name__)
 
 authentication= 'authentication@100chinaguide.com'

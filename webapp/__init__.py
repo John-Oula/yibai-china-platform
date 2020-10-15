@@ -1198,7 +1198,7 @@ def home():
             code = data['code']
 
             req = requests.get(url='https://api.weixin.qq.com/sns/oauth2/access_token?appid=' + str(
-                wxId) + "&secret=" + wxSecret + "&code=" + str(code) + 'grant_type=authorization_code')
+                wxId) + "&secret=" + wxSecret + "&code=" + str(code) + '&grant_type=authorization_code')
             resp = req.json()
             access_token = resp['access_token']
             openid = resp['openid']

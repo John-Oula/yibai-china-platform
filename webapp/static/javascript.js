@@ -673,7 +673,7 @@ $('.live-list').ready(function () {
             $.each(obj, function (key, value) {
 
 
-                $('.live-list').append('<card class="card shadow-lg live-card"  data-href="' + liveUrl + value.id + '" > <card ><a href="' + liveInfoUrl + value.id + '"> <div class="live-img-wrapper"><img class="live-img" src="../static/coverImages/' + value.coverImg + '" alt=""></div> <div class="live-profile-pic-wrapper click-pro-pic"  data-href="' + userUrl + value.host.host + '"><span><a  class="user-profile-pic border-light" href="#"><img class="profilepic"  src="../static/profile_pics/' + value.userImg + '" alt=""></a></span> </div><div class="p-2 row no-gutters"><span class="live-info col-8 flex-content flex-column no-gutters"><span class="live-title">' + value.title + '</span><span class="">Hosted by:' + value.host + ' </span><span class="">Category:' + value.category + '</span><span class=""> </span></span>  <span class="live-info col-4 flex-content flex-column no-gutters">           <span class="text-right">' + value.startTime + '-' + value.endTime + '</span><span class="text-right">' + value.date + '</span>  <div class="circle-icon text-right text-center mt-2  p-2 shadow-sm"> </div> </span> </div> </a></card> </card>');
+                $('.live-list').append('<card class="card shadow-lg live-card"  data-href="' + liveUrl + value.id + '" > <card ><a href="' + liveInfoUrl + value.id + '"> <div class="live-img-wrapper"><img class="live-img" src="../static/coverImages/' + value.coverImg + '" alt=""></div> <div class="live-profile-pic-wrapper click-pro-pic"  data-href="' + userUrl + value.host.host + '"><span><a  class="user-profile-pic border-light" href="#"><img class="profilepic"  src="' + value.userImg + '" alt=""></a></span> </div><div class="p-2 row no-gutters"><span class="live-info col-8 flex-content flex-column no-gutters"><span class="live-title">' + value.title + '</span><span class="">Hosted by:' + value.host + ' </span><span class="">Category:' + value.category + '</span><span class=""> </span></span>  <span class="live-info col-4 flex-content flex-column no-gutters">           <span class="text-right">' + value.startTime + '-' + value.endTime + '</span><span class="text-right">' + value.date + '</span>  <div class="circle-icon text-right text-center mt-2  p-2 shadow-sm"> </div> </span> </div> </a></card> </card>');
 
             });
             $('#live').css('display', 'block');
@@ -749,7 +749,7 @@ $('.profile').ready(function () {
             $('#my-live-sessions').html(data.liveSessions);
             $('#my-introduction').html(data.introduction);
             $('.user-form').css('display', 'none');
-            $('img.profilepic').attr("src", userImgSrc + data.userImage);
+            $('img.profilepic').attr("src",  data.userImage);
             $('#user-profile').css('display', 'block');
             $('#live').css('display', 'none');
             
@@ -1126,7 +1126,7 @@ function closeLeftNav() {
             $('#user-followers').html(data.followers);
             $('#user-live-sessions').html(data.liveSessions);
             $('#user-introduction').html(data.introduction);
-            $('img.profilepic').attr("src", userImgSrc + data.userImage);
+            $('img.profilepic').attr("src",  data.userImage);
             $('#user-profile').css('display', 'none');
             $('#live').css('display', 'none');
             
@@ -1208,7 +1208,7 @@ function closeLeftNav() {
             $.each(obj.comments, function (key, value) {
 
 
-                $('#user-reviews').append('<div><div data-href="" class="profile-pic-wrapper d-inline-flex mr-2 click-pro-pic"><span><img class="profilepic" src="' + userImgSrc + value.proPic + '" alt=""></span></div><small ><strong>' + value.username + '</strong></small><div><small id="user-review">' + value.content + '</small></div></div></div></div>');
+                $('#user-reviews').append('<div><div data-href="" class="profile-pic-wrapper d-inline-flex mr-2 click-pro-pic"><span><img class="profilepic" src="'  + value.proPic + '" alt=""></span></div><small ><strong>' + value.username + '</strong></small><div><small id="user-review">' + value.content + '</small></div></div></div></div>');
 
             });
 
@@ -1996,7 +1996,7 @@ function closeLeftNav() {
 
             $.each(details.bookers, function (key, value) {
 
-                $('.modal-body.append-bookers').append('<div class=" p-2 d-flex align-items-center "><div data-href="" class=" user-profile-pic-wrapper mr-2"><span><img class="profilepic" src="'+ userImgSrc+ value.profPic +'" alt=""></span></div><h6>' + value.username + '</h6></div>');
+                $('.modal-body.append-bookers').append('<div class=" p-2 d-flex align-items-center "><div data-href="" class=" user-profile-pic-wrapper mr-2"><span><img class="profilepic" src="'+ value.profPic +'" alt=""></span></div><h6>' + value.username + '</h6></div>');
 
 
 
@@ -2040,7 +2040,7 @@ function closeLeftNav() {
 
             $.each(details.bookers, function (key, value) {
 
-                $('.modal-body.append-live-bookers').append('<div class="  p-2 d-flex align-items-center "><div data-href="" class=" user-profile-pic-wrapper mr-2"><span><img class="profilepic" src="'+ userImgSrc+ value.profPic +'" alt=""></span></div><h6>' + value.username + '</h6></div>');
+                $('.modal-body.append-live-bookers').append('<div class="  p-2 d-flex align-items-center "><div data-href="" class=" user-profile-pic-wrapper mr-2"><span><img class="profilepic" src="'+ value.profPic +'" alt=""></span></div><h6>' + value.username + '</h6></div>');
 
 
 
@@ -2557,7 +2557,7 @@ $('.upload-list').ready(function () {
             $.each(obj, function (key, value) {
 
                 if (value.approved === true)
-                    $('.upload-list').append('<div class="video-container"><div class="thumb-wrapper" data-href="' + videoUrl + value.id + '"><li><a class="video" video-id="' + value.id + '" href="' + videoUrl + value.id + '"><img class="video-feed" loading="lazy" src="../static/coverImages/' + value.coverImage + '"></a></li></div><div class="video-info">     <div class="row no-gutters">     <div class="col-2 col-sm-2 col-md-2 no-gutters">     <div class="profile-pic-wrapper click-pro-pic" data-href=" ' + userUrl + value.username + '">     <span><a class="user-profile-pic" user-id="" href="#"><img class="profilepic" src="../static/profile_pics/' + value.userImg + '" alt=""></a></span></div> </div>     <div class="col no-gutters">     <div class="inner-info">     <div class="flex-fill flex-column"><span>' + value.title + '</span><h5 class="float-right mr-2 text-success">'+currency+ value.price + '</h5>     <div class="upload-username">' + value.username + '</div>     <div class="upload-username">' + value.category + '</div> <span><p class="likes-comments" class="text-justify text-left " data-likes=""><span>' + value.likes + '</span><img    class="ml-1 mr-1"     src="../static/heart.png" alt="" width="16"><span>' + value.comments + '</span>     <img         src="../static/comment.svg" alt="" width="16"> </p> </span></div> </div> </div> </div></div></div>');
+                    $('.upload-list').append('<div class="video-container"><div class="thumb-wrapper" data-href="' + videoUrl + value.id + '"><li><a class="video" video-id="' + value.id + '" href="' + videoUrl + value.id + '"><img class="video-feed" loading="lazy" src="../static/coverImages/' + value.coverImage + '"></a></li></div><div class="video-info">     <div class="row no-gutters">     <div class="col-2 col-sm-2 col-md-2 no-gutters">     <div class="profile-pic-wrapper click-pro-pic" data-href=" ' + userUrl + value.username + '">     <span><a class="user-profile-pic" user-id="" href="#"><img class="profilepic" src="' + value.userImg + '" alt=""></a></span></div> </div>     <div class="col no-gutters">     <div class="inner-info">     <div class="flex-fill flex-column"><span>' + value.title + '</span><h5 class="float-right mr-2 text-success">'+currency+ value.price + '</h5>     <div class="upload-username">' + value.username + '</div>     <div class="upload-username">' + value.category + '</div> <span><p class="likes-comments" class="text-justify text-left " data-likes=""><span>' + value.likes + '</span><img    class="ml-1 mr-1"     src="../static/heart.png" alt="" width="16"><span>' + value.comments + '</span>     <img         src="../static/comment.svg" alt="" width="16"> </p> </span></div> </div> </div> </div></div></div>');
 
             });
 
@@ -2605,7 +2605,7 @@ $('.upload-list').ready(function () {
 
                    $.each(obj, function (key, value) {
 
-                $('#verify-list').append('<card class="card shadow-lg live-card"  data-href="' + value.id + '" > <card ><a href="'  + value.id + '"> <div class="live-img-wrapper"><img class="live-img" src="../static/coverImages/' + value.coverImage + '" alt=""></div> <div class="live-profile-pic-wrapper click-pro-pic"  data-href="'  + value.username + '"><span><a  class="user-profile-pic border-light" href="#"><img class="profilepic"  src="../static/profile_pics/' + value.userImg + '" alt=""></a></span> </div><div class="p-2 row no-gutters"><span class="live-info col-8 flex-content flex-column no-gutters"><span class="live-title">' + value.title + '</span><span class="">Created by:' + value.username + ' </span><span class="">Type:' + value.status + ' </span><span class="">Category:' + value.category + '</span><span class=""> </span></span>  <span class="live-info col-4 flex-content flex-column no-gutters"></div> </a></card><img src="../static/arrowDown.svg" type="button" class=" d-block mx-auto  extra-info m-2"><div class="content"><div class="text-center"><button class="fixed-btn m-2 review-videos-btn" data-target="#review-video-modal" data-toggle="modal">Review Videos</button><button class="fixed-btn m-2 user-intro" data-target="#user-info-modal" data-toggle="modal">User Intro</button></div><div></div><h6>Description</h6><div>'+ value.description+'</div><button type="button" class=" d-block mx-auto fixed-btn extra-info approve-btn" data-href="'+verifyUrl + value.id +'" >Approve</button></div> </card>');
+                $('#verify-list').append('<card class="card shadow-lg live-card"  data-href="' + value.id + '" > <card ><a href="'  + value.id + '"> <div class="live-img-wrapper"><img class="live-img" src="../static/coverImages/' + value.coverImage + '" alt=""></div> <div class="live-profile-pic-wrapper click-pro-pic"  data-href="'  + value.username + '"><span><a  class="user-profile-pic border-light" href="#"><img class="profilepic"  src="' + value.userImg + '" alt=""></a></span> </div><div class="p-2 row no-gutters"><span class="live-info col-8 flex-content flex-column no-gutters"><span class="live-title">' + value.title + '</span><span class="">Created by:' + value.username + ' </span><span class="">Type:' + value.status + ' </span><span class="">Category:' + value.category + '</span><span class=""> </span></span>  <span class="live-info col-4 flex-content flex-column no-gutters"></div> </a></card><img src="../static/arrowDown.svg" type="button" class=" d-block mx-auto  extra-info m-2"><div class="content"><div class="text-center"><button class="fixed-btn m-2 review-videos-btn" data-target="#review-video-modal" data-toggle="modal">Review Videos</button><button class="fixed-btn m-2 user-intro" data-target="#user-info-modal" data-toggle="modal">User Intro</button></div><div></div><h6>Description</h6><div>'+ value.description+'</div><button type="button" class=" d-block mx-auto fixed-btn extra-info approve-btn" data-href="'+verifyUrl + value.id +'" >Approve</button></div> </card>');
 
                 $('.user-intro').attr('data-href','/userDetails?username='+value.username)
                 $('.review-videos-btn').attr('data-href','/videoDetails?videoId='+value.id)
@@ -3001,7 +3001,7 @@ $(document).ready(function () {
                 $('#my-introduction').html(intro)
                 $('.user-form').css('display', 'none')
                 $('#my-introduction').css('display', 'block')
-                $('#my-proPic').attr('src',userImgSrc+$('#pic').value.split('\\')[2])
+                $('#my-proPic').attr('src',$('#pic').value.split('\\')[2])
 
                 popover(data, 'success')
 
@@ -3037,7 +3037,7 @@ $(document).ready(function () {
 
                 var comment = $('#content').val()
                 $('#video-comments').text(data.totalComments)
-                $('#user-reviews').append('<div><div data-href="" class="profile-pic-wrapper d-inline-flex mr-2 click-pro-pic"><span><img class="profilepic" src="' + userImgSrc + currentUserProPic + '" alt=""></span></div><small ><strong>' + currentUserUsername + '</strong></small><div><small id="user-review">' + comment + '</small></div></div></div></div>');
+                $('#user-reviews').append('<div><div data-href="" class="profile-pic-wrapper d-inline-flex mr-2 click-pro-pic"><span><img class="profilepic" src="'  + currentUserProPic + '" alt=""></span></div><small ><strong>' + currentUserUsername + '</strong></small><div><small id="user-review">' + comment + '</small></div></div></div></div>');
 
 
                 popover(data.msg, 'success')

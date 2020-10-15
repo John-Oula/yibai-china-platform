@@ -250,7 +250,7 @@ class User(db.Model, UserMixin):
     fullname = db.Column('fullname', db.String(20))
     username = db.Column('username', db.String(20), unique=True, nullable=True)
     password = db.Column('password',db.String(500), nullable=True)
-    profile_photo = db.Column(db.String(60), nullable=True, default='default.jpg')
+    profile_photo = db.Column(db.String, nullable=True, default='https://www.100chinaguide.com/static/profile_pics/default.jpg')
     introduction = db.Column('introduction', db.String(500), nullable=True)
     introduction_video = db.Column('introduction_video', db.String(60), nullable=True)
     id_type = db.Column('id_type', db.String(60), nullable=True)
@@ -1846,7 +1846,7 @@ def settings(username):
     if request.method == 'POST':
         if form.pic.data:
             pic_file = save_pic(form.pic.data)
-            current_user.profile_photo = pic_file
+            current_user.profile_photo = 'https://www.100chinaguide.com/static/profile_pics/'+pic_file
         current_user.username = form.username.data
         current_user.password = hash_password(form.password.data)
         current_user.email = form.email.data
@@ -1894,7 +1894,7 @@ def updateInfo():
     elif request.method == 'PUT':
         if form.pic.data:
             pic_file = save_pic(form.pic.data)
-            current_user.profile_photo = pic_file
+            current_user.profile_photo = 'https://www.100chinaguide.com/static/profile_pics/'+pic_file
         if form.introVideo.data:
             introVid_file = save_pic(form.introVideo.data)
             current_user.introduction_video = introVid_file

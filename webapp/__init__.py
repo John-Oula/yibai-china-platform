@@ -130,7 +130,7 @@ appID=200000164
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = True
 app.config['FLASK_ADMIN_SWATCH'] = 'flatly'
 app.config['WTF_CSRF_ENABLED'] = False
-app.config['WHOOSH_BASE'] = '/var/www/App/webapp/static/videos/whoosh'
+app.config['WHOOSH_BASE'] = 'whoosh'
 csrf = CSRFProtect(app)
 
 if get_Host_name_IP('CJAY') == True:

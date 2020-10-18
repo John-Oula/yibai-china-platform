@@ -2327,17 +2327,6 @@ function closeLeftNav() {
 
 
     });
-    $('.click-search').on("click", function (e) {
-        e.preventDefault();
-
-
-
-        $('.logo').toggle();
-        $('#search-form').toggle();
-
-
-
-    });
 
 
 

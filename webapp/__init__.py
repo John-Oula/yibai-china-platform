@@ -1240,6 +1240,7 @@ def home():
     signupForm = Signup_form()
     userForm = User_form()
     commentForm = Comment_form()
+    searchForm = Search_form()
 
     approvedVideos = Series.query.filter_by(approved=False).all()
 
@@ -1268,7 +1269,7 @@ def home():
             pass
 
 
-    return render_template('home.html',commentForm=commentForm,userForm = userForm,loginForm = loginForm,signupForm=signupForm,UpdateSession=UpdateSession,UpdateUploads=UpdateUploads,UpdateSeries=UpdateSeries,UpdateEpisode=UpdateEpisode,sessionForm=sessionForm,form=form,page=page,seriesForm=seriesForm,episodeForm=episodeForm,approvedVideos=len(approvedVideos))
+    return render_template('home.html',searchForm = searchForm,commentForm=commentForm,userForm = userForm,loginForm = loginForm,signupForm=signupForm,UpdateSession=UpdateSession,UpdateUploads=UpdateUploads,UpdateSeries=UpdateSeries,UpdateEpisode=UpdateEpisode,sessionForm=sessionForm,form=form,page=page,seriesForm=seriesForm,episodeForm=episodeForm,approvedVideos=len(approvedVideos))
 
 @app.route('/admin/redirect' ,methods=['POST','GET'])
 def adminRedirect():

@@ -1292,7 +1292,7 @@ def liveSession():
 @app.route('/userDetails')
 def userDetails():
 
-    user_id = request.args.get('user_id', type=str)
+    user_id = request.args.get('user_id', type=int)
     user = User.query.filter_by(id=user_id).first_or_404()
     if current_user.is_anonymous :
         data = {"id":user.id,"username":user.username,"followers":user.followers.count(),"userImage":user.profile_photo,"videos":len(user.series),"liveSessions":len(user.posts),"introduction":user.introduction,"Isfollowing":False,"fullname":user.fullname,"status":user.status,'email':user.email,'IntroVid':user.introduction_video}

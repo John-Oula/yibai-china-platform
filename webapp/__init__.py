@@ -50,7 +50,7 @@ from alipay.aop.api.request.AlipayTradeWapPayRequest import AlipayTradeWapPayReq
 from alipay.aop.api.request.AlipayTradeQueryRequest import AlipayTradeQueryModel
 from alipay.aop.api.request.AlipayTradeQueryRequest import AlipayTradeQueryRequest
 from alipay.aop.api.response.AlipayTradeWapPayResponse import AlipayTradeWapPayResponse
-
+import flask_whooshalchemy as wa
 
 wxId = 'wx5f367d7de40c6054'
 wxSecret = '2ee66046845980fc293fe881c83faace'
@@ -127,10 +127,12 @@ UPLOAD_FOLDER = "/videos"
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 app.config['SECRET_KEY'] = 'Adawug;irwugw79536870635785ty0875y03davvavavdey'
 appID=200000164
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = True
 app.config['FLASK_ADMIN_SWATCH'] = 'flatly'
 app.config['WTF_CSRF_ENABLED'] = False
+app.config['WHOOSH_BASE'] = '/var/www/App/webapp/static/videos/whoosh'
 csrf = CSRFProtect(app)
+
 if get_Host_name_IP('CJAY') == True:
     app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:@qwerty1234!@localhost/postgres'
 else:
@@ -588,7 +590,9 @@ class Payment(db.Model):
 
 
 class Series(db.Model):
+
     __tablename__ = 'series'
+    __searchable__ = ['title']
     id = db.Column('id', db.Integer, primary_key=True)
     title = db.Column('title', db.String(30))
     status = db.Column('status', db.String(7))
@@ -910,6 +914,11 @@ class Series_form(FlaskForm):
     series_submit = SubmitField('Submit')
 
 
+class Search_form(FlaskForm):
+    search = StringField('search')
+    search_submit = SubmitField('Submit')
+
+
 
 class Episode_form(FlaskForm):
     subtitle = StringField('Subtitle')
@@ -1154,6 +1163,9 @@ admin.add_sub_category(name="Links", parent_name="Course Management")
 #admin.add_sub_category(name="Assign roles", parent_name="Roles Management")
 #admin.add_sub_category(name="Create roles", parent_name="Roles Management")
 admin.add_sub_category(name="Create live", parent_name="Live Management")
+
+wa.whoosh_index(app, Series)
+
 @app.context_processor
 def inject_permissions():
     return dict(Permission=Permission)
@@ -1172,8 +1184,9 @@ def forms():
     userForm = User_form()
     commentForm = Comment_form()
     roleForm = Role_form()
+    searchForm = Search_form()
 
-    return dict(commentForm=commentForm,roleForm=roleForm,userForm = userForm,signupForm=signupForm,UpdateSession=UpdateSession,UpdateUploads=UpdateUploads,UpdateSeries=UpdateSeries,UpdateEpisode=UpdateEpisode,sessionForm=sessionForm,form=form,seriesForm=seriesForm,episodeForm=episodeForm)
+    return dict(searchForm=searchForm,commentForm=commentForm,roleForm=roleForm,userForm = userForm,signupForm=signupForm,UpdateSession=UpdateSession,UpdateUploads=UpdateUploads,UpdateSeries=UpdateSeries,UpdateEpisode=UpdateEpisode,sessionForm=sessionForm,form=form,seriesForm=seriesForm,episodeForm=episodeForm)
 
 @app.route('/' ,methods=['POST','GET'])
 def home():
@@ -1195,7 +1208,7 @@ def home():
                 url='https://api.weixin.qq.com/sns/userinfo?access_token=' + str(access_token) + "&openid=" + openid+'&lang=en')
             resp_user_info = req_user_info.json()
             print(resp_user_info)
-            username = resp_user_info['nickname']
+            username = resp_user_info['nickname'].encode('latin').decode('utf-8')
             profile_photo = resp_user_info['headimgurl']
             user = User.query.filter_by(username=username).first()
             if user:
@@ -1227,7 +1240,6 @@ def home():
     signupForm = Signup_form()
     userForm = User_form()
     commentForm = Comment_form()
-    searchForm = Search_form()
 
     approvedVideos = Series.query.filter_by(approved=False).all()
 
@@ -1256,7 +1268,7 @@ def home():
             pass
 
 
-    return render_template('home.html',searchForm = searchForm,commentForm=commentForm,userForm = userForm,loginForm = loginForm,signupForm=signupForm,UpdateSession=UpdateSession,UpdateUploads=UpdateUploads,UpdateSeries=UpdateSeries,UpdateEpisode=UpdateEpisode,sessionForm=sessionForm,form=form,page=page,seriesForm=seriesForm,episodeForm=episodeForm,approvedVideos=len(approvedVideos))
+    return render_template('home.html',commentForm=commentForm,userForm = userForm,loginForm = loginForm,signupForm=signupForm,UpdateSession=UpdateSession,UpdateUploads=UpdateUploads,UpdateSeries=UpdateSeries,UpdateEpisode=UpdateEpisode,sessionForm=sessionForm,form=form,page=page,seriesForm=seriesForm,episodeForm=episodeForm,approvedVideos=len(approvedVideos))
 
 @app.route('/admin/redirect' ,methods=['POST','GET'])
 def adminRedirect():

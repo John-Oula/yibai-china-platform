@@ -2360,11 +2360,11 @@ def createMeeting(title,fulltime,end_time):
     headerString = "X-TC-Key=%s&X-TC-Nonce=%s&X-TC-Timestamp=%s" % (SecretId, num, str(stamp))
 
     req_body = {
-        "userid": str(current_user.username),
+        "userid": str(current_user.id),
         "instanceid": 1,
         "subject": "%s" % (title),
         "type": 0,
-        "hosts": [{"userid": str(current_user.username)}],
+        "hosts": [{"userid": str(current_user.id)}],
 
         "start_time": str(int(fulltime) / 1000),
         "end_time": str(int(end_time) / 1000),
@@ -2507,7 +2507,7 @@ def modifyMeeting(title,fulltime,end_time,meetingId,username,instanceId):
         "instanceid": instanceId,
         "subject": "%s" % (title),
         "type": 0,
-        "hosts": [{"userid": str(current_user.username)}],
+        "hosts": [{"userid": str(current_user.id)}],
         "start_time": str(int(fulltime) / 1000),
         "end_time": str(int(end_time) / 1000),
         "settings": {

@@ -938,8 +938,8 @@
                                                                       alt=""><span class="nav_text">Live</span></a>
             {% if current_user.is_authenticated %}
                 <a class="navLink profile-nav"
-                   data-href="{{ url_for('userDetails', username = current_user.username) }}"
-                   href="{{ url_for('profilePage' ,username = current_user.username) }}"><img class="mobile-icon"
+                   data-href="{{ url_for('userDetails', user_id = current_user.id) }}"
+                   href="{{ url_for('profilePage' ,user_id = current_user.id) }}"><img class="mobile-icon"
                                                                                               src="../static/profile.svg"
                                                                                               alt=""><span
                         class="nav_text">Profile</span></a>
@@ -1176,7 +1176,6 @@
     <script src="https://unpkg.com/wavesurfer.js"></script>
 
 
-    </script>
     <script>
         var sound = null;
         var audioSrc = '7ad5a4b99fc5275e.mp3'

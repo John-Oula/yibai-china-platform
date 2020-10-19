@@ -546,7 +546,7 @@ $('.live-details').ready(function () {
         var liveParam = $.urlParam('liveId')
         var liveUrl = '/liveDetails?liveId=' + liveParam;
         var userImgUrl = '../static/profile_pics/';
-        var userUrl = '/userDetails?username=';
+        var userUrl = '/userDetails?user_id=';
         var coverImgUrl = '../static/coverImages/';
         var bookUrl = '/book/';
         var unbookUrl = '/unbook/';
@@ -652,7 +652,7 @@ $('.live-list').ready(function () {
 //        e.preventDefault();
         var liveUrl = '/liveDetails?liveId=';
         var liveInfoUrl = '/liveInfo?liveId=';
-        var userUrl = '/userDetails?username='
+        var userUrl = '/userDetails?user_id='
 
         req = $.ajax({
             url: '/liveSession',
@@ -715,8 +715,8 @@ $('.profile').ready(function () {
         
         
         
-        var param = $.urlParam('username');
-        var url = '/userDetails?username='+ param;
+        var param = $.urlParam('user_id');
+        var url = '/userDetails?user_id='+ param;
         
         
         $('#create-course').css('display', 'none');
@@ -878,7 +878,7 @@ function closeLeftNav() {
 //         var url = '/videoDetails?videoId='+vidParam;
 //         var videoSrc = "../static/videos/";
 //         var userImgSrc = "../static/profile_pics/";
-//         var userUrl = "/userDetails?username=";
+//         var userUrl = "/userDetails?user_id=";
 //         var courseUrl = "/editSeries?series_id=";
 //         var commentUrl = "/comment?series_id=";
 //         var currency = "￥";
@@ -1083,7 +1083,7 @@ function closeLeftNav() {
         var currency = "￥";
         var followUrl = "/follow";
         var unfollowUrl = "/unfollow";
-        var userUrl = "/userDetails?username=";
+        var userUrl = "/userDetails?user_id=";
 
         req = $.ajax({
             url: url,
@@ -1902,7 +1902,7 @@ function closeLeftNav() {
     $('#book-schedule-btn').on("click", function (e) {
         e.preventDefault();
         $('#book-schedule').modal('toggle')
-        scheduleUrl = '/userDetails?username=';
+        scheduleUrl = '/userDetails?user_id=';
         bookUrl = '/book/';
         unbookUrl = '/unbook/';
         param = '?type=';
@@ -1970,7 +1970,7 @@ function closeLeftNav() {
     $('#main').on("click",'#bookers-list', function (e) {
         e.preventDefault();
         $('#bookers-modal').modal('toggle')
-        scheduleUrl = '/userDetails?username=';
+        scheduleUrl = '/userDetails?user_id=';
         bookUrl = '/book/';
         unbookUrl = '/unbook/';
         param = '?type=';
@@ -2014,7 +2014,7 @@ function closeLeftNav() {
     $('#main').on("click",'#live-bookers-list', function (e) {
         e.preventDefault();
         $('#bookers-live-modal').modal('toggle')
-        scheduleUrl = '/userDetails?username=';
+        scheduleUrl = '/userDetails?user_id=';
         bookUrl = '/book/';
         unbookUrl = '/unbook/';
         param = '?type=';
@@ -2525,7 +2525,7 @@ $(document).ready(function () {
 $('.upload-list').ready(function () {
     var arg = 'videoId=';
     var videoUrl = '/videoInfo?' + arg;
-    var userUrl = '/userDetails?username='
+    var userUrl = '/userDetails?user_id='
     var currency = "￥"
     req = $.ajax({
         url: '/videos',
@@ -2570,7 +2570,7 @@ $('.upload-list').ready(function () {
 
     var arg = 'videoId=';
     var videoUrl = '/videoInfo?' + arg;
-    var userUrl = '/userDetails?username='
+    var userUrl = '/userDetails?user_id='
     var verifyUrl = '/verifyCourse?videoId='
 
     req = $.ajax({
@@ -2596,7 +2596,7 @@ $('.upload-list').ready(function () {
 
                 $('#verify-list').append('<card class="card shadow-lg live-card"  data-href="' + value.id + '" > <card ><a href="'  + value.id + '"> <div class="live-img-wrapper"><img class="live-img" src="../static/coverImages/' + value.coverImage + '" alt=""></div> <div class="live-profile-pic-wrapper click-pro-pic"  data-href="'  + value.username + '"><span><a  class="user-profile-pic border-light" href="#"><img class="profilepic"  src="' + value.userImg + '" alt=""></a></span> </div><div class="p-2 row no-gutters"><span class="live-info col-8 flex-content flex-column no-gutters"><span class="live-title">' + value.title + '</span><span class="">Created by:' + value.username + ' </span><span class="">Type:' + value.status + ' </span><span class="">Category:' + value.category + '</span><span class=""> </span></span>  <span class="live-info col-4 flex-content flex-column no-gutters"></div> </a></card><img src="../static/arrowDown.svg" type="button" class=" d-block mx-auto  extra-info m-2"><div class="content"><div class="text-center"><button class="fixed-btn m-2 review-videos-btn" data-target="#review-video-modal" data-toggle="modal">Review Videos</button><button class="fixed-btn m-2 user-intro" data-target="#user-info-modal" data-toggle="modal">User Intro</button></div><div></div><h6>Description</h6><div>'+ value.description+'</div><button type="button" class=" d-block mx-auto fixed-btn extra-info approve-btn" data-href="'+verifyUrl + value.id +'" >Approve</button></div> </card>');
 
-                $('.user-intro').attr('data-href','/userDetails?username='+value.username)
+                $('.user-intro').attr('data-href','/userDetails?user_id='+value.username)
                 $('.review-videos-btn').attr('data-href','/videoDetails?videoId='+value.id)
         });
 
@@ -2619,7 +2619,7 @@ $('.upload-list').ready(function () {
 
     var arg = 'videoId=';
     var videoUrl = '/videoInfo?' + arg;
-    var userUrl = '/userDetails?username='
+    var userUrl = '/userDetails?user_id='
     var verifyUrl = '/verifyCourse?videoId='
 
     req = $.ajax({

@@ -1372,6 +1372,9 @@ p.likes{
 }
 
 @media screen and (min-width: 768px){
+    .video-container{
+        margin: 10px;
+    }
     #video-title{
         font-size: 18px;
     }

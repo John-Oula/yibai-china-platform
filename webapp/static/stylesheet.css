@@ -1,3 +1,120 @@
+    #live-card{
+        height: fit-content;
+        margin-left: 4%;
+        margin-right: 4%;
+        margin-bottom: 3%;
+        border-top-left-radius: 10px;
+        border-top-right-radius: 10px;
+
+    }
+    .live-img-wrapper{
+        padding-left: 0px;
+        overflow: hidden;
+        height: 62px;
+        position: relative;
+        border-top-left-radius: 10px;
+        border-top-right-radius: 10px;
+
+    }
+        #unbook{
+        display: none;
+    }
+            .click-unbook{
+        display: none;
+
+    }
+                .share-logos{
+        background-color: white;
+        width: 50%;
+        position: fixed;
+        border-radius: 7px;
+        bottom: 130px;
+        display: none;
+
+        z-index: 100;
+        left: 0;
+        right: 0;
+    }
+
+    .live-details-img-wrapper{
+        padding-left: 0px;
+        overflow: hidden;
+        height: 62px;
+        position: relative;
+
+
+    }
+
+    .live-img{
+        height: auto;
+        width: 100%;
+    }
+
+    .live-profile-pic-wrapper{
+        width: 42px;
+        height: 42px;
+        bottom: 20px;
+        float: right;
+        position: relative;
+        right: 15px;
+        border-radius: 50%;
+        overflow: hidden;
+
+    }
+    .live-info{
+        font-size: 12px;
+    }
+
+    .live-details{
+    }
+        .navLink{
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        flex-grow: 1;
+        min-width: 50px;
+        overflow: hidden;
+        white-space: nowrap;
+        text-decoration: none;
+        color: #444444;
+        font-size: 12px;
+        font-family: Josefin Sans, sans-serif;
+        margin-bottom: 0px;
+
+    }
+    .video-nav{
+        position: fixed;
+        bottom: 55px;
+        width: 100%;
+        height: 55px;
+        background-color: white;
+        display: flex;
+        overflow-x: auto;
+
+    }
+
+
+    .live-title{
+
+        font-size: 15px;
+        font-weight: 600;
+    }
+        .fixed-btn{
+        border-radius: 4px;
+        background-color: #5bb75b;
+        padding: 5px;
+        width: 132px;
+        height: fit-content;
+        border-style: none;
+    }
+        .common-btn{
+        border-radius: 4px;
+        background-color: #5bb75b;
+        padding: 10px;
+        width: fit-content;
+        border-style: none;
+    }
 /*GLOBAL*/
 .btn-text{
     color: white;
@@ -117,6 +234,9 @@ audio{
     color: #707070;
     font-size: 14px;
 }
+    #comment-nav{
+        display: none;
+    }
 /*NAVIGATION*/
 .navbar-light .nav-link{
     color: white;
@@ -1365,13 +1485,67 @@ p.likes{
 .mobile-navigation{
     display: none;
 }
-
+    #user-profile{
+        display: none;
+    }
 
 #main{
 
 }
 
 @media screen and (min-width: 768px){
+
+
+.video-nav {
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    height: 55px;
+    background-color: white;
+    display: flex;
+    overflow-x: auto;
+
+}
+    .share-logos{
+        background-color: white;
+        width: fit-content;
+        position: fixed;
+        border-radius: 7px;
+        bottom: 130px;
+        display: none;
+            bottom: 10%;
+
+        z-index: 100;
+        left: 0;
+        right: 0;
+    }
+    .live-profile-pic-wrapper{
+        width: 60px;
+        height: 60px;
+        bottom: 20px;
+        float: right;
+        position: relative;
+        right: 15px;
+        border-radius: 50%;
+        overflow: hidden;
+
+    }
+.live-details-img-wrapper {
+    padding-left: 0px;
+    overflow: hidden;
+    height: 150px;
+    position: relative;
+}
+    .video-box{}
+    .like-btn{
+
+
+    margin-right: 10px;
+    }
+    .video-info{
+margin-top: 10px;
+    margin-left: 20px;
+    }
     .video-container{
         margin: 10px;
     }
@@ -1390,6 +1564,15 @@ p.likes{
     }
     #update-schedule{
         display: none;
+    }
+    .live-list{
+            display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+    }
+    .live-card{
+            width: 470px;
+    margin: 10px;
     }
 
     .schedule{
@@ -1450,7 +1633,8 @@ p.likes{
         height: auto;
     }
     video{
-        width: 1000px;
+            width: 1000px;
+    height: 500px;
     }
     .likes-comments{
         float: right;
@@ -1460,6 +1644,9 @@ p.likes{
     }
     .btn-row{
         display: flex;
+
+    float: right;
+    margin-top: 50px;
     }
 
     .editor-source{
@@ -1483,9 +1670,23 @@ p.likes{
     }
     .schedule-btn{
     }
+        .user-profile-pic-wrapper{
+        margin-top: 0%;
+        width: 60px;
+        height: 60px;
+        margin-left: 10%;
+        border-radius: 50%;
+        position: relative;
+        overflow: hidden;
+    }
 }
 
 @media screen and (max-width: 768px){
+        .live-list{
+            display: flex;
+        flex-direction: column;
+
+    }
     .login-btns{
         margin-top: 40%;
     }
@@ -1510,22 +1711,7 @@ p.likes{
         z-index: 100;
 
     }
-    .navLink{
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        flex-grow: 1;
-        min-width: 50px;
-        overflow: hidden;
-        white-space: nowrap;
-        text-decoration: none;
-        color: #444444;
-        font-size: 12px;
-        font-family: Josefin Sans, sans-serif;
-        margin-bottom: 0px;
 
-    }
 
 
 
@@ -2035,24 +2221,8 @@ p.likes{
         flex-direction: column;
     }
 
-    .video-nav{
-        position: fixed;
-        bottom: 55px;
-        width: 100%;
-        height: 55px;
-        background-color: white;
-        display: flex;
-        overflow-x: auto;
 
-    }
 
-    .common-btn{
-        border-radius: 4px;
-        background-color: #5bb75b;
-        padding: 10px;
-        width: fit-content;
-        border-style: none;
-    }
     .orange-btn{
         border-radius: 4px;
         background-color: #E74525;
@@ -2118,14 +2288,7 @@ p.likes{
         position: relative;
         overflow: hidden;
     }
-    .fixed-btn{
-        border-radius: 4px;
-        background-color: #5bb75b;
-        padding: 5px;
-        width: 132px;
-        height: fit-content;
-        border-style: none;
-    }
+
     .profile-btn{
         margin-bottom: 4%;
     }
@@ -2151,63 +2314,7 @@ p.likes{
     }
     #live{
     }
-    #live-card{
-        height: fit-content;
-        margin-left: 4%;
-        margin-right: 4%;
-        margin-bottom: 3%;
-        border-top-left-radius: 10px;
-        border-top-right-radius: 10px;
 
-    }
-    .live-img-wrapper{
-        padding-left: 0px;
-        overflow: hidden;
-        height: 62px;
-        position: relative;
-        border-top-left-radius: 10px;
-        border-top-right-radius: 10px;
-
-    }
-
-    .live-details-img-wrapper{
-        padding-left: 0px;
-        overflow: hidden;
-        height: 62px;
-        position: relative;
-
-
-    }
-
-    .live-img{
-        height: auto;
-        width: 100%;
-    }
-
-    .live-profile-pic-wrapper{
-        width: 42px;
-        height: 42px;
-        bottom: 20px;
-        float: right;
-        position: relative;
-        right: 15px;
-        border-radius: 50%;
-        overflow: hidden;
-
-    }
-    .live-info{
-        font-size: 12px;
-    }
-
-    .live-details{
-    }
-
-
-    .live-title{
-
-        font-size: 15px;
-        font-weight: 600;
-    }
 
     .circle-icon{
         border-radius: 50%;
@@ -2274,9 +2381,7 @@ p.likes{
         height:130px;
     }
 
-    #user-profile{
-        display: none;
-    }
+
 
 
 
@@ -2345,9 +2450,7 @@ p.likes{
     #episode-tab{
         display: block;
     }
-    #unbook{
-        display: none;
-    }
+
 
     .update-schedule{
         display: none;
@@ -2450,18 +2553,7 @@ p.likes{
         display: none;
 
     }
-    .share-logos{
-        background-color: white;
-        width: 50%;
-        position: fixed;
-        border-radius: 7px;
-        bottom: 130px;
-        display: none;
 
-        z-index: 100;
-        left: 0;
-        right: 0;
-    }
     .fb-share-button{
     }
 
@@ -2503,9 +2595,7 @@ p.likes{
         border-width: thin;
 
     }
-    #comment-nav{
-        display: none;
-    }
+
     #user-reviews{
         overflow-y: scroll;
         height: 300px;
@@ -2520,9 +2610,7 @@ p.likes{
     }
 
 
-    .click-unbook{
-        display: none;
-    }
+
     .navLink.removeCart{
 
     }

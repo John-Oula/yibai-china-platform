@@ -590,9 +590,9 @@ $('.live-details').ready(function () {
 
 
             $('.live-details').css('display', 'block');
-            $('#profile-btn').attr('data-href', userUrl + data.host.host);
-            $('#profile-btn').attr('href', userUrl + data.host.host);
-            $('.live-profile-pic-wrapper').attr('data-href', userUrl + data.host.host);
+            $('#profile-btn').attr('data-href', userUrl + data.host.userId);
+            $('#profile-btn').attr('href', userUrl + data.host.userId);
+            $('.live-profile-pic-wrapper').attr('data-href', userUrl + data.host.id);
             $('.live-title').html(data.title);
             $('#live-startTime').html(data.startTime);
             $('#live-endTime').html(data.endTime);
@@ -647,7 +647,7 @@ $('#posts-btn').click(function (e) {
     });
 });
 $('.live-list').ready(function () {
-    $('.live-list').css('display', 'block');
+    $('.live-list').css('display', 'flex');
 //    $('.live').click(function (e) {
 //        e.preventDefault();
         var liveUrl = '/liveDetails?liveId=';
@@ -673,13 +673,13 @@ $('.live-list').ready(function () {
             $.each(obj, function (key, value) {
 
 
-                $('.live-list').append('<card class="card shadow-lg live-card"  data-href="' + liveUrl + value.id + '" > <card ><a href="' + liveInfoUrl + value.id + '"> <div class="live-img-wrapper"><img class="live-img" src="../static/coverImages/' + value.coverImg + '" alt=""></div> <div class="live-profile-pic-wrapper click-pro-pic"  data-href="' + userUrl + value.host.host + '"><span><a  class="user-profile-pic border-light" href="#"><img class="profilepic"  src="' + value.userImg + '" alt=""></a></span> </div><div class="p-2 row no-gutters"><span class="live-info col-8 flex-content flex-column no-gutters"><span class="live-title">' + value.title + '</span><span class="">Hosted by:' + value.host + ' </span><span class="">Category:' + value.category + '</span><span class=""> </span></span>  <span class="live-info col-4 flex-content flex-column no-gutters">           <span class="text-right">' + value.startTime + '-' + value.endTime + '</span><span class="text-right">' + value.date + '</span>  <div class="circle-icon text-right text-center mt-2  p-2 shadow-sm"> </div> </span> </div> </a></card> </card>');
+                $('.live-list').append('<card class="card shadow-lg live-card"  data-href="' + liveUrl + value.id + '" > <card ><a href="' + liveInfoUrl + value.id + '"> <div class="live-img-wrapper"><img class="live-img" src="../static/coverImages/' + value.coverImg + '" alt=""></div> <div class="live-profile-pic-wrapper click-pro-pic"  data-href="' + userUrl + value.host.id + '"><span><a  class="user-profile-pic border-light" href="#"><img class="profilepic"  src="' + value.userImg + '" alt=""></a></span> </div><div class="p-2 row no-gutters"><span class="live-info col-8 flex-content flex-column no-gutters"><span class="live-title">' + value.title + '</span><span class="">Hosted by:' + value.host + ' </span><span class="">Category:' + value.category + '</span><span class=""> </span></span>  <span class="live-info col-4 flex-content flex-column no-gutters">           <span class="text-right">' + value.startTime + '-' + value.endTime + '</span><span class="text-right">' + value.date + '</span>  <div class="circle-icon text-right text-center mt-2  p-2 shadow-sm"> </div> </span> </div> </a></card> </card>');
 
             });
             $('#live').css('display', 'block');
-            $('.live-list').css('display', 'block');
+            $('.live-list').css('display', 'flex');
             
-            $('.profile').css('display', 'none');
+            
             
             
             $('#user-profile').css('display', 'none');
@@ -1289,7 +1289,7 @@ function closeLeftNav() {
             $('#live').css('display', 'none');
             $('#live-update').css('display', 'none');
             
-            $('.profile').css('display', 'none');
+            
             $('#create-course').css('display', 'none');
             
             
@@ -1622,7 +1622,7 @@ function closeLeftNav() {
                 $.each(data.result, function (key, value) {
 
 
-                    $('.booked-live').append('<div class=" text-center p-2 bg-dark text-light schedule-box"><h4 class="flex-wrap">'+ value.title +'</h4><h4>' + value.date + '</h4><span>' + value.startTime + ' - ' + value.endTime + '</span><div class="row w-100"><div class=" col h-50 text-light text-center d-flex my-green"><a class="p-2 text-light" href="' + value.meetingUrl + '">JOIN</a></div><div class="w-100 col h-50 text-light text-center my-green"><a id="unbook" class="p-2 text-light d-flex click-unbook" data-href="/unbook/'+value.id+'?type=schedule" href="" >UNBOOK</a></div></div></div></div>');
+                    $('.booked-live').append('<div class=" text-center p-2 bg-dark text-light schedule-box"><h4 class="flex-wrap">'+ value.title +'</h4><h4>' + value.date + '</h4><span>' + value.startTime + ' - ' + value.endTime + '</span><div class="row w-100"><div class=" col h-50 text-light text-center d-flex my-green"><a class="p-2 text-light" href="' + value.meetingUrl + '">JOIN</a></div><div class="w-100 col h-50 text-light text-center my-green"><a id="unbook" class="p-2 text-light  click-unbook" data-href="/unbook/'+value.id+'?type=schedule" href="" >UNBOOK</a></div></div></div></div>');
                 });
         });
 
@@ -1741,7 +1741,7 @@ function closeLeftNav() {
         $('.schedule').css('display', 'none');
         $('#course-upload').css('display', 'block');
         $('#create-series').css('display', 'none');
-        $('.profile').css('display', 'none');
+        
         $('#create-course').css('display', 'block');
         
         
@@ -1763,7 +1763,7 @@ function closeLeftNav() {
         $('.schedule').css('display', 'none');
         $('#course-upload').css('display', 'none');
         $('#create-series').css('display', 'block');
-        $('.profile').css('display', 'none');
+        
         $('#create-course').css('display', 'block');
         
         
@@ -1831,7 +1831,7 @@ function closeLeftNav() {
             $('.my-profile').css('display', 'none');
             $('#course-upload').css('display', 'none');
             $('#create-series').css('display', 'none');
-            $('.profile').css('display', 'none');
+            
             $('#create-course').css('display', 'none');
             $('.video-details').css('display', 'none');
             $('.upload-list').css('display', 'none');
@@ -1885,7 +1885,7 @@ function closeLeftNav() {
             $('.my-profile').css('display', 'none');
             $('#course-upload').css('display', 'none');
             $('#create-series').css('display', 'none');
-            $('.profile').css('display', 'none');
+            
             $('#create-course').css('display', 'none');
             $('.video-details').css('display', 'none');
             $('.upload-list').css('display', 'none');
@@ -2091,7 +2091,7 @@ function closeLeftNav() {
             $('.live-details').css('display', 'none');
             $('.video-details').css('display', 'none');
 
-            $('.profile').css('display', 'none');
+            
             $('#create-course').css('display', 'none');
             $('#course-update').css('display', 'none');
             $('.video-details').css('display', 'none');
@@ -2470,7 +2470,7 @@ $(document).ready(function () {
             $('.schedule').css('display', 'none');
             $('#course-upload').css('display', 'none');
             $('#create-series').css('display', 'none');
-            $('.profile').css('display', 'none');
+            
             $('#create-course').css('display', 'none');
             $('.my-profile').css('display', 'none');
             $('.live-list').css('display', 'none');
@@ -2554,7 +2554,7 @@ $('.upload-list').ready(function () {
 
         $('#live').css('display', 'none');
 
-        $('.profile').css('display', 'none');
+        
 
         $('.upload-list').css('display', 'flex');
         $('#user-profile').css('display', 'none');

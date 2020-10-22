@@ -46,7 +46,7 @@
         <div class="video-details">
             <div>
             {% if series.is_series() == false %}
-                <div class=" ">
+                <div class="video-box">
                 {% if series.fileType() == 'video' %}
                     <li>
                         <video class="" preload="auto" video-id="" controls="" type="video/mp4"
@@ -71,7 +71,7 @@
                 </div>
             {% elif series.is_series() == true %}
 
-                         <div class=" ">
+                         <div class="video-box">
                          {% if series.episode[0].fileType() == 'video' %}
                     <li>
                         <video class="" preload="auto" video-id="" controls="" type="video/mp4"
@@ -420,12 +420,12 @@
                 {% endif %}
 
             </nav>
-
-        </div>
         <div class="p-3">
             <h6>Related videos</h6>
 
         </div>
+        </div>
+
         <br>
         <br>
         <br>
